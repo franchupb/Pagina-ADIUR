@@ -4,69 +4,283 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Iniciar Sesiòn - ADIUR FEM</title>
+    <meta
+        name="theme-color"
+        content="#171717"
+    >
+
+    <meta
+        name="description"
+        content="Inicio de sesión de ADIUR FEMENINO. Accedé al sistema de gestión del club."
+    >
+
+    <title>Iniciar sesión | ADIUR FEMENINO</title>
 
     <style>
-        * {
+        /* =====================================================
+           IDENTIDAD VISUAL ADIUR FEMENINO
+        ===================================================== */
+
+        :root {
+            --naranja: #f47721;
+            --naranja-oscuro: #dc5e0b;
+            --naranja-claro: #fff0e6;
+
+            --negro: #171717;
+            --negro-suave: #262626;
+
+            --blanco: #ffffff;
+            --fondo: #f6f6f6;
+            --gris: #f4f5f7;
+            --gris-texto: #747474;
+            --borde: #e5e5e5;
+
+            --rojo: #c62828;
+            --rojo-fondo: #fde9e9;
+
+            --radio: 18px;
+            --sombra: 0 24px 65px rgba(0, 0, 0, 0.30);
+        }
+
+        /* =====================================================
+           CONFIGURACIÓN GENERAL
+        ===================================================== */
+
+        *,
+        *::before,
+        *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
+        html {
+            min-height: 100%;
+        }
+
         body {
             min-height: 100vh;
+            min-height: 100dvh;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 24px;
+
             font-family: Arial, Helvetica, sans-serif;
+            color: var(--negro);
+
+            background-color: #202020;
 
             background-image:
                 linear-gradient(
-                    rgba(0, 0, 0, 0.50),
-                    rgba(0, 0, 0, 0.50)
+                    135deg,
+                    rgba(18, 18, 18, 0.76),
+                    rgba(25, 25, 25, 0.58),
+                    rgba(18, 18, 18, 0.78)
                 ),
                 url("Familia.jpg");
 
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
 
+        button,
+        input {
+            font: inherit;
+        }
+
+        button {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        button:focus-visible,
+        input:focus-visible {
+            outline: 3px solid rgba(244, 119, 33, 0.55);
+            outline-offset: 3px;
+        }
+
+        /* =====================================================
+           CONTENEDOR PRINCIPAL
+        ===================================================== */
+
+        .login-container {
+            position: relative;
+
+            width: 100%;
+            max-width: 430px;
+
+            overflow: hidden;
+
+            background: rgba(255, 255, 255, 0.98);
+
+            border: 1px solid rgba(255, 255, 255, 0.75);
+            border-radius: var(--radio);
+
+            box-shadow: var(--sombra);
+
+            text-align: center;
+
+            animation: aparecer 0.45s ease-out;
+        }
+
+        /* Franja superior naranja */
+
+        .franja-superior {
+            width: 100%;
+            height: 7px;
+
+            background: linear-gradient(
+                90deg,
+                var(--naranja-oscuro),
+                var(--naranja),
+                #ffad70
+            );
+        }
+
+        .login-contenido {
+            padding: 35px 36px 27px;
+        }
+
+        @keyframes aparecer {
+            from {
+                opacity: 0;
+                transform: translateY(14px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* =====================================================
+           LOGO DEL CLUB
+        ===================================================== */
+
+        .logo-contenedor {
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+
+            margin: 2px 0 19px;
         }
 
-        /* CAJA DE LOGIN */
-        .login-container {
-            width: 100%;
-            max-width: 420px;
-            background: rgba(255, 255, 255, 0.96);
-            border-radius: 20px;
-            padding: 35px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35);
-            text-align: center;
-        }
-
-        /* LOGO */
         .logo {
-            width: 105px;
-            height: 105px;
+            display: block;
+
+            width: 112px;
+            height: 112px;
+
             object-fit: contain;
-            margin-bottom: 15px;
+
+            padding: 4px;
+
+            background: var(--blanco);
+
+            border-radius: 100%;
         }
 
-        /* TITULOS */
+        /* =====================================================
+           IDENTIDAD Y TÍTULOS
+        ===================================================== */
+
+        .etiqueta-club {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+
+            margin-bottom: 13px;
+
+            color: var(--naranja-oscuro);
+
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .etiqueta-punto {
+            width: 6px;
+            height: 6px;
+
+            background: var(--naranja);
+            border-radius: 50%;
+        }
+
         h1 {
-            font-size: 25px;
-            color: #222;
-            margin-bottom: 5px;
+            color: var(--negro);
+
+            font-size: 26px;
+            font-weight: 900;
+            line-height: 1.25;
+            letter-spacing: -0.5px;
+
+            margin-bottom: 8px;
         }
 
         .subtitulo {
-            color: #777;
-            font-size: 14px;
-            margin-bottom: 30px;
+            color: var(--gris-texto);
+
+            font-size: 13px;
+            line-height: 1.6;
+
+            margin-bottom: 24px;
         }
 
-        /* FORMULARIO */
+        .separador {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            width: 100%;
+
+            margin-bottom: 25px;
+        }
+
+        .separador::before {
+            content: "";
+
+            width: 54px;
+            height: 4px;
+
+            border-radius: 10px;
+            background: var(--naranja);
+        }
+
+        /* =====================================================
+           CABECERA DEL FORMULARIO
+        ===================================================== */
+
+        .formulario-cabecera {
+            text-align: left;
+            margin-bottom: 21px;
+        }
+
+        .formulario-cabecera h2 {
+            color: var(--negro);
+
+            font-size: 17px;
+            font-weight: 900;
+
+            margin-bottom: 5px;
+        }
+
+        .formulario-cabecera p {
+            color: var(--gris-texto);
+
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        /* =====================================================
+           CAMPOS DEL FORMULARIO
+        ===================================================== */
+
         .campo {
             text-align: left;
             margin-bottom: 18px;
@@ -74,71 +288,400 @@
 
         .campo label {
             display: block;
-            font-size: 13px;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 7px;
+
+            margin-bottom: 8px;
+
+            color: #333333;
+
+            font-size: 12px;
+            font-weight: 900;
+            letter-spacing: 0.1px;
         }
 
         .campo input {
+            display: block;
+
             width: 100%;
+            min-height: 49px;
+
             padding: 13px 14px;
-            border: 1px solid #ddd;
+
+            border: 1px solid #dcdcdc;
             border-radius: 10px;
-            font-size: 14px;
+
+            background: #ffffff;
+
+            color: var(--negro);
+
+            font-size: 13px;
+
             outline: none;
-            transition: 0.2s;
+
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease,
+                background 0.2s ease;
+        }
+
+        .campo input::placeholder {
+            color: #a0a0a0;
+            opacity: 1;
+        }
+
+        .campo input:hover {
+            border-color: #c5c5c5;
         }
 
         .campo input:focus {
-            border-color: #a00000;
-            box-shadow: 0 0 0 3px rgba(160, 0, 0, 0.10);
+            border-color: var(--naranja);
+
+            box-shadow:
+                0 0 0 3px rgba(244, 119, 33, 0.12);
+
+            background: #ffffff;
         }
 
-        /* BOTON */
-        .boton-login {
-            width: 100%;
-            padding: 14px;
+        .campo input[aria-invalid="true"] {
+            border-color: var(--rojo);
+
+            box-shadow:
+                0 0 0 3px rgba(198, 40, 40, 0.08);
+        }
+
+        /* =====================================================
+           CONTRASEÑA Y VISIBILIDAD
+        ===================================================== */
+
+        .contenedor-contrasena {
+            position: relative;
+        }
+
+        .contenedor-contrasena input {
+            padding-right: 74px;
+        }
+
+        .boton-ver-contrasena {
+            position: absolute;
+
+            top: 50%;
+            right: 8px;
+
+            transform: translateY(-50%);
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            min-height: 32px;
+
+            padding: 0 8px;
+
             border: none;
-            border-radius: 10px;
-            background: #a00000;
-            color: white;
-            font-size: 15px;
-            font-weight: bold;
+            border-radius: 7px;
+
+            background: transparent;
+
+            color: #626262;
+
+            font-size: 11px;
+            font-weight: 800;
+
             cursor: pointer;
-            transition: 0.2s;
+
+            transition:
+                background 0.2s ease,
+                color 0.2s ease;
+        }
+
+        .boton-ver-contrasena:hover {
+            background: var(--naranja-claro);
+            color: var(--naranja-oscuro);
+        }
+
+        /* =====================================================
+           BOTÓN DE INICIO DE SESIÓN
+        ===================================================== */
+
+        .boton-login {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 11px;
+
+            width: 100%;
+            min-height: 50px;
+
+            margin-top: 7px;
+            padding: 14px 18px;
+
+            border: 1px solid var(--naranja);
+            border-radius: 10px;
+
+            background: var(--naranja);
+            color: var(--blanco);
+
+            font-size: 12px;
+            font-weight: 900;
+            letter-spacing: 0.8px;
+
+            box-shadow:
+                0 5px 12px rgba(244, 119, 33, 0.17);
+
+            cursor: pointer;
+
+            transition:
+                background 0.2s ease,
+                border-color 0.2s ease,
+                box-shadow 0.2s ease,
+                transform 0.2s ease;
         }
 
         .boton-login:hover {
-            background: #850000;
+            background: var(--naranja-oscuro);
+            border-color: var(--naranja-oscuro);
+
+            box-shadow:
+                0 7px 17px rgba(220, 94, 11, 0.24);
+
             transform: translateY(-1px);
         }
 
-        /* ERROR */
-        .error {
-            display: none;
-            margin-top: 15px;
-            padding: 11px;
-            border-radius: 8px;
-            background: #ffe5e5;
-            color: #a00000;
-            font-size: 13px;
-            font-weight: bold;
+        .boton-login:active {
+            transform: translateY(0);
         }
 
-        /* CELULAR */
+        .boton-login:disabled {
+            opacity: 0.7;
+            cursor: wait;
+            transform: none;
+        }
+
+        .texto-boton {
+            line-height: 1.2;
+        }
+
+        .icono-ingreso {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 19px;
+            line-height: 1;
+        }
+
+        /* =====================================================
+           MENSAJE DE ERROR
+        ===================================================== */
+
+        .error {
+            display: none;
+
+            margin-top: 16px;
+            padding: 12px 13px;
+
+            border: 1px solid #f3cccc;
+            border-radius: 9px;
+
+            background: var(--rojo-fondo);
+            color: var(--rojo);
+
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 1.5;
+
+            text-align: left;
+        }
+
+        .error.visible {
+            display: block;
+
+            animation: mostrarError 0.2s ease-out;
+        }
+
+        @keyframes mostrarError {
+            from {
+                opacity: 0;
+                transform: translateY(-4px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* =====================================================
+           PIE DEL LOGIN
+        ===================================================== */
+
+        .pie-login {
+            margin-top: 26px;
+            padding-top: 19px;
+
+            border-top: 1px solid #eeeeee;
+
+            color: var(--gris-texto);
+
+            font-size: 10px;
+            line-height: 1.7;
+        }
+
+        .pie-login strong {
+            display: block;
+
+            margin-bottom: 3px;
+
+            color: #404040;
+
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 1.1px;
+        }
+
+        .pie-login span {
+            color: var(--naranja-oscuro);
+            font-weight: 700;
+        }
+
+        /* =====================================================
+           RESPONSIVE: CELULARES Y TABLETS
+        ===================================================== */
+
         @media (max-width: 500px) {
+            body {
+                padding: 16px;
+
+                background-attachment: scroll;
+                background-position: center center;
+            }
+
             .login-container {
-                padding: 28px 22px;
+                max-width: 420px;
+                border-radius: 16px;
+            }
+
+            .login-contenido {
+                padding: 28px 23px 23px;
             }
 
             .logo {
-                width: 90px;
-                height: 90px;
+                width: 96px;
+                height: 96px;
+            }
+
+            .logo-contenedor {
+                margin-bottom: 16px;
             }
 
             h1 {
-                font-size: 22px;
+                font-size: 23px;
+            }
+
+            .subtitulo {
+                font-size: 12px;
+                margin-bottom: 22px;
+            }
+
+            .formulario-cabecera h2 {
+                font-size: 16px;
+            }
+
+            .campo {
+                margin-bottom: 16px;
+            }
+
+            .pie-login {
+                margin-top: 23px;
+                padding-top: 16px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            body {
+                padding: 11px;
+            }
+
+            .login-contenido {
+                padding: 26px 18px 21px;
+            }
+
+            .logo {
+                width: 84px;
+                height: 84px;
+            }
+
+            h1 {
+                font-size: 21px;
+            }
+
+            .campo input {
+                min-height: 46px;
+            }
+
+            .boton-login {
+                min-height: 47px;
+            }
+        }
+
+        /* =====================================================
+           PANTALLAS CON POCA ALTURA
+        ===================================================== */
+
+        @media (max-height: 650px) and (min-width: 501px) {
+            body {
+                align-items: flex-start;
+                padding-top: 18px;
+                padding-bottom: 18px;
+            }
+
+            .login-contenido {
+                padding-top: 23px;
+                padding-bottom: 20px;
+            }
+
+            .logo {
+                width: 78px;
+                height: 78px;
+            }
+
+            .logo-contenedor {
+                margin-bottom: 12px;
+            }
+
+            .subtitulo {
+                margin-bottom: 16px;
+            }
+
+            .separador {
+                margin-bottom: 18px;
+            }
+
+            .formulario-cabecera {
+                margin-bottom: 16px;
+            }
+
+            .campo {
+                margin-bottom: 13px;
+            }
+
+            .pie-login {
+                margin-top: 19px;
+                padding-top: 14px;
+            }
+        }
+
+        /* =====================================================
+           ACCESIBILIDAD
+        ===================================================== */
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
             }
         }
     </style>
@@ -146,64 +689,127 @@
 
 <body>
 
-    <div class="login-container">
+    <main class="login-container">
 
-        <!-- LOGO -->
-        <img
-            src="Logo ADIUR.jpg"
-            alt="Logo ADIUR"
-            class="logo"
-        >
+        <div class="franja-superior" aria-hidden="true"></div>
 
-        <!-- TITULO -->
-        <h1>ADIUR FEMENINO</h1>
+        <div class="login-contenido">
 
-        <p class="subtitulo">Panel del club</p>
-
-        <!-- FORMULARIO -->
-        <form id="loginForm">
-
-            <!-- USUARIO -->
-            <div class="campo">
-                <label for="usuario">Usuario</label>
-
-                <input
-                    type="text"
-                    id="usuario"
-                    placeholder="Ingresá tu usuario"
-                    autocomplete="username"
-                    required
+            <!-- LOGO OFICIAL DE ADIUR -->
+            <div class="logo-contenedor">
+                <img
+                    src="CLUBES/ADIUR.jpeg"
+                    alt="Escudo de ADIUR"
+                    class="logo"
+                    onerror="if(!this.dataset.intento){this.dataset.intento='1';this.src='logo adiur.jpg'}else{this.style.display='none'}"
                 >
             </div>
 
-            <!-- CONTRASEÑA -->
-            <div class="campo">
-                <label for="contrasena">Contraseña</label>
+            <!-- IDENTIDAD DEL CLUB -->
+            <div class="etiqueta-club">
+                <span class="etiqueta-punto" aria-hidden="true"></span>
+                CLUB DEPORTIVO
+            </div>
 
-                <input
-                    type="password"
-                    id="contrasena"
-                    placeholder="Ingresá tu contraseña"
-                    autocomplete="current-password"
-                    required
+            <h1>ADIUR FEMENINO</h1>
+
+            <p class="subtitulo">
+                Pasión, compromiso y trabajo en equipo
+            </p>
+
+            <div class="separador" aria-hidden="true"></div>
+
+            <!-- CABECERA DEL FORMULARIO -->
+            <div class="formulario-cabecera">
+                <p></p>
+            </div>
+
+            <!-- FORMULARIO -->
+            <form id="loginForm" novalidate>
+
+                <!-- USUARIO -->
+                <div class="campo">
+                    <label for="usuario">Usuario</label>
+
+                    <input
+                        type="text"
+                        id="usuario"
+                        name="usuario"
+                        placeholder="Ingresá tu usuario"
+                        autocomplete="username"
+                        autocapitalize="none"
+                        spellcheck="false"
+                        aria-describedby="mensajeError"
+                        required
+                    >
+                </div>
+
+                <!-- CONTRASEÑA -->
+                <div class="campo">
+                    <label for="contrasena">Contraseña</label>
+
+                    <div class="contenedor-contrasena">
+                        <input
+                            type="password"
+                            id="contrasena"
+                            name="contrasena"
+                            placeholder="Ingresá tu contraseña"
+                            autocomplete="current-password"
+                            aria-describedby="mensajeError"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="boton-ver-contrasena"
+                            id="botonVerContrasena"
+                            aria-label="Mostrar contraseña"
+                            aria-pressed="false"
+                        >
+                            Mostrar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- BOTÓN -->
+                <button
+                    type="submit"
+                    class="boton-login"
+                    id="botonLogin"
                 >
-            </div>
+                    <span class="texto-boton" id="textoBoton">
+                        INICIAR SESIÓN
+                    </span>
 
-            <!-- BOTON -->
-            <button type="submit" class="boton-login">
-                INICIAR SESIÓN
-            </button>
+                    <span class="icono-ingreso" aria-hidden="true">→</span>
+                </button>
 
-            <!-- ERROR -->
-            <div class="error" id="mensajeError" role="alert">
-                Usuario o contraseña incorrectos.
-            </div>
+                <!-- MENSAJE DE ERROR -->
+                <div
+                    class="error"
+                    id="mensajeError"
+                    role="alert"
+                    aria-live="assertive"
+                    aria-atomic="true"
+                >
+                    Usuario o contraseña incorrectos.
+                </div>
 
-        </form>
-    </div>
+            </form>
 
+            <!-- PIE INSTITUCIONAL -->
+            <footer class="pie-login">
+                <strong></strong>
     <script>
-        // USUARIOS AUTORIZADOS
+        "use strict";
+
+        /* =====================================================
+           USUARIOS AUTORIZADOS
+
+           Se conservan los usuarios y las contraseñas
+           definidos en el código original.
+        ===================================================== */
+
         const usuarios = {
             "fran": {
                 contrasena: "ADIUR",
@@ -221,52 +827,167 @@
             }
         };
 
-        // LOGIN
-        document
-            .getElementById("loginForm")
-            .addEventListener("submit", function(event) {
+        /* =====================================================
+           ELEMENTOS DEL FORMULARIO
+        ===================================================== */
 
-                event.preventDefault();
+        const loginForm = document.getElementById("loginForm");
+        const campoUsuario = document.getElementById("usuario");
+        const campoContrasena = document.getElementById("contrasena");
+        const mensajeError = document.getElementById("mensajeError");
+        const botonLogin = document.getElementById("botonLogin");
+        const textoBoton = document.getElementById("textoBoton");
 
-                const usuario = document
-                    .getElementById("usuario")
-                    .value
-                    .trim()
-                    .toLowerCase();
+        const botonVerContrasena = document.getElementById(
+            "botonVerContrasena"
+        );
 
-                const contrasena = document
-                    .getElementById("contrasena")
-                    .value;
+        /* =====================================================
+           MOSTRAR U OCULTAR CONTRASEÑA
+        ===================================================== */
 
-                const mensajeError = document
-                    .getElementById("mensajeError");
+        botonVerContrasena.addEventListener("click", function() {
+            const estaOculta = campoContrasena.type === "password";
 
-                // OCULTAR ERROR ANTERIOR
-                mensajeError.style.display = "none";
+            campoContrasena.type = estaOculta ? "text" : "password";
 
-                // COMPROBAR USUARIO Y CONTRASEÑA
-                if (
-                    usuarios[usuario] &&
-                    usuarios[usuario].contrasena === contrasena
-                ) {
-                    // GUARDAR EL USUARIO
+            botonVerContrasena.textContent = estaOculta
+                ? "Ocultar"
+                : "Mostrar";
+
+            botonVerContrasena.setAttribute(
+                "aria-label",
+                estaOculta ? "Ocultar contraseña" : "Mostrar contraseña"
+            );
+
+            botonVerContrasena.setAttribute(
+                "aria-pressed",
+                String(estaOculta)
+            );
+        });
+
+        /* =====================================================
+           MENSAJES DE VALIDACIÓN
+        ===================================================== */
+
+        function ocultarError() {
+            mensajeError.classList.remove("visible");
+
+            campoUsuario.removeAttribute("aria-invalid");
+            campoContrasena.removeAttribute("aria-invalid");
+        }
+
+        function mostrarError(mensaje, campoAEnfocar = null) {
+            mensajeError.textContent = mensaje;
+            mensajeError.classList.add("visible");
+
+            if (campoAEnfocar) {
+                campoAEnfocar.setAttribute("aria-invalid", "true");
+                campoAEnfocar.focus();
+            }
+        }
+
+        campoUsuario.addEventListener("input", ocultarError);
+        campoContrasena.addEventListener("input", ocultarError);
+
+        /* =====================================================
+           INICIO DE SESIÓN
+        ===================================================== */
+
+        loginForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            ocultarError();
+
+            const usuario = campoUsuario.value
+                .trim()
+                .toLowerCase();
+
+            const contrasena = campoContrasena.value;
+
+            /* VALIDAR CAMPOS VACÍOS */
+
+            if (!usuario) {
+                mostrarError(
+                    "Ingresá tu nombre de usuario.",
+                    campoUsuario
+                );
+                return;
+            }
+
+            if (!contrasena) {
+                mostrarError(
+                    "Ingresá tu contraseña para continuar.",
+                    campoContrasena
+                );
+                return;
+            }
+
+            /* COMPROBAR USUARIO Y CONTRASEÑA */
+
+            const cuenta = Object.prototype.hasOwnProperty.call(
+                usuarios,
+                usuario
+            )
+                ? usuarios[usuario]
+                : null;
+
+            if (
+                cuenta &&
+                cuenta.contrasena === contrasena
+            ) {
+                /*
+                 * GUARDAR LA SESIÓN
+                 *
+                 * Se conserva la clave "usuarioADIUR" y el formato
+                 * de texto que utilizan las demás páginas del club.
+                 */
+
+                try {
                     localStorage.setItem(
                         "usuarioADIUR",
-                        usuarios[usuario].nombre
+                        cuenta.nombre
+                    );
+                } catch (error) {
+                    console.error(
+                        "No se pudo guardar la sesión:",
+                        error
                     );
 
-                    // IR A LA PAGINA PRINCIPAL
-                    window.location.href = "Página Principal.html";
-                    window.location.href = "Pagina Principal.html";
+                    mostrarError(
+                        "No se pudo guardar la sesión. Revisá la configuración del navegador."
+                    );
 
-                } else {
-                    // MOSTRAR ERROR
-                    mensajeError.style.display = "block";
-
-                    // LIMPIAR CONTRASEÑA
-                    document.getElementById("contrasena").value = "";
+                    return;
                 }
-            });
+
+                /*
+                 * REDIRECCIÓN ORIGINAL
+                 *
+                 * Se mantiene la página principal existente.
+                 */
+
+                window.location.href = "Pagina Principal.html";
+
+            } else {
+                /* CREDENCIALES INCORRECTAS */
+
+                campoContrasena.value = "";
+
+                mostrarError(
+                    "Usuario o contraseña incorrectos. Revisá los datos e intentá nuevamente.",
+                    campoContrasena
+                );
+            }
+        });
+
+        /* =====================================================
+           INICIALIZACIÓN
+        ===================================================== */
+
+        document.addEventListener("DOMContentLoaded", function() {
+            campoUsuario.focus({ preventScroll: true });
+        });
     </script>
 
 </body>
