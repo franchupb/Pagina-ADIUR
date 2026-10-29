@@ -1,994 +1,2358 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <meta
-        name="theme-color"
-        content="#171717"
-    >
-
-    <meta
-        name="description"
-        content="Inicio de sesión de ADIUR FEMENINO. Accedé al sistema de gestión del club."
-    >
-
-    <title>Iniciar sesión | ADIUR FEMENINO</title>
-
-    <style>
-        /* =====================================================
-           IDENTIDAD VISUAL ADIUR FEMENINO
-        ===================================================== */
-
-        :root {
-            --naranja: #f47721;
-            --naranja-oscuro: #dc5e0b;
-            --naranja-claro: #fff0e6;
-
-            --negro: #171717;
-            --negro-suave: #262626;
-
-            --blanco: #ffffff;
-            --fondo: #f6f6f6;
-            --gris: #f4f5f7;
-            --gris-texto: #747474;
-            --borde: #e5e5e5;
-
-            --rojo: #c62828;
-            --rojo-fondo: #fde9e9;
-
-            --radio: 18px;
-            --sombra: 0 24px 65px rgba(0, 0, 0, 0.30);
-        }
-
-        /* =====================================================
-           CONFIGURACIÓN GENERAL
-        ===================================================== */
-
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        html {
-            min-height: 100%;
-        }
-
-        body {
-            min-height: 100vh;
-            min-height: 100dvh;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            padding: 24px;
-
-            font-family: Arial, Helvetica, sans-serif;
-            color: var(--negro);
-
-            background-color: #202020;
-
-            background-image:
-                linear-gradient(
-                    135deg,
-                    rgba(18, 18, 18, 0.76),
-                    rgba(25, 25, 25, 0.58),
-                    rgba(18, 18, 18, 0.78)
-                ),
-                url("Familia.jpg");
-
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-        }
-
-        button,
-        input {
-            font: inherit;
-        }
-
-        button {
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        button:focus-visible,
-        input:focus-visible {
-            outline: 3px solid rgba(244, 119, 33, 0.55);
-            outline-offset: 3px;
-        }
-
-        /* =====================================================
-           CONTENEDOR PRINCIPAL
-        ===================================================== */
-
-        .login-container {
-            position: relative;
-
-            width: 100%;
-            max-width: 430px;
-
-            overflow: hidden;
-
-            background: rgba(255, 255, 255, 0.98);
-
-            border: 1px solid rgba(255, 255, 255, 0.75);
-            border-radius: var(--radio);
-
-            box-shadow: var(--sombra);
-
-            text-align: center;
-
-            animation: aparecer 0.45s ease-out;
-        }
-
-        /* Franja superior naranja */
-
-        .franja-superior {
-            width: 100%;
-            height: 7px;
-
-            background: linear-gradient(
-                90deg,
-                var(--naranja-oscuro),
-                var(--naranja),
-                #ffad70
-            );
-        }
-
-        .login-contenido {
-            padding: 35px 36px 27px;
-        }
-
-        @keyframes aparecer {
-            from {
-                opacity: 0;
-                transform: translateY(14px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* =====================================================
-           LOGO DEL CLUB
-        ===================================================== */
-
-        .logo-contenedor {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            margin: 2px 0 19px;
-        }
-
-        .logo {
-            display: block;
-
-            width: 112px;
-            height: 112px;
-
-            object-fit: contain;
-
-            padding: 4px;
-
-            background: var(--blanco);
-
-            border-radius: 100%;
-        }
-
-        /* =====================================================
-           IDENTIDAD Y TÍTULOS
-        ===================================================== */
-
-        .etiqueta-club {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 7px;
-
-            margin-bottom: 13px;
-
-            color: var(--naranja-oscuro);
-
-            font-size: 10px;
-            font-weight: 900;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        .etiqueta-punto {
-            width: 6px;
-            height: 6px;
-
-            background: var(--naranja);
-            border-radius: 50%;
-        }
-
-        h1 {
-            color: var(--negro);
-
-            font-size: 26px;
-            font-weight: 900;
-            line-height: 1.25;
-            letter-spacing: -0.5px;
-
-            margin-bottom: 8px;
-        }
-
-        .subtitulo {
-            color: var(--gris-texto);
-
-            font-size: 13px;
-            line-height: 1.6;
-
-            margin-bottom: 24px;
-        }
-
-        .separador {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            width: 100%;
-
-            margin-bottom: 25px;
-        }
-
-        .separador::before {
-            content: "";
-
-            width: 54px;
-            height: 4px;
-
-            border-radius: 10px;
-            background: var(--naranja);
-        }
-
-        /* =====================================================
-           CABECERA DEL FORMULARIO
-        ===================================================== */
-
-        .formulario-cabecera {
-            text-align: left;
-            margin-bottom: 21px;
-        }
-
-        .formulario-cabecera h2 {
-            color: var(--negro);
-
-            font-size: 17px;
-            font-weight: 900;
-
-            margin-bottom: 5px;
-        }
-
-        .formulario-cabecera p {
-            color: var(--gris-texto);
-
-            font-size: 12px;
-            line-height: 1.5;
-        }
-
-        /* =====================================================
-           CAMPOS DEL FORMULARIO
-        ===================================================== */
-
-        .campo {
-            text-align: left;
-            margin-bottom: 18px;
-        }
-
-        .campo label {
-            display: block;
-
-            margin-bottom: 8px;
-
-            color: #333333;
-
-            font-size: 12px;
-            font-weight: 900;
-            letter-spacing: 0.1px;
-        }
-
-        .campo input {
-            display: block;
-
-            width: 100%;
-            min-height: 49px;
-
-            padding: 13px 14px;
-
-            border: 1px solid #dcdcdc;
-            border-radius: 10px;
-
-            background: #ffffff;
-
-            color: var(--negro);
-
-            font-size: 13px;
-
-            outline: none;
-
-            transition:
-                border-color 0.2s ease,
-                box-shadow 0.2s ease,
-                background 0.2s ease;
-        }
-
-        .campo input::placeholder {
-            color: #a0a0a0;
-            opacity: 1;
-        }
-
-        .campo input:hover {
-            border-color: #c5c5c5;
-        }
-
-        .campo input:focus {
-            border-color: var(--naranja);
-
-            box-shadow:
-                0 0 0 3px rgba(244, 119, 33, 0.12);
-
-            background: #ffffff;
-        }
-
-        .campo input[aria-invalid="true"] {
-            border-color: var(--rojo);
-
-            box-shadow:
-                0 0 0 3px rgba(198, 40, 40, 0.08);
-        }
-
-        /* =====================================================
-           CONTRASEÑA Y VISIBILIDAD
-        ===================================================== */
-
-        .contenedor-contrasena {
-            position: relative;
-        }
-
-        .contenedor-contrasena input {
-            padding-right: 74px;
-        }
-
-        .boton-ver-contrasena {
-            position: absolute;
-
-            top: 50%;
-            right: 8px;
-
-            transform: translateY(-50%);
-
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-
-            min-height: 32px;
-
-            padding: 0 8px;
-
-            border: none;
-            border-radius: 7px;
-
-            background: transparent;
-
-            color: #626262;
-
-            font-size: 11px;
-            font-weight: 800;
-
-            cursor: pointer;
-
-            transition:
-                background 0.2s ease,
-                color 0.2s ease;
-        }
-
-        .boton-ver-contrasena:hover {
-            background: var(--naranja-claro);
-            color: var(--naranja-oscuro);
-        }
-
-        /* =====================================================
-           BOTÓN DE INICIO DE SESIÓN
-        ===================================================== */
-
-        .boton-login {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 11px;
-
-            width: 100%;
-            min-height: 50px;
-
-            margin-top: 7px;
-            padding: 14px 18px;
-
-            border: 1px solid var(--naranja);
-            border-radius: 10px;
-
-            background: var(--naranja);
-            color: var(--blanco);
-
-            font-size: 12px;
-            font-weight: 900;
-            letter-spacing: 0.8px;
-
-            box-shadow:
-                0 5px 12px rgba(244, 119, 33, 0.17);
-
-            cursor: pointer;
-
-            transition:
-                background 0.2s ease,
-                border-color 0.2s ease,
-                box-shadow 0.2s ease,
-                transform 0.2s ease;
-        }
-
-        .boton-login:hover {
-            background: var(--naranja-oscuro);
-            border-color: var(--naranja-oscuro);
-
-            box-shadow:
-                0 7px 17px rgba(220, 94, 11, 0.24);
-
-            transform: translateY(-1px);
-        }
-
-        .boton-login:active {
-            transform: translateY(0);
-        }
-
-        .boton-login:disabled {
-            opacity: 0.7;
-            cursor: wait;
-            transform: none;
-        }
-
-        .texto-boton {
-            line-height: 1.2;
-        }
-
-        .icono-ingreso {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-
-            font-size: 19px;
-            line-height: 1;
-        }
-
-        /* =====================================================
-           MENSAJE DE ERROR
-        ===================================================== */
-
-        .error {
-            display: none;
-
-            margin-top: 16px;
-            padding: 12px 13px;
-
-            border: 1px solid #f3cccc;
-            border-radius: 9px;
-
-            background: var(--rojo-fondo);
-            color: var(--rojo);
-
-            font-size: 12px;
-            font-weight: 700;
-            line-height: 1.5;
-
-            text-align: left;
-        }
-
-        .error.visible {
-            display: block;
-
-            animation: mostrarError 0.2s ease-out;
-        }
-
-        @keyframes mostrarError {
-            from {
-                opacity: 0;
-                transform: translateY(-4px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* =====================================================
-           PIE DEL LOGIN
-        ===================================================== */
-
-        .pie-login {
-            margin-top: 26px;
-            padding-top: 19px;
-
-            border-top: 1px solid #eeeeee;
-
-            color: var(--gris-texto);
-
-            font-size: 10px;
-            line-height: 1.7;
-        }
-
-        .pie-login strong {
-            display: block;
-
-            margin-bottom: 3px;
-
-            color: #404040;
-
-            font-size: 10px;
-            font-weight: 900;
-            letter-spacing: 1.1px;
-        }
-
-        .pie-login span {
-            color: var(--naranja-oscuro);
-            font-weight: 700;
-        }
-
-        /* =====================================================
-           RESPONSIVE: CELULARES Y TABLETS
-        ===================================================== */
-
-        @media (max-width: 500px) {
-            body {
-                padding: 16px;
-
-                background-attachment: scroll;
-                background-position: center center;
-            }
-
-            .login-container {
-                max-width: 420px;
-                border-radius: 16px;
-            }
-
-            .login-contenido {
-                padding: 28px 23px 23px;
-            }
-
-            .logo {
-                width: 96px;
-                height: 96px;
-            }
-
-            .logo-contenedor {
-                margin-bottom: 16px;
-            }
-
-            h1 {
-                font-size: 23px;
-            }
-
-            .subtitulo {
-                font-size: 12px;
-                margin-bottom: 22px;
-            }
-
-            .formulario-cabecera h2 {
-                font-size: 16px;
-            }
-
-            .campo {
-                margin-bottom: 16px;
-            }
-
-            .pie-login {
-                margin-top: 23px;
-                padding-top: 16px;
-            }
-        }
-
-        @media (max-width: 360px) {
-            body {
-                padding: 11px;
-            }
-
-            .login-contenido {
-                padding: 26px 18px 21px;
-            }
-
-            .logo {
-                width: 84px;
-                height: 84px;
-            }
-
-            h1 {
-                font-size: 21px;
-            }
-
-            .campo input {
-                min-height: 46px;
-            }
-
-            .boton-login {
-                min-height: 47px;
-            }
-        }
-
-        /* =====================================================
-           PANTALLAS CON POCA ALTURA
-        ===================================================== */
-
-        @media (max-height: 650px) and (min-width: 501px) {
-            body {
-                align-items: flex-start;
-                padding-top: 18px;
-                padding-bottom: 18px;
-            }
-
-            .login-contenido {
-                padding-top: 23px;
-                padding-bottom: 20px;
-            }
-
-            .logo {
-                width: 78px;
-                height: 78px;
-            }
-
-            .logo-contenedor {
-                margin-bottom: 12px;
-            }
-
-            .subtitulo {
-                margin-bottom: 16px;
-            }
-
-            .separador {
-                margin-bottom: 18px;
-            }
-
-            .formulario-cabecera {
-                margin-bottom: 16px;
-            }
-
-            .campo {
-                margin-bottom: 13px;
-            }
-
-            .pie-login {
-                margin-top: 19px;
-                padding-top: 14px;
-            }
-        }
-
-        /* =====================================================
-           ACCESIBILIDAD
-        ===================================================== */
-
-        @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-                scroll-behavior: auto !important;
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jugadoras - ADIUR FEM</title>
+  <style>
+    :root {
+      --naranja: #f47721;
+      --naranja-oscuro: #dc5e0b;
+      --naranja-claro: #fff0e6;
+      --negro: #171717;
+      --blanco: #fff;
+      --rojo: #c8102e;
+      --rojo-oscuro: #a20c25;
+      --borde: #e8e8e8;
+      --gris: #f4f5f7;
+      --gris-texto: #747474;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    body {
+      background: #f4f5f7;
+      color: #222;
+    }
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+    button {
+      cursor: pointer;
+    }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .barra-superior {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      min-height: 84px;
+      padding: 12px 25px;
+      background: #fff;
+      border-bottom: 1px solid var(--borde);
+    }
+    .boton-menu {
+      width: 42px;
+      height: 42px;
+      flex-shrink: 0;
+      border: 0;
+      background: #fff;
+      border-radius: 9px;
+      font-size: 27px;
+      color: var(--negro);
+    }
+    .boton-menu:hover {
+      background: var(--gris);
+    }
+    .logo-superior {
+      width: 55px;
+      height: 55px;
+      flex-shrink: 0;
+      object-fit: contain;
+      border-radius: 50%;
+      padding: 2px;
+      background: #fff;
+    }
+    .titulo-superior {
+      flex: 1;
+      min-width: 0;
+    }
+    .titulo-superior h1 {
+      margin: 0 0 5px;
+      font-size: 23px;
+      font-weight: 900;
+      letter-spacing: .5px;
+    }
+    .titulo-superior p {
+      margin: 0;
+      color: var(--gris-texto);
+      font-size: 13px;
+    }
+    .perfil {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      flex-shrink: 0;
+    }
+    .avatar {
+      width: 42px;
+      height: 42px;
+      display: flex;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+      background: var(--negro);
+      color: #fff;
+      border-radius: 50%;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    .informacion-perfil {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      min-width: 0;
+    }
+    .nombre-perfil {
+      display: block;
+      max-width: 150px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: var(--negro);
+      font-size: 13px;
+      font-weight: bold;
+    }
+    .rol-perfil {
+      display: block;
+      margin-top: 4px;
+      color: var(--gris-texto);
+      font-size: 11px;
+    }
+    .contenedor {
+      display: flex;
+      min-height: calc(100vh - 84px);
+      align-items: stretch;
+    }
+    .sidebar {
+      width: 258px;
+      flex: 0 0 258px;
+      padding: 20px 13px;
+      background: #fff;
+      border-right: 1px solid var(--borde);
+      transition: margin-left .25s ease;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+    .sidebar.oculto {
+      margin-left: -258px;
+    }
+    .menu-inicio {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 14px;
+      margin-bottom: 16px;
+      border-radius: 11px;
+      background: #fff;
+      color: var(--negro);
+      font-size: 13px;
+      font-weight: 850;
+      transition: background .2s, color .2s;
+    }
+    .menu-inicio:hover {
+      background: #f8f8f8;
+      color: var(--negro);
+    }
+    .menu-inicio.activo {
+      background: var(--naranja-claro);
+      color: var(--naranja-oscuro);
+    }
+    .menu-inicio.activo:hover {
+      background: #ffe7d6;
+    }
+    .menu-inicio .icono-inicio {
+      width: 15px;
+      flex-shrink: 0;
+      text-align: center;
+      font-size: 17px;
+      line-height: 1;
+    }
+    .grupo-menu {
+      margin-bottom: 8px;
+    }
+    .titulo-grupo {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      min-height: 46px;
+      padding: 12px 13px;
+      cursor: pointer;
+      border-radius: 8px;
+      color: var(--negro);
+      font-size: 11px;
+      font-weight: 850;
+      letter-spacing: .8px;
+      user-select: none;
+    }
+    .titulo-grupo:hover {
+      background: #f8f8f8;
+    }
+    .flecha {
+      display: inline-block;
+      flex-shrink: 0;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1;
+      transition: transform .2s;
+    }
+    .grupo-menu.cerrado .flecha {
+      transform: rotate(0deg);
+    }
+    .grupo-menu:not(.cerrado) .flecha {
+      transform: rotate(90deg);
+    }
+    .submenu {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      padding: 0 0 5px;
+    }
+    .grupo-menu.cerrado .submenu {
+      display: none;
+    }
+    .submenu a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 9px;
+      font-size: 13px;
+      color: #656872;
+      transition: background .15s, color .15s;
+    }
+    .submenu a:hover {
+      background: #f6f6f6;
+      color: #181818;
+    }
+    .submenu a.activo {
+      background: var(--naranja-claro);
+      color: var(--naranja-oscuro);
+      font-weight: 800;
+    }
+    .submenu a.activo:hover {
+      background: #ffe7d6;
+      color: var(--naranja-oscuro);
+    }
+    .nav-punto {
+      width: 6px;
+      height: 6px;
+      flex-shrink: 0;
+      background: #d7d9de;
+      border-radius: 50%;
+    }
+    .submenu a.activo .nav-punto {
+      background: var(--naranja);
+    }
+    .separador-sesion {
+      border-top: 1px solid var(--borde);
+      margin: 19px 0 0;
+      padding-top: 12px;
+    }
+    .enlace-cerrar-sesion {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      border-radius: 9px;
+      color: #c0392b;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .enlace-cerrar-sesion:hover {
+      background: #fff2f1;
+      color: #a93226;
+    }
+    .icono-salir {
+      font-size: 17px;
+    }
+    .capa-sidebar {
+      display: none;
+    }
+    main {
+      flex: 1;
+      min-width: 0;
+      width: 100%;
+      max-width: 1450px;
+      margin: 30px auto;
+      padding: 0 25px;
+    }
+    .encabezado-pagina {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 25px;
+    }
+    .encabezado-pagina h2 {
+      font-size: 29px;
+      margin-bottom: 8px;
+    }
+    .encabezado-pagina p {
+      color: #777;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .boton-principal {
+      background: var(--rojo);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 18px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    .boton-principal:hover {
+      background: var(--rojo-oscuro);
+    }
+    .tarjeta {
+      background: #fff;
+      border-radius: 12px;
+      padding: 22px;
+      box-shadow: 0 2px 9px rgba(0,0,0,.05);
+      border: 1px solid var(--borde);
+      margin-bottom: 22px;
+    }
+    .resumen {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+    .dato {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid var(--borde);
+      box-shadow: 0 2px 9px rgba(0,0,0,.04);
+    }
+    .dato p {
+      color: #777;
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+    .dato h3 {
+      font-size: 28px;
+      color: var(--rojo);
+    }
+    .controles {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(150px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .controles input,
+    .controles select {
+      width: 100%;
+      min-width: 0;
+      padding: 11px 12px;
+      border: 1px solid #ccc;
+      border-radius: 7px;
+      background: #fff;
+      font-size: 14px;
+    }
+    .controles input:focus,
+    .controles select:focus {
+      outline: none;
+      border-color: var(--rojo);
+    }
+    .tabla-contenedor {
+      width: 100%;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1050px;
+    }
+    th {
+      background: #f7f7f7;
+      text-align: left;
+      padding: 14px 12px;
+      font-size: 12px;
+      text-transform: uppercase;
+      color: #666;
+      border-bottom: 1px solid #ddd;
+      white-space: nowrap;
+    }
+    td {
+      padding: 14px 12px;
+      border-bottom: 1px solid #eee;
+      font-size: 14px;
+    }
+    tbody tr:hover {
+      background: #fff9fa;
+    }
+    .nombre-jugadora {
+      font-weight: bold;
+    }
+    .etiqueta {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      background: #fbe9ec;
+      color: #b20d2a;
+      white-space: nowrap;
+    }
+    .estado {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+    .estado-activo {
+      background: #e0f5e7;
+      color: #18743b;
+    }
+    .estado-lesionado {
+      background: #fbe2e2;
+      color: #b42323;
+    }
+    .estado-inactivo {
+      background: #e8e8e8;
+      color: #555;
+    }
+    .estado-prueba {
+      background: #fff0cc;
+      color: #8a5a00;
+    }
+    .acciones {
+      display: flex;
+      gap: 7px;
+    }
+    .boton-secundario,
+    .boton-eliminar {
+      padding: 7px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 1px solid #ddd;
+      background: #fff;
+      font-size: 12px;
+    }
+    .boton-secundario:hover {
+      background: #eee;
+    }
+    .boton-eliminar {
+      color: #b20d2a;
+    }
+    .boton-eliminar:hover {
+      background: #fbe9ec;
+    }
+    .vacio {
+      text-align: center;
+      color: #888;
+      padding: 35px;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.5);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+    }
+    .modal.activo {
+      display: flex;
+    }
+    .modal-contenido {
+      background: #fff;
+      border-radius: 13px;
+      padding: 25px;
+      width: 100%;
+      max-width: 520px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-encabezado {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+    .modal-encabezado h3 {
+      font-size: 21px;
+    }
+    .cerrar-modal {
+      background: transparent;
+      border: none;
+      font-size: 27px;
+      cursor: pointer;
+      color: #333;
+    }
+    .campo {
+      margin-bottom: 15px;
+    }
+    .campo label {
+      display: block;
+      font-size: 13px;
+      font-weight: bold;
+      margin-bottom: 7px;
+    }
+    .campo input,
+    .campo select {
+      width: 100%;
+      padding: 11px;
+      border: 1px solid #ccc;
+      border-radius: 7px;
+      font-size: 14px;
+      background: #fff;
+    }
+    .campo input:focus,
+    .campo select:focus {
+      outline: none;
+      border-color: var(--rojo);
+    }
+    .campo input[readonly] {
+      background: #f1f1f1;
+      color: #555;
+    }
+    .ayuda {
+      color: #777;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+    .botones-modal {
+      display: flex;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+    }
+    .boton-cancelar {
+      padding: 11px 16px;
+      border: 1px solid #ccc;
+      background: #fff;
+      border-radius: 7px;
+    }
+    .boton-cancelar:hover {
+      background: #f4f4f4;
+    }
+    @media (max-width: 1150px) {
+      .controles {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    @media (max-width: 760px) {
+      .barra-superior {
+        min-height: 72px;
+        padding: 10px 13px;
+        gap: 9px;
+      }
+      .boton-menu {
+        width: 38px;
+        height: 38px;
+        font-size: 24px;
+      }
+      .logo-superior {
+        width: 44px;
+        height: 44px;
+      }
+      .titulo-superior h1 {
+        font-size: 16px;
+      }
+      .titulo-superior p {
+        font-size: 11px;
+      }
+      .perfil {
+        gap: 6px;
+      }
+      .avatar {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+      }
+      .nombre-perfil {
+        max-width: 80px;
+        font-size: 12px;
+      }
+      .rol-perfil {
+        display: none;
+      }
+      .contenedor {
+        min-height: calc(100vh - 72px);
+      }
+      .sidebar {
+        position: fixed;
+        top: 72px;
+        bottom: 0;
+        left: 0;
+        z-index: 150;
+        display: block;
+        width: 258px;
+        max-width: 86vw;
+        height: auto;
+        flex: none;
+        padding: 20px 13px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        background: #fff;
+        border-right: 1px solid var(--borde);
+        box-shadow: 5px 0 25px #00000012;
+        margin-left: 0;
+        transform: translateX(0);
+        transition: transform .25s ease;
+      }
+      .sidebar.oculto {
+        margin-left: 0;
+        transform: translateX(-110%);
+      }
+      .capa-sidebar.visible {
+        display: block;
+        position: fixed;
+        inset: 72px 0 0;
+        z-index: 140;
+        background: rgba(0,0,0,.32);
+      }
+      main {
+        margin: 22px auto;
+        padding: 0 13px;
+      }
+      .encabezado-pagina {
+        gap: 15px;
+      }
+      .encabezado-pagina h2 {
+        font-size: 24px;
+      }
+      .encabezado-pagina p {
+        font-size: 13px;
+      }
+      .boton-principal {
+        padding: 11px 14px;
+        font-size: 13px;
+      }
+      .resumen {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      .dato {
+        padding: 15px;
+      }
+      .dato h3 {
+        font-size: 24px;
+      }
+      .tarjeta {
+        padding: 14px;
+      }
+      .controles {
+        grid-template-columns: 1fr;
+      }
+      .tabla-contenedor {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      .modal-contenido {
+        padding: 18px;
+      }
+    }
+    @media (max-width: 380px) {
+      .barra-superior {
+        padding: 8px;
+        gap: 6px;
+      }
+      .boton-menu {
+        width: 32px;
+        height: 36px;
+        font-size: 23px;
+      }
+      .logo-superior {
+        width: 34px;
+        height: 34px;
+      }
+      .titulo-superior h1 {
+        font-size: 14px;
+      }
+      .titulo-superior p {
+        font-size: 9px;
+      }
+      .nombre-perfil {
+        max-width: 60px;
+      }
+      .avatar {
+        width: 32px;
+        height: 32px;
+      }
+    }
+    /* =====================================================
+       REDISEÑO VISUAL · JUGADORAS
+       Mantiene intactos los selectores usados por JavaScript.
+    ===================================================== */
+    :root {
+      --naranja: #f47721;
+      --naranja-oscuro: #dc5e0b;
+      --naranja-claro: #fff0e6;
+      --borde: #e7e9ee;
+      --gris: #f5f6f8;
+      --gris-texto: #717784;
+      --negro: #171717;
+      --sombra-suave: 0 8px 28px rgba(26, 32, 44, .045);
+      --radio-panel: 18px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #f6f7f9;
+      color: #20222a;
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, input, select { font: inherit; }
+    button { transition: background .18s ease, border-color .18s ease, box-shadow .18s ease, transform .18s ease; }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid rgba(244, 119, 33, .25);
+      outline-offset: 2px;
+    }
+    .barra-superior {
+      min-height: 84px;
+      padding: 12px 25px;
+      gap: 14px;
+      background: rgba(255,255,255,.97);
+      border-bottom: 1px solid #e9eaf0;
+      box-shadow: 0 2px 10px rgba(20, 26, 36, .025);
+      backdrop-filter: blur(12px);
+    }
+    .boton-menu {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border: 1px solid transparent;
+      border-radius: 11px;
+      background: transparent;
+      font-size: 25px;
+      line-height: 1;
+      color: #24252b;
+    }
+    .boton-menu:hover { background: #f5f6f8; border-color: #eceef2; }
+    .logo-superior { width: 52px; height: 52px; }
+    .titulo-superior h1 { font-size: 21px; letter-spacing: .55px; }
+    .titulo-superior p { font-size: 12px; color: #7b808b; }
+    .avatar { background: #1b1c20; border: 3px solid #f1f2f5; }
+    .contenedor { min-height: calc(100vh - 84px); }
+    .sidebar {
+      background: #fff;
+      border-right: 1px solid #e9eaf0;
+      padding: 20px 13px;
+    }
+    .menu-inicio { margin-bottom: 13px; }
+    .menu-inicio.activo, .submenu a.activo {
+      background: #fff0e6;
+      color: #d95a08;
+    }
+    .submenu a.activo .nav-punto { background: #f47721; }
+    .titulo-grupo { min-height: 43px; }
+    main {
+      flex: 1;
+      min-width: 0;
+      width: 100%;
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 34px 34px 48px;
+    }
+    .encabezado-pagina {
+      align-items: flex-end;
+      gap: 22px;
+      margin-bottom: 26px;
+    }
+    .eyebrow-pagina {
+      display: block;
+      margin-bottom: 8px;
+      color: #dc5e0b;
+      font-size: 11px;
+      font-weight: 850;
+      letter-spacing: 1.35px;
+    }
+    .encabezado-pagina h2 {
+      margin-bottom: 8px;
+      color: #17181c;
+      font-size: clamp(25px, 2.3vw, 32px);
+      line-height: 1.15;
+      font-weight: 850;
+      letter-spacing: -.65px;
+    }
+    .encabezado-pagina p {
+      max-width: 690px;
+      color: #727783;
+      font-size: 14px;
+      line-height: 1.65;
+    }
+    .boton-principal {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 46px;
+      padding: 12px 18px;
+      border: 1px solid #e96812;
+      border-radius: 11px;
+      background: #f47721;
+      color: #fff;
+      box-shadow: 0 5px 12px rgba(244, 119, 33, .16);
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .boton-principal::first-letter { font-size: 16px; }
+    .boton-principal:hover { background: #dc5e0b; border-color: #dc5e0b; box-shadow: 0 7px 16px rgba(244, 119, 33, .22); transform: translateY(-1px); }
+    .resumen {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 17px;
+      margin-bottom: 22px;
+    }
+    .dato {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      min-height: 135px;
+      padding: 22px 24px;
+      overflow: hidden;
+      border: 1px solid #e9eaf0;
+      border-radius: var(--radio-panel);
+      background: #fff;
+      box-shadow: var(--sombra-suave);
+    }
+    .dato::after {
+      position: absolute;
+      right: -30px;
+      bottom: -48px;
+      width: 135px;
+      height: 135px;
+      border-radius: 50%;
+      background: #fff6ef;
+      content: "";
+      pointer-events: none;
+    }
+    .dato-categorias::after { background: #f3f5fa; }
+    .dato-contenido { position: relative; z-index: 1; min-width: 0; }
+    .dato p { margin-bottom: 6px; color: #6f7480; font-size: 13px; font-weight: 650; }
+    .dato h3 { margin: 0 0 5px; color: #1b1d23; font-size: 34px; font-weight: 850; line-height: 1.1; letter-spacing: -.8px; }
+    .dato-ayuda { display: block; color: #9297a1; font-size: 11px; }
+    .dato-icono {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 56px;
+      width: 56px;
+      height: 56px;
+      border: 1px solid #ffdfc9;
+      border-radius: 16px;
+      background: #fff0e6;
+      color: #e56b19;
+    }
+    .dato-categorias .dato-icono { border-color: #e2e7f0; background: #f3f5fa; color: #68748a; }
+    .dato-icono svg { width: 27px; height: 27px; }
+    .tarjeta {
+      padding: 26px;
+      margin-bottom: 22px;
+      border: 1px solid #e8eaf0;
+      border-radius: 19px;
+      background: #fff;
+      box-shadow: var(--sombra-suave);
+    }
+    .encabezado-listado {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+    .encabezado-listado h3 {
+      margin: 0 0 5px;
+      color: #21232a;
+      font-size: 18px;
+      font-weight: 850;
+      letter-spacing: -.2px;
+    }
+    .encabezado-listado p { color: #7b808b; font-size: 12px; line-height: 1.5; }
+    .boton-limpiar {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 38px;
+      padding: 8px 11px;
+      border: 1px solid #e7e9ef;
+      border-radius: 9px;
+      background: #fff;
+      color: #646a76;
+      font-size: 12px;
+      font-weight: 750;
+      white-space: nowrap;
+    }
+    .boton-limpiar svg { width: 15px; height: 15px; }
+    .boton-limpiar:hover { border-color: #f5c9ad; background: #fff8f3; color: #d95e0b; }
+    .controles {
+      display: grid;
+      grid-template-columns: minmax(230px, 1.55fr) repeat(3, minmax(145px, 1fr));
+      gap: 13px;
+      margin-bottom: 22px;
+      padding: 17px;
+      border: 1px solid #eff0f3;
+      border-radius: 14px;
+      background: #fafbfc;
+    }
+    .campo-filtro { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
+    .campo-filtro label {
+      color: #555b66;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .15px;
+    }
+    .campo-filtro input, .campo-filtro select {
+      width: 100%;
+      min-width: 0;
+      min-height: 43px;
+      padding: 10px 12px;
+      border: 1px solid #dfe2e8;
+      border-radius: 9px;
+      outline: none;
+      background-color: #fff;
+      color: #292c33;
+      font-size: 12px;
+      box-shadow: 0 1px 2px rgba(19, 29, 48, .025);
+      transition: border-color .18s ease, box-shadow .18s ease;
+    }
+    .campo-filtro input::placeholder { color: #a0a4ad; }
+    .campo-filtro input:focus, .campo-filtro select:focus {
+      border-color: #f49a5c;
+      box-shadow: 0 0 0 3px rgba(244, 119, 33, .12);
+    }
+    .tabla-contenedor {
+      width: 100%;
+      overflow: auto;
+      border: 1px solid #eaecf1;
+      border-radius: 13px;
+      background: #fff;
+      -webkit-overflow-scrolling: touch;
+    }
+    table {
+      width: 100%;
+      min-width: 1070px;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+    th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      padding: 15px 16px;
+      border-bottom: 1px solid #e7e9ef;
+      background: #f8f9fb;
+      color: #676d78;
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: .65px;
+      text-align: left;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    td {
+      padding: 15px 16px;
+      border-bottom: 1px solid #f0f1f4;
+      color: #4d525d;
+      font-size: 12px;
+      vertical-align: middle;
+    }
+    tbody tr { background: #fff; transition: background .15s ease; }
+    tbody tr:hover { background: #fffaf6; }
+    tbody tr:last-child td { border-bottom: 0; }
+    .nombre-jugadora { color: #22242a; font-size: 13px; font-weight: 800; }
+    .etiqueta {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 9px;
+      border: 1px solid #ffe0cc;
+      border-radius: 7px;
+      background: #fff3ea;
+      color: #c9570b;
+      font-size: 11px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .estado { padding: 6px 10px; border: 1px solid transparent; border-radius: 7px; font-size: 10px; font-weight: 850; }
+    .estado-activo { border-color: #cdeed9; background: #eaf8ef; color: #247342; }
+    .estado-lesionado { border-color: #f5cccc; background: #fff0f0; color: #b42323; }
+    .estado-inactivo { border-color: #e3e5e9; background: #f1f2f4; color: #666b75; }
+    .estado-prueba { border-color: #f1dfad; background: #fff7df; color: #896113; }
+    .acciones { display: flex; flex-wrap: wrap; gap: 7px; }
+    .boton-secundario, .boton-eliminar {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 31px;
+      padding: 6px 10px;
+      border: 1px solid #e0e3e9;
+      border-radius: 8px;
+      background: #fff;
+      color: #515762;
+      font-size: 11px;
+      font-weight: 750;
+    }
+    .boton-secundario:hover { border-color: #f3c29f; background: #fff7f1; color: #d45a09; }
+    .boton-eliminar { border-color: #f1d3d3; color: #b42323; }
+    .boton-eliminar:hover { border-color: #e9b6b6; background: #fff1f1; }
+    .vacio-contenedor { display: none; padding: 28px 16px 12px; text-align: center; }
+    .vacio-icono {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 43px;
+      height: 43px;
+      margin-bottom: 10px;
+      border-radius: 13px;
+      background: #f5f6f8;
+      color: #9095a0;
+      font-size: 29px;
+    }
+    .vacio { padding: 0 0 12px; color: #777e89; font-size: 12px; }
+    .modal { padding: 20px; background: rgba(20, 24, 32, .48); backdrop-filter: blur(5px); }
+    .modal-contenido {
+      width: 100%;
+      max-width: 650px;
+      max-height: min(90vh, 850px);
+      padding: 28px;
+      overflow: auto;
+      border: 1px solid rgba(255,255,255,.7);
+      border-radius: 20px;
+      background: #fff;
+      box-shadow: 0 24px 80px rgba(16, 24, 40, .22);
+    }
+    .modal-encabezado { align-items: flex-start; gap: 16px; margin-bottom: 23px; }
+    .modal-titulos { min-width: 0; }
+    .modal-eyebrow { display: block; margin-bottom: 7px; color: #dc5e0b; font-size: 10px; font-weight: 850; letter-spacing: 1px; }
+    .modal-encabezado h3 { color: #202127; font-size: 23px; letter-spacing: -.45px; }
+    .modal-titulos p { margin-top: 6px; color: #7a808b; font-size: 12px; }
+    .cerrar-modal { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 35px; width: 35px; height: 35px; border-radius: 10px; background: #f6f7f9; color: #666b75; font-size: 25px; }
+    .cerrar-modal:hover { background: #eeeeF2; color: #25272e; }
+    #formJugadora { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 15px; row-gap: 0; }
+    .campo { min-width: 0; margin-bottom: 16px; }
+    .campo label { color: #454a54; font-size: 12px; font-weight: 800; }
+    .campo input, .campo select {
+      min-height: 44px;
+      padding: 11px 12px;
+      border: 1px solid #dfe2e8;
+      border-radius: 9px;
+      background: #fff;
+      color: #272a31;
+      font-size: 13px;
+      transition: border-color .18s ease, box-shadow .18s ease;
+    }
+    .campo input:focus, .campo select:focus { outline: none; border-color: #f49a5c; box-shadow: 0 0 0 3px rgba(244,119,33,.12); }
+    .campo input[readonly] { background: #f6f7f9; color: #666b75; }
+    .campo:first-child, .campo:nth-child(7), .botones-modal { grid-column: 1 / -1; }
+    .ayuda { color: #8a909a; font-size: 11px; line-height: 1.5; }
+    .botones-modal { justify-content: flex-end; gap: 9px; padding-top: 7px; margin-top: 5px; border-top: 1px solid #eff0f3; }
+    .boton-cancelar { min-height: 43px; padding: 10px 15px; border: 1px solid #e0e3e9; border-radius: 9px; background: #fff; color: #555b65; font-size: 12px; font-weight: 750; }
+    .boton-cancelar:hover { background: #f6f7f9; }
+    .botones-modal .boton-principal { min-height: 43px; }
+    @media (max-width: 1250px) {
+      main { padding: 30px 24px 40px; }
+      .controles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 760px) {
+      .barra-superior { min-height: 72px; padding: 10px 13px; gap: 9px; }
+      .boton-menu { width: 38px; height: 38px; font-size: 24px; }
+      .logo-superior { width: 44px; height: 44px; }
+      .titulo-superior h1 { font-size: 16px; }
+      .titulo-superior p { font-size: 11px; }
+      .perfil { gap: 6px; }
+      .avatar { width: 36px; height: 36px; font-size: 14px; }
+      .nombre-perfil { max-width: 80px; font-size: 12px; }
+      .rol-perfil { display: none; }
+      .contenedor { min-height: calc(100vh - 72px); }
+      .sidebar { position: fixed; top: 72px; bottom: 0; left: 0; z-index: 150; display: block; width: 258px; max-width: 86vw; height: auto; flex: none; padding: 20px 13px; overflow-x: hidden; overflow-y: auto; background: #fff; border-right: 1px solid var(--borde); box-shadow: 5px 0 25px #00000012; margin-left: 0; transform: translateX(0); transition: transform .25s ease; }
+      .sidebar.oculto { margin-left: 0; transform: translateX(-110%); }
+      .capa-sidebar.visible { display: block; position: fixed; inset: 72px 0 0; z-index: 140; background: rgba(0,0,0,.32); }
+      main { margin: 0 auto; padding: 24px 15px 34px; }
+      .encabezado-pagina { align-items: flex-start; flex-direction: column; gap: 17px; margin-bottom: 20px; }
+      .encabezado-pagina h2 { font-size: 25px; }
+      .encabezado-pagina p { font-size: 13px; }
+      .boton-principal { min-height: 43px; padding: 11px 14px; font-size: 12px; }
+      .resumen { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-bottom: 15px; }
+      .dato { min-height: 120px; padding: 16px; border-radius: 15px; }
+      .dato h3 { font-size: 27px; }
+      .dato-ayuda { max-width: 145px; font-size: 10px; }
+      .dato-icono { flex-basis: 42px; width: 42px; height: 42px; border-radius: 12px; }
+      .dato-icono svg { width: 22px; height: 22px; }
+      .tarjeta { padding: 17px; border-radius: 16px; }
+      .encabezado-listado { align-items: flex-start; }
+      .encabezado-listado h3 { font-size: 16px; }
+      .encabezado-listado p { font-size: 11px; }
+      .boton-limpiar { padding: 8px; font-size: 0; gap: 0; }
+      .boton-limpiar svg { width: 17px; height: 17px; }
+      .controles { grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 13px; margin-bottom: 16px; }
+      .campo-filtro input, .campo-filtro select { min-height: 44px; }
+      .tabla-contenedor { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .modal { padding: 12px; }
+      .modal-contenido { padding: 21px; border-radius: 16px; }
+    }
+    @media (max-width: 480px) {
+      .barra-superior { padding: 8px; gap: 6px; }
+      .boton-menu { width: 32px; height: 36px; font-size: 23px; }
+      .logo-superior { width: 34px; height: 34px; }
+      .titulo-superior h1 { font-size: 14px; }
+      .titulo-superior p { font-size: 9px; }
+      .nombre-perfil { max-width: 60px; }
+      .avatar { width: 32px; height: 32px; }
+      .resumen { grid-template-columns: 1fr; }
+      .dato { min-height: 105px; }
+      .encabezado-listado { gap: 9px; }
+      .encabezado-listado p { max-width: 210px; }
+      #formJugadora { grid-template-columns: 1fr; }
+      .campo:first-child, .campo:nth-child(7), .botones-modal { grid-column: 1; }
+      .botones-modal { flex-direction: column-reverse; }
+      .botones-modal button { width: 100%; }
+    }
+    /* =====================================================
+       SELECTOR PRINCIPAL DE CATEGORÍA Y RESUMEN POR PUESTO
+       ===================================================== */
+    .selector-categoria-principal {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(280px, .8fr);
+      align-items: center;
+      gap: 24px;
+      margin: 0 0 22px;
+      padding: 24px 26px;
+      border: 1px solid #f2d7c4;
+      border-radius: 18px;
+      background: linear-gradient(115deg, #fffaf6 0%, #fff 72%);
+      box-shadow: 0 4px 16px rgba(40, 35, 28, .035);
+    }
+    .selector-categoria-texto { min-width: 0; }
+    .selector-eyebrow {
+      display: inline-block;
+      margin-bottom: 8px;
+      color: #dc5e0b;
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: 1.35px;
+    }
+    .selector-categoria-texto h3 {
+      margin: 0 0 7px;
+      color: #202127;
+      font-size: 20px;
+      font-weight: 850;
+      letter-spacing: -.45px;
+    }
+    .selector-categoria-texto p {
+      max-width: 650px;
+      color: #747985;
+      font-size: 12px;
+      line-height: 1.65;
+    }
+    .selector-categoria-campo { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+    .selector-categoria-campo label {
+      color: #4d515b;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .15px;
+    }
+    .selector-categoria-campo select {
+      width: 100%;
+      min-height: 48px;
+      padding: 11px 14px;
+      border: 1px solid #e3b894;
+      border-radius: 11px;
+      outline: none;
+      background: #fff;
+      color: #25262b;
+      font-size: 13px;
+      font-weight: 750;
+      box-shadow: 0 2px 5px rgba(35, 28, 20, .035);
+      transition: border-color .18s ease, box-shadow .18s ease;
+    }
+    .selector-categoria-campo select:focus {
+      border-color: #f47721;
+      box-shadow: 0 0 0 3px rgba(244, 119, 33, .14);
+    }
+    .resumen[hidden], .tarjeta[hidden] { display: none !important; }
+    .resumen {
+      grid-template-columns: minmax(230px, .72fr) minmax(0, 1.8fr);
+      align-items: stretch;
+    }
+    .dato-jugadoras { min-height: 145px; }
+    .dato-posiciones {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: center;
+      gap: 15px;
+      min-width: 0;
+      min-height: 145px;
+      padding: 18px 20px;
+    }
+    .dato-posiciones::after { width: 90px; height: 90px; right: -35px; bottom: -38px; background: #f6f7fa; }
+    .puestos-encabezado { position: relative; z-index: 1; }
+    .puestos-encabezado p { margin: 0 0 4px; color: #343740; font-size: 14px; font-weight: 850; }
+    .puestos-encabezado .dato-ayuda { font-size: 10px; }
+    .puestos-mini {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .puesto-mini {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-width: 0;
+      min-height: 62px;
+      padding: 9px 5px;
+      border: 1px solid #eceef2;
+      border-radius: 10px;
+      background: #fafbfc;
+      text-align: center;
+    }
+    .puesto-mini span { color: #686d78; font-size: 10px; font-weight: 700; line-height: 1.25; }
+    .puesto-mini strong { color: #24262c; font-size: 19px; font-weight: 850; line-height: 1; }
+    .controles {
+      grid-template-columns: minmax(210px, 1.45fr) repeat(4, minmax(130px, 1fr));
+    }
+    @media (max-width: 1250px) {
+      .selector-categoria-principal { grid-template-columns: minmax(0, 1.1fr) minmax(250px, .9fr); gap: 18px; }
+      .resumen { grid-template-columns: 1fr; }
+      .controles { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .puestos-mini { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+    @media (max-width: 760px) {
+      .selector-categoria-principal { grid-template-columns: 1fr; gap: 17px; padding: 20px 18px; margin-bottom: 16px; border-radius: 15px; }
+      .selector-categoria-texto h3 { font-size: 18px; }
+      .selector-categoria-texto p { font-size: 12px; }
+      .resumen { grid-template-columns: 1fr; }
+      .dato-posiciones { padding: 17px; gap: 13px; }
+      .puestos-mini { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .controles { grid-template-columns: minmax(0, 1fr); }
+    }
+    @media (max-width: 480px) {
+      .puestos-mini { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .puesto-mini { min-height: 58px; }
+    }
+  </style>
 </head>
-
 <body>
-
-    <main class="login-container">
-
-        <div class="franja-superior" aria-hidden="true"></div>
-
-        <div class="login-contenido">
-
-            <!-- LOGO OFICIAL DE ADIUR -->
-            <div class="logo-contenedor">
-                <img
-                    src="CLUBES/ADIUR.jpeg"
-                    alt="Escudo de ADIUR"
-                    class="logo"
-                    onerror="if(!this.dataset.intento){this.dataset.intento='1';this.src='logo adiur.jpg'}else{this.style.display='none'}"
-                >
+  <header class="barra-superior">
+    <button
+      class="boton-menu"
+      id="botonMenu"
+      type="button"
+      aria-label="Abrir o cerrar menú"
+      aria-controls="sidebar"
+      aria-expanded="true"
+    >☰</button>
+    <img
+      class="logo-superior"
+      id="logoAdiur"
+      src="Logo ADIUR.jpg"
+      alt="Logo ADIUR"
+      onerror="if(!this.dataset.intento){this.dataset.intento='1';this.src='logo adiur.jpg'}else{this.style.display='none'}"
+    >
+    <div class="titulo-superior">
+      <h1>ADIUR FEMENINO</h1>
+      <p>Plantel de jugadoras</p>
+    </div>
+    <div class="perfil">
+      <div class="avatar" id="avatarUsuario">U</div>
+      <div class="informacion-perfil">
+        <div class="nombre-perfil" id="nombreUsuario">Usuario</div>
+        <div class="rol-perfil" id="rolUsuario">Club ADIUR</div>
+      </div>
+    </div>
+  </header>
+  <!-- CAPA OSCURA PARA EL MENÚ EN CELULARES -->
+  <div
+    class="capa-sidebar"
+    id="capaSidebar"
+    aria-hidden="true"
+  ></div>
+  <div class="contenedor">
+    <aside class="sidebar" id="sidebar">
+  <!-- INICIO -->
+      <a class="menu-inicio" href="Pàgina Principal.html">
+        <span class="icono-inicio" aria-hidden="true">⌂</span>
+        INICIO
+      </a>
+  <!-- PLANTEL -->
+      <div class="grupo-menu" id="grupoPlantel">
+        <div
+          class="titulo-grupo"
+          onclick="toggleGrupo('grupoPlantel')"
+          role="button"
+          tabindex="0"
+          aria-expanded="true"
+        >
+          <span>PLANTEL</span>
+          <span class="flecha" aria-hidden="true">›</span>
+        </div>
+        <div class="submenu">
+          <a
+            href="jugadoras.html"
+            class="activo"
+            aria-current="page"
+          >
+            <span class="nav-punto" aria-hidden="true"></span>
+            Jugadoras
+          </a>
+          <a href="asistencia.html">
+            <span class="nav-punto" aria-hidden="true"></span>
+            Asistencia
+          </a>
+        </div>
+      </div>
+  <!-- ENTRENAMIENTO -->
+      <div class="grupo-menu cerrado" id="grupoEntrenamiento">
+        <div
+          class="titulo-grupo"
+          onclick="toggleGrupo('grupoEntrenamiento')"
+          role="button"
+          tabindex="0"
+          aria-expanded="false"
+        >
+          <span>ENTRENAMIENTO</span>
+          <span class="flecha" aria-hidden="true">›</span>
+        </div>
+        <div class="submenu">
+          <a href="calendario.html">
+            <span class="nav-punto" aria-hidden="true"></span>
+            Calendario
+          </a>
+          <a href="planificacion.html" data-ocultar-bianca>
+            <span class="nav-punto" aria-hidden="true"></span>
+            Planificación
+          </a>
+          <a href="biblioteca.html" data-ocultar-bianca>
+            <span class="nav-punto" aria-hidden="true"></span>
+            Biblioteca de ejercicios
+          </a>
+          <a href="gimnasio.html">
+            <span class="nav-punto" aria-hidden="true"></span>
+            Gimnasio
+          </a>
+          <a href="calculadora.html" data-ocultar-bianca>
+            <span class="nav-punto" aria-hidden="true"></span>
+            Calculadora
+          </a>
+        </div>
+      </div>
+  <!-- COMPETENCIA -->
+      <div class="grupo-menu cerrado" id="grupoCompetencia">
+        <div
+          class="titulo-grupo"
+          onclick="toggleGrupo('grupoCompetencia')"
+          role="button"
+          tabindex="0"
+          aria-expanded="false"
+        >
+          <span>COMPETENCIA</span>
+          <span class="flecha" aria-hidden="true">›</span>
+        </div>
+        <div class="submenu">
+          <a href="Partidos.html">
+            <span class="nav-punto" aria-hidden="true"></span>
+            Partidos
+          </a>
+          <a href="informes.html" data-ocultar-bianca>
+            <span class="nav-punto" aria-hidden="true"></span>
+            Informes
+          </a>
+          <a href="estadisticas.html" data-ocultar-bianca>
+            <span class="nav-punto" aria-hidden="true"></span>
+            Estadísticas
+          </a>
+          <a href="pizarra.html" data-ocultar-bianca>
+            <span class="nav-punto" aria-hidden="true"></span>
+            Pizarra táctica
+          </a>
+        </div>
+      </div>
+  <!-- RENDIMIENTOS -->
+      <div class="grupo-menu cerrado" id="grupoRendimientos">
+        <div
+          class="titulo-grupo"
+          onclick="toggleGrupo('grupoRendimientos')"
+          role="button"
+          tabindex="0"
+          aria-expanded="false"
+        >
+          <span>RENDIMIENTOS</span>
+          <span class="flecha" aria-hidden="true">›</span>
+        </div>
+        <div class="submenu">
+          <a href="testeos.html">
+            <span class="nav-punto" aria-hidden="true"></span>
+            Planilla de testeos
+          </a>
+          <a href="tiempos.html">
+            <span class="nav-punto" aria-hidden="true"></span>
+            Tiempos
+          </a>
+          <a href="multimedia.html">
+            <span class="nav-punto" aria-hidden="true"></span>
+            Multimedia
+          </a>
+          <a href="encuestas.html">
+            <span class="nav-punto" aria-hidden="true"></span>
+            Encuestas
+          </a>
+          <a href="lesiones.html">
+            <span class="nav-punto" aria-hidden="true"></span>
+            Lesiones
+          </a>
+        </div>
+      </div>
+  <!-- CERRAR SESIÓN -->
+      <div class="separador-sesion">
+        <a
+          class="enlace-cerrar-sesion"
+          href="#"
+          onclick="cerrarSesion(event)"
+        >
+          <span class="icono-salir" aria-hidden="true">↪</span>
+          Cerrar sesión
+        </a>
+      </div>
+    </aside>
+    <main>
+      <div class="encabezado-pagina">
+        <div>
+          <span class="eyebrow-pagina">PLANTEL · EQUIPO</span>
+          <h2>Plantel de jugadoras</h2>
+          <p>
+            Administrá la información personal y deportiva de ADIUR FEMENINO.
+          </p>
+        </div>
+        <button
+          class="boton-principal"
+          id="botonAgregar"
+          type="button"
+        >
+          + Agregar jugadora
+        </button>
+      </div>
+      <!-- SELECTOR PRINCIPAL DE CATEGORÍA -->
+      <section class="selector-categoria-principal" aria-labelledby="tituloSelectorCategoria">
+        <div class="selector-categoria-texto">
+          <span class="selector-eyebrow">PLANTEL POR CATEGORÍA</span>
+          <h3 id="tituloSelectorCategoria">Seleccioná una categoría</h3>
+          <p>Elegí el plantel que querés consultar. La lista y el resumen se actualizarán con las jugadoras de esa categoría.</p>
+        </div>
+        <div class="selector-categoria-campo">
+          <label for="categoriaPrincipal">Categoría del plantel</label>
+          <select id="categoriaPrincipal" aria-label="Seleccionar categoría del plantel">
+            <option value="">Seleccioná una categoría</option>
+            <option value="Sub 10">Sub 10</option>
+            <option value="Sub 12">Sub 12</option>
+            <option value="Sub 14">Sub 14</option>
+            <option value="Sub 16">Sub 16</option>
+            <option value="Primera">Primera</option>
+          </select>
+        </div>
+      </section>
+      <!-- RESUMEN -->
+      <section class="resumen" id="resumenPlantel" aria-label="Resumen del plantel" hidden>
+        <div class="dato dato-jugadoras">
+          <div class="dato-contenido">
+            <p>Jugadoras visibles</p>
+            <h3 id="totalJugadoras">0</h3>
+            <span class="dato-ayuda">Según la búsqueda y los filtros activos</span>
+          </div>
+          <span class="dato-icono" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M16 20v-1.6a3.4 3.4 0 0 0-3.4-3.4H6.4A3.4 3.4 0 0 0 3 18.4V20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              <circle cx="9.5" cy="7.5" r="3.5" stroke="currentColor" stroke-width="1.8"/>
+              <path d="M17 4.4a3.5 3.5 0 0 1 0 6.8M21 20v-1.6a3.4 3.4 0 0 0-2.6-3.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </span>
+        </div>
+        <div class="dato dato-posiciones" aria-label="Cantidad de jugadoras por puesto en la categoría seleccionada">
+          <div class="puestos-encabezado">
+            <div>
+              <p>Jugadoras por puesto</p>
+              <span class="dato-ayuda">Plantel completo de la categoría seleccionada</span>
             </div>
-
-            <!-- IDENTIDAD DEL CLUB -->
-            <div class="etiqueta-club">
-                <span class="etiqueta-punto" aria-hidden="true"></span>
-                CLUB DEPORTIVO
-            </div>
-
-            <h1>ADIUR FEMENINO</h1>
-
-            <p class="subtitulo">
-                Pasión, compromiso y trabajo en equipo
-            </p>
-
-            <div class="separador" aria-hidden="true"></div>
-
-            <!-- CABECERA DEL FORMULARIO -->
-            <div class="formulario-cabecera">
-                <p></p>
-            </div>
-
-            <!-- FORMULARIO -->
-            <form id="loginForm" novalidate>
-
-                <!-- USUARIO -->
-                <div class="campo">
-                    <label for="usuario">Usuario</label>
-
-                    <input
-                        type="text"
-                        id="usuario"
-                        name="usuario"
-                        placeholder="Ingresá tu usuario"
-                        autocomplete="username"
-                        autocapitalize="none"
-                        spellcheck="false"
-                        aria-describedby="mensajeError"
-                        required
-                    >
-                </div>
-
-                <!-- CONTRASEÑA -->
-                <div class="campo">
-                    <label for="contrasena">Contraseña</label>
-
-                    <div class="contenedor-contrasena">
-                        <input
-                            type="password"
-                            id="contrasena"
-                            name="contrasena"
-                            placeholder="Ingresá tu contraseña"
-                            autocomplete="current-password"
-                            aria-describedby="mensajeError"
-                            required
-                        >
-
-                        <button
-                            type="button"
-                            class="boton-ver-contrasena"
-                            id="botonVerContrasena"
-                            aria-label="Mostrar contraseña"
-                            aria-pressed="false"
-                        >
-                            Mostrar
-                        </button>
-                    </div>
-                </div>
-
-                <!-- BOTÓN -->
-                <button
-                    type="submit"
-                    class="boton-login"
-                    id="botonLogin"
-                >
-                    <span class="texto-boton" id="textoBoton">
-                        INICIAR SESIÓN
-                    </span>
-
-                    <span class="icono-ingreso" aria-hidden="true">→</span>
-                </button>
-
-                <!-- MENSAJE DE ERROR -->
-                <div
-                    class="error"
-                    id="mensajeError"
-                    role="alert"
-                    aria-live="assertive"
-                    aria-atomic="true"
-                >
-                    Usuario o contraseña incorrectos.
-                </div>
-
-            </form>
-
-            <!-- PIE INSTITUCIONAL -->
-            <footer class="pie-login">
-                <strong></strong>
-    <script>
-        "use strict";
-
-        /* =====================================================
-           USUARIOS AUTORIZADOS
-
-           Se conservan los usuarios y las contraseñas
-           definidos en el código original.
-        ===================================================== */
-
-        const usuarios = {
-            "fran": {
-                contrasena: "ADIUR",
-                nombre: "Fran"
-            },
-
-            "toto": {
-                contrasena: "ADIUR",
-                nombre: "Toto"
-            },
-
-            "bianca": {
-                contrasena: "SUB14",
-                nombre: "Bianca"
-            }
-        };
-
-        /* =====================================================
-           ELEMENTOS DEL FORMULARIO
-        ===================================================== */
-
-        const loginForm = document.getElementById("loginForm");
-        const campoUsuario = document.getElementById("usuario");
-        const campoContrasena = document.getElementById("contrasena");
-        const mensajeError = document.getElementById("mensajeError");
-        const botonLogin = document.getElementById("botonLogin");
-        const textoBoton = document.getElementById("textoBoton");
-
-        const botonVerContrasena = document.getElementById(
-            "botonVerContrasena"
+          </div>
+          <div class="puestos-mini">
+            <div class="puesto-mini"><span>Arqueras</span><strong id="totalArqueras">0</strong></div>
+            <div class="puesto-mini"><span>Defensoras</span><strong id="totalDefensoras">0</strong></div>
+            <div class="puesto-mini"><span>Mediocampistas</span><strong id="totalMediocampistas">0</strong></div>
+            <div class="puesto-mini"><span>Delanteras</span><strong id="totalDelanteras">0</strong></div>
+            <div class="puesto-mini"><span>Polifuncionales</span><strong id="totalPolifuncionales">0</strong></div>
+            <div class="puesto-mini"><span>Sin puesto</span><strong id="totalSinPuesto">0</strong></div>
+          </div>
+        </div>
+      </section>
+  <!-- TABLA Y FILTROS -->
+      <section class="tarjeta" id="tarjetaPlantel" hidden>
+        <div class="encabezado-listado">
+          <div>
+            <h3>Jugadoras de la categoría</h3>
+            <p>Buscá y ordená el plantel seleccionado. Los filtros no cambian la categoría principal.</p>
+          </div>
+          <button class="boton-limpiar" id="limpiarFiltros" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none">
+              <path d="M4 7h16M10 11v6m4-6v6M6.5 7l.8 13h9.4l.8-13M9 7V4h6v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Limpiar filtros
+          </button>
+        </div>
+        <div class="controles">
+          <div class="campo-filtro campo-filtro-busqueda">
+            <label for="buscador">Buscar jugadora</label>
+            <input type="search" id="buscador" placeholder="Nombre o apellido..." aria-label="Buscar jugadoras">
+          </div>
+          <div class="campo-filtro">
+            <label for="filtroPosicion">Posición</label>
+            <select id="filtroPosicion" aria-label="Filtrar por posición">
+              <option value="">Todas las posiciones</option>
+              <option value="Arquera">Arquera</option>
+              <option value="Defensora">Defensora</option>
+              <option value="Mediocampista">Mediocampista</option>
+              <option value="Delantera">Delantera</option>
+              <option value="Polifuncional">Polifuncional</option>
+            </select>
+          </div>
+          <div class="campo-filtro">
+            <label for="filtroPierna">Pierna hábil</label>
+            <select id="filtroPierna" aria-label="Filtrar por pierna hábil">
+              <option value="">Todas las piernas</option>
+              <option value="Derecha">Derecha</option>
+              <option value="Izquierda">Izquierda</option>
+              <option value="Ambas">Ambas</option>
+            </select>
+          </div>
+          <div class="campo-filtro">
+            <label for="filtroEstado">Estado</label>
+            <select id="filtroEstado" aria-label="Filtrar por estado">
+              <option value="">Todos los estados</option>
+              <option value="Activo">Activo</option>
+              <option value="Lesionado">Lesionado</option>
+              <option value="Inactivo">Inactivo</option>
+              <option value="A prueba">A prueba</option>
+            </select>
+          </div>
+          <div class="campo-filtro">
+            <label for="ordenLista">Ordenar lista</label>
+            <select id="ordenLista" aria-label="Ordenar lista de jugadoras">
+              <option value="nombre-asc">Alfabético A–Z</option>
+              <option value="nombre-desc">Alfabético Z–A</option>
+              <option value="puesto">Por puesto (arqueras primero)</option>
+            </select>
+          </div>
+        </div>
+        <div class="tabla-contenedor">
+          <table>
+            <thead>
+              <tr>
+                <th>Nombre y apellido</th>
+                <th>Categoría</th>
+                <th>Fecha de nacimiento</th>
+                <th>Edad</th>
+                <th>Pierna hábil</th>
+                <th>Posición</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tablaJugadoras"></tbody>
+          </table>
+        </div>
+        <div class="vacio-contenedor">
+          <span class="vacio-icono" aria-hidden="true">⌕</span>
+          <p id="mensajeVacio" class="vacio">No hay jugadoras para mostrar con los filtros seleccionados.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+  <div
+    class="modal"
+    id="modalJugadora"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="tituloModal"
+  >
+    <div class="modal-contenido">
+      <div class="modal-encabezado">
+        <div class="modal-titulos">
+          <span class="modal-eyebrow">PLANTEL ADIUR FEMENINO</span>
+          <h3 id="tituloModal">Agregar jugadora</h3>
+          <p>Completá los datos personales y deportivos.</p>
+        </div>
+        <button
+          type="button"
+          class="cerrar-modal"
+          id="cerrarModal"
+          aria-label="Cerrar"
+        >×</button>
+      </div>
+      <form id="formJugadora">
+        <div class="campo">
+          <label for="nombre">Nombre y apellido *</label>
+          <input
+            type="text"
+            id="nombre"
+            required
+            maxlength="100"
+            placeholder="Ej.: Martina Pérez"
+          >
+        </div>
+        <div class="campo">
+          <label for="categoria">Categoría *</label>
+          <select id="categoria" required>
+            <option value="">Seleccionar categoría</option>
+            <option value="Sub 10">Sub 10</option>
+            <option value="Sub 12">Sub 12</option>
+            <option value="Sub 14">Sub 14</option>
+            <option value="Sub 16">Sub 16</option>
+            <option value="Primera">Primera</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label for="nacimiento">Fecha de nacimiento *</label>
+          <input type="date" id="nacimiento" required>
+          <p class="ayuda">La edad se calcula automáticamente.</p>
+        </div>
+        <div class="campo">
+          <label for="edad">Edad</label>
+          <input
+            type="number"
+            id="edad"
+            readonly
+            placeholder="Cálculo automático"
+          >
+        </div>
+        <div class="campo">
+          <label for="pierna">Pierna hábil *</label>
+          <select id="pierna" required>
+            <option value="">Seleccionar pierna hábil</option>
+            <option value="Derecha">Derecha</option>
+            <option value="Izquierda">Izquierda</option>
+            <option value="Ambas">Ambas</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label for="posicion">Posición</label>
+          <select id="posicion">
+            <option value="">Seleccionar posición</option>
+            <option value="Arquera">Arquera</option>
+            <option value="Defensora">Defensora</option>
+            <option value="Mediocampista">Mediocampista</option>
+            <option value="Delantera">Delantera</option>
+            <option value="Polifuncional">Polifuncional</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label for="estado">Estado de la jugadora *</label>
+          <select id="estado" required>
+            <option value="Activo">Activo</option>
+            <option value="Lesionado">Lesionado</option>
+            <option value="Inactivo">Inactivo</option>
+            <option value="A prueba">A prueba</option>
+          </select>
+        </div>
+        <div class="botones-modal">
+          <button
+            type="button"
+            class="boton-cancelar"
+            id="cancelarModal"
+          >
+            Cancelar
+          </button>
+          <button type="submit" class="boton-principal">
+            Guardar jugadora
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script>
+    // =====================================================
+    // USUARIO Y PERMISOS
+    // =====================================================
+    const usuarioGuardado = (
+      localStorage.getItem("usuarioADIUR") || ""
+    ).trim();
+    function normalizarUsuario(nombre) {
+      return String(nombre || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim()
+        .toLowerCase();
+    }
+    const usuarioActual = normalizarUsuario(usuarioGuardado);
+    function esToto() {
+      return usuarioActual === "toto";
+    }
+    function esBianca() {
+      return [
+        "biancadominguez",
+        "bianca"
+      ].includes(usuarioActual);
+    }
+    function esFran() {
+      return [
+        "fran",
+        "francisco",
+        "francisco perez basla"
+      ].includes(usuarioActual);
+    }
+    // Si no existe una sesión, regresar al inicio de sesión.
+    if (!usuarioGuardado) {
+      window.location.href = "Loing.html";
+    }
+    // Información del usuario en la barra superior.
+    document.getElementById("nombreUsuario").textContent =
+      usuarioGuardado || "Usuario";
+    document.getElementById("avatarUsuario").textContent =
+      usuarioGuardado
+        ? usuarioGuardado.charAt(0).toUpperCase()
+        : "U";
+    document.getElementById("rolUsuario").textContent =
+      esFran() ? "Administrador" :
+      esToto() ? "Cuerpo técnico" :
+      esBianca() ? "Jugadora · Sub 14" :
+      "Club ADIUR";
+    // Permisos de visualización del menú.
+    if (esBianca()) {
+      document.getElementById("grupoPlantel")?.remove();
+      document.getElementById("grupoRendimientos")?.remove();
+      document.querySelectorAll("[data-ocultar-bianca]").forEach(enlace => {
+        enlace.style.display = "none";
+      });
+    }
+    // Cerrar sesión.
+    function cerrarSesion(event) {
+      event.preventDefault();
+      localStorage.removeItem("usuarioADIUR");
+      window.location.href = "Loing.html";
+    }
+    // Mantener los permisos originales de la página de jugadoras.
+    if (
+      !usuarioGuardado ||
+      esBianca() ||
+      (!esToto() && !esFran())
+    ) {
+      document.body.innerHTML = `
+        <div style="
+          font-family:Arial,sans-serif;
+          text-align:center;
+          padding:70px 20px;
+          color:#222;
+        ">
+          <h1>Acceso restringido</h1>
+          <p>No tenés permisos para acceder a la página de jugadoras.</p>
+          <br>
+          <a href="Pagina Principal.html" style="
+            display:inline-block;
+            padding:10px 16px;
+            border-radius:8px;
+            background:#fff0e6;
+            color:#dc5e0b;
+            font-weight:bold;
+          ">Volver al inicio</a>
+        </div>
+      `;
+    } else {
+      iniciarPaginaJugadoras();
+    }
+    // =====================================================
+    // INICIALIZACIÓN DE LA PÁGINA
+    // =====================================================
+    function iniciarPaginaJugadoras() {
+      // ===================================================
+      // BARRA LATERAL
+      // ===================================================
+      const botonMenu = document.getElementById("botonMenu");
+      const sidebar = document.getElementById("sidebar");
+      const capaSidebar = document.getElementById("capaSidebar");
+      function esPantallaMovil() {
+        return window.innerWidth <= 760;
+      }
+      function actualizarEstadoSidebar() {
+        const abierto = !sidebar.classList.contains("oculto");
+        botonMenu.setAttribute(
+          "aria-expanded",
+          String(abierto)
         );
-
-        /* =====================================================
-           MOSTRAR U OCULTAR CONTRASEÑA
-        ===================================================== */
-
-        botonVerContrasena.addEventListener("click", function() {
-            const estaOculta = campoContrasena.type === "password";
-
-            campoContrasena.type = estaOculta ? "text" : "password";
-
-            botonVerContrasena.textContent = estaOculta
-                ? "Ocultar"
-                : "Mostrar";
-
-            botonVerContrasena.setAttribute(
-                "aria-label",
-                estaOculta ? "Ocultar contraseña" : "Mostrar contraseña"
-            );
-
-            botonVerContrasena.setAttribute(
-                "aria-pressed",
-                String(estaOculta)
-            );
-        });
-
-        /* =====================================================
-           MENSAJES DE VALIDACIÓN
-        ===================================================== */
-
-        function ocultarError() {
-            mensajeError.classList.remove("visible");
-
-            campoUsuario.removeAttribute("aria-invalid");
-            campoContrasena.removeAttribute("aria-invalid");
+        botonMenu.setAttribute(
+          "aria-label",
+          abierto ? "Cerrar menú" : "Abrir menú"
+        );
+        if (esPantallaMovil()) {
+          capaSidebar.classList.toggle("visible", abierto);
+        } else {
+          capaSidebar.classList.remove("visible");
         }
-
-        function mostrarError(mensaje, campoAEnfocar = null) {
-            mensajeError.textContent = mensaje;
-            mensajeError.classList.add("visible");
-
-            if (campoAEnfocar) {
-                campoAEnfocar.setAttribute("aria-invalid", "true");
-                campoAEnfocar.focus();
-            }
+      }
+      function alternarSidebar() {
+        sidebar.classList.toggle("oculto");
+        actualizarEstadoSidebar();
+      }
+      function cerrarSidebarMovil() {
+        if (!esPantallaMovil()) return;
+        sidebar.classList.add("oculto");
+        capaSidebar.classList.remove("visible");
+        actualizarEstadoSidebar();
+      }
+      botonMenu.addEventListener("click", alternarSidebar);
+      capaSidebar.addEventListener("click", cerrarSidebarMovil);
+      // Adaptar la barra lateral al cambiar el tamaño de pantalla.
+      function ajustarSidebarPorPantalla() {
+        if (esPantallaMovil()) {
+          sidebar.classList.add("oculto");
+        } else {
+          sidebar.classList.remove("oculto");
         }
-
-        campoUsuario.addEventListener("input", ocultarError);
-        campoContrasena.addEventListener("input", ocultarError);
-
-        /* =====================================================
-           INICIO DE SESIÓN
-        ===================================================== */
-
-        loginForm.addEventListener("submit", function(event) {
+        actualizarEstadoSidebar();
+      }
+      window.addEventListener("resize", ajustarSidebarPorPantalla);
+      // Abrir y cerrar categorías del menú.
+      window.toggleGrupo = function(id) {
+        const grupo = document.getElementById(id);
+        if (!grupo) return;
+        grupo.classList.toggle("cerrado");
+        const titulo = grupo.querySelector(".titulo-grupo");
+        if (titulo) {
+          titulo.setAttribute(
+            "aria-expanded",
+            String(!grupo.classList.contains("cerrado"))
+          );
+        }
+      };
+      // Accesibilidad con teclado para las categorías.
+      document.querySelectorAll(
+        ".titulo-grupo[role='button']"
+      ).forEach(titulo => {
+        titulo.addEventListener("keydown", event => {
+          if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
-
-            ocultarError();
-
-            const usuario = campoUsuario.value
-                .trim()
-                .toLowerCase();
-
-            const contrasena = campoContrasena.value;
-
-            /* VALIDAR CAMPOS VACÍOS */
-
-            if (!usuario) {
-                mostrarError(
-                    "Ingresá tu nombre de usuario.",
-                    campoUsuario
-                );
-                return;
+            const grupo = titulo.closest(".grupo-menu");
+            if (grupo) {
+              window.toggleGrupo(grupo.id);
             }
-
-            if (!contrasena) {
-                mostrarError(
-                    "Ingresá tu contraseña para continuar.",
-                    campoContrasena
-                );
-                return;
-            }
-
-            /* COMPROBAR USUARIO Y CONTRASEÑA */
-
-            const cuenta = Object.prototype.hasOwnProperty.call(
-                usuarios,
-                usuario
-            )
-                ? usuarios[usuario]
-                : null;
-
-            if (
-                cuenta &&
-                cuenta.contrasena === contrasena
-            ) {
-                /*
-                 * GUARDAR LA SESIÓN
-                 *
-                 * Se conserva la clave "usuarioADIUR" y el formato
-                 * de texto que utilizan las demás páginas del club.
-                 */
-
-                try {
-                    localStorage.setItem(
-                        "usuarioADIUR",
-                        cuenta.nombre
-                    );
-                } catch (error) {
-                    console.error(
-                        "No se pudo guardar la sesión:",
-                        error
-                    );
-
-                    mostrarError(
-                        "No se pudo guardar la sesión. Revisá la configuración del navegador."
-                    );
-
-                    return;
-                }
-
-                /*
-                 * REDIRECCIÓN ORIGINAL
-                 *
-                 * Se mantiene la página principal existente.
-                 */
-
-                window.location.href = "Pàgina Principal.html";
-
+          }
+        });
+      });
+      // Cerrar el menú después de seleccionar un enlace en móvil.
+      document.querySelectorAll(".sidebar a").forEach(enlace => {
+        enlace.addEventListener("click", () => {
+          cerrarSidebarMovil();
+        });
+      });
+      ajustarSidebarPorPantalla();
+      // ===================================================
+      // DATOS DE JUGADORAS
+      // ===================================================
+      const CLAVE_JUGADORAS = "jugadorasADIUR";
+      const categoriasPermitidas = [
+        "Sub 10",
+        "Sub 12",
+        "Sub 14",
+        "Sub 16",
+        "Primera"
+      ];
+      let jugadoras = cargarJugadoras();
+      let idEnEdicion = null;
+      function puedeAccederCategoria(categoria) {
+        return (esFran() || esToto()) &&
+          categoriasPermitidas.includes(categoria);
+      }
+      function puedeEliminar() {
+        return esFran();
+      }
+      function generarId() {
+        return window.crypto &&
+          typeof window.crypto.randomUUID === "function"
+          ? window.crypto.randomUUID()
+          : String(Date.now()) + Math.random().toString(16).slice(2);
+      }
+      function cargarJugadoras() {
+        try {
+          const datos = JSON.parse(
+            localStorage.getItem(CLAVE_JUGADORAS) || "[]"
+          );
+          if (!Array.isArray(datos)) {
+            return [];
+          }
+          return datos.map(j => ({
+            ...j,
+            id: j.id || generarId(),
+            nombre: j.nombre || "",
+            categoria: j.categoria || "",
+            nacimiento: j.nacimiento || "",
+            pierna: j.pierna || "",
+            posicion: j.posicion || "",
+            estado: j.estado || "Activo"
+          }));
+        } catch (error) {
+          console.error(
+            "No se pudieron cargar las jugadoras:",
+            error
+          );
+          return [];
+        }
+      }
+      function guardarJugadoras() {
+        localStorage.setItem(
+          CLAVE_JUGADORAS,
+          JSON.stringify(jugadoras)
+        );
+      }
+      // ===================================================
+      // EDAD Y FECHAS
+      // ===================================================
+      function calcularEdad(fecha) {
+        if (!fecha) return null;
+        const partes = fecha.split("-").map(Number);
+        if (
+          partes.length !== 3 ||
+          partes.some(n => !Number.isFinite(n))
+        ) {
+          return null;
+        }
+        const [anio, mes, dia] = partes;
+        const nacimiento = new Date(anio, mes - 1, dia);
+        const hoy = new Date();
+        if (
+          nacimiento.getFullYear() !== anio ||
+          nacimiento.getMonth() !== mes - 1 ||
+          nacimiento.getDate() !== dia ||
+          nacimiento > hoy
+        ) {
+          return null;
+        }
+        let edad = hoy.getFullYear() - anio;
+        if (
+          hoy.getMonth() < mes - 1 ||
+          (
+            hoy.getMonth() === mes - 1 &&
+            hoy.getDate() < dia
+          )
+        ) {
+          edad--;
+        }
+        return edad;
+      }
+      function formatearFecha(fecha) {
+        if (!fecha) return "—";
+        const partes = fecha.split("-");
+        if (partes.length !== 3) return "—";
+        return `${partes[2]}/${partes[1]}/${partes[0]}`;
+      }
+      const campoNacimiento = document.getElementById("nacimiento");
+      const campoEdad = document.getElementById("edad");
+      function actualizarEdadFormulario() {
+        const edad = calcularEdad(campoNacimiento.value);
+        campoEdad.value = edad === null ? "" : edad;
+      }
+      campoNacimiento.addEventListener(
+        "input",
+        actualizarEdadFormulario
+      );
+      campoNacimiento.addEventListener(
+        "change",
+        actualizarEdadFormulario
+      );
+      // ===================================================
+      // ESTADOS
+      // ===================================================
+      function claseEstado(estado) {
+        const clases = {
+          "Activo": "estado-activo",
+          "Lesionado": "estado-lesionado",
+          "Inactivo": "estado-inactivo",
+          "A prueba": "estado-prueba"
+        };
+        return clases[estado] || "estado-inactivo";
+      }
+      // ===================================================
+      // TABLA DE JUGADORAS
+      // ===================================================
+      function renderizarJugadoras() {
+        const tabla = document.getElementById("tablaJugadoras");
+        const mensajeVacio = document.getElementById("mensajeVacio");
+        const resumenPlantel = document.getElementById("resumenPlantel");
+        const tarjetaPlantel = document.getElementById("tarjetaPlantel");
+        const categoriaSeleccionada = document.getElementById("categoriaPrincipal").value;
+        const idsContadoresPuesto = {
+          "Arquera": "totalArqueras",
+          "Defensora": "totalDefensoras",
+          "Mediocampista": "totalMediocampistas",
+          "Delantera": "totalDelanteras",
+          "Polifuncional": "totalPolifuncionales"
+        };
+        function actualizarContadoresEnCero() {
+          Object.values(idsContadoresPuesto).forEach(id => {
+            document.getElementById(id).textContent = "0";
+          });
+          document.getElementById("totalSinPuesto").textContent = "0";
+        }
+        tabla.replaceChildren();
+        if (!categoriaSeleccionada) {
+          resumenPlantel.hidden = true;
+          tarjetaPlantel.hidden = true;
+          document.getElementById("totalJugadoras").textContent = "0";
+          actualizarContadoresEnCero();
+          mensajeVacio.style.display = "none";
+          const contenedorVacio = mensajeVacio.closest(".vacio-contenedor");
+          if (contenedorVacio) contenedorVacio.style.display = "none";
+          return;
+        }
+        resumenPlantel.hidden = false;
+        tarjetaPlantel.hidden = false;
+        const plantelCategoria = jugadoras.filter(j =>
+          puedeAccederCategoria(j.categoria) &&
+          j.categoria === categoriaSeleccionada
+        );
+        // Los contadores por puesto siempre representan el plantel completo
+        // de la categoría, sin verse afectados por búsqueda ni filtros.
+        Object.entries(idsContadoresPuesto).forEach(([puesto, id]) => {
+          const cantidad = plantelCategoria.filter(j => j.posicion === puesto).length;
+          document.getElementById(id).textContent = cantidad;
+        });
+        const cantidadSinPuesto = plantelCategoria.filter(j =>
+          !j.posicion || !Object.prototype.hasOwnProperty.call(idsContadoresPuesto, j.posicion)
+        ).length;
+        document.getElementById("totalSinPuesto").textContent = cantidadSinPuesto;
+        const busqueda = document.getElementById("buscador").value.trim().toLocaleLowerCase("es");
+        const posicionFiltro = document.getElementById("filtroPosicion").value;
+        const piernaFiltro = document.getElementById("filtroPierna").value;
+        const estadoFiltro = document.getElementById("filtroEstado").value;
+        const ordenSeleccionado = document.getElementById("ordenLista").value;
+        const filtradas = plantelCategoria.filter(j => {
+          const coincideNombre = (j.nombre || "").toLocaleLowerCase("es").includes(busqueda);
+          const coincidePosicion = !posicionFiltro || j.posicion === posicionFiltro;
+          const coincidePierna = !piernaFiltro || j.pierna === piernaFiltro;
+          const coincideEstado = !estadoFiltro || (j.estado || "Activo") === estadoFiltro;
+          return coincideNombre && coincidePosicion && coincidePierna && coincideEstado;
+        });
+        const compararNombres = (a, b) =>
+          (a.nombre || "").localeCompare(b.nombre || "", "es", { sensitivity: "base" });
+        const ordenPosiciones = {
+          "Arquera": 0,
+          "Defensora": 1,
+          "Mediocampista": 2,
+          "Delantera": 3,
+          "Polifuncional": 4
+        };
+        filtradas.sort((a, b) => {
+          if (ordenSeleccionado === "nombre-desc") {
+            return compararNombres(b, a);
+          }
+          if (ordenSeleccionado === "puesto") {
+            const puestoA = Object.prototype.hasOwnProperty.call(ordenPosiciones, a.posicion)
+              ? ordenPosiciones[a.posicion] : 5;
+            const puestoB = Object.prototype.hasOwnProperty.call(ordenPosiciones, b.posicion)
+              ? ordenPosiciones[b.posicion] : 5;
+            if (puestoA !== puestoB) return puestoA - puestoB;
+            return compararNombres(a, b);
+          }
+          return compararNombres(a, b);
+        });
+        filtradas.forEach(j => {
+          const fila = document.createElement("tr");
+          const edad = calcularEdad(j.nacimiento);
+          const valores = [
+            j.nombre || "—",
+            j.categoria || "—",
+            formatearFecha(j.nacimiento),
+            edad === null ? "—" : `${edad} años`,
+            j.pierna || "—",
+            j.posicion || "—"
+          ];
+          valores.forEach((valor, indice) => {
+            const celda = document.createElement("td");
+            if (indice === 0) celda.className = "nombre-jugadora";
+            if (indice === 1 && valor !== "—") {
+              const etiqueta = document.createElement("span");
+              etiqueta.className = "etiqueta";
+              etiqueta.textContent = valor;
+              celda.appendChild(etiqueta);
             } else {
-                /* CREDENCIALES INCORRECTAS */
-
-                campoContrasena.value = "";
-
-                mostrarError(
-                    "Usuario o contraseña incorrectos. Revisá los datos e intentá nuevamente.",
-                    campoContrasena
-                );
+              celda.textContent = valor;
             }
+            fila.appendChild(celda);
+          });
+          // Columna de estado.
+          const celdaEstado = document.createElement("td");
+          const estado = j.estado || "Activo";
+          const etiquetaEstado = document.createElement("span");
+          etiquetaEstado.className = "estado " + claseEstado(estado);
+          etiquetaEstado.textContent = estado;
+          celdaEstado.appendChild(etiquetaEstado);
+          fila.appendChild(celdaEstado);
+          // Columna de acciones.
+          const celdaAcciones = document.createElement("td");
+          const acciones = document.createElement("div");
+          acciones.className = "acciones";
+          const botonEditar = document.createElement("button");
+          botonEditar.type = "button";
+          botonEditar.className = "boton-secundario";
+          botonEditar.textContent = "Editar";
+          botonEditar.addEventListener("click", () => editarJugadora(j.id));
+          acciones.appendChild(botonEditar);
+          if (puedeEliminar()) {
+            const botonEliminar = document.createElement("button");
+            botonEliminar.type = "button";
+            botonEliminar.className = "boton-eliminar";
+            botonEliminar.textContent = "Eliminar";
+            botonEliminar.addEventListener("click", () => eliminarJugadora(j.id));
+            acciones.appendChild(botonEliminar);
+          }
+          celdaAcciones.appendChild(acciones);
+          fila.appendChild(celdaAcciones);
+          tabla.appendChild(fila);
         });
-
-        /* =====================================================
-           INICIALIZACIÓN
-        ===================================================== */
-
-        document.addEventListener("DOMContentLoaded", function() {
-            campoUsuario.focus({ preventScroll: true });
-        });
-    </script>
-
+        const estaVacia = filtradas.length === 0;
+        mensajeVacio.style.display = estaVacia ? "block" : "none";
+        const contenedorVacio = mensajeVacio.closest(".vacio-contenedor");
+        if (contenedorVacio) contenedorVacio.style.display = estaVacia ? "block" : "none";
+        document.getElementById("totalJugadoras").textContent = filtradas.length;
+      }
+      // ===================================================
+      // MODAL
+      // ===================================================
+      const modal = document.getElementById("modalJugadora");
+      const formulario = document.getElementById("formJugadora");
+      function abrirModal() {
+        modal.classList.add("activo");
+        document.getElementById("nombre").focus();
+      }
+      function cerrarModal() {
+        modal.classList.remove("activo");
+        formulario.reset();
+        idEnEdicion = null;
+        document.getElementById("tituloModal").textContent =
+          "Agregar jugadora";
+        campoEdad.value = "";
+        document.getElementById("estado").value = "Activo";
+      }
+      document.getElementById("botonAgregar").addEventListener(
+        "click",
+        () => {
+          const categoriaSeleccionada = document.getElementById("categoriaPrincipal").value;
+          if (!categoriaSeleccionada) {
+            alert("Primero seleccioná una categoría para agregar una jugadora a ese plantel.");
+            document.getElementById("categoriaPrincipal").focus();
+            return;
+          }
+          cerrarModal();
+          document.getElementById("categoria").value = categoriaSeleccionada;
+          abrirModal();
+        }
+      );
+      document.getElementById("cerrarModal").addEventListener(
+        "click",
+        cerrarModal
+      );
+      document.getElementById("cancelarModal").addEventListener(
+        "click",
+        cerrarModal
+      );
+      modal.addEventListener("click", evento => {
+        if (evento.target === modal) {
+          cerrarModal();
+        }
+      });
+      document.addEventListener("keydown", evento => {
+        if (
+          evento.key === "Escape" &&
+          modal.classList.contains("activo")
+        ) {
+          cerrarModal();
+        }
+      });
+      // ===================================================
+      // GUARDAR JUGADORA
+      // ===================================================
+      formulario.addEventListener("submit", evento => {
+        evento.preventDefault();
+        const datos = {
+          nombre: document.getElementById("nombre").value.trim(),
+          categoria: document.getElementById("categoria").value,
+          nacimiento: campoNacimiento.value,
+          pierna: document.getElementById("pierna").value,
+          posicion: document.getElementById("posicion").value,
+          estado: document.getElementById("estado").value
+        };
+        if (
+          !datos.nombre ||
+          !datos.categoria ||
+          !datos.nacimiento ||
+          !datos.pierna ||
+          !datos.estado
+        ) {
+          alert("Completá todos los campos obligatorios.");
+          return;
+        }
+        if (!puedeAccederCategoria(datos.categoria)) {
+          alert("No tenés permiso para administrar esta categoría.");
+          return;
+        }
+        if (calcularEdad(datos.nacimiento) === null) {
+          alert(
+            "Ingresá una fecha de nacimiento válida que no sea futura."
+          );
+          return;
+        }
+        if (idEnEdicion !== null) {
+          const indice = jugadoras.findIndex(
+            j => j.id === idEnEdicion
+          );
+          if (indice === -1) {
+            alert("No se encontró la jugadora que querés editar.");
+            return;
+          }
+          if (!puedeAccederCategoria(jugadoras[indice].categoria)) {
+            alert("No tenés permiso para editar esta jugadora.");
+            return;
+          }
+          jugadoras[indice] = {
+            ...jugadoras[indice],
+            ...datos
+          };
+        } else {
+          jugadoras.push({
+            id: generarId(),
+            ...datos
+          });
+        }
+        guardarJugadoras();
+        renderizarJugadoras();
+        cerrarModal();
+      });
+      // ===================================================
+      // EDITAR JUGADORA
+      // ===================================================
+      function editarJugadora(id) {
+        const jugadora = jugadoras.find(j => j.id === id);
+        if (
+          !jugadora ||
+          !puedeAccederCategoria(jugadora.categoria)
+        ) {
+          alert("No tenés permiso para editar esta jugadora.");
+          return;
+        }
+        idEnEdicion = id;
+        document.getElementById("tituloModal").textContent =
+          "Editar jugadora";
+        document.getElementById("nombre").value =
+          jugadora.nombre || "";
+        document.getElementById("categoria").value =
+          jugadora.categoria || "";
+        campoNacimiento.value =
+          jugadora.nacimiento || "";
+        document.getElementById("pierna").value =
+          jugadora.pierna || "";
+        document.getElementById("posicion").value =
+          jugadora.posicion || "";
+        document.getElementById("estado").value =
+          jugadora.estado || "Activo";
+        actualizarEdadFormulario();
+        abrirModal();
+      }
+      // ===================================================
+      // ELIMINAR JUGADORA: SOLO FRAN
+      // ===================================================
+      function eliminarJugadora(id) {
+        if (!puedeEliminar()) {
+          alert("No tenés permiso para eliminar jugadoras.");
+          return;
+        }
+        const jugadora = jugadoras.find(j => j.id === id);
+        if (!jugadora) return;
+        if (!puedeAccederCategoria(jugadora.categoria)) {
+          alert("No tenés permiso para eliminar esta jugadora.");
+          return;
+        }
+        if (
+          confirm(
+            "¿Querés eliminar a " +
+            jugadora.nombre +
+            " del plantel?"
+          )
+        ) {
+          jugadoras = jugadoras.filter(j => j.id !== id);
+          guardarJugadoras();
+          renderizarJugadoras();
+        }
+      }
+      // ===================================================
+      // BUSCADOR Y FILTROS
+      // ===================================================
+      document.getElementById("buscador").addEventListener(
+        "input",
+        renderizarJugadoras
+      );
+      document.getElementById("categoriaPrincipal").addEventListener("change", () => {
+        document.getElementById("buscador").value = "";
+        document.getElementById("filtroPosicion").value = "";
+        document.getElementById("filtroPierna").value = "";
+        document.getElementById("filtroEstado").value = "";
+        document.getElementById("ordenLista").value = "nombre-asc";
+        renderizarJugadoras();
+      });
+      document.getElementById("filtroPosicion").addEventListener(
+        "change",
+        renderizarJugadoras
+      );
+      document.getElementById("filtroPierna").addEventListener(
+        "change",
+        renderizarJugadoras
+      );
+      document.getElementById("filtroEstado").addEventListener(
+        "change",
+        renderizarJugadoras
+      );
+      document.getElementById("ordenLista").addEventListener(
+        "change",
+        renderizarJugadoras
+      );
+      document.getElementById("limpiarFiltros").addEventListener("click", () => {
+        document.getElementById("buscador").value = "";
+        document.getElementById("filtroPosicion").value = "";
+        document.getElementById("filtroPierna").value = "";
+        document.getElementById("filtroEstado").value = "";
+        document.getElementById("ordenLista").value = "nombre-asc";
+        renderizarJugadoras();
+      });
+      // Mostrar el botón de agregar según los permisos.
+      document.getElementById("botonAgregar").style.display =
+        (esToto() || esFran()) ? "inline-block" : "none";
+      // ===================================================
+      // INICIALIZACIÓN
+      // ===================================================
+      renderizarJugadoras();
+    }
+  </script>
 </body>
 </html>
