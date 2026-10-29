@@ -1694,7 +1694,27 @@
       </form>
     </div>
   </div>
-  <script>
+
+  <!-- SCRIPT DE FIREBASE Y LÓGICA CONECTADA A LA NUBE -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-analytics.js";
+    import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCc0dPIEkaKxbHoRC2CgZK412dXVGPOdTI",
+      authDomain: "adiur-b1913.firebaseapp.com",
+      projectId: "adiur-b1913",
+      storageBucket: "adiur-b1913.firebasestorage.app",
+      messagingSenderId: "884643321144",
+      appId: "1:884643321144:web:ba3c314de3a1c9e3545dcd",
+      measurementId: "G-58LL26YXPM"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getFirestore(app);
+
     // =====================================================
     // USUARIO Y PERMISOS
     // =====================================================
@@ -1750,7 +1770,7 @@
       });
     }
     // Cerrar sesión.
-    function cerrarSesion(event) {
+    window.cerrarSesion = function(event) {
       event.preventDefault();
       localStorage.removeItem("usuarioADIUR");
       window.location.href = "Loing.html";
@@ -1784,13 +1804,11 @@
     } else {
       iniciarPaginaJugadoras();
     }
+
     // =====================================================
-    // INICIALIZACIÓN DE LA PÁGINA
+    // INICIALIZACIÓN DE LA PÁGINA CON FIREBASE
     // =====================================================
     function iniciarPaginaJugadoras() {
-      // ===================================================
-      // BARRA LATERAL
-      // ===================================================
       const botonMenu = document.getElementById("botonMenu");
       const sidebar = document.getElementById("sidebar");
       const capaSidebar = document.getElementById("capaSidebar");
@@ -1799,14 +1817,8 @@
       }
       function actualizarEstadoSidebar() {
         const abierto = !sidebar.classList.contains("oculto");
-        botonMenu.setAttribute(
-          "aria-expanded",
-          String(abierto)
-        );
-        botonMenu.setAttribute(
-          "aria-label",
-          abierto ? "Cerrar menú" : "Abrir menú"
-        );
+        botonMenu.setAttribute("aria-expanded", String(abierto));
+        botonMenu.setAttribute("aria-label", abierto ? "Cerrar menú" : "Abrir menú");
         if (esPantallaMovil()) {
           capaSidebar.classList.toggle("visible", abierto);
         } else {
@@ -1825,7 +1837,7 @@
       }
       botonMenu.addEventListener("click", alternarSidebar);
       capaSidebar.addEventListener("click", cerrarSidebarMovil);
-      // Adaptar la barra lateral al cambiar el tamaño de pantalla.
+
       function ajustarSidebarPorPantalla() {
         if (esPantallaMovil()) {
           sidebar.classList.add("oculto");
@@ -1835,156 +1847,94 @@
         actualizarEstadoSidebar();
       }
       window.addEventListener("resize", ajustarSidebarPorPantalla);
-      // Abrir y cerrar categorías del menú.
+
       window.toggleGrupo = function(id) {
         const grupo = document.getElementById(id);
         if (!grupo) return;
         grupo.classList.toggle("cerrado");
         const titulo = grupo.querySelector(".titulo-grupo");
         if (titulo) {
-          titulo.setAttribute(
-            "aria-expanded",
-            String(!grupo.classList.contains("cerrado"))
-          );
+          titulo.setAttribute("aria-expanded", String(!grupo.classList.contains("cerrado")));
         }
       };
-      // Accesibilidad con teclado para las categorías.
-      document.querySelectorAll(
-        ".titulo-grupo[role='button']"
-      ).forEach(titulo => {
+
+      document.querySelectorAll(".titulo-grupo[role='button']").forEach(titulo => {
         titulo.addEventListener("keydown", event => {
           if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
             const grupo = titulo.closest(".grupo-menu");
-            if (grupo) {
-              window.toggleGrupo(grupo.id);
-            }
+            if (grupo) window.toggleGrupo(grupo.id);
           }
         });
       });
-      // Cerrar el menú después de seleccionar un enlace en móvil.
+
       document.querySelectorAll(".sidebar a").forEach(enlace => {
-        enlace.addEventListener("click", () => {
-          cerrarSidebarMovil();
-        });
+        enlace.addEventListener("click", () => cerrarSidebarMovil());
       });
       ajustarSidebarPorPantalla();
-      // ===================================================
-      // DATOS DE JUGADORAS
-      // ===================================================
-      const CLAVE_JUGADORAS = "jugadorasADIUR";
-      const categoriasPermitidas = [
-        "Sub 10",
-        "Sub 12",
-        "Sub 14",
-        "Sub 16",
-        "Primera"
-      ];
-      let jugadoras = cargarJugadoras();
+
+      const categoriasPermitidas = ["Sub 10", "Sub 12", "Sub 14", "Sub 16", "Primera"];
+      let jugadoras = [];
       let idEnEdicion = null;
+
       function puedeAccederCategoria(categoria) {
-        return (esFran() || esToto()) &&
-          categoriasPermitidas.includes(categoria);
+        return (esFran() || esToto()) && categoriasPermitidas.includes(categoria);
       }
       function puedeEliminar() {
         return esFran();
       }
-      function generarId() {
-        return window.crypto &&
-          typeof window.crypto.randomUUID === "function"
-          ? window.crypto.randomUUID()
-          : String(Date.now()) + Math.random().toString(16).slice(2);
-      }
-      function cargarJugadoras() {
-        try {
-          const datos = JSON.parse(
-            localStorage.getItem(CLAVE_JUGADORAS) || "[]"
-          );
-          if (!Array.isArray(datos)) {
-            return [];
-          }
-          return datos.map(j => ({
-            ...j,
-            id: j.id || generarId(),
-            nombre: j.nombre || "",
-            categoria: j.categoria || "",
-            nacimiento: j.nacimiento || "",
-            pierna: j.pierna || "",
-            posicion: j.posicion || "",
-            estado: j.estado || "Activo"
-          }));
-        } catch (error) {
-          console.error(
-            "No se pudieron cargar las jugadoras:",
-            error
-          );
-          return [];
-        }
-      }
-      function guardarJugadoras() {
-        localStorage.setItem(
-          CLAVE_JUGADORAS,
-          JSON.stringify(jugadoras)
-        );
-      }
-      // ===================================================
-      // EDAD Y FECHAS
-      // ===================================================
+
+      // --- ESCUCHAR CAMBIOS EN TIEMPO REAL DESDE FIREBASE ---
+      onSnapshot(collection(db, "jugadoras"), (snapshot) => {
+        jugadoras = [];
+        snapshot.forEach((docSnap) => {
+          const data = docSnap.data();
+          jugadoras.push({
+            id: docSnap.id,
+            nombre: data.nombre || "",
+            categoria: data.categoria || "",
+            nacimiento: data.nacimiento || "",
+            pierna: data.pierna || "",
+            posicion: data.posicion || "",
+            estado: data.estado || "Activo"
+          });
+        });
+        renderizarJugadoras();
+      });
+
       function calcularEdad(fecha) {
         if (!fecha) return null;
         const partes = fecha.split("-").map(Number);
-        if (
-          partes.length !== 3 ||
-          partes.some(n => !Number.isFinite(n))
-        ) {
-          return null;
-        }
+        if (partes.length !== 3 || partes.some(n => !Number.isFinite(n))) return null;
         const [anio, mes, dia] = partes;
         const nacimiento = new Date(anio, mes - 1, dia);
         const hoy = new Date();
-        if (
-          nacimiento.getFullYear() !== anio ||
-          nacimiento.getMonth() !== mes - 1 ||
-          nacimiento.getDate() !== dia ||
-          nacimiento > hoy
-        ) {
+        if (nacimiento.getFullYear() !== anio || nacimiento.getMonth() !== mes - 1 || nacimiento.getDate() !== dia || nacimiento > hoy) {
           return null;
         }
         let edad = hoy.getFullYear() - anio;
-        if (
-          hoy.getMonth() < mes - 1 ||
-          (
-            hoy.getMonth() === mes - 1 &&
-            hoy.getDate() < dia
-          )
-        ) {
+        if (hoy.getMonth() < mes - 1 || (hoy.getMonth() === mes - 1 && hoy.getDate() < dia)) {
           edad--;
         }
         return edad;
       }
+
       function formatearFecha(fecha) {
         if (!fecha) return "—";
         const partes = fecha.split("-");
         if (partes.length !== 3) return "—";
         return `${partes[2]}/${partes[1]}/${partes[0]}`;
       }
+
       const campoNacimiento = document.getElementById("nacimiento");
       const campoEdad = document.getElementById("edad");
       function actualizarEdadFormulario() {
         const edad = calcularEdad(campoNacimiento.value);
         campoEdad.value = edad === null ? "" : edad;
       }
-      campoNacimiento.addEventListener(
-        "input",
-        actualizarEdadFormulario
-      );
-      campoNacimiento.addEventListener(
-        "change",
-        actualizarEdadFormulario
-      );
-      // ===================================================
-      // ESTADOS
-      // ===================================================
+      campoNacimiento.addEventListener("input", actualizarEdadFormulario);
+      campoNacimiento.addEventListener("change", actualizarEdadFormulario);
+
       function claseEstado(estado) {
         const clases = {
           "Activo": "estado-activo",
@@ -1994,9 +1944,7 @@
         };
         return clases[estado] || "estado-inactivo";
       }
-      // ===================================================
-      // TABLA DE JUGADORAS
-      // ===================================================
+
       function renderizarJugadoras() {
         const tabla = document.getElementById("tablaJugadoras");
         const mensajeVacio = document.getElementById("mensajeVacio");
@@ -2033,8 +1981,7 @@
           puedeAccederCategoria(j.categoria) &&
           j.categoria === categoriaSeleccionada
         );
-        // Los contadores por puesto siempre representan el plantel completo
-        // de la categoría, sin verse afectados por búsqueda ni filtros.
+
         Object.entries(idsContadoresPuesto).forEach(([puesto, id]) => {
           const cantidad = plantelCategoria.filter(j => j.posicion === puesto).length;
           document.getElementById(id).textContent = cantidad;
@@ -2043,11 +1990,13 @@
           !j.posicion || !Object.prototype.hasOwnProperty.call(idsContadoresPuesto, j.posicion)
         ).length;
         document.getElementById("totalSinPuesto").textContent = cantidadSinPuesto;
+
         const busqueda = document.getElementById("buscador").value.trim().toLocaleLowerCase("es");
         const posicionFiltro = document.getElementById("filtroPosicion").value;
         const piernaFiltro = document.getElementById("filtroPierna").value;
         const estadoFiltro = document.getElementById("filtroEstado").value;
         const ordenSeleccionado = document.getElementById("ordenLista").value;
+
         const filtradas = plantelCategoria.filter(j => {
           const coincideNombre = (j.nombre || "").toLocaleLowerCase("es").includes(busqueda);
           const coincidePosicion = !posicionFiltro || j.posicion === posicionFiltro;
@@ -2055,6 +2004,7 @@
           const coincideEstado = !estadoFiltro || (j.estado || "Activo") === estadoFiltro;
           return coincideNombre && coincidePosicion && coincidePierna && coincideEstado;
         });
+
         const compararNombres = (a, b) =>
           (a.nombre || "").localeCompare(b.nombre || "", "es", { sensitivity: "base" });
         const ordenPosiciones = {
@@ -2069,15 +2019,14 @@
             return compararNombres(b, a);
           }
           if (ordenSeleccionado === "puesto") {
-            const puestoA = Object.prototype.hasOwnProperty.call(ordenPosiciones, a.posicion)
-              ? ordenPosiciones[a.posicion] : 5;
-            const puestoB = Object.prototype.hasOwnProperty.call(ordenPosiciones, b.posicion)
-              ? ordenPosiciones[b.posicion] : 5;
+            const puestoA = Object.prototype.hasOwnProperty.call(ordenPosiciones, a.posicion) ? ordenPosiciones[a.posicion] : 5;
+            const puestoB = Object.prototype.hasOwnProperty.call(ordenPosiciones, b.posicion) ? ordenPosiciones[b.posicion] : 5;
             if (puestoA !== puestoB) return puestoA - puestoB;
             return compararNombres(a, b);
           }
           return compararNombres(a, b);
         });
+
         filtradas.forEach(j => {
           const fila = document.createElement("tr");
           const edad = calcularEdad(j.nacimiento);
@@ -2102,7 +2051,7 @@
             }
             fila.appendChild(celda);
           });
-          // Columna de estado.
+
           const celdaEstado = document.createElement("td");
           const estado = j.estado || "Activo";
           const etiquetaEstado = document.createElement("span");
@@ -2110,7 +2059,7 @@
           etiquetaEstado.textContent = estado;
           celdaEstado.appendChild(etiquetaEstado);
           fila.appendChild(celdaEstado);
-          // Columna de acciones.
+
           const celdaAcciones = document.createElement("td");
           const acciones = document.createElement("div");
           acciones.className = "acciones";
@@ -2120,6 +2069,7 @@
           botonEditar.textContent = "Editar";
           botonEditar.addEventListener("click", () => editarJugadora(j.id));
           acciones.appendChild(botonEditar);
+
           if (puedeEliminar()) {
             const botonEliminar = document.createElement("button");
             botonEliminar.type = "button";
@@ -2132,15 +2082,14 @@
           fila.appendChild(celdaAcciones);
           tabla.appendChild(fila);
         });
+
         const estaVacia = filtradas.length === 0;
         mensajeVacio.style.display = estaVacia ? "block" : "none";
         const contenedorVacio = mensajeVacio.closest(".vacio-contenedor");
         if (contenedorVacio) contenedorVacio.style.display = estaVacia ? "block" : "none";
         document.getElementById("totalJugadoras").textContent = filtradas.length;
       }
-      // ===================================================
-      // MODAL
-      // ===================================================
+
       const modal = document.getElementById("modalJugadora");
       const formulario = document.getElementById("formJugadora");
       function abrirModal() {
@@ -2151,50 +2100,34 @@
         modal.classList.remove("activo");
         formulario.reset();
         idEnEdicion = null;
-        document.getElementById("tituloModal").textContent =
-          "Agregar jugadora";
+        document.getElementById("tituloModal").textContent = "Agregar jugadora";
         campoEdad.value = "";
         document.getElementById("estado").value = "Activo";
       }
-      document.getElementById("botonAgregar").addEventListener(
-        "click",
-        () => {
-          const categoriaSeleccionada = document.getElementById("categoriaPrincipal").value;
-          if (!categoriaSeleccionada) {
-            alert("Primero seleccioná una categoría para agregar una jugadora a ese plantel.");
-            document.getElementById("categoriaPrincipal").focus();
-            return;
-          }
-          cerrarModal();
-          document.getElementById("categoria").value = categoriaSeleccionada;
-          abrirModal();
+
+      document.getElementById("botonAgregar").addEventListener("click", () => {
+        const categoriaSeleccionada = document.getElementById("categoriaPrincipal").value;
+        if (!categoriaSeleccionada) {
+          alert("Primero seleccioná una categoría para agregar una jugadora a ese plantel.");
+          document.getElementById("categoriaPrincipal").focus();
+          return;
         }
-      );
-      document.getElementById("cerrarModal").addEventListener(
-        "click",
-        cerrarModal
-      );
-      document.getElementById("cancelarModal").addEventListener(
-        "click",
-        cerrarModal
-      );
+        cerrarModal();
+        document.getElementById("categoria").value = categoriaSeleccionada;
+        abrirModal();
+      });
+
+      document.getElementById("cerrarModal").addEventListener("click", cerrarModal);
+      document.getElementById("cancelarModal").addEventListener("click", cerrarModal);
       modal.addEventListener("click", evento => {
-        if (evento.target === modal) {
-          cerrarModal();
-        }
+        if (evento.target === modal) cerrarModal();
       });
       document.addEventListener("keydown", evento => {
-        if (
-          evento.key === "Escape" &&
-          modal.classList.contains("activo")
-        ) {
-          cerrarModal();
-        }
+        if (evento.key === "Escape" && modal.classList.contains("activo")) cerrarModal();
       });
-      // ===================================================
-      // GUARDAR JUGADORA
-      // ===================================================
-      formulario.addEventListener("submit", evento => {
+
+      // --- GUARDAR O EDITAR JUGADORA EN FIREBASE ---
+      formulario.addEventListener("submit", async evento => {
         evento.preventDefault();
         const datos = {
           nombre: document.getElementById("nombre").value.trim(),
@@ -2204,13 +2137,7 @@
           posicion: document.getElementById("posicion").value,
           estado: document.getElementById("estado").value
         };
-        if (
-          !datos.nombre ||
-          !datos.categoria ||
-          !datos.nacimiento ||
-          !datos.pierna ||
-          !datos.estado
-        ) {
+        if (!datos.nombre || !datos.categoria || !datos.nacimiento || !datos.pierna || !datos.estado) {
           alert("Completá todos los campos obligatorios.");
           return;
         }
@@ -2219,71 +2146,44 @@
           return;
         }
         if (calcularEdad(datos.nacimiento) === null) {
-          alert(
-            "Ingresá una fecha de nacimiento válida que no sea futura."
-          );
+          alert("Ingresá una fecha de nacimiento válida que no sea futura.");
           return;
         }
-        if (idEnEdicion !== null) {
-          const indice = jugadoras.findIndex(
-            j => j.id === idEnEdicion
-          );
-          if (indice === -1) {
-            alert("No se encontró la jugadora que querés editar.");
-            return;
+
+        try {
+          if (idEnEdicion !== null) {
+            const docRef = doc(db, "jugadoras", idEnEdicion);
+            await updateDoc(docRef, datos);
+          } else {
+            await addDoc(collection(db, "jugadoras"), datos);
           }
-          if (!puedeAccederCategoria(jugadoras[indice].categoria)) {
-            alert("No tenés permiso para editar esta jugadora.");
-            return;
-          }
-          jugadoras[indice] = {
-            ...jugadoras[indice],
-            ...datos
-          };
-        } else {
-          jugadoras.push({
-            id: generarId(),
-            ...datos
-          });
+          cerrarModal();
+        } catch (error) {
+          console.error("Error al guardar en la nube:", error);
+          alert("Hubo un error al guardar los datos.");
         }
-        guardarJugadoras();
-        renderizarJugadoras();
-        cerrarModal();
       });
-      // ===================================================
-      // EDITAR JUGADORA
-      // ===================================================
+
       function editarJugadora(id) {
         const jugadora = jugadoras.find(j => j.id === id);
-        if (
-          !jugadora ||
-          !puedeAccederCategoria(jugadora.categoria)
-        ) {
+        if (!jugadora || !puedeAccederCategoria(jugadora.categoria)) {
           alert("No tenés permiso para editar esta jugadora.");
           return;
         }
         idEnEdicion = id;
-        document.getElementById("tituloModal").textContent =
-          "Editar jugadora";
-        document.getElementById("nombre").value =
-          jugadora.nombre || "";
-        document.getElementById("categoria").value =
-          jugadora.categoria || "";
-        campoNacimiento.value =
-          jugadora.nacimiento || "";
-        document.getElementById("pierna").value =
-          jugadora.pierna || "";
-        document.getElementById("posicion").value =
-          jugadora.posicion || "";
-        document.getElementById("estado").value =
-          jugadora.estado || "Activo";
+        document.getElementById("tituloModal").textContent = "Editar jugadora";
+        document.getElementById("nombre").value = jugadora.nombre || "";
+        document.getElementById("categoria").value = jugadora.categoria || "";
+        campoNacimiento.value = jugadora.nacimiento || "";
+        document.getElementById("pierna").value = jugadora.pierna || "";
+        document.getElementById("posicion").value = jugadora.posicion || "";
+        document.getElementById("estado").value = jugadora.estado || "Activo";
         actualizarEdadFormulario();
         abrirModal();
       }
-      // ===================================================
-      // ELIMINAR JUGADORA: SOLO FRAN
-      // ===================================================
-      function eliminarJugadora(id) {
+
+      // --- ELIMINAR JUGADORA EN FIREBASE ---
+      window.eliminarJugadora = async function(id) {
         if (!puedeEliminar()) {
           alert("No tenés permiso para eliminar jugadoras.");
           return;
@@ -2294,25 +2194,17 @@
           alert("No tenés permiso para eliminar esta jugadora.");
           return;
         }
-        if (
-          confirm(
-            "¿Querés eliminar a " +
-            jugadora.nombre +
-            " del plantel?"
-          )
-        ) {
-          jugadoras = jugadoras.filter(j => j.id !== id);
-          guardarJugadoras();
-          renderizarJugadoras();
+        if (confirm("¿Querés eliminar a " + jugadora.nombre + " del plantel?")) {
+          try {
+            await deleteDoc(doc(db, "jugadoras", id));
+          } catch (error) {
+            console.error("Error al eliminar de la nube:", error);
+            alert("No se pudo eliminar a la jugadora.");
+          }
         }
       }
-      // ===================================================
-      // BUSCADOR Y FILTROS
-      // ===================================================
-      document.getElementById("buscador").addEventListener(
-        "input",
-        renderizarJugadoras
-      );
+
+      document.getElementById("buscador").addEventListener("input", renderizarJugadoras);
       document.getElementById("categoriaPrincipal").addEventListener("change", () => {
         document.getElementById("buscador").value = "";
         document.getElementById("filtroPosicion").value = "";
@@ -2321,22 +2213,10 @@
         document.getElementById("ordenLista").value = "nombre-asc";
         renderizarJugadoras();
       });
-      document.getElementById("filtroPosicion").addEventListener(
-        "change",
-        renderizarJugadoras
-      );
-      document.getElementById("filtroPierna").addEventListener(
-        "change",
-        renderizarJugadoras
-      );
-      document.getElementById("filtroEstado").addEventListener(
-        "change",
-        renderizarJugadoras
-      );
-      document.getElementById("ordenLista").addEventListener(
-        "change",
-        renderizarJugadoras
-      );
+      document.getElementById("filtroPosicion").addEventListener("change", renderizarJugadoras);
+      document.getElementById("filtroPierna").addEventListener("change", renderizarJugadoras);
+      document.getElementById("filtroEstado").addEventListener("change", renderizarJugadoras);
+      document.getElementById("ordenLista").addEventListener("change", renderizarJugadoras);
       document.getElementById("limpiarFiltros").addEventListener("click", () => {
         document.getElementById("buscador").value = "";
         document.getElementById("filtroPosicion").value = "";
@@ -2345,13 +2225,8 @@
         document.getElementById("ordenLista").value = "nombre-asc";
         renderizarJugadoras();
       });
-      // Mostrar el botón de agregar según los permisos.
-      document.getElementById("botonAgregar").style.display =
-        (esToto() || esFran()) ? "inline-block" : "none";
-      // ===================================================
-      // INICIALIZACIÓN
-      // ===================================================
-      renderizarJugadoras();
+
+      document.getElementById("botonAgregar").style.display = (esToto() || esFran()) ? "inline-block" : "none";
     }
   </script>
 </body>
