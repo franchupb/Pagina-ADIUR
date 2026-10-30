@@ -1653,7 +1653,6 @@ a {
 
 /* =====================================================
    PERFIL Y BARRA SUPERIOR
-   Ajustados a la identidad visual de jugadoras.html
 ===================================================== */
 
 .barra-superior {
@@ -2502,7 +2501,6 @@ function cargarJugadorasLocales() {
 
 jugadoras = cargarJugadorasLocales();
 
-// Escuchar jugadoras desde Firestore en tiempo real para que siempre estén sincronizadas
 onSnapshot(collection(db, "jugadoras"), (snapshot) => {
   let listaNube = [];
   snapshot.forEach((docSnap) => {
@@ -2804,9 +2802,7 @@ function renderizarDiasSemana() {
 
 let sesiones = {};
 
-// Sincronizar asistencia en tiempo real desde Firestore
 onSnapshot(collection(db, "asistenciaADIUR"), (snapshot) => {
-  sesiones = {};
   snapshot.forEach((docSnap) => {
     sesiones[docSnap.id] = docSnap.data();
   });
@@ -2860,7 +2856,6 @@ async function guardarSesionEnNube(categoria, fecha) {
   if (!sesion) return;
 
   try {
-    // Usamos el ID limpio para Firestore reemplazando espacios o barras si las hay
     const docId = clave.replace(/[\s\/]/g, "_");
     await setDoc(doc(db, "asistenciaADIUR", docId), sesion);
     informarGuardado();
