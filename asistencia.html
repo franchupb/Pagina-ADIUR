@@ -2238,7 +2238,25 @@ a {
 
 </div>
 
-<script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-analytics.js";
+  import { getFirestore, collection, addDoc, getDocs, doc, setDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCc0dPIEkaKxbHoRC2CgZK412dXVGPOdTI",
+    authDomain: "adiur-b1913.firebaseapp.com",
+    projectId: "adiur-b1913",
+    storageBucket: "adiur-b1913.firebasestorage.app",
+    messagingSenderId: "884643321144",
+    appId: "1:884643321144:web:ba3c314de3a1c9e3545dcd",
+    measurementId: "G-58LL26YXPM"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const db = getFirestore(app);
+
 /* =====================================================
    USUARIO Y PERMISOS
 ===================================================== */
@@ -2309,13 +2327,13 @@ if (esBianca) {
    MENÚ Y SESIÓN
 ===================================================== */
 
-function cerrarSesion(event) {
+window.cerrarSesion = function(event) {
   event.preventDefault();
   localStorage.removeItem("usuarioADIUR");
   window.location.href = "Loing.html";
 }
 
-function alternarSidebar() {
+window.alternarSidebar = function() {
   const sidebar = document.getElementById("sidebar");
   const capa = document.getElementById("capaSidebar");
   const boton = document.getElementById("botonMenu");
@@ -2331,7 +2349,7 @@ function alternarSidebar() {
   }
 }
 
-function toggleGrupo(id) {
+window.toggleGrupo = function(id) {
   const grupo = document.getElementById(id);
 
   if (!grupo) return;
@@ -2379,11 +2397,10 @@ window.addEventListener("resize", ajustarSidebarPorPantalla);
 ajustarSidebarPorPantalla();
 
 /* =====================================================
-   CLAVES DE ALMACENAMIENTO
+   CLAVES DE ALMACENAMIENTO Y NUBE
 ===================================================== */
 
 const CLAVE_JUGADORAS = "jugadorasADIUR";
-const CLAVE_ASISTENCIA = "asistenciaADIUR";
 const CLAVE_DIAS_SEMANA = "diasEntrenamientoSemanaADIUR";
 const CLAVE_DIAS_SIN_ENTRENO = "diasSinEntrenamientoADIUR";
 const CLAVE_CATEGORIA = "categoriaAsistenciaSeleccionadaADIUR";
@@ -2400,17 +2417,8 @@ const DIAS_SEMANA = [
   { valor: 0, nombre: "Domingo" }
 ];
 
-/* =====================================================
-   FECHA ACTUAL Y ALMACENAMIENTO
-===================================================== */
-
 let mesActual = new Date();
-
-mesActual = new Date(
-  mesActual.getFullYear(),
-  mesActual.getMonth(),
-  1
-);
+mesActual = new Date(mesActual.getFullYear(), mesActual.getMonth(), 1);
 
 function leerJSON(clave, valorPorDefecto) {
   try {
@@ -2433,7 +2441,7 @@ function escaparHTML(valor) {
 }
 
 /* =====================================================
-   JUGADORAS
+   JUGADORAS (DESDE LA NUBE Y LOCAL)
 ===================================================== */
 
 function obtenerNombreJugadora(jugadora) {
@@ -2462,17 +2470,10 @@ function obtenerCategoriaJugadora(jugadora) {
   ).trim().replace(/\s+/g, " ");
 }
 
-function cargarJugadoras() {
-  const datos = leerJSON(CLAVE_JUGADORAS, []);
-  let lista = [];
+let jugadoras = [];
 
-  if (Array.isArray(datos)) {
-    lista = datos;
-  } else if (datos && Array.isArray(datos.jugadoras)) {
-    lista = datos.jugadoras;
-  }
-
-  return lista
+function procesarListaJugadoras(listaCruda) {
+  return listaCruda
     .filter(j => j && typeof j === "object")
     .map(j => ({
       ...j,
@@ -2488,6 +2489,33 @@ function cargarJugadoras() {
     );
 }
 
+function cargarJugadorasLocales() {
+  const datos = leerJSON(CLAVE_JUGADORAS, []);
+  let lista = [];
+  if (Array.isArray(datos)) {
+    lista = datos;
+  } else if (datos && Array.isArray(datos.jugadoras)) {
+    lista = datos.jugadoras;
+  }
+  return procesarListaJugadoras(lista);
+}
+
+jugadoras = cargarJugadorasLocales();
+
+// Escuchar jugadoras desde Firestore en tiempo real para que siempre estén sincronizadas
+onSnapshot(collection(db, "jugadoras"), (snapshot) => {
+  let listaNube = [];
+  snapshot.forEach((docSnap) => {
+    listaNube.push({ id: docSnap.id, ...docSnap.data() });
+  });
+  if (listaNube.length > 0) {
+    jugadoras = procesarListaJugadoras(listaNube);
+  } else {
+    jugadoras = cargarJugadorasLocales();
+  }
+  actualizarCategoriasYReRenderizar();
+});
+
 function claveJugadora(jugadora) {
   if (
     jugadora.id !== undefined &&
@@ -2496,7 +2524,6 @@ function claveJugadora(jugadora) {
   ) {
     return "id:" + String(jugadora.id);
   }
-
   return "nombre:" + normalizarTexto(jugadora.nombre);
 }
 
@@ -2517,8 +2544,6 @@ function inicialesJugadora(nombre) {
     partes[partes.length - 1].charAt(0)
   ).toUpperCase();
 }
-
-let jugadoras = cargarJugadoras();
 
 /* =====================================================
    CATEGORÍAS Y ORDENAMIENTO
@@ -2774,17 +2799,23 @@ function renderizarDiasSemana() {
 }
 
 /* =====================================================
-   SESIONES DE ASISTENCIA
+   SESIONES DE ASISTENCIA (SINCRONIZADAS EN FIRESTORE)
 ===================================================== */
 
-let sesiones = leerJSON(CLAVE_ASISTENCIA, {});
+let sesiones = {};
 
-if (!sesiones || typeof sesiones !== "object" || Array.isArray(sesiones)) {
+// Sincronizar asistencia en tiempo real desde Firestore
+onSnapshot(collection(db, "asistenciaADIUR"), (snapshot) => {
   sesiones = {};
-}
+  snapshot.forEach((docSnap) => {
+    sesiones[docSnap.id] = docSnap.data();
+  });
+  renderizarMatriz();
+  renderizarSeguimientoIndividual();
+});
 
 function claveSesion(categoria, fecha) {
-  return String(categoria || "Sin categoría") + "|" + fecha;
+  return String(categoria || "Sin categoría") + "_" + fecha;
 }
 
 function obtenerSesion(categoria, fecha) {
@@ -2823,15 +2854,20 @@ function crearSesion(categoria, fecha) {
   return sesiones[clave];
 }
 
-function guardarSesiones() {
+async function guardarSesionEnNube(categoria, fecha) {
+  const clave = claveSesion(categoria, fecha);
+  const sesion = sesiones[clave];
+  if (!sesion) return;
+
   try {
-    localStorage.setItem(CLAVE_ASISTENCIA, JSON.stringify(sesiones));
+    // Usamos el ID limpio para Firestore reemplazando espacios o barras si las hay
+    const docId = clave.replace(/[\s\/]/g, "_");
+    await setDoc(doc(db, "asistenciaADIUR", docId), sesion);
     informarGuardado();
   } catch (error) {
-    console.error("No se pudo guardar la asistencia.", error);
-
+    console.error("No se pudo guardar la asistencia en la nube:", error);
     document.getElementById("estadoGuardado").textContent =
-      "No se pudo guardar. Revisá el almacenamiento del navegador.";
+      "No se pudo guardar en la nube. Revisá tu conexión.";
   }
 }
 
@@ -3016,10 +3052,10 @@ function obtenerCategoriaDeSesion(clave, sesion) {
   }
 
   const coincidencia = String(clave).match(
-    /^(.*)\|(\d{4}-\d{2}-\d{2})$/
+    /^(.*)[\|_](\d{4}-\d{2}-\d{2})$/
   );
 
-  return coincidencia ? coincidencia[1] : "";
+  return coincidencia ? coincidencia[1].replace(/_/g, " ") : "";
 }
 
 function obtenerFechaDeSesion(clave, sesion) {
@@ -3028,7 +3064,7 @@ function obtenerFechaDeSesion(clave, sesion) {
   }
 
   const coincidencia = String(clave).match(
-    /\|(\d{4}-\d{2}-\d{2})$/
+    /(\d{4}-\d{2}-\d{2})$/
   );
 
   return coincidencia ? coincidencia[1] : "";
@@ -3160,7 +3196,7 @@ function guardarEstadoJugadora(jugadora, fecha, nuevoEstado) {
     delete sesion.asistencias[clave];
   }
 
-  guardarSesiones();
+  guardarSesionEnNube(jugadora.categoria, fecha);
 }
 
 const ESTADOS_CICLICOS = [
@@ -3663,6 +3699,36 @@ function renderizarMatriz() {
   }
 }
 
+function actualizarCategoriasYReRenderizar() {
+  categoriasDisponibles = obtenerCategoriasDisponibles();
+
+  if (
+    !categoriasDisponibles.some(
+      categoria =>
+        normalizarCategoria(categoria) ===
+        normalizarCategoria(categoriaSeleccionada)
+    )
+  ) {
+    categoriaSeleccionada = categoriasDisponibles[0] || "";
+  } else {
+    categoriaSeleccionada = categoriasDisponibles.find(
+      categoria =>
+        normalizarCategoria(categoria) ===
+        normalizarCategoria(categoriaSeleccionada)
+    ) || categoriaSeleccionada;
+  }
+
+  guardarCategoriaSeleccionada();
+
+  diasEntrenamiento = cargarDiasEntrenamiento(categoriaSeleccionada);
+  diasSinEntrenamiento = cargarDiasSinEntrenamiento();
+
+  renderizarSelectorCategorias();
+  renderizarDiasSemana();
+  renderizarMatriz();
+  renderizarSeguimientoIndividual();
+}
+
 /* =====================================================
    CAMBIAR CATEGORÍA
 ===================================================== */
@@ -3720,7 +3786,7 @@ function informarGuardado() {
 
   if (!indicador) return;
 
-  indicador.textContent = "✓ Guardado automáticamente";
+  indicador.textContent = "✓ Sincronizado en la nube";
 
   if (temporizadorGuardado) {
     clearTimeout(temporizadorGuardado);
@@ -3762,41 +3828,7 @@ document.getElementById("mesSiguiente").addEventListener("click", () => {
 ===================================================== */
 
 function iniciarAsistencia() {
-  jugadoras = cargarJugadoras();
-  categoriasDisponibles = obtenerCategoriasDisponibles();
-
-  if (
-    !categoriasDisponibles.some(
-      categoria =>
-        normalizarCategoria(categoria) ===
-        normalizarCategoria(categoriaSeleccionada)
-    )
-  ) {
-    categoriaSeleccionada = categoriasDisponibles[0] || "";
-  } else {
-    categoriaSeleccionada = categoriasDisponibles.find(
-      categoria =>
-        normalizarCategoria(categoria) ===
-        normalizarCategoria(categoriaSeleccionada)
-    ) || categoriaSeleccionada;
-  }
-
-  guardarCategoriaSeleccionada();
-
-  diasEntrenamiento = cargarDiasEntrenamiento(categoriaSeleccionada);
-
-  sesiones = leerJSON(CLAVE_ASISTENCIA, {});
-
-  if (!sesiones || typeof sesiones !== "object" || Array.isArray(sesiones)) {
-    sesiones = {};
-  }
-
-  diasSinEntrenamiento = cargarDiasSinEntrenamiento();
-
-  renderizarSelectorCategorias();
-  renderizarDiasSemana();
-  renderizarMatriz();
-  renderizarSeguimientoIndividual();
+  actualizarCategoriasYReRenderizar();
 }
 
 iniciarAsistencia();
