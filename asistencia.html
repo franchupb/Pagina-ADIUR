@@ -2227,7 +2227,7 @@ a {
         </span>
 
         <span>
-          Recordá hacer clic en "Guardar asistencia" arriba para conservar los cambios en la nube.
+          Recordá hacer clic en "Guardar asistencia" arriba para conservar los cambios en la nube para todas las categorías.
         </span>
 
       </div>
@@ -2854,7 +2854,8 @@ onSnapshot(collection(db, "asistenciaADIUR"), (snapshot) => {
 });
 
 function claveSesion(categoria, fecha) {
-  return String(categoria || "Sin categoría") + "_" + fecha;
+  const catLimpia = String(categoria || "Sin categoría").trim().replace(/[\s\/]+/g, "_");
+  return catLimpia + "_" + fecha;
 }
 
 function obtenerSesion(categoria, fecha) {
@@ -2894,20 +2895,21 @@ function crearSesion(categoria, fecha) {
 }
 
 /* =====================================================
-   BOTÓN GUARDAR MANUAL COMPLETO (LA NUBE)
+   BOTÓN GUARDAR MANUAL COMPLETO (TODAS LAS CATEGORÍAS)
 ===================================================== */
 
 window.guardarTodoManual = async function() {
   const boton = document.getElementById("botonGuardarAsistencia");
   const originalTexto = boton.innerHTML;
   boton.disabled = true;
-  boton.innerHTML = "⏳ Guardando en la nube...";
+  boton.innerHTML = "⏳ Guardando todas las categorías...";
 
   try {
     const promesas = Object.keys(sesiones).map(clave => {
       const sesion = sesiones[clave];
       if (!sesion) return Promise.resolve();
-      const docId = clave.replace(/[\s\/]/g, "_");
+      // Aseguramos que el ID del documento Firestore sea limpio y seguro para cualquier categoría
+      const docId = clave.replace(/[\s\/]+/g, "_");
       return setDoc(doc(db, "asistenciaADIUR", docId), sesion);
     });
 
@@ -2922,7 +2924,7 @@ window.guardarTodoManual = async function() {
       if (indicador) indicador.textContent = "Modificá y tocá \"Guardar asistencia\"";
     }, 3500);
 
-    alert("¡Asistencia guardada correctamente en la nube!");
+    alert("¡Asistencia guardada correctamente en la nube para todas las categorías (Sub 10, Sub 12, Sub 14, Sub 16 y Primera)!");
   } catch (error) {
     console.error("Error al guardar manualmente:", error);
     alert("Hubo un error al guardar. Verificá tu conexión a internet.");
@@ -3110,11 +3112,13 @@ function obtenerCategoriaDeSesion(clave, sesion) {
     return String(sesion.categoria);
   }
 
-  const coincidencia = String(clave).match(
-    /^(.*)[\|_](\d{4}-\d{2}-\d{2})$/
-  );
+  const partes = String(clave).split("_");
+  if (partes.length > 1) {
+    partes.pop(); // Quitar la fecha final (YYYY-MM-DD)
+    return partes.join(" ");
+  }
 
-  return coincidencia ? coincidencia[1].replace(/_/g, " ") : "";
+  return "";
 }
 
 function obtenerFechaDeSesion(clave, sesion) {
