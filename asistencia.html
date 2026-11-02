@@ -2205,7 +2205,7 @@ a {
             id="estadoGuardado"
             aria-live="polite"
           >
-            Guardado automático activado
+            Modificá y tocá "Guardar asistencia"
           </div>
 
         </div>
@@ -2227,7 +2227,7 @@ a {
         </span>
 
         <span>
-          Los registros se guardan automáticamente por categoría.
+          Recordá hacer clic en "Guardar asistencia" arriba para conservar los cambios en la nube.
         </span>
 
       </div>
@@ -2795,8 +2795,6 @@ function guardarDiasEntrenamiento() {
       claveDiasEntrenamiento(categoriaSeleccionada),
       JSON.stringify(diasEntrenamiento)
     );
-
-    informarGuardado();
   } catch (error) {
     console.error("No se pudieron guardar los días de entrenamiento.", error);
   }
@@ -2895,31 +2893,15 @@ function crearSesion(categoria, fecha) {
   return sesiones[clave];
 }
 
-async function guardarSesionEnNube(categoria, fecha) {
-  const clave = claveSesion(categoria, fecha);
-  const sesion = sesiones[clave];
-  if (!sesion) return;
-
-  try {
-    const docId = clave.replace(/[\s\/]/g, "_");
-    await setDoc(doc(db, "asistenciaADIUR", docId), sesion);
-    informarGuardado();
-  } catch (error) {
-    console.error("No se pudo guardar la asistencia en la nube:", error);
-    document.getElementById("estadoGuardado").textContent =
-      "No se pudo guardar en la nube. Revisá tu conexión.";
-  }
-}
-
 /* =====================================================
-   BOTÓN GUARDAR MANUAL COMPLETO
+   BOTÓN GUARDAR MANUAL COMPLETO (LA NUBE)
 ===================================================== */
 
 window.guardarTodoManual = async function() {
   const boton = document.getElementById("botonGuardarAsistencia");
   const originalTexto = boton.innerHTML;
   boton.disabled = true;
-  boton.innerHTML = "⏳ Guardando...";
+  boton.innerHTML = "⏳ Guardando en la nube...";
 
   try {
     const promesas = Object.keys(sesiones).map(clave => {
@@ -2933,14 +2915,14 @@ window.guardarTodoManual = async function() {
 
     const indicador = document.getElementById("estadoGuardado");
     if (indicador) {
-      indicador.textContent = "✓ ¡Asistencia guardada con éxito!";
+      indicador.textContent = "✓ ¡Guardado en la nube con éxito!";
     }
     
     setTimeout(() => {
-      if (indicador) indicador.textContent = "Guardado automático activado";
-    }, 3000);
+      if (indicador) indicador.textContent = "Modificá y tocá \"Guardar asistencia\"";
+    }, 3500);
 
-    alert("¡Toda la asistencia fue guardada correctamente en la nube!");
+    alert("¡Asistencia guardada correctamente en la nube!");
   } catch (error) {
     console.error("Error al guardar manualmente:", error);
     alert("Hubo un error al guardar. Verificá tu conexión a internet.");
@@ -3027,8 +3009,6 @@ function guardarDiasSinEntrenamiento() {
       CLAVE_DIAS_SIN_ENTRENO,
       JSON.stringify(diasSinEntrenamiento)
     );
-
-    informarGuardado();
   } catch (error) {
     console.error("No se pudo guardar el día sin entrenamiento.", error);
   }
@@ -3274,8 +3254,6 @@ function guardarEstadoJugadora(jugadora, fecha, nuevoEstado) {
   } else {
     delete sesion.asistencias[clave];
   }
-
-  guardarSesionEnNube(jugadora.categoria, fecha);
 }
 
 const ESTADOS_CICLICOS = [
@@ -3853,28 +3831,6 @@ document.getElementById("selectorJugadoraSeguimiento").addEventListener(
     renderizarSeguimientoIndividual();
   }
 );
-
-/* =====================================================
-   GUARDADO AUTOMÁTICO
-===================================================== */
-
-let temporizadorGuardado = null;
-
-function informarGuardado() {
-  const indicador = document.getElementById("estadoGuardado");
-
-  if (!indicador) return;
-
-  indicador.textContent = "✓ Sincronizado en la nube";
-
-  if (temporizadorGuardado) {
-    clearTimeout(temporizadorGuardado);
-  }
-
-  temporizadorGuardado = setTimeout(() => {
-    indicador.textContent = "Guardado automático activado";
-  }, 2200);
-}
 
 /* =====================================================
    NAVEGACIÓN ENTRE MESES
