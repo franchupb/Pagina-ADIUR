@@ -373,6 +373,40 @@ a {
 }
 
 /* =====================================================
+   BOTÓN DE GUARDAR GLOBAL
+===================================================== */
+
+.acciones-superiores-pagina {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.boton-guardar-principal {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 22px;
+  background: var(--naranja);
+  color: white;
+  border: 0;
+  border-radius: 11px;
+  font-size: 13px;
+  font-weight: 900;
+  box-shadow: 0 4px 12px rgba(244, 119, 33, 0.3);
+  transition: background 0.15s, transform 0.1s;
+}
+
+.boton-guardar-principal:hover {
+  background: var(--naranja-oscuro);
+  transform: translateY(-1px);
+}
+
+.boton-guardar-principal:active {
+  transform: translateY(0);
+}
+
+/* =====================================================
    SELECTOR PRINCIPAL DE CATEGORÍA
 ===================================================== */
 
@@ -2033,6 +2067,17 @@ a {
           individual de cada jugadora al final de la página.
         </p>
       </div>
+
+      <div class="acciones-superiores-pagina">
+        <button
+          type="button"
+          class="boton-guardar-principal"
+          id="botonGuardarAsistencia"
+          onclick="guardarTodoManual()"
+        >
+          💾 Guardar asistencia
+        </button>
+      </div>
     </section>
 
     <!-- SELECTOR PRINCIPAL DE CATEGORÍA -->
@@ -2865,6 +2910,45 @@ async function guardarSesionEnNube(categoria, fecha) {
       "No se pudo guardar en la nube. Revisá tu conexión.";
   }
 }
+
+/* =====================================================
+   BOTÓN GUARDAR MANUAL COMPLETO
+===================================================== */
+
+window.guardarTodoManual = async function() {
+  const boton = document.getElementById("botonGuardarAsistencia");
+  const originalTexto = boton.innerHTML;
+  boton.disabled = true;
+  boton.innerHTML = "⏳ Guardando...";
+
+  try {
+    const promesas = Object.keys(sesiones).map(clave => {
+      const sesion = sesiones[clave];
+      if (!sesion) return Promise.resolve();
+      const docId = clave.replace(/[\s\/]/g, "_");
+      return setDoc(doc(db, "asistenciaADIUR", docId), sesion);
+    });
+
+    await Promise.all(promesas);
+
+    const indicador = document.getElementById("estadoGuardado");
+    if (indicador) {
+      indicador.textContent = "✓ ¡Asistencia guardada con éxito!";
+    }
+    
+    setTimeout(() => {
+      if (indicador) indicador.textContent = "Guardado automático activado";
+    }, 3000);
+
+    alert("¡Toda la asistencia fue guardada correctamente en la nube!");
+  } catch (error) {
+    console.error("Error al guardar manualmente:", error);
+    alert("Hubo un error al guardar. Verificá tu conexión a internet.");
+  } finally {
+    boton.disabled = false;
+    boton.innerHTML = originalTexto;
+  }
+};
 
 /* =====================================================
    DÍAS SIN ENTRENAMIENTO POR CATEGORÍA
