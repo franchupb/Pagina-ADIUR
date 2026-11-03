@@ -2307,6 +2307,7 @@ button:disabled {
     class="boton-menu"
     id="botonMenu"
     type="button"
+    onclick="window.alternarSidebar()"
     aria-label="Abrir menú"
     aria-expanded="false"
   >☰</button>
@@ -2332,7 +2333,7 @@ button:disabled {
   </div>
 </header>
 
-<div class="capa-sidebar" id="capaSidebar"></div>
+<div class="capa-sidebar" id="capaSidebar" onclick="window.alternarSidebar()"></div>
 
 <div class="contenedor">
 
@@ -2344,7 +2345,7 @@ button:disabled {
     </a>
 
     <div class="grupo-menu cerrado" id="grupoPlantel">
-      <button class="titulo-grupo" type="button" id="btnGrupoPlantel">
+      <button class="titulo-grupo" type="button" onclick="window.toggleGrupo('grupoPlantel')">
         <span>PLANTEL</span>
         <span class="flecha">›</span>
       </button>
@@ -2355,7 +2356,7 @@ button:disabled {
     </div>
 
     <div class="grupo-menu" id="grupoEntrenamiento">
-      <button class="titulo-grupo" type="button" id="btnGrupoEntrenamiento">
+      <button class="titulo-grupo" type="button" onclick="window.toggleGrupo('grupoEntrenamiento')">
         <span>ENTRENAMIENTO</span>
         <span class="flecha">›</span>
       </button>
@@ -2369,7 +2370,7 @@ button:disabled {
     </div>
 
     <div class="grupo-menu cerrado" id="grupoCompetencia">
-      <button class="titulo-grupo" type="button" id="btnGrupoCompetencia">
+      <button class="titulo-grupo" type="button" onclick="window.toggleGrupo('grupoCompetencia')">
         <span>COMPETENCIA</span>
         <span class="flecha">›</span>
       </button>
@@ -2382,7 +2383,7 @@ button:disabled {
     </div>
 
     <div class="grupo-menu cerrado" id="grupoRendimientos">
-      <button class="titulo-grupo" type="button" id="btnGrupoRendimientos">
+      <button class="titulo-grupo" type="button" onclick="window.toggleGrupo('grupoRendimientos')">
         <span>RENDIMIENTOS</span>
         <span class="flecha">›</span>
       </button>
@@ -2396,7 +2397,7 @@ button:disabled {
     </div>
 
     <div class="separador-sesion">
-      <a class="enlace-cerrar-sesion" id="enlaceCerrarSesion" href="#">
+      <a class="enlace-cerrar-sesion" href="#" onclick="window.cerrarSesion(event)">
         <span>↪</span>
         Cerrar sesión
       </a>
@@ -2420,7 +2421,7 @@ button:disabled {
       <div class="controles-semana">
         <div class="campo-control panel-categoria">
           <label for="selectCategoria">CATEGORÍA DEL PLANTEL</label>
-          <select id="selectCategoria">
+          <select id="selectCategoria" onchange="window.seleccionarCategoria(this.value)">
             <option value="Sub 10">Sub 10</option>
             <option value="Sub 12">Sub 12</option>
             <option value="Sub 14">Sub 14</option>
@@ -2450,20 +2451,20 @@ button:disabled {
           <button
             type="button"
             class="boton-flecha-microciclo"
-            id="botonSemanaAnterior"
+            onclick="window.cambiarSemana(-1)"
             aria-label="Microciclo anterior"
             title="Microciclo anterior"
           >‹</button>
 
           <div class="campo-control control-microciclo">
             <label for="selectMicrociclo">MICROCICLO</label>
-            <select id="selectMicrociclo"></select>
+            <select id="selectMicrociclo" onchange="window.seleccionarSemana(this.value)"></select>
           </div>
 
           <button
             type="button"
             class="boton-flecha-microciclo"
-            id="botonSemanaSiguiente"
+            onclick="window.cambiarSemana(1)"
             aria-label="Microciclo siguiente"
             title="Microciclo siguiente"
           >›</button>
@@ -2481,12 +2482,14 @@ button:disabled {
             type="button"
             class="boton boton-principal"
             id="botonGuardarSemana"
+            onclick="window.guardarSemana()"
           >✓ Guardar microciclo</button>
 
           <button
             type="button"
             class="boton boton-agregar"
             id="botonAgregarSesion"
+            onclick="window.agregarSesion()"
           >
             <span class="mas">+</span>
             AGREGAR SESIÓN
@@ -2496,6 +2499,7 @@ button:disabled {
             type="button"
             class="boton boton-secundario"
             id="botonEditarSemana"
+            onclick="window.editarSemana()"
             hidden
           >✎ Editar microciclo</button>
 
@@ -2504,7 +2508,7 @@ button:disabled {
 
       <div class="estado-guardado" aria-live="polite">
         <span class="punto-guardado" id="puntoGuardado"></span>
-        <span id="estadoGuardado">Los cambios se guardan automáticamente en este navegador.</span>
+        <span id="estadoGuardado">Los cambios se guardan automáticamente en este navegador y la nube.</span>
       </div>
 
       <div class="aviso-solo-lectura" id="avisoSoloLectura" hidden>
@@ -2533,11 +2537,11 @@ button:disabled {
 
 <div id="mensajeFlotante" class="mensaje-flotante" role="status" aria-live="polite"></div>
 
-<!-- SCRIPT DE FIREBASE Y LÓGICA DE PLANIFICACIÓN -->
+<!-- LÓGICA CON FIREBASE Y CÁLCULO DE FECHA AUTOMÁTICO -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-analytics.js";
-  import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, getDocs, doc, setDoc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyCc0dPIEkaKxbHoRC2CgZK412dXVGPOdTI",
@@ -2586,10 +2590,10 @@ button:disabled {
   const FECHA_REFERENCIA = "2026-10-19";
 
   let categoriaActual = "Sub 16";
-  
-  // Cálculo automático de la semana actual basado en la fecha del día actual
+
+  // CÁLCULO AUTOMÁTICO DE LA SEMANA SEGÚN LA FECHA ACTUAL
   function calcularSemanaActualPorFecha() {
-    const fechaRef = new Date(2026, 9, 19); // 19 de Octubre de 2026 (Semana 39)
+    const fechaRef = new Date(2026, 9, 19); // 19 Oct 2026 = Semana 39
     const hoy = new Date();
     const diffTime = hoy.getTime() - fechaRef.getTime();
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
@@ -2966,35 +2970,6 @@ button:disabled {
     sesion.fisico = lineasFisicas.join("\n\n");
   }
 
-  function obtenerDuracionParaTexto(duracion) {
-    const valor = String(duracion ?? "").trim();
-    return valor ? ` (${valor} min)` : "";
-  }
-
-  function obtenerLineasDeBloquesTTT(bloques) {
-    const lineas = [];
-    (Array.isArray(bloques) ? bloques : []).forEach((b, i) => {
-      const contenido = String(b?.contenido ?? "").trim();
-      const duracion = String(b?.duracion ?? "").trim();
-      if (!contenido && !duracion) return;
-      const encabezado = "TTT · Bloque " + (i + 1) + obtenerDuracionParaTexto(duracion);
-      lineas.push(contenido ? encabezado + ": " + contenido : encabezado);
-    });
-    return lineas;
-  }
-
-  function obtenerLineasDeBloquesFisicos(bloques) {
-    const lineas = [];
-    (Array.isArray(bloques) ? bloques : []).forEach((b, i) => {
-      const desc = describirBloqueFisico(b);
-      const duracion = String(b?.duracion ?? "").trim();
-      const nota = String(b?.notaAnterior ?? "").trim();
-      if (desc) lineas.push("Físico · Bloque " + (i + 1) + obtenerDuracionParaTexto(duracion) + ": " + desc);
-      if (nota) lineas.push("Contenido físico anterior · Bloque " + (i + 1) + ": " + nota);
-    });
-    return lineas;
-  }
-
   function crearSesionVacia(diaSemana = 0, intensidad = "media") {
     return {
       diaSemana, intensidad, ec: "", ecDuracion: "", ttt: "",
@@ -3168,20 +3143,34 @@ button:disabled {
     };
   }
 
-  function guardarDatosAutomaticamente(mostrarMensaje = false) {
+  async function guardarDatosAutomaticamente(mostrarMensaje = false) {
     try {
       const almacen = cargarAlmacen();
       if (!almacen[categoriaActual] || typeof almacen[categoriaActual] !== "object") {
         almacen[categoriaActual] = {};
       }
       sesionesActuales.forEach(actualizarCamposLegado);
-      almacen[categoriaActual][String(semanaActual)] = {
+      
+      const datosMicrociclo = {
         fechaInicio: fechaInicioActual,
         sesiones: sesionesActuales,
-        guardada: microcicloGuardado
+        guardada: microcicloGuardado,
+        categoria: categoriaActual,
+        semana: semanaActual,
+        ultimaActualizacion: new Date().toISOString()
       };
+
+      almacen[categoriaActual][String(semanaActual)] = datosMicrociclo;
       localStorage.setItem(CLAVE_PLANIFICACION, JSON.stringify(almacen));
       sincronizarCalendarioSemana();
+
+      // Guardado en la nube (Firebase Firestore)
+      try {
+        const idDoc = `${categoriaActual}_Semana_${semanaActual}`;
+        await setDoc(doc(db, "planificaciones", idDoc), datosMicrociclo);
+      } catch (errCloud) {
+        console.warn("No se pudo sincronizar en Firebase:", errCloud);
+      }
 
       const hora = new Date().toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" });
       actualizarEstadoGuardado(microcicloGuardado ? "Microciclo guardado · " + hora : "Borrador guardado automáticamente · " + hora, false);
@@ -3195,10 +3184,11 @@ button:disabled {
     }
   }
 
-  window.guardarSemana = function() {
+  window.guardarSemana = async function() {
     if (!modoEdicion) return;
     microcicloGuardado = true;
-    if (!guardarDatosAutomaticamente(false)) {
+    const ok = await guardarDatosAutomaticamente(false);
+    if (!ok) {
       microcicloGuardado = false;
       return;
     }
@@ -3258,8 +3248,6 @@ button:disabled {
   function crearActividadCalendario(sesion, indice, fecha) {
     const cfg = obtenerConfiguracionIntensidad(sesion.intensidad);
     const esPartido = sesion.intensidad === "partido";
-    const esSuspendido = sesion.intensidad === "suspendido";
-    const club = esPartido ? obtenerClubPorNombre(sesion.rival) : null;
     const idMicrociclo = ORIGEN_PLANIFICACION + ":" + categoriaActual + ":S" + semanaActual;
 
     return {
@@ -3513,7 +3501,36 @@ button:disabled {
     document.getElementById("avisoSoloLectura").hidden = modoEdicion;
   }
 
-  // Event Listeners principales
+  // Funciones de control de menú y perfil
+  window.alternarSidebar = function() {
+    const sidebar = document.getElementById("sidebar");
+    const capa = document.getElementById("capaSidebar");
+    const boton = document.getElementById("botonMenu");
+    const esMovil = window.matchMedia("(max-width: 760px)").matches;
+
+    if (esMovil) {
+      const visible = sidebar.classList.toggle("visible");
+      capa.classList.toggle("visible", visible);
+      boton.setAttribute("aria-expanded", String(visible));
+    } else {
+      const oculto = sidebar.classList.toggle("oculto");
+      boton.setAttribute("aria-expanded", String(!oculto));
+    }
+  };
+
+  window.toggleGrupo = function(id) {
+    const grupo = document.getElementById(id);
+    if (grupo) grupo.classList.toggle("cerrado");
+  };
+
+  window.cerrarSesion = function(evento) {
+    evento.preventDefault();
+    if (confirm("¿Querés cerrar la sesión?")) {
+      try { localStorage.removeItem("usuarioADIUR"); } catch (e) {}
+      window.location.href = "Loing.html";
+    }
+  };
+
   document.addEventListener("DOMContentLoaded", () => {
     categoriaActual = obtenerCategoriaPredeterminada();
     const semana = obtenerSemana(semanaActual, categoriaActual);
@@ -3523,19 +3540,6 @@ button:disabled {
     modoEdicion = !microcicloGuardado;
 
     renderizarSemana();
-
-    document.getElementById("selectCategoria").addEventListener("change", (e) => {
-      window.seleccionarCategoria(e.target.value);
-    });
-
-    document.getElementById("selectMicrociclo").addEventListener("change", (e) => {
-      window.seleccionarSemana(e.target.value);
-    });
-
-    document.getElementById("botonSemanaAnterior").addEventListener("click", () => window.cambiarSemana(-1));
-    document.getElementById("botonSemanaSiguiente").addEventListener("click", () => window.cambiarSemana(1));
-    document.getElementById("botonGuardarSemana").addEventListener("click", () => window.guardarSemana());
-    document.getElementById("botonEditarSemana").addEventListener("click", () => window.editarSemana());
 
     document.getElementById("gridMicrociclo").addEventListener("input", (e) => {
       if (!modoEdicion) return;
