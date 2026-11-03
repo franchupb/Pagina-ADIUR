@@ -2508,7 +2508,7 @@ button:disabled {
 
       <div class="estado-guardado" aria-live="polite">
         <span class="punto-guardado" id="puntoGuardado"></span>
-        <span id="estadoGuardado">Los cambios se guardan automáticamente en este navegador.</span>
+        <span id="estadoGuardado">Los cambios se guardan automáticamente en la nube.</span>
       </div>
 
       <div class="aviso-solo-lectura" id="avisoSoloLectura" hidden>
@@ -2523,9 +2523,9 @@ button:disabled {
     <section class="ayuda-planificacion">
       <div class="ayuda-icono">i</div>
       <div>
-        <strong>Planificación conectada con el calendario</strong>
+        <strong>Planificación conectada con la nube y el calendario</strong>
         <p>
-          Las sesiones se guardan automáticamente como borrador mientras editás. Al guardar el microciclo, los días se muestran en modo de consulta. Los entrenamientos publican sus contenidos, duraciones e intensidad; los partidos publican el rival, el escudo y el torneo.
+          Las sesiones se sincronizan automáticamente en Firebase. Al guardar el microciclo, los días se muestran en modo de consulta y se actualizan para todo el cuerpo técnico.
         </p>
       </div>
     </section>
@@ -2536,6 +2536,36 @@ button:disabled {
 </div>
 
 <div id="mensajeFlotante" class="mensaje-flotante" role="status" aria-live="polite"></div>
+
+<!-- FIREBASE SDKs -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
+  import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCc0dPIEkaKxbHoRC2CgZK412dXVGPOdTI",
+    authDomain: "adiur-b1913.firebaseapp.com",
+    projectId: "adiur-b1913",
+    storageBucket: "adiur-b1913.firebasestorage.app",
+    messagingSenderId: "884643321144",
+    appId: "1:884643321144:web:ba3c314de3a1c9e3545dcd",
+    measurementId: "G-58LL26YXPM"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  window.dbFirestore = db;
+  window.firebaseDoc = doc;
+  window.firebaseSetDoc = setDoc;
+  window.firebaseGetDoc = getDoc;
+  window.firebaseCollection = collection;
+  window.firebaseOnSnapshot = onSnapshot;
+
+  if (window.iniciarAplicacionPlanificacion) {
+    window.iniciarAplicacionPlanificacion();
+  }
+</script>
 
 <script>
 "use strict";
@@ -2579,6 +2609,7 @@ let sesionesActuales = [];
 let temporizadorMensaje = null;
 let modoEdicion = true;
 let microcicloGuardado = false;
+let datosNubeCargados = false;
 
 const COMPETICIONES_POR_DIVISION = {
   "Sub 10": ["Rosarina", "Copa Oro - ARF", "Copa Plata - ARF"],
@@ -2802,6 +2833,25 @@ function formatearRangoMicrociclo(fechaInicioISO) {
 function obtenerFechaPredeterminada(numeroSemana) {
   const diferencia = (numeroSemana - SEMANA_REFERENCIA) * 7;
   return sumarDiasISO(FECHA_REFERENCIA, diferencia);
+}
+
+/* CÁLCULO DE LA SEMANA ACTUAL SEGÚN LA FECHA DE HOY */
+function calcularSemanaActualSegunFecha() {
+  const hoy = new Date();
+  const fechaRef = fechaISOaObjeto(FECHA_REFERENCIA);
+  
+  if (!fechaRef) return 39;
+
+  const diferenciaMs = hoy.getTime() - fechaRef.getTime();
+  const diasDiferencia = Math.floor(diferenciaMs / (1000 * 60 * 60 * 24));
+  const semanasDiferencia = Math.floor(diasDiferencia / 7);
+  
+  const semanaCalculada = SEMANA_REFERENCIA + semanasDiferencia;
+  
+  // Limitar entre semana 32 y 43 para asegurar que siempre haya contenido
+  if (semanaCalculada < 32) return 32;
+  if (semanaCalculada > 43) return 43;
+  return semanaCalculada;
 }
 
 function obtenerDiaIndex(texto) {
@@ -3375,10 +3425,12 @@ function crearSesionesPredeterminadas(numeroSemana, categoria) {
 }
 
 /* =====================================================
-   ALMACENAMIENTO
+   ALMACENAMIENTO HÍBRIDO (LOCAL + NUBE FIRESTORE)
 ===================================================== */
 
-function cargarAlmacen() {
+let almacenGlobalRemoto = {};
+
+function cargarAlmacenLocal() {
   try {
     const texto = localStorage.getItem(CLAVE_PLANIFICACION);
     if (!texto) return {};
@@ -3395,8 +3447,84 @@ function cargarAlmacen() {
 
     return datos;
   } catch (error) {
-    console.error("No se pudo leer la planificación:", error);
+    console.error("No se pudo leer la planificación local:", error);
     return {};
+  }
+}
+
+function guardarAlmacenLocal(almacen) {
+  try {
+    localStorage.setItem(CLAVE_PLANIFICACION, JSON.stringify(almacen));
+  } catch (error) {
+    console.warn("No se pudo guardar localmente la planificación.");
+  }
+}
+
+function cargarAlmacen() {
+  if (Object.keys(almacenGlobalRemoto).length > 0) {
+    return almacenGlobalRemoto;
+  }
+  return cargarAlmacenLocal();
+}
+
+async function sincronizarConNubeFirestore() {
+  if (!window.dbFirestore) return;
+
+  try {
+    const docRef = window.firebaseDoc(window.dbFirestore, "planificaciones", "globalADIUR");
+    const docSnap = await window.firebaseGetDoc(docRef);
+
+    if (docSnap.exists()) {
+      const dataNube = docSnap.data();
+      if (dataNube && typeof dataNube === "object") {
+        almacenGlobalRemoto = dataNube;
+        guardarAlmacenLocal(almacenGlobalRemoto);
+        
+        // Actualizar vista con datos frescos de la nube
+        const semana = obtenerSemana(semanaActual, categoriaActual);
+        fechaInicioActual = semana.fechaInicio;
+        sesionesActuales = semana.sesiones;
+        microcicloGuardado = Boolean(semana.guardada);
+        modoEdicion = !microcicloGuardado;
+        renderizarSemana();
+      }
+    } else {
+      // Si no existe en la nube, subimos lo local actual
+      const local = cargarAlmacenLocal();
+      if (Object.keys(local).length > 0) {
+        await window.firebaseSetDoc(docRef, local);
+        almacenGlobalRemoto = local;
+      }
+    }
+    datosNubeCargados = true;
+  } catch (err) {
+    console.error("Error al sincronizar con Firestore:", err);
+  }
+}
+
+function escucharCambiosNube() {
+  if (!window.dbFirestore) return;
+
+  try {
+    const docRef = window.firebaseDoc(window.dbFirestore, "planificaciones", "globalADIUR");
+    window.firebaseOnSnapshot(docRef, (docSnap) => {
+      if (docSnap.exists()) {
+        const dataNube = docSnap.data();
+        if (dataNube && typeof dataNube === "object") {
+          almacenGlobalRemoto = dataNube;
+          guardarAlmacenLocal(almacenGlobalRemoto);
+
+          const semana = obtenerSemana(semanaActual, categoriaActual);
+          fechaInicioActual = semana.fechaInicio;
+          sesionesActuales = semana.sesiones;
+          microcicloGuardado = Boolean(semana.guardada);
+          modoEdicion = !microcicloGuardado;
+          renderizarSemana();
+        }
+      }
+    });
+  } catch (e) {
+    console.warn("No se pudo iniciar el listener de Firestore:", e);
   }
 }
 
@@ -3577,10 +3705,10 @@ function obtenerSemana(numeroSemana, categoria) {
 }
 
 /* =====================================================
-   GUARDADO AUTOMÁTICO Y GUARDAR MICROCICLO
+   GUARDADO AUTOMÁTICO Y NUBE FIRESTORE
 ===================================================== */
 
-function guardarDatosAutomaticamente(mostrarMensaje = false) {
+async function guardarDatosAutomaticamente(mostrarMensaje = false) {
   try {
     const almacen = cargarAlmacen();
 
@@ -3596,8 +3724,19 @@ function guardarDatosAutomaticamente(mostrarMensaje = false) {
       guardada: microcicloGuardado
     };
 
-    localStorage.setItem(CLAVE_PLANIFICACION, JSON.stringify(almacen));
+    almacenGlobalRemoto = almacen;
+    guardarAlmacenLocal(almacen);
     sincronizarCalendarioSemana();
+
+    // Guardar en Firestore nube
+    if (window.dbFirestore) {
+      try {
+        const docRef = window.firebaseDoc(window.dbFirestore, "planificaciones", "globalADIUR");
+        await window.firebaseSetDoc(docRef, almacen);
+      } catch (errNube) {
+        console.error("Error al guardar en Firestore:", errNube);
+      }
+    }
 
     const hora = new Date().toLocaleTimeString("es-AR", {
       hour: "2-digit",
@@ -3606,8 +3745,8 @@ function guardarDatosAutomaticamente(mostrarMensaje = false) {
 
     actualizarEstadoGuardado(
       microcicloGuardado
-        ? "Microciclo guardado · " + hora
-        : "Borrador guardado automáticamente · " + hora,
+        ? "Microciclo guardado en la nube · " + hora
+        : "Borrador sincronizado · " + hora,
       false
     );
 
@@ -3615,7 +3754,7 @@ function guardarDatosAutomaticamente(mostrarMensaje = false) {
 
     if (mostrarMensaje) {
       mostrarNotificacion(
-        "Semana " + semanaActual + " guardada. Calendario actualizado."
+        "Semana " + semanaActual + " guardada en la nube y calendario actualizado."
       );
     }
 
@@ -3623,7 +3762,7 @@ function guardarDatosAutomaticamente(mostrarMensaje = false) {
   } catch (error) {
     console.error("No se pudo guardar la planificación:", error);
     actualizarEstadoGuardado(
-      "No se pudo guardar. Revisá el almacenamiento del navegador.",
+      "No se pudo guardar en la nube. Verificá tu conexión a internet.",
       true
     );
 
@@ -3643,24 +3782,24 @@ function guardarSemana() {
 
   microcicloGuardado = true;
 
-  const guardado = guardarDatosAutomaticamente(false);
+  guardarDatosAutomaticamente(false).then((guardado) => {
+    if (!guardado) {
+      microcicloGuardado = false;
+      return;
+    }
 
-  if (!guardado) {
-    microcicloGuardado = false;
-    return;
-  }
+    modoEdicion = false;
+    renderizarSemana();
 
-  modoEdicion = false;
-  renderizarSemana();
+    actualizarEstadoGuardado(
+      "Microciclo guardado en la nube y bloqueado para edición. Podés volver a editarlo cuando lo necesites.",
+      false
+    );
 
-  actualizarEstadoGuardado(
-    "Microciclo guardado y bloqueado para edición. Podés volver a editarlo cuando lo necesites.",
-    false
-  );
-
-  mostrarNotificacion(
-    "Microciclo guardado. Ahora podés consultar los días sin modificar los contenidos."
-  );
+    mostrarNotificacion(
+      "Microciclo guardado correctamente en la nube."
+    );
+  });
 }
 
 function editarSemana() {
@@ -3673,7 +3812,7 @@ function editarSemana() {
   guardarDatosAutomaticamente(false);
 
   actualizarEstadoGuardado(
-    "Modo edición activado. Los cambios se guardan automáticamente como borrador.",
+    "Modo edición activado. Los cambios se sincronizan en la nube.",
     false
   );
 
@@ -3967,7 +4106,6 @@ function seleccionarSemana(valor) {
   const numero = Number(valor);
   if (!Number.isInteger(numero)) return;
 
-  // Guardar el microciclo que se está dejando sin cambiar su estado.
   guardarDatosAutomaticamente(false);
 
   semanaActual = numero;
@@ -3983,12 +4121,11 @@ function seleccionarSemana(valor) {
 
   actualizarEstadoGuardado(
     microcicloGuardado
-      ? "Microciclo guardado · Modo de solo lectura."
-      : "Borrador disponible para editar. Los cambios se guardan automáticamente.",
+      ? "Microciclo guardado en la nube · Modo de solo lectura."
+      : "Borrador sincronizado. Los cambios se guardan automáticamente.",
     false
   );
 
-  // Se actualiza el calendario con el microciclo que ahora está seleccionado.
   guardarDatosAutomaticamente(false);
 }
 
@@ -4016,8 +4153,8 @@ function seleccionarCategoria(valor) {
 
   actualizarEstadoGuardado(
     microcicloGuardado
-      ? "Microciclo guardado · Modo de solo lectura."
-      : "Borrador disponible para editar. Los cambios se guardan automáticamente.",
+      ? "Microciclo guardado en la nube · Modo de solo lectura."
+      : "Borrador sincronizado. Los cambios se guardan automáticamente.",
     false
   );
 
@@ -4594,7 +4731,7 @@ function crearHTMLPreviewRival(nombre) {
 }
 
 /* =====================================================
-   NUEVA VISTA DE SOLO LECTURA
+   VISTA DE SOLO LECTURA
 ===================================================== */
 
 function crearHTMLContenidoLectura(titulo, contenido, duracion = "", numero = "") {
@@ -4854,7 +4991,7 @@ function crearTarjetaSesion(sesion, indice) {
 
       <footer class="pie-dia">
         <strong>SESIÓN ${indice + 1}</strong>
-        · ${sesion.activa ? "Publicada en el calendario" : "Plan editable"}
+        · ${sesion.activa ? "Sincronizada en la nube" : "Plan editable"}
       </footer>
 
     </article>
@@ -4911,7 +5048,7 @@ function crearTarjetaSesionSoloLectura(sesion, indice) {
 
       <footer class="pie-dia">
         <strong>SESIÓN ${indice + 1}</strong>
-        · MICROCICLO GUARDADO
+        · MICROCICLO GUARDADO EN LA NUBE
       </footer>
     </article>
   `;
@@ -4942,7 +5079,7 @@ function actualizarEstadoMicrociclo() {
 
   if (!modoEdicion && microcicloGuardado) {
     estado.classList.add("microciclo-guardado");
-    texto.textContent = "Guardado · Solo lectura";
+    texto.textContent = "Guardado en nube · Solo lectura";
     return;
   }
 
@@ -5154,7 +5291,7 @@ function eliminarSesion(indice) {
 
   const confirmado = confirm(
     "¿Querés eliminar esta sesión adicional?\n\n" +
-    "También se quitará del calendario si había sido publicada."
+    " También se quitará de la nube y del calendario."
   );
 
   if (!confirmado) return;
@@ -5248,7 +5385,7 @@ function procesarEntrada(evento) {
 
   if (pie) {
     pie.innerHTML =
-      `<strong>SESIÓN ${indice + 1}</strong> · Publicada en el calendario`;
+      `<strong>SESIÓN ${indice + 1}</strong> · Sincronizada en la nube`;
   }
 }
 
@@ -5550,7 +5687,9 @@ function inicializarPlanificacion() {
   inicializarPerfil();
 
   categoriaActual = obtenerCategoriaPredeterminada();
-  semanaActual = 39;
+  
+  // Establecer automáticamente la semana según la fecha actual del sistema
+  semanaActual = calcularSemanaActualSegunFecha();
 
   const semana = obtenerSemana(semanaActual, categoriaActual);
 
@@ -5569,12 +5708,15 @@ function inicializarPlanificacion() {
 
   actualizarEstadoGuardado(
     microcicloGuardado
-      ? "Microciclo guardado · Modo de solo lectura."
-      : "Borrador disponible para editar. Los cambios se guardan automáticamente.",
+      ? "Microciclo guardado en la nube · Modo de solo lectura."
+      : "Borrador sincronizado. Los cambios se guardan automáticamente.",
     false
   );
 
-  guardarDatosAutomaticamente(false);
+  // Sincronizar con Firestore de manera inicial y escuchar cambios remotos
+  sincronizarConNubeFirestore().then(() => {
+    escucharCambiosNube();
+  });
 
   window.addEventListener("resize", () => {
     if (window.matchMedia("(min-width: 761px)").matches) {
@@ -5589,7 +5731,11 @@ function inicializarPlanificacion() {
   });
 }
 
-document.addEventListener("DOMContentLoaded", inicializarPlanificacion);
+window.iniciarAplicacionPlanificacion = inicializarPlanificacion;
+
+if (typeof window.dbFirestore !== "undefined") {
+  document.addEventListener("DOMContentLoaded", inicializarPlanificacion);
+}
 </script>
 
 </body>
