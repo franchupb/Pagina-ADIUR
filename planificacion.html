@@ -2541,7 +2541,7 @@ button:disabled {
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-analytics.js";
-  import { getFirestore, collection, addDoc, getDocs, doc, setDoc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
+  import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyCc0dPIEkaKxbHoRC2CgZK412dXVGPOdTI",
@@ -2752,10 +2752,6 @@ button:disabled {
 
   function normalizarUsuario(valor) {
     return normalizarTexto(valor).replace(/[\s._-]+/g, "");
-  }
-
-  function clonarObjeto(objeto) {
-    return JSON.parse(JSON.stringify(objeto));
   }
 
   function fechaISOaObjeto(fechaISO) {
