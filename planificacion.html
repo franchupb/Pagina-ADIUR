@@ -2307,7 +2307,6 @@ button:disabled {
     class="boton-menu"
     id="botonMenu"
     type="button"
-    onclick="alternarSidebar()"
     aria-label="Abrir menú"
     aria-expanded="false"
   >☰</button>
@@ -2333,19 +2332,19 @@ button:disabled {
   </div>
 </header>
 
-<div class="capa-sidebar" id="capaSidebar" onclick="alternarSidebar()"></div>
+<div class="capa-sidebar" id="capaSidebar"></div>
 
 <div class="contenedor">
 
   <aside class="sidebar" id="sidebar">
 
-    <a class="menu-inicio" href="Pagina Principal.html">
+    <a class="menu-inicio" href="Pàgina Principal.html">
       <span class="icono-inicio">⌂</span>
       INICIO
     </a>
 
     <div class="grupo-menu cerrado" id="grupoPlantel">
-      <button class="titulo-grupo" type="button" onclick="toggleGrupo('grupoPlantel')">
+      <button class="titulo-grupo" type="button" id="btnGrupoPlantel">
         <span>PLANTEL</span>
         <span class="flecha">›</span>
       </button>
@@ -2356,7 +2355,7 @@ button:disabled {
     </div>
 
     <div class="grupo-menu" id="grupoEntrenamiento">
-      <button class="titulo-grupo" type="button" onclick="toggleGrupo('grupoEntrenamiento')">
+      <button class="titulo-grupo" type="button" id="btnGrupoEntrenamiento">
         <span>ENTRENAMIENTO</span>
         <span class="flecha">›</span>
       </button>
@@ -2370,7 +2369,7 @@ button:disabled {
     </div>
 
     <div class="grupo-menu cerrado" id="grupoCompetencia">
-      <button class="titulo-grupo" type="button" onclick="toggleGrupo('grupoCompetencia')">
+      <button class="titulo-grupo" type="button" id="btnGrupoCompetencia">
         <span>COMPETENCIA</span>
         <span class="flecha">›</span>
       </button>
@@ -2383,7 +2382,7 @@ button:disabled {
     </div>
 
     <div class="grupo-menu cerrado" id="grupoRendimientos">
-      <button class="titulo-grupo" type="button" onclick="toggleGrupo('grupoRendimientos')">
+      <button class="titulo-grupo" type="button" id="btnGrupoRendimientos">
         <span>RENDIMIENTOS</span>
         <span class="flecha">›</span>
       </button>
@@ -2397,7 +2396,7 @@ button:disabled {
     </div>
 
     <div class="separador-sesion">
-      <a class="enlace-cerrar-sesion" href="#" onclick="cerrarSesion(event)">
+      <a class="enlace-cerrar-sesion" id="enlaceCerrarSesion" href="#">
         <span>↪</span>
         Cerrar sesión
       </a>
@@ -2421,7 +2420,7 @@ button:disabled {
       <div class="controles-semana">
         <div class="campo-control panel-categoria">
           <label for="selectCategoria">CATEGORÍA DEL PLANTEL</label>
-          <select id="selectCategoria" onchange="seleccionarCategoria(this.value)">
+          <select id="selectCategoria">
             <option value="Sub 10">Sub 10</option>
             <option value="Sub 12">Sub 12</option>
             <option value="Sub 14">Sub 14</option>
@@ -2451,20 +2450,20 @@ button:disabled {
           <button
             type="button"
             class="boton-flecha-microciclo"
-            onclick="cambiarSemana(-1)"
+            id="botonSemanaAnterior"
             aria-label="Microciclo anterior"
             title="Microciclo anterior"
           >‹</button>
 
           <div class="campo-control control-microciclo">
             <label for="selectMicrociclo">MICROCICLO</label>
-            <select id="selectMicrociclo" onchange="seleccionarSemana(this.value)"></select>
+            <select id="selectMicrociclo"></select>
           </div>
 
           <button
             type="button"
             class="boton-flecha-microciclo"
-            onclick="cambiarSemana(1)"
+            id="botonSemanaSiguiente"
             aria-label="Microciclo siguiente"
             title="Microciclo siguiente"
           >›</button>
@@ -2482,14 +2481,12 @@ button:disabled {
             type="button"
             class="boton boton-principal"
             id="botonGuardarSemana"
-            onclick="guardarSemana()"
           >✓ Guardar microciclo</button>
 
           <button
             type="button"
             class="boton boton-agregar"
             id="botonAgregarSesion"
-            onclick="agregarSesion()"
           >
             <span class="mas">+</span>
             AGREGAR SESIÓN
@@ -2499,7 +2496,6 @@ button:disabled {
             type="button"
             class="boton boton-secundario"
             id="botonEditarSemana"
-            onclick="editarSemana()"
             hidden
           >✎ Editar microciclo</button>
 
@@ -2508,7 +2504,7 @@ button:disabled {
 
       <div class="estado-guardado" aria-live="polite">
         <span class="punto-guardado" id="puntoGuardado"></span>
-        <span id="estadoGuardado">Los cambios se guardan automáticamente en la nube.</span>
+        <span id="estadoGuardado">Los cambios se guardan automáticamente en este navegador.</span>
       </div>
 
       <div class="aviso-solo-lectura" id="avisoSoloLectura" hidden>
@@ -2523,9 +2519,9 @@ button:disabled {
     <section class="ayuda-planificacion">
       <div class="ayuda-icono">i</div>
       <div>
-        <strong>Planificación conectada con la nube y el calendario</strong>
+        <strong>Planificación conectada con el calendario</strong>
         <p>
-          Las sesiones se sincronizan automáticamente en Firebase. Al guardar el microciclo, los días se muestran en modo de consulta y se actualizan para todo el cuerpo técnico.
+          Las sesiones se guardan automáticamente como borrador mientras editás. Al guardar el microciclo, los días se muestran en modo de consulta. Los entrenamientos publican sus contenidos, duraciones e intensidad; los partidos publican el rival, el escudo y el torneo.
         </p>
       </div>
     </section>
@@ -2537,10 +2533,11 @@ button:disabled {
 
 <div id="mensajeFlotante" class="mensaje-flotante" role="status" aria-live="polite"></div>
 
-<!-- FIREBASE SDKs -->
+<!-- SCRIPT DE FIREBASE Y LÓGICA DE PLANIFICACIÓN -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
-  import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-analytics.js";
+  import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyCc0dPIEkaKxbHoRC2CgZK412dXVGPOdTI",
@@ -2553,3189 +2550,1019 @@ button:disabled {
   };
 
   const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
   const db = getFirestore(app);
 
-  window.dbFirestore = db;
-  window.firebaseDoc = doc;
-  window.firebaseSetDoc = setDoc;
-  window.firebaseGetDoc = getDoc;
-  window.firebaseCollection = collection;
-  window.firebaseOnSnapshot = onSnapshot;
+  const CLAVE_PLANIFICACION = "microciclosPlanificacionADIUR_Sub16_v1";
+  const CLAVE_CALENDARIO = "actividadesADIUR";
+  const ORIGEN_PLANIFICACION = "planificacionMicrocicloADIUR";
 
-  if (window.iniciarAplicacionPlanificacion) {
-    window.iniciarAplicacionPlanificacion();
-  }
-</script>
+  const CATEGORIAS = ["Sub 10", "Sub 12", "Sub 14", "Sub 16", "Primera"];
 
-<script>
-"use strict";
+  const DIAS_SEMANA = [
+    "Lunes", "Martes", "Miércoles", "Jueves",
+    "Viernes", "Sábado", "Domingo"
+  ];
 
-const CLAVE_PLANIFICACION = "microciclosPlanificacionADIUR_Sub16_v1";
-const CLAVE_CALENDARIO = "actividadesADIUR";
-const ORIGEN_PLANIFICACION = "planificacionMicrocicloADIUR";
+  const DIAS_RUTINA_GIMNASIO = ["Día 1", "Día 2", "Día 3"];
 
-const CATEGORIAS = ["Sub 10", "Sub 12", "Sub 14", "Sub 16", "Primera"];
+  const DIAS_BASE_POR_CATEGORIA = {
+    "Sub 10": [1, 3, 5],
+    "Sub 12": [1, 3, 5],
+    "Sub 14": [0, 1, 4, 5],
+    "Sub 16": [0, 1, 4, 5],
+    "Primera": [0, 1, 4, 5]
+  };
 
-const DIAS_SEMANA = [
-  "Lunes", "Martes", "Miércoles", "Jueves",
-  "Viernes", "Sábado", "Domingo"
-];
+  const CANTIDAD_SESIONES_BASE = {
+    "Sub 10": 3,
+    "Sub 12": 3,
+    "Sub 14": 4,
+    "Sub 16": 4,
+    "Primera": 4
+  };
 
-const DIAS_RUTINA_GIMNASIO = ["Día 1", "Día 2", "Día 3"];
+  const SEMANA_REFERENCIA = 39;
+  const FECHA_REFERENCIA = "2026-10-19";
 
-const DIAS_BASE_POR_CATEGORIA = {
-  "Sub 10": [1, 3, 5],
-  "Sub 12": [1, 3, 5],
-  "Sub 14": [0, 1, 4, 5],
-  "Sub 16": [0, 1, 4, 5],
-  "Primera": [0, 1, 4, 5]
-};
-
-const CANTIDAD_SESIONES_BASE = {
-  "Sub 10": 3,
-  "Sub 12": 3,
-  "Sub 14": 4,
-  "Sub 16": 4,
-  "Primera": 4
-};
-
-const SEMANA_REFERENCIA = 39;
-const FECHA_REFERENCIA = "2026-10-19";
-
-let categoriaActual = "Sub 16";
-let semanaActual = 39;
-let fechaInicioActual = FECHA_REFERENCIA;
-let sesionesActuales = [];
-let temporizadorMensaje = null;
-let modoEdicion = true;
-let microcicloGuardado = false;
-let datosNubeCargados = false;
-
-const COMPETICIONES_POR_DIVISION = {
-  "Sub 10": ["Rosarina", "Copa Oro - ARF", "Copa Plata - ARF"],
-  "Sub 12": ["Rosarina", "Copa Oro - ARF", "Copa Plata - ARF"],
-  "Sub 14": ["Rosarina", "Copa Oro - ARF", "Copa Plata - ARF"],
-  "Sub 16": ["Rosarina", "Copa Oro - ARF", "Copa Plata - ARF"],
-  "Primera": ["Fase Regular - ARF", "Copa Oro - ARF", "Copa Santa Fe", "Torneo Regional AFA"]
-};
-
-const CONFIGURACION_INTENSIDAD = {
-  baja: { etiqueta: "BAJA · VERDE", color: "verde", hex: "#2eaa62", estado: "Bajo" },
-  media: { etiqueta: "MEDIA · AMARILLO", color: "amarillo", hex: "#f3c928", estado: "Medio" },
-  alta: { etiqueta: "ALTA · ROJO", color: "rojo", hex: "#e74c3c", estado: "Alto" },
-  partido: { etiqueta: "PARTIDO · AZUL", color: "azul", hex: "#2464c5", estado: "Partido" },
-  suspendido: { etiqueta: "SUSPENDIDO · GRIS", color: "gris", hex: "#888888", estado: "Suspendido" }
-};
-
-const ESCUDOS_CLUBES = [
-  { nombre: "14 de Junio", ruta: "CLUBES/14 JUNIO.jpg" },
-  { nombre: "Alianza", ruta: "CLUBES/ALIANZA.png" },
-  { nombre: "Argentino", ruta: "CLUBES/ARGENTINO.png" },
-  { nombre: "Banco", ruta: "CLUBES/BANCO.jpg" },
-  { nombre: "Botafogo", ruta: "CLUBES/BOTAFOGO.jpg" },
-  { nombre: "Central", ruta: "CLUBES/CENTRAL.png" },
-  { nombre: "CGR", ruta: "CLUBES/CGR.png" },
-  { nombre: "Coronel Aguirre", ruta: "CLUBES/CORONEL AGUIRRE.png" },
-  { nombre: "General Paz", ruta: "CLUBES/GRAL PAZ.jpg" },
-  { nombre: "Lamadrid", ruta: "CLUBES/LAMADRID.jpg" },
-  { nombre: "Leones", ruta: "CLUBES/LEONES.jpg" },
-  { nombre: "Mitre", ruta: "CLUBES/MITRE.png" },
-  { nombre: "Morning", ruta: "CLUBES/MORNING.jpg" },
-  { nombre: "Newell's Old Boys", ruta: "CLUBES/NEWELLS.png" },
-  { nombre: "Oriental", ruta: "CLUBES/ORIENTAL.jpg" },
-  { nombre: "Pablo VI", ruta: "CLUBES/PABLO VI.jpg" },
-  { nombre: "Provincial", ruta: "CLUBES/PROVINCIAL.png" },
-  { nombre: "Renato", ruta: "CLUBES/RENATO.jpg" },
-  { nombre: "San José", ruta: "CLUBES/SAN JOSE.jpg" },
-  { nombre: "San Roque", ruta: "CLUBES/SAN ROQUE.jpg" },
-  { nombre: "San Telmo", ruta: "CLUBES/SAN TELMO.png" },
-  { nombre: "Social Lux", ruta: "CLUBES/SOCIAL LUX.jpg" },
-  { nombre: "Sparta", ruta: "CLUBES/SPARTA.jpg" },
-  { nombre: "Tiro Federal", ruta: "CLUBES/TIRO FEDERAL.jpg" },
-  { nombre: "Tiro Suizo", ruta: "CLUBES/TIRO SUIZO.jpg" },
-  { nombre: "Torito", ruta: "CLUBES/TORITO.png" },
-  { nombre: "Unión Americana", ruta: "CLUBES/UNION AMERICANA.png" },
-  { nombre: "Villa Gobernador Gálvez", ruta: "CLUBES/VG GALVEZ.png" }
-];
-
-/* HISTÓRICO DE MICROCICLOS */
-
-const microciclosData = {
-  32: [
-    { dia: "Lunes 01/09", intensidad: "media", ec: "Movilidad + Core + Coordinativos c/vel 10m", ttt: "Circuitos técnicos de pase y control" },
-    { dia: "Martes 02/09", intensidad: "alta", ec: "Movilidad + Core", ttt: "Gimnasio N° 5 - Fuerza / Pliometría" },
-    { dia: "Viernes 05/09", intensidad: "baja", ec: "Movilidad articular", ttt: "Trabajos tácticos en espacios reducidos" },
-    { dia: "Sábado 06/09", intensidad: "partido", ec: "Activación precompetitiva", ttt: "FECHA 10 vs Leones" }
-  ],
-  33: [
-    { dia: "Lunes 07/09", intensidad: "media", ec: "Movilidad + Core + Coordinativos", ttt: "Ejercicios de posesión y superioridad" },
-    { dia: "Martes 08/09", intensidad: "alta", ec: "Movilidad + Pliometría", ttt: "Gimnasio N° 5 - Día 2 - Semana 1" },
-    { dia: "Viernes 11/09", intensidad: "baja", ec: "Movilidad articular", ttt: "Repaso de pelota parada" },
-    { dia: "Sábado 12/09", intensidad: "partido", ec: "Activación", ttt: "FECHA 11 vs Newell's" }
-  ],
-  34: [
-    { dia: "Lunes 14/09", intensidad: "media", ec: "Movilidad + Core + Coordinativos c/vel 60m (10')", ttt: "Trabajo técnico integrado" },
-    { dia: "Martes 15/09", intensidad: "alta", ec: "Movilidad + Core + Pliometría (10')", ttt: "Fuerza y resistencia intermitente" },
-    { dia: "Viernes 18/09", intensidad: "baja", ec: "Movilidad + Core (10')", ttt: "Velocidad y repaso táctico" },
-    { dia: "Sábado 19/09", intensidad: "partido", ec: "Activación", ttt: "FECHA 10 / 11 Oficial" }
-  ],
-  35: [
-    { dia: "Lunes 21/09", intensidad: "media", ec: "Movilidad + Core + Coordinativos c/vel 20m (10')", ttt: "Estaciones lúdicas: definición, cabezazo, cognitivo." },
-    { dia: "Martes 22/09", intensidad: "alta", ec: "Movilidad + Core (10')", ttt: "Gimnasio N° 5 - Pliometría (100 saltos) + Velocidad 5m" },
-    { dia: "Viernes 25/09", intensidad: "baja", ec: "Charla Psicológica (25')", ttt: "Trabajo regenerativo y análisis de video" },
-    { dia: "Sábado 26/09", intensidad: "partido", ec: "Activación específica", ttt: "FECHA 11 Torneo Oficial" }
-  ],
-  36: [
-    { dia: "Lunes 28/09", intensidad: "suspendido", ec: "SUSPENDIDO (Lluvia)", ttt: "Jornada suspendida por condiciones climáticas" },
-    { dia: "Martes 29/09", intensidad: "alta", ec: "Movilidad + Core (10')", ttt: "Gimnasio N° 5 y Potencia aeróbica" },
-    { dia: "Viernes 02/10", intensidad: "baja", ec: "Movilidad + Core (15')", ttt: "Circuito técnico y velocidad" },
-    { dia: "Sábado 03/10", intensidad: "suspendido", ec: "PARTIDO SUSPENDIDO", ttt: "Reprogramación de fecha" }
-  ],
-  37: [
-    { dia: "Lunes 05/10", intensidad: "media", ec: "Movilidad + Core + Coordinativos", ttt: "Circuitos / Entradas en calor técnicas" },
-    { dia: "Martes 06/10", intensidad: "alta", ec: "Movilidad + Fuerza", ttt: "Gimnasio y trabajos de fuerza explosiva" },
-    { dia: "Viernes 09/10", intensidad: "baja", ec: "Movilidad articular", ttt: "Repaso táctico previo a partido" },
-    { dia: "Sábado 10/10", intensidad: "partido", ec: "Activación", ttt: "FECHA 13 vs Provincial" }
-  ],
-  38: [
-    { dia: "Lunes 12/10", intensidad: "media", ec: "Movilidad + Core", ttt: "Preparación física general y posesión" },
-    { dia: "Martes 13/10", intensidad: "alta", ec: "Movilidad + Core + Pliometría", ttt: "Gimnasio N° 5 y pasadas aeróbicas" },
-    { dia: "Viernes 16/10", intensidad: "baja", ec: "Movilidad articular", ttt: "Velocidad y salida rápida" },
-    { dia: "Sábado 17/10", intensidad: "partido", ec: "Activación", ttt: "FECHA 14 vs Pablo VI" }
-  ],
-  39: [
-    { dia: "Lunes 19/10", intensidad: "media", ec: "Movilidad + Core + Coordinativos c/vel 20m (15')", ttt: "Lúdico de cabezas + Pelota parada defensiva + Fútbol Sub14" },
-    { dia: "Martes 20/10", intensidad: "alta", ec: "Movilidad + Core + Fuerza Lucha (8')", ttt: "Gimnasio N° 5 + Resistencia Anaeróbica (10 x 150m)" },
-    { dia: "Viernes 23/10", intensidad: "baja", ec: "Movilidad + Core (8')", ttt: "Técnica Individual + Pausa Lúdica / Hidratación + Velocidad 8x40m" },
-    { dia: "Sábado 24/10", intensidad: "partido", ec: "Activación táctica", ttt: "FECHA 14: Pablo VI" }
-  ],
-  40: [
-    { dia: "Lunes 26/10", intensidad: "media", ec: "Movilidad + Core + Plio + Coord + Vel", ttt: "Circuitos y entradas en calor específicas" },
-    { dia: "Martes 27/10", intensidad: "alta", ec: "Movilidad + Core", ttt: "Gimnasio N° 5 - Trabajos de potencia" },
-    { dia: "Viernes 30/10", intensidad: "baja", ec: "Movilidad articular", ttt: "Velocidad y jugadas preparadas" },
-    { dia: "Sábado 31/10", intensidad: "partido", ec: "Activación", ttt: "FECHA Oficial Copa Oro" }
-  ],
-  41: [
-    { dia: "Lunes 02/11", intensidad: "media", ec: "Movilidad + Core + Coordinativos (10')", ttt: "Evaluaciones físicas (Test Illinois) y posesión" },
-    { dia: "Martes 03/11", intensidad: "alta", ec: "Movilidad + Core (10')", ttt: "Gimnasio N° 5 - Día 2 - Semana 4 + Tolerancia Anaeróbica (10 x 120m)" },
-    { dia: "Viernes 06/11", intensidad: "baja", ec: "Movilidad + Core (15')", ttt: "Circuitos con velocidad 10m + Juego e hidratación" },
-    { dia: "Sábado 07/11", intensidad: "partido", ec: "Activación", ttt: "FECHA 16 Torneo Oficial" }
-  ],
-  42: [
-    { dia: "Lunes 09/11", intensidad: "media", ec: "Movilidad + Core", ttt: "Pliometría y circuitos técnicos" },
-    { dia: "Martes 10/11", intensidad: "alta", ec: "Movilidad + Fuerza", ttt: "Gimnasio N° 6 y trabajos de fuerza intermitente" },
-    { dia: "Viernes 13/11", intensidad: "baja", ec: "Movilidad articular", ttt: "Velocidad y fútbol reducido" },
-    { dia: "Sábado 14/11", intensidad: "partido", ec: "Activación", ttt: "FECHA 18: Lamadrid" }
-  ],
-  43: [
-    { dia: "Lunes 16/11", intensidad: "media", ec: "Movilidad + Core + Coordinativos c/vel 20m (10')", ttt: "Trabajos de tenencia y superioridad numérica" },
-    { dia: "Martes 17/11", intensidad: "alta", ec: "Movilidad + Core (10')", ttt: "Gimnasio N° 6 (Día 2 - S1) + Potencia Anaeróbica (12 x 80m) + Test Illinois" },
-    { dia: "Viernes 20/11", intensidad: "baja", ec: "Movilidad + Core (15')", ttt: "Velocidad (10 x 30m) + Hidratación y juego recreativo" },
-    { dia: "Sábado 21/11", intensidad: "partido", ec: "Activación", ttt: "FECHA 18: Cierre de temporada" }
-  ]
-};
-
-/* =====================================================
-   UTILIDADES
-===================================================== */
-
-function escaparHTML(valor) {
-  return String(valor ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
-
-function normalizarTexto(valor) {
-  return String(valor ?? "")
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .trim();
-}
-
-function normalizarUsuario(valor) {
-  return normalizarTexto(valor).replace(/[\s._-]+/g, "");
-}
-
-function clonarObjeto(objeto) {
-  return JSON.parse(JSON.stringify(objeto));
-}
-
-function fechaISOaObjeto(fechaISO) {
-  const partes = String(fechaISO || "").split("-").map(Number);
-
-  if (
-    partes.length !== 3 ||
-    !partes[0] ||
-    !partes[1] ||
-    !partes[2]
-  ) {
-    return null;
-  }
-
-  return new Date(partes[0], partes[1] - 1, partes[2], 12, 0, 0);
-}
-
-function objetoAFechaISO(fecha) {
-  const anio = fecha.getFullYear();
-  const mes = String(fecha.getMonth() + 1).padStart(2, "0");
-  const dia = String(fecha.getDate()).padStart(2, "0");
-  return `${anio}-${mes}-${dia}`;
-}
-
-function sumarDiasISO(fechaISO, cantidad) {
-  const fecha = fechaISOaObjeto(fechaISO);
-  if (!fecha) return "";
-  fecha.setDate(fecha.getDate() + cantidad);
-  return objetoAFechaISO(fecha);
-}
-
-function normalizarALunes(fechaISO) {
-  const fecha = fechaISOaObjeto(fechaISO);
-  if (!fecha) return "";
-  const desplazamiento = (fecha.getDay() + 6) % 7;
-  fecha.setDate(fecha.getDate() - desplazamiento);
-  return objetoAFechaISO(fecha);
-}
-
-function formatearFecha(fechaISO, incluirAnio = true) {
-  const fecha = fechaISOaObjeto(fechaISO);
-  if (!fecha) return "Fecha pendiente";
-
-  const opciones = incluirAnio
-    ? { day: "2-digit", month: "2-digit", year: "numeric" }
-    : { day: "2-digit", month: "short" };
-
-  return fecha.toLocaleDateString("es-AR", opciones);
-}
-
-function formatearRangoMicrociclo(fechaInicioISO) {
-  const fechaInicio = fechaISOaObjeto(fechaInicioISO);
-
-  if (!fechaInicio) return "Fechas pendientes";
-
-  const fechaFinalISO = sumarDiasISO(fechaInicioISO, 6);
-  const mesInicio = fechaInicio
-    .toLocaleDateString("es-AR", { month: "short" })
-    .replace(".", "")
-    .toLowerCase();
-
-  const diaInicio = String(fechaInicio.getDate()).padStart(2, "0");
-  const fechaInicioCorta = `${diaInicio}-${mesInicio}`;
-  const fechaFinal = formatearFecha(fechaFinalISO, true);
-
-  return `${fechaInicioCorta} al ${fechaFinal}`;
-}
-
-function obtenerFechaPredeterminada(numeroSemana) {
-  const diferencia = (numeroSemana - SEMANA_REFERENCIA) * 7;
-  return sumarDiasISO(FECHA_REFERENCIA, diferencia);
-}
-
-/* CÁLCULO DE LA SEMANA ACTUAL SEGÚN LA FECHA DE HOY */
-function calcularSemanaActualSegunFecha() {
-  const hoy = new Date();
-  const fechaRef = fechaISOaObjeto(FECHA_REFERENCIA);
+  let categoriaActual = "Sub 16";
   
-  if (!fechaRef) return 39;
-
-  const diferenciaMs = hoy.getTime() - fechaRef.getTime();
-  const diasDiferencia = Math.floor(diferenciaMs / (1000 * 60 * 60 * 24));
-  const semanasDiferencia = Math.floor(diasDiferencia / 7);
-  
-  const semanaCalculada = SEMANA_REFERENCIA + semanasDiferencia;
-  
-  // Limitar entre semana 32 y 43 para asegurar que siempre haya contenido
-  if (semanaCalculada < 32) return 32;
-  if (semanaCalculada > 43) return 43;
-  return semanaCalculada;
-}
-
-function obtenerDiaIndex(texto) {
-  const normalizado = normalizarTexto(texto);
-  return DIAS_SEMANA.findIndex(dia =>
-    normalizado.startsWith(normalizarTexto(dia))
-  );
-}
-
-function obtenerFechaDeSesion(sesion) {
-  return sumarDiasISO(fechaInicioActual, Number(sesion.diaSemana));
-}
-
-function obtenerClubPorNombre(nombre) {
-  const normalizado = normalizarTexto(nombre);
-  if (!normalizado) return null;
-
-  return ESCUDOS_CLUBES.find(club =>
-    normalizarTexto(club.nombre) === normalizado
-  ) || null;
-}
-
-function detectarRivalEnTexto(texto) {
-  const normalizado = normalizarTexto(texto);
-  if (!normalizado) return "";
-
-  if (normalizado.includes("newell") || normalizado.includes("nob")) {
-    return "Newell's Old Boys";
+  // Cálculo automático de la semana actual basado en la fecha del día actual
+  function calcularSemanaActualPorFecha() {
+    const fechaRef = new Date(2026, 9, 19); // 19 de Octubre de 2026 (Semana 39)
+    const hoy = new Date();
+    const diffTime = hoy.getTime() - fechaRef.getTime();
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    const diffWeeks = Math.floor(diffDays / 7);
+    let semana = 39 + diffWeeks;
+    if (semana < 32) semana = 32;
+    if (semana > 43) semana = 43;
+    return semana;
   }
 
-  const club = ESCUDOS_CLUBES.find(item =>
-    normalizado.includes(normalizarTexto(item.nombre))
-  );
+  let semanaActual = calcularSemanaActualPorFecha();
+  let fechaInicioActual = FECHA_REFERENCIA;
+  let sesionesActuales = [];
+  let temporizadorMensaje = null;
+  let modoEdicion = true;
+  let microcicloGuardado = false;
 
-  return club ? club.nombre : "";
-}
+  const COMPETICIONES_POR_DIVISION = {
+    "Sub 10": ["Rosarina", "Copa Oro - ARF", "Copa Plata - ARF"],
+    "Sub 12": ["Rosarina", "Copa Oro - ARF", "Copa Plata - ARF"],
+    "Sub 14": ["Rosarina", "Copa Oro - ARF", "Copa Plata - ARF"],
+    "Sub 16": ["Rosarina", "Copa Oro - ARF", "Copa Plata - ARF"],
+    "Primera": ["Fase Regular - ARF", "Copa Oro - ARF", "Copa Santa Fe", "Torneo Regional AFA"]
+  };
 
-function detectarCompeticionEnTexto(texto, categoria) {
-  const normalizado = normalizarTexto(texto);
-  const opciones = COMPETICIONES_POR_DIVISION[categoria] ||
-    COMPETICIONES_POR_DIVISION["Sub 16"];
+  const CONFIGURACION_INTENSIDAD = {
+    baja: { etiqueta: "BAJA · VERDE", color: "verde", hex: "#2eaa62", estado: "Bajo" },
+    media: { etiqueta: "MEDIA · AMARILLO", color: "amarillo", hex: "#f3c928", estado: "Medio" },
+    alta: { etiqueta: "ALTA · ROJO", color: "rojo", hex: "#e74c3c", estado: "Alto" },
+    partido: { etiqueta: "PARTIDO · AZUL", color: "azul", hex: "#2464c5", estado: "Partido" },
+    suspendido: { etiqueta: "SUSPENDIDO · GRIS", color: "gris", hex: "#888888", estado: "Suspendido" }
+  };
 
-  if (normalizado.includes("copa oro") && opciones.includes("Copa Oro - ARF")) {
-    return "Copa Oro - ARF";
+  const ESCUDOS_CLUBES = [
+    { nombre: "14 de Junio", ruta: "CLUBES/14 JUNIO.jpg" },
+    { nombre: "Alianza", ruta: "CLUBES/ALIANZA.png" },
+    { nombre: "Argentino", ruta: "CLUBES/ARGENTINO.png" },
+    { nombre: "Banco", ruta: "CLUBES/BANCO.jpg" },
+    { nombre: "Botafogo", ruta: "CLUBES/BOTAFOGO.jpg" },
+    { nombre: "Central", ruta: "CLUBES/CENTRAL.png" },
+    { nombre: "CGR", ruta: "CLUBES/CGR.png" },
+    { nombre: "Coronel Aguirre", ruta: "CLUBES/CORONEL AGUIRRE.png" },
+    { nombre: "General Paz", ruta: "CLUBES/GRAL PAZ.jpg" },
+    { nombre: "Lamadrid", ruta: "CLUBES/LAMADRID.jpg" },
+    { nombre: "Leones", ruta: "CLUBES/LEONES.jpg" },
+    { nombre: "Mitre", ruta: "CLUBES/MITRE.png" },
+    { nombre: "Morning", ruta: "CLUBES/MORNING.jpg" },
+    { nombre: "Newell's Old Boys", ruta: "CLUBES/NEWELLS.png" },
+    { nombre: "Oriental", ruta: "CLUBES/ORIENTAL.jpg" },
+    { nombre: "Pablo VI", ruta: "CLUBES/PABLO VI.jpg" },
+    { nombre: "Provincial", ruta: "CLUBES/PROVINCIAL.png" },
+    { nombre: "Renato", ruta: "CLUBES/RENATO.jpg" },
+    { nombre: "San José", ruta: "CLUBES/SAN JOSE.jpg" },
+    { nombre: "San Roque", ruta: "CLUBES/SAN ROQUE.jpg" },
+    { nombre: "San Telmo", ruta: "CLUBES/SAN TELMO.png" },
+    { nombre: "Social Lux", ruta: "CLUBES/SOCIAL LUX.jpg" },
+    { nombre: "Sparta", ruta: "CLUBES/SPARTA.jpg" },
+    { nombre: "Tiro Federal", ruta: "CLUBES/TIRO FEDERAL.jpg" },
+    { nombre: "Tiro Suizo", ruta: "CLUBES/TIRO SUIZO.jpg" },
+    { nombre: "Torito", ruta: "CLUBES/TORITO.png" },
+    { nombre: "Unión Americana", ruta: "CLUBES/UNION AMERICANA.png" },
+    { nombre: "Villa Gobernador Gálvez", ruta: "CLUBES/VG GALVEZ.png" }
+  ];
+
+  const microciclosData = {
+    32: [
+      { dia: "Lunes 01/09", intensidad: "media", ec: "Movilidad + Core + Coordinativos c/vel 10m", ttt: "Circuitos técnicos de pase y control" },
+      { dia: "Martes 02/09", intensidad: "alta", ec: "Movilidad + Core", ttt: "Gimnasio N° 5 - Fuerza / Pliometría" },
+      { dia: "Viernes 05/09", intensidad: "baja", ec: "Movilidad articular", ttt: "Trabajos tácticos en espacios reducidos" },
+      { dia: "Sábado 06/09", intensidad: "partido", ec: "Activación precompetitiva", ttt: "FECHA 10 vs Leones" }
+    ],
+    33: [
+      { dia: "Lunes 07/09", intensidad: "media", ec: "Movilidad + Core + Coordinativos", ttt: "Ejercicios de posesión y superioridad" },
+      { dia: "Martes 08/09", intensidad: "alta", ec: "Movilidad + Pliometría", ttt: "Gimnasio N° 5 - Día 2 - Semana 1" },
+      { dia: "Viernes 11/09", intensidad: "baja", ec: "Movilidad articular", ttt: "Repaso de pelota parada" },
+      { dia: "Sábado 12/09", intensidad: "partido", ec: "Activación", ttt: "FECHA 11 vs Newell's" }
+    ],
+    34: [
+      { dia: "Lunes 14/09", intensidad: "media", ec: "Movilidad + Core + Coordinativos c/vel 60m (10')", ttt: "Trabajo técnico integrado" },
+      { dia: "Martes 15/09", intensidad: "alta", ec: "Movilidad + Core + Pliometría (10')", ttt: "Fuerza y resistencia intermitente" },
+      { dia: "Viernes 18/09", intensidad: "baja", ec: "Movilidad + Core (10')", ttt: "Velocidad y repaso táctico" },
+      { dia: "Sábado 19/09", intensidad: "partido", ec: "Activación", ttt: "FECHA 10 / 11 Oficial" }
+    ],
+    35: [
+      { dia: "Lunes 21/09", intensidad: "media", ec: "Movilidad + Core + Coordinativos c/vel 20m (10')", ttt: "Estaciones lúdicas: definición, cabezazo, cognitivo." },
+      { dia: "Martes 22/09", intensidad: "alta", ec: "Movilidad + Core (10')", ttt: "Gimnasio N° 5 - Pliometría (100 saltos) + Velocidad 5m" },
+      { dia: "Viernes 25/09", intensidad: "baja", ec: "Charla Psicológica (25')", ttt: "Trabajo regenerativo y análisis de video" },
+      { dia: "Sábado 26/09", intensidad: "partido", ec: "Activación específica", ttt: "FECHA 11 Torneo Oficial" }
+    ],
+    36: [
+      { dia: "Lunes 28/09", intensidad: "suspendido", ec: "SUSPENDIDO (Lluvia)", ttt: "Jornada suspendida por condiciones climáticas" },
+      { dia: "Martes 29/09", intensidad: "alta", ec: "Movilidad + Core (10')", ttt: "Gimnasio N° 5 y Potencia aeróbica" },
+      { dia: "Viernes 02/10", intensidad: "baja", ec: "Movilidad + Core (15')", ttt: "Circuito técnico y velocidad" },
+      { dia: "Sábado 03/10", intensidad: "suspendido", ec: "PARTIDO SUSPENDIDO", ttt: "Reprogramación de fecha" }
+    ],
+    37: [
+      { dia: "Lunes 05/10", intensidad: "media", ec: "Movilidad + Core + Coordinativos", ttt: "Circuitos / Entradas en calor técnicas" },
+      { dia: "Martes 06/10", intensidad: "alta", ec: "Movilidad + Fuerza", ttt: "Gimnasio y trabajos de fuerza explosiva" },
+      { dia: "Viernes 09/10", intensidad: "baja", ec: "Movilidad articular", ttt: "Repaso táctico previo a partido" },
+      { dia: "Sábado 10/10", intensidad: "partido", ec: "Activación", ttt: "FECHA 13 vs Provincial" }
+    ],
+    38: [
+      { dia: "Lunes 12/10", intensidad: "media", ec: "Movilidad + Core", ttt: "Preparación física general y posesión" },
+      { dia: "Martes 13/10", intensidad: "alta", ec: "Movilidad + Core + Pliometría", ttt: "Gimnasio N° 5 y pasadas aeróbicas" },
+      { dia: "Viernes 16/10", intensidad: "baja", ec: "Movilidad articular", ttt: "Velocidad y salida rápida" },
+      { dia: "Sábado 17/10", intensidad: "partido", ec: "Activación", ttt: "FECHA 14 vs Pablo VI" }
+    ],
+    39: [
+      { dia: "Lunes 19/10", intensidad: "media", ec: "Movilidad + Core + Coordinativos c/vel 20m (15')", ttt: "Lúdico de cabezas + Pelota parada defensiva + Fútbol Sub14" },
+      { dia: "Martes 20/10", intensidad: "alta", ec: "Movilidad + Core + Fuerza Lucha (8')", ttt: "Gimnasio N° 5 + Resistencia Anaeróbica (10 x 150m)" },
+      { dia: "Viernes 23/10", intensidad: "baja", ec: "Movilidad + Core (8')", ttt: "Técnica Individual + Pausa Lúdica / Hidratación + Velocidad 8x40m" },
+      { dia: "Sábado 24/10", intensidad: "partido", ec: "Activación táctica", ttt: "FECHA 14: Pablo VI" }
+    ],
+    40: [
+      { dia: "Lunes 26/10", intensidad: "media", ec: "Movilidad + Core + Plio + Coord + Vel", ttt: "Circuitos y entradas en calor específicas" },
+      { dia: "Martes 27/10", intensidad: "alta", ec: "Movilidad + Core", ttt: "Gimnasio N° 5 - Trabajos de potencia" },
+      { dia: "Viernes 30/10", intensidad: "baja", ec: "Movilidad articular", ttt: "Velocidad y jugadas preparadas" },
+      { dia: "Sábado 31/10", intensidad: "partido", ec: "Activación", ttt: "FECHA Oficial Copa Oro" }
+    ],
+    41: [
+      { dia: "Lunes 02/11", intensidad: "media", ec: "Movilidad + Core + Coordinativos (10')", ttt: "Evaluaciones físicas (Test Illinois) y posesión" },
+      { dia: "Martes 03/11", intensidad: "alta", ec: "Movilidad + Core (10')", ttt: "Gimnasio N° 5 - Día 2 - Semana 4 + Tolerancia Anaeróbica (10 x 120m)" },
+      { dia: "Viernes 06/11", intensidad: "baja", ec: "Movilidad + Core (15')", ttt: "Circuitos con velocidad 10m + Juego e hidratación" },
+      { dia: "Sábado 07/11", intensidad: "partido", ec: "Activación", ttt: "FECHA 16 Torneo Oficial" }
+    ],
+    42: [
+      { dia: "Lunes 09/11", intensidad: "media", ec: "Movilidad + Core", ttt: "Pliometría y circuitos técnicos" },
+      { dia: "Martes 10/11", intensidad: "alta", ec: "Movilidad + Fuerza", ttt: "Gimnasio N° 6 y trabajos de fuerza intermitente" },
+      { dia: "Viernes 13/11", intensidad: "baja", ec: "Movilidad articular", ttt: "Velocidad y fútbol reducido" },
+      { dia: "Sábado 14/11", intensidad: "partido", ec: "Activación", ttt: "FECHA 18: Lamadrid" }
+    ],
+    43: [
+      { dia: "Lunes 16/11", intensidad: "media", ec: "Movilidad + Core + Coordinativos c/vel 20m (10')", ttt: "Trabajos de tenencia y superioridad numérica" },
+      { dia: "Martes 17/11", intensidad: "alta", ec: "Movilidad + Core (10')", ttt: "Gimnasio N° 6 (Día 2 - S1) + Potencia Anaeróbica (12 x 80m) + Test Illinois" },
+      { dia: "Viernes 20/11", intensidad: "baja", ec: "Movilidad + Core (15')", ttt: "Velocidad (10 x 30m) + Hidratación y juego recreativo" },
+      { dia: "Sábado 21/11", intensidad: "partido", ec: "Activación", ttt: "FECHA 18: Cierre de temporada" }
+    ]
+  };
+
+  function escaparHTML(valor) {
+    return String(valor ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
   }
 
-  if (normalizado.includes("copa plata") && opciones.includes("Copa Plata - ARF")) {
-    return "Copa Plata - ARF";
+  function normalizarTexto(valor) {
+    return String(valor ?? "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .trim();
   }
 
-  if (normalizado.includes("copa santa fe") && opciones.includes("Copa Santa Fe")) {
-    return "Copa Santa Fe";
+  function normalizarUsuario(valor) {
+    return normalizarTexto(valor).replace(/[\s._-]+/g, "");
   }
 
-  if (normalizado.includes("regional") && opciones.includes("Torneo Regional AFA")) {
-    return "Torneo Regional AFA";
+  function clonarObjeto(objeto) {
+    return JSON.parse(JSON.stringify(objeto));
   }
 
-  if (categoria === "Primera" && opciones.includes("Fase Regular - ARF")) {
-    return "Fase Regular - ARF";
+  function fechaISOaObjeto(fechaISO) {
+    const partes = String(fechaISO || "").split("-").map(Number);
+    if (partes.length !== 3 || !partes[0] || !partes[1] || !partes[2]) return null;
+    return new Date(partes[0], partes[1] - 1, partes[2], 12, 0, 0);
   }
 
-  return opciones[0];
-}
+  function objetoAFechaISO(fecha) {
+    const anio = fecha.getFullYear();
+    const mes = String(fecha.getMonth() + 1).padStart(2, "0");
+    const dia = String(fecha.getDate()).padStart(2, "0");
+    return `${anio}-${mes}-${dia}`;
+  }
 
-function normalizarDuracion(valor) {
-  if (valor === null || valor === undefined || valor === "") {
+  function sumarDiasISO(fechaISO, cantidad) {
+    const fecha = fechaISOaObjeto(fechaISO);
+    if (!fecha) return "";
+    fecha.setDate(fecha.getDate() + cantidad);
+    return objetoAFechaISO(fecha);
+  }
+
+  function normalizarALunes(fechaISO) {
+    const fecha = fechaISOaObjeto(fechaISO);
+    if (!fecha) return "";
+    const desplazamiento = (fecha.getDay() + 6) % 7;
+    fecha.setDate(fecha.getDate() - desplazamiento);
+    return objetoAFechaISO(fecha);
+  }
+
+  function formatearFecha(fechaISO, incluirAnio = true) {
+    const fecha = fechaISOaObjeto(fechaISO);
+    if (!fecha) return "Fecha pendiente";
+    const opciones = incluirAnio
+      ? { day: "2-digit", month: "2-digit", year: "numeric" }
+      : { day: "2-digit", month: "short" };
+    return fecha.toLocaleDateString("es-AR", opciones);
+  }
+
+  function formatearRangoMicrociclo(fechaInicioISO) {
+    const fechaInicio = fechaISOaObjeto(fechaInicioISO);
+    if (!fechaInicio) return "Fechas pendientes";
+    const fechaFinalISO = sumarDiasISO(fechaInicioISO, 6);
+    const mesInicio = fechaInicio
+      .toLocaleDateString("es-AR", { month: "short" })
+      .replace(".", "")
+      .toLowerCase();
+    const diaInicio = String(fechaInicio.getDate()).padStart(2, "0");
+    const fechaInicioCorta = `${diaInicio}-${mesInicio}`;
+    const fechaFinal = formatearFecha(fechaFinalISO, true);
+    return `${fechaInicioCorta} al ${fechaFinal}`;
+  }
+
+  function obtenerFechaPredeterminada(numeroSemana) {
+    const diferencia = (numeroSemana - SEMANA_REFERENCIA) * 7;
+    return sumarDiasISO(FECHA_REFERENCIA, diferencia);
+  }
+
+  function obtenerDiaIndex(texto) {
+    const normalizado = normalizarTexto(texto);
+    return DIAS_SEMANA.findIndex(dia => normalizado.startsWith(normalizarTexto(dia)));
+  }
+
+  function obtenerFechaDeSesion(sesion) {
+    return sumarDiasISO(fechaInicioActual, Number(sesion.diaSemana));
+  }
+
+  function obtenerClubPorNombre(nombre) {
+    const normalizado = normalizarTexto(nombre);
+    if (!normalizado) return null;
+    return ESCUDOS_CLUBES.find(club => normalizarTexto(club.nombre) === normalizado) || null;
+  }
+
+  function detectarRivalEnTexto(texto) {
+    const normalizado = normalizarTexto(texto);
+    if (!normalizado) return "";
+    if (normalizado.includes("newell") || normalizado.includes("nob")) return "Newell's Old Boys";
+    const club = ESCUDOS_CLUBES.find(item => normalizado.includes(normalizarTexto(item.nombre)));
+    return club ? club.nombre : "";
+  }
+
+  function detectarCompeticionEnTexto(texto, categoria) {
+    const normalizado = normalizarTexto(texto);
+    const opciones = COMPETICIONES_POR_DIVISION[categoria] || COMPETICIONES_POR_DIVISION["Sub 16"];
+    if (normalizado.includes("copa oro") && opciones.includes("Copa Oro - ARF")) return "Copa Oro - ARF";
+    if (normalizado.includes("copa plata") && opciones.includes("Copa Plata - ARF")) return "Copa Plata - ARF";
+    if (normalizado.includes("copa santa fe") && opciones.includes("Copa Santa Fe")) return "Copa Santa Fe";
+    if (normalizado.includes("regional") && opciones.includes("Torneo Regional AFA")) return "Torneo Regional AFA";
+    if (categoria === "Primera" && opciones.includes("Fase Regular - ARF")) return "Fase Regular - ARF";
+    return opciones[0];
+  }
+
+  function normalizarDuracion(valor) {
+    if (valor === null || valor === undefined || valor === "") return "";
+    const numero = Number(valor);
+    if (!Number.isFinite(numero) || numero < 0) return "";
+    return String(numero);
+  }
+
+  function obtenerClavePreferenciaCategoria() {
+    let usuario = "";
+    try { usuario = localStorage.getItem("usuarioADIUR") || ""; } catch (e) { usuario = ""; }
+    return "divisionPreferidaADIUR_" + normalizarUsuario(usuario || "entrenador");
+  }
+
+  function obtenerCategoriaPredeterminada() {
+    try {
+      const guardada = localStorage.getItem(obtenerClavePreferenciaCategoria());
+      if (CATEGORIAS.includes(guardada)) return guardada;
+    } catch (e) {}
+    return "Sub 16";
+  }
+
+  function guardarPreferenciaCategoria() {
+    try {
+      localStorage.setItem(obtenerClavePreferenciaCategoria(), categoriaActual);
+    } catch (e) {}
+  }
+
+  function crearBloquesTTTVacios() {
+    return [{ contenido: "", duracion: "" }, { contenido: "", duracion: "" }];
+  }
+
+  function crearBloqueFisicoVacio() {
+    return {
+      tipo: "", duracion: "", diaRutina: "", semanaRutina: "",
+      areaPasadas: "", cantidadPasadas: "", metrosPasada: "",
+      cantidadSaltos: "", notaAnterior: ""
+    };
+  }
+
+  function crearBloquesFisicosVacios() {
+    return [crearBloqueFisicoVacio(), crearBloqueFisicoVacio()];
+  }
+
+  function normalizarBloquesEntrenamiento(bloquesGuardados, contenidoAntiguo = "") {
+    const textoAntiguo = String(contenidoAntiguo ?? "");
+    if (Array.isArray(bloquesGuardados)) {
+      const hayDatos = bloquesGuardados.some(b => Boolean(String(b?.contenido ?? b?.texto ?? "").trim()) || Boolean(String(b?.duracion ?? "").trim()));
+      if (hayDatos || !textoAntiguo.trim()) {
+        const bloques = bloquesGuardados.slice(0, 3).map(b => ({
+          contenido: String(b?.contenido ?? b?.texto ?? ""),
+          duracion: normalizarDuracion(b?.duracion)
+        }));
+        while (bloques.length < 2) bloques.push({ contenido: "", duracion: "" });
+        return bloques;
+      }
+    }
+    return [{ contenido: textoAntiguo, duracion: "" }, { contenido: "", duracion: "" }];
+  }
+
+  function normalizarBloquesFisicos(bloquesGuardados, contenidoAntiguo = "") {
+    const textoAntiguo = String(contenidoAntiguo ?? "");
+    if (Array.isArray(bloquesGuardados)) {
+      const tieneEstructuraNueva = bloquesGuardados.some(b => b && typeof b === "object" && (b.tipo || b.diaRutina || b.semanaRutina || b.areaPasadas || b.cantidadSaltos || b.notaAnterior));
+      if (tieneEstructuraNueva) {
+        const bloques = bloquesGuardados.slice(0, 3).map(b => {
+          const diaGuardado = String(b?.diaRutina ?? "");
+          const semanaGuardada = String(b?.semanaRutina ?? "");
+          const semanaNumero = Number(semanaGuardada);
+          return {
+            ...crearBloqueFisicoVacio(),
+            tipo: ["Gimnasio", "Pasadas", "Pliometría"].includes(b?.tipo) ? b.tipo : "",
+            duracion: normalizarDuracion(b?.duracion),
+            diaRutina: DIAS_RUTINA_GIMNASIO.includes(diaGuardado) ? diaGuardado : "",
+            semanaRutina: (semanaGuardada !== "" && Number.isInteger(semanaNumero) && semanaNumero >= 1 && semanaNumero <= 6) ? String(semanaNumero) : "",
+            areaPasadas: String(b?.areaPasadas ?? ""),
+            cantidadPasadas: String(b?.cantidadPasadas ?? ""),
+            metrosPasada: String(b?.metrosPasada ?? ""),
+            cantidadSaltos: String(b?.cantidadSaltos ?? ""),
+            notaAnterior: String(b?.notaAnterior ?? "")
+          };
+        });
+        while (bloques.length < 2) bloques.push(crearBloqueFisicoVacio());
+        return bloques;
+      }
+    }
+    const bloques = crearBloquesFisicosVacios();
+    if (textoAntiguo.trim()) bloques[0].notaAnterior = textoAntiguo;
+    return bloques;
+  }
+
+  function describirBloqueFisico(bloque) {
+    if (!bloque) return "";
+    const tipo = String(bloque.tipo || "");
+    const partes = [];
+    if (tipo === "Gimnasio") {
+      if (bloque.diaRutina) partes.push(bloque.diaRutina);
+      if (bloque.semanaRutina) partes.push("Semana " + bloque.semanaRutina);
+      return partes.length ? "Gimnasio · " + partes.join(" · ") : "Gimnasio · Rutina sin completar";
+    }
+    if (tipo === "Pasadas") {
+      if (bloque.areaPasadas) partes.push("Área: " + bloque.areaPasadas);
+      if (bloque.cantidadPasadas) partes.push(bloque.cantidadPasadas + " pasadas");
+      if (bloque.metrosPasada) partes.push(bloque.metrosPasada + " m");
+      return "Pasadas" + (partes.length ? " · " + partes.join(" · ") : " · Datos pendientes");
+    }
+    if (tipo === "Pliometría") {
+      const saltos = String(bloque.cantidadSaltos || "");
+      return "Pliometría" + (saltos ? " · " + saltos + " saltos" : " · Cantidad de saltos pendiente");
+    }
     return "";
   }
 
-  const numero = Number(valor);
-
-  if (!Number.isFinite(numero) || numero < 0) {
-    return "";
+  function actualizarCamposLegado(sesion) {
+    sesion.ttt = (sesion.tttBloques || []).map(b => String(b.contenido || "").trim()).filter(Boolean).join("\n\n");
+    const lineasFisicas = [];
+    (sesion.fisicoBloques || []).forEach(b => {
+      if (b.tipo) lineasFisicas.push(describirBloqueFisico(b));
+      if (String(b.notaAnterior || "").trim()) lineasFisicas.push(String(b.notaAnterior).trim());
+    });
+    sesion.fisico = lineasFisicas.join("\n\n");
   }
 
-  return String(numero);
-}
-
-/* =====================================================
-   PREFERENCIA DE CATEGORÍA
-===================================================== */
-
-function obtenerClavePreferenciaCategoria() {
-  let usuario = "";
-
-  try {
-    usuario = localStorage.getItem("usuarioADIUR") || "";
-  } catch (error) {
-    usuario = "";
+  function obtenerDuracionParaTexto(duracion) {
+    const valor = String(duracion ?? "").trim();
+    return valor ? ` (${valor} min)` : "";
   }
 
-  return "divisionPreferidaADIUR_" +
-    normalizarUsuario(usuario || "entrenador");
-}
-
-function obtenerCategoriaPredeterminada() {
-  try {
-    const guardada = localStorage.getItem(obtenerClavePreferenciaCategoria());
-
-    if (CATEGORIAS.includes(guardada)) {
-      return guardada;
-    }
-  } catch (error) {
-    console.warn("No se pudo leer la categoría preferida.");
+  function obtenerLineasDeBloquesTTT(bloques) {
+    const lineas = [];
+    (Array.isArray(bloques) ? bloques : []).forEach((b, i) => {
+      const contenido = String(b?.contenido ?? "").trim();
+      const duracion = String(b?.duracion ?? "").trim();
+      if (!contenido && !duracion) return;
+      const encabezado = "TTT · Bloque " + (i + 1) + obtenerDuracionParaTexto(duracion);
+      lineas.push(contenido ? encabezado + ": " + contenido : encabezado);
+    });
+    return lineas;
   }
 
-  return "Sub 16";
-}
-
-function guardarPreferenciaCategoria() {
-  try {
-    localStorage.setItem(obtenerClavePreferenciaCategoria(), categoriaActual);
-  } catch (error) {
-    console.warn("No se pudo guardar la preferencia de categoría.");
-  }
-}
-
-/* =====================================================
-   CREACIÓN Y NORMALIZACIÓN DE BLOQUES
-===================================================== */
-
-function crearBloquesTTTVacios() {
-  return [
-    { contenido: "", duracion: "" },
-    { contenido: "", duracion: "" }
-  ];
-}
-
-function crearBloqueFisicoVacio() {
-  return {
-    tipo: "",
-    duracion: "",
-    diaRutina: "",
-    semanaRutina: "",
-    areaPasadas: "",
-    cantidadPasadas: "",
-    metrosPasada: "",
-    cantidadSaltos: "",
-    notaAnterior: ""
-  };
-}
-
-function crearBloquesFisicosVacios() {
-  return [
-    crearBloqueFisicoVacio(),
-    crearBloqueFisicoVacio()
-  ];
-}
-
-function normalizarBloquesEntrenamiento(bloquesGuardados, contenidoAntiguo = "") {
-  const textoAntiguo = String(contenidoAntiguo ?? "");
-
-  if (Array.isArray(bloquesGuardados)) {
-    const hayDatosEnBloques = bloquesGuardados.some(bloque =>
-      Boolean(String(bloque?.contenido ?? bloque?.texto ?? "").trim()) ||
-      Boolean(String(bloque?.duracion ?? "").trim())
-    );
-
-    if (hayDatosEnBloques || !textoAntiguo.trim()) {
-      const bloques = bloquesGuardados.slice(0, 3).map(bloque => ({
-        contenido: String(bloque?.contenido ?? bloque?.texto ?? ""),
-        duracion: normalizarDuracion(bloque?.duracion)
-      }));
-
-      while (bloques.length < 2) {
-        bloques.push({ contenido: "", duracion: "" });
-      }
-
-      return bloques;
-    }
+  function obtenerLineasDeBloquesFisicos(bloques) {
+    const lineas = [];
+    (Array.isArray(bloques) ? bloques : []).forEach((b, i) => {
+      const desc = describirBloqueFisico(b);
+      const duracion = String(b?.duracion ?? "").trim();
+      const nota = String(b?.notaAnterior ?? "").trim();
+      if (desc) lineas.push("Físico · Bloque " + (i + 1) + obtenerDuracionParaTexto(duracion) + ": " + desc);
+      if (nota) lineas.push("Contenido físico anterior · Bloque " + (i + 1) + ": " + nota);
+    });
+    return lineas;
   }
 
-  return [
-    { contenido: textoAntiguo, duracion: "" },
-    { contenido: "", duracion: "" }
-  ];
-}
-
-function normalizarBloquesFisicos(bloquesGuardados, contenidoAntiguo = "") {
-  const textoAntiguo = String(contenidoAntiguo ?? "");
-
-  if (Array.isArray(bloquesGuardados)) {
-    const tieneEstructuraNueva = bloquesGuardados.some(bloque =>
-      bloque &&
-      typeof bloque === "object" &&
-      (
-        Object.prototype.hasOwnProperty.call(bloque, "tipo") ||
-        Object.prototype.hasOwnProperty.call(bloque, "diaRutina") ||
-        Object.prototype.hasOwnProperty.call(bloque, "semanaRutina") ||
-        Object.prototype.hasOwnProperty.call(bloque, "areaPasadas") ||
-        Object.prototype.hasOwnProperty.call(bloque, "cantidadSaltos") ||
-        Object.prototype.hasOwnProperty.call(bloque, "notaAnterior")
-      )
-    );
-
-    if (tieneEstructuraNueva) {
-      const bloques = bloquesGuardados.slice(0, 3).map(bloque => {
-        const diaGuardado = String(bloque?.diaRutina ?? "");
-        const semanaGuardada = String(bloque?.semanaRutina ?? "");
-        const semanaNumero = Number(semanaGuardada);
-
-        return {
-          ...crearBloqueFisicoVacio(),
-          tipo: ["Gimnasio", "Pasadas", "Pliometría"].includes(bloque?.tipo)
-            ? bloque.tipo
-            : "",
-          duracion: normalizarDuracion(bloque?.duracion),
-          diaRutina: DIAS_RUTINA_GIMNASIO.includes(diaGuardado)
-            ? diaGuardado
-            : "",
-          semanaRutina:
-            semanaGuardada !== "" &&
-            Number.isInteger(semanaNumero) &&
-            semanaNumero >= 1 &&
-            semanaNumero <= 6
-              ? String(semanaNumero)
-              : "",
-          areaPasadas: String(bloque?.areaPasadas ?? ""),
-          cantidadPasadas: String(bloque?.cantidadPasadas ?? ""),
-          metrosPasada: String(bloque?.metrosPasada ?? ""),
-          cantidadSaltos: String(bloque?.cantidadSaltos ?? ""),
-          notaAnterior: String(bloque?.notaAnterior ?? "")
-        };
-      });
-
-      while (bloques.length < 2) {
-        bloques.push(crearBloqueFisicoVacio());
-      }
-
-      return bloques;
-    }
-
-    const antiguos = bloquesGuardados
-      .slice(0, 3)
-      .map(bloque => ({
-        texto: String(bloque?.contenido ?? bloque?.texto ?? ""),
-        duracion: normalizarDuracion(bloque?.duracion)
-      }));
-
-    if (antiguos.some(bloque => bloque.texto.trim() || bloque.duracion)) {
-      const convertidos = antiguos.map(bloque => ({
-        ...crearBloqueFisicoVacio(),
-        duracion: bloque.duracion,
-        notaAnterior: bloque.texto
-      }));
-
-      while (convertidos.length < 2) {
-        convertidos.push(crearBloqueFisicoVacio());
-      }
-
-      return convertidos;
-    }
+  function crearSesionVacia(diaSemana = 0, intensidad = "media") {
+    return {
+      diaSemana, intensidad, ec: "", ecDuracion: "", ttt: "",
+      tttBloques: crearBloquesTTTVacios(), fisico: "",
+      fisicoBloques: crearBloquesFisicosVacios(), rival: "",
+      competicion: "", activa: false, extra: false
+    };
   }
 
-  const bloques = crearBloquesFisicosVacios();
-
-  if (textoAntiguo.trim()) {
-    bloques[0].notaAnterior = textoAntiguo;
-  }
-
-  return bloques;
-}
-
-function describirBloqueFisico(bloque) {
-  if (!bloque) return "";
-
-  const tipo = String(bloque.tipo || "");
-  const partes = [];
-
-  if (tipo === "Gimnasio") {
-    const dia = String(bloque.diaRutina || "");
-    const semana = String(bloque.semanaRutina || "");
-
-    if (dia) partes.push(dia);
-    if (semana) partes.push("Semana " + semana);
-
-    if (partes.length) {
-      return "Gimnasio · " + partes.join(" · ");
-    }
-
-    return "Gimnasio · Rutina sin completar";
-  }
-
-  if (tipo === "Pasadas") {
-    const area = String(bloque.areaPasadas || "");
-    const cantidad = String(bloque.cantidadPasadas || "");
-    const metros = String(bloque.metrosPasada || "");
-
-    if (area) partes.push("Área: " + area);
-    if (cantidad) partes.push(cantidad + " pasadas");
-    if (metros) partes.push(metros + " m");
-
-    return "Pasadas" + (partes.length ? " · " + partes.join(" · ") : " · Datos pendientes");
-  }
-
-  if (tipo === "Pliometría") {
-    const saltos = String(bloque.cantidadSaltos || "");
-
-    return "Pliometría" +
-      (saltos ? " · " + saltos + " saltos" : " · Cantidad de saltos pendiente");
-  }
-
-  return "";
-}
-
-function actualizarCamposLegado(sesion) {
-  sesion.ttt = (sesion.tttBloques || [])
-    .map(bloque => String(bloque.contenido || "").trim())
-    .filter(Boolean)
-    .join("\n\n");
-
-  const lineasFisicas = [];
-
-  (sesion.fisicoBloques || []).forEach(bloque => {
-    if (bloque.tipo) {
-      lineasFisicas.push(describirBloqueFisico(bloque));
-    }
-
-    if (String(bloque.notaAnterior || "").trim()) {
-      lineasFisicas.push(String(bloque.notaAnterior).trim());
-    }
-  });
-
-  sesion.fisico = lineasFisicas.join("\n\n");
-}
-
-function obtenerDuracionParaTexto(duracion) {
-  const valor = String(duracion ?? "").trim();
-  return valor ? ` (${valor} min)` : "";
-}
-
-function obtenerLineasDeBloquesTTT(bloques) {
-  const lineas = [];
-
-  (Array.isArray(bloques) ? bloques : []).forEach((bloque, indice) => {
-    const contenido = String(bloque?.contenido ?? "").trim();
-    const duracion = String(bloque?.duracion ?? "").trim();
-
-    if (!contenido && !duracion) return;
-
-    const encabezado = "TTT · Bloque " + (indice + 1) + obtenerDuracionParaTexto(duracion);
-
-    lineas.push(
-      contenido ? encabezado + ": " + contenido : encabezado
-    );
-  });
-
-  return lineas;
-}
-
-function obtenerLineasDeBloquesFisicos(bloques) {
-  const lineas = [];
-
-  (Array.isArray(bloques) ? bloques : []).forEach((bloque, indice) => {
-    const descripcion = describirBloqueFisico(bloque);
-    const duracion = String(bloque?.duracion ?? "").trim();
-    const notaAnterior = String(bloque?.notaAnterior ?? "").trim();
-
-    if (descripcion) {
-      lineas.push(
-        "Físico · Bloque " + (indice + 1) +
-        obtenerDuracionParaTexto(duracion) + ": " + descripcion
-      );
-    }
-
-    if (notaAnterior) {
-      lineas.push(
-        "Contenido físico anterior · Bloque " + (indice + 1) + ": " + notaAnterior
-      );
-    }
-  });
-
-  return lineas;
-}
-
-/* =====================================================
-   SESIONES
-===================================================== */
-
-function crearSesionVacia(diaSemana = 0, intensidad = "media") {
-  return {
-    diaSemana,
-    intensidad,
-    ec: "",
-    ecDuracion: "",
-    ttt: "",
-    tttBloques: crearBloquesTTTVacios(),
-    fisico: "",
-    fisicoBloques: crearBloquesFisicosVacios(),
-    rival: "",
-    competicion: "",
-    activa: false,
-    extra: false
-  };
-}
-
-function obtenerIntensidadNormalizada(valor, textoAdicional = "") {
-  const intensidad = normalizarTexto(valor);
-  const texto = normalizarTexto(textoAdicional);
-
-  if (
-    intensidad.includes("suspend") ||
-    texto.includes("suspendido") ||
-    texto.includes("suspendida")
-  ) {
-    return "suspendido";
-  }
-
-  if (intensidad === "partido") return "partido";
-  if (intensidad === "alta" || intensidad === "rojo") return "alta";
-
-  if (intensidad === "media" || intensidad === "medio" || intensidad === "amarillo") {
+  function obtenerIntensidadNormalizada(valor, textoAdicional = "") {
+    const intensidad = normalizarTexto(valor);
+    const texto = normalizarTexto(textoAdicional);
+    if (intensidad.includes("suspend") || texto.includes("suspendido") || texto.includes("suspendida")) return "suspendido";
+    if (intensidad === "partido") return "partido";
+    if (intensidad === "alta" || intensidad === "rojo") return "alta";
+    if (intensidad === "media" || intensidad === "medio" || intensidad === "amarillo") return "media";
+    if (intensidad === "baja" || intensidad === "bajo" || intensidad === "verde") return "baja";
+    if (intensidad === "libre") return "suspendido";
     return "media";
   }
 
-  if (intensidad === "baja" || intensidad === "bajo" || intensidad === "verde") {
-    return "baja";
-  }
-
-  if (intensidad === "libre") return "suspendido";
-  return "media";
-}
-
-function normalizarSesion(registro, indicePredeterminado) {
-  const original = registro && typeof registro === "object" ? registro : {};
-
-  let diaSemana = Number(original.diaSemana);
-
-  if (!Number.isInteger(diaSemana) || diaSemana < 0 || diaSemana > 6) {
-    diaSemana = obtenerDiaIndex(original.dia);
-
-    if (diaSemana < 0) {
-      const diasBase = DIAS_BASE_POR_CATEGORIA[categoriaActual] || [0, 1, 4, 5];
-      diaSemana = diasBase[indicePredeterminado] ?? 0;
+  function normalizarSesion(registro, indicePredeterminado) {
+    const original = registro && typeof registro === "object" ? registro : {};
+    let diaSemana = Number(original.diaSemana);
+    if (!Number.isInteger(diaSemana) || diaSemana < 0 || diaSemana > 6) {
+      diaSemana = obtenerDiaIndex(original.dia);
+      if (diaSemana < 0) {
+        const diasBase = DIAS_BASE_POR_CATEGORIA[categoriaActual] || [0, 1, 4, 5];
+        diaSemana = diasBase[indicePredeterminado] ?? 0;
+      }
     }
+    const intensidad = obtenerIntensidadNormalizada(original.intensidad || original.color, (original.ec || "") + " " + (original.ttt || ""));
+    const ec = String(original.ec || "");
+    const ecDuracion = normalizarDuracion(original.ecDuracion ?? original.duracionEC);
+    const tttBloques = normalizarBloquesEntrenamiento(original.tttBloques, original.ttt || "");
+    const fisicoBloques = normalizarBloquesFisicos(original.fisicoBloques, original.fisico || original.bloqueFisico || "");
+    const ttt = tttBloques.map(b => String(b.contenido || "").trim()).filter(Boolean).join("\n\n");
+    const tieneDatos = Boolean(ec.trim()) || Boolean(ecDuracion.trim()) || Boolean(ttt.trim()) || fisicoBloques.some(b => b.tipo || b.duracion || b.notaAnterior) || Boolean(original.rival) || Boolean(original.competicion || original.torneo) || intensidad === "partido" || intensidad === "suspendido";
+    let activa = typeof original.activa === "boolean" ? original.activa : (typeof original.publicada === "boolean" ? original.publicada : tieneDatos);
+
+    const sesion = {
+      ...crearSesionVacia(diaSemana, intensidad),
+      ec, ecDuracion, ttt, tttBloques, fisicoBloques,
+      rival: original.rival || "",
+      competicion: original.competicion || original.torneo || "",
+      activa, extra: Boolean(original.extra)
+    };
+    actualizarCamposLegado(sesion);
+    return sesion;
   }
 
-  const intensidad = obtenerIntensidadNormalizada(
-    original.intensidad || original.color,
-    (original.ec || "") + " " + (original.ttt || "")
-  );
-
-  const ec = String(original.ec || "");
-  const ecDuracion = normalizarDuracion(original.ecDuracion ?? original.duracionEC);
-
-  const tttBloques = normalizarBloquesEntrenamiento(
-    original.tttBloques,
-    original.ttt || ""
-  );
-
-  const fisicoBloques = normalizarBloquesFisicos(
-    original.fisicoBloques,
-    original.fisico || original.bloqueFisico || ""
-  );
-
-  const ttt = tttBloques
-    .map(bloque => String(bloque.contenido || "").trim())
-    .filter(Boolean)
-    .join("\n\n");
-
-  const tieneDatos =
-    Boolean(ec.trim()) ||
-    Boolean(ecDuracion.trim()) ||
-    Boolean(ttt.trim()) ||
-    fisicoBloques.some(bloque =>
-      Boolean(bloque.tipo) ||
-      Boolean(bloque.duracion) ||
-      Boolean(bloque.notaAnterior)
-    ) ||
-    Boolean(original.rival) ||
-    Boolean(original.competicion || original.torneo) ||
-    intensidad === "partido" ||
-    intensidad === "suspendido";
-
-  let activa;
-
-  if (typeof original.activa === "boolean") {
-    activa = original.activa;
-  } else if (typeof original.publicada === "boolean") {
-    activa = original.publicada;
-  } else {
-    activa = tieneDatos;
-  }
-
-  const sesion = {
-    ...crearSesionVacia(diaSemana, intensidad),
-    ec,
-    ecDuracion,
-    ttt,
-    tttBloques,
-    fisicoBloques,
-    rival: original.rival || "",
-    competicion: original.competicion || original.torneo || "",
-    activa,
-    extra: Boolean(original.extra)
-  };
-
-  actualizarCamposLegado(sesion);
-
-  return sesion;
-}
-
-/* =====================================================
-   SESIONES PREDETERMINADAS
-===================================================== */
-
-function crearSesionesPredeterminadas(numeroSemana, categoria) {
-  if (
-    categoria === "Sub 16" &&
-    Array.isArray(microciclosData[numeroSemana])
-  ) {
-    const originales = microciclosData[numeroSemana];
-
-    return originales.slice(0, 4).map((dato, indice) => {
-      const diaDetectado = obtenerDiaIndex(dato.dia);
-      const dia = diaDetectado >= 0
-        ? diaDetectado
-        : (DIAS_BASE_POR_CATEGORIA[categoria][indice] ?? 0);
-
-      const intensidad = obtenerIntensidadNormalizada(
-        dato.intensidad,
-        (dato.ec || "") + " " + (dato.ttt || "")
-      );
-
-      const esPartido = intensidad === "partido";
-
-      const sesion = {
+  function crearSesionesPredeterminadas(numeroSemana, categoria) {
+    if (categoria === "Sub 16" && Array.isArray(microciclosData[numeroSemana])) {
+      return microciclosData[numeroSemana].slice(0, 4).map((dato, indice) => {
+        const diaDetectado = obtenerDiaIndex(dato.dia);
+        const dia = diaDetectado >= 0 ? diaDetectado : (DIAS_BASE_POR_CATEGORIA[categoria][indice] ?? 0);
+        const intensidad = obtenerIntensidadNormalizada(dato.intensidad, (dato.ec || "") + " " + (dato.ttt || ""));
+        const esPartido = intensidad === "partido";
+        const sesion = {
+          ...crearSesionVacia(dia, intensidad),
+          ec: esPartido || intensidad === "suspendido" ? "" : (dato.ec || ""),
+          ttt: esPartido || intensidad === "suspendido" ? "" : (dato.ttt || ""),
+          fisico: "",
+          rival: esPartido ? detectarRivalEnTexto(dato.ttt || "") : "",
+          competicion: esPartido ? detectarCompeticionEnTexto(dato.ttt || "", categoria) : "",
+          activa: true, extra: false
+        };
+        sesion.tttBloques = normalizarBloquesEntrenamiento(null, sesion.ttt);
+        actualizarCamposLegado(sesion);
+        return sesion;
+      });
+    }
+    const dias = DIAS_BASE_POR_CATEGORIA[categoria] || DIAS_BASE_POR_CATEGORIA["Sub 16"];
+    const cantidad = CANTIDAD_SESIONES_BASE[categoria] || 4;
+    return dias.slice(0, cantidad).map((dia, indice) => {
+      let intensidad = "media";
+      if (indice === 1) intensidad = "alta";
+      if (indice === cantidad - 1) intensidad = "partido";
+      return {
         ...crearSesionVacia(dia, intensidad),
-        ec: esPartido || intensidad === "suspendido" ? "" : (dato.ec || ""),
-        ttt: esPartido || intensidad === "suspendido" ? "" : (dato.ttt || ""),
-        fisico: "",
-        rival: esPartido ? detectarRivalEnTexto(dato.ttt || "") : "",
-        competicion: esPartido
-          ? detectarCompeticionEnTexto(dato.ttt || "", categoria)
-          : "",
-        activa: true,
-        extra: false
+        competicion: intensidad === "partido" ? COMPETICIONES_POR_DIVISION[categoria][0] : "",
+        activa: true, extra: false
       };
-
-      sesion.tttBloques = normalizarBloquesEntrenamiento(
-        null,
-        sesion.ttt
-      );
-
-      actualizarCamposLegado(sesion);
-      return sesion;
     });
   }
 
-  const dias = DIAS_BASE_POR_CATEGORIA[categoria] ||
-    DIAS_BASE_POR_CATEGORIA["Sub 16"];
+  function cargarAlmacen() {
+    try {
+      const texto = localStorage.getItem(CLAVE_PLANIFICACION);
+      if (!texto) return {};
+      const datos = JSON.parse(texto);
+      if (!datos || typeof datos !== "object" || Array.isArray(datos)) return {};
+      if (Object.keys(datos).some(clave => /^\d+$/.test(clave))) return { "Sub 16": datos };
+      return datos;
+    } catch (e) { return {}; }
+  }
 
-  const cantidad = CANTIDAD_SESIONES_BASE[categoria] || 4;
+  function obtenerRegistroSemana(numeroSemana, categoria) {
+    const almacen = cargarAlmacen();
+    const semanas = almacen[categoria];
+    if (!semanas || typeof semanas !== "object") return null;
+    return semanas[String(numeroSemana)] || null;
+  }
 
-  return dias.slice(0, cantidad).map((dia, indice) => {
-    let intensidad = "media";
+  function migrarSesionesAntiguas(listaAntigua, categoria) {
+    if (!Array.isArray(listaAntigua)) return null;
+    if (listaAntigua.length >= 7) {
+      const diasConservados = [0, 1, 4, 5];
+      return diasConservados.map((dia, posicion) => {
+        const encontrado = listaAntigua.find(registro => obtenerDiaIndex(registro?.dia) === dia);
+        return normalizarSesion(encontrado || listaAntigua[dia] || {}, posicion);
+      });
+    }
+    return listaAntigua.map((registro, indice) => normalizarSesion(registro, indice));
+  }
 
-    if (indice === 1) intensidad = "alta";
-    if (indice === cantidad - 1) intensidad = "partido";
+  function ajustarSesionesBaseCategoria(sesiones, categoria) {
+    if (categoria !== "Sub 10" && categoria !== "Sub 12") return sesiones;
+    const diasBase = DIAS_BASE_POR_CATEGORIA[categoria];
+    const cantidadBase = CANTIDAD_SESIONES_BASE[categoria];
+    const extras = sesiones.filter(s => s.extra);
+    const baseDisponibles = sesiones.filter(s => !s.extra);
+    const sesionesBaseAjustadas = [];
+
+    for (let indice = 0; indice < cantidadBase; indice++) {
+      const diaObjetivo = diasBase[indice];
+      let indiceEncontrado = baseDisponibles.findIndex(s => Number(s.diaSemana) === diaObjetivo);
+      if (indiceEncontrado >= 0) {
+        const [elegida] = baseDisponibles.splice(indiceEncontrado, 1);
+        elegida.diaSemana = diaObjetivo;
+        elegida.extra = false;
+        sesionesBaseAjustadas.push(elegida);
+      } else {
+        let intensidad = "media";
+        if (indice === 1) intensidad = "alta";
+        if (indice === cantidadBase - 1) intensidad = "partido";
+        const nueva = {
+          ...crearSesionVacia(diaObjetivo, intensidad),
+          activa: true, extra: false
+        };
+        if (intensidad === "partido") nueva.competicion = COMPETICIONES_POR_DIVISION[categoria][0];
+        sesionesBaseAjustadas.push(nueva);
+      }
+    }
+    return [...sesionesBaseAjustadas, ...extras];
+  }
+
+  function obtenerSemana(numeroSemana, categoria) {
+    const guardada = obtenerRegistroSemana(numeroSemana, categoria);
+    let fechaInicio = obtenerFechaPredeterminada(numeroSemana);
+    let sesiones = null;
+    let confirmada = false;
+
+    if (guardada && !Array.isArray(guardada) && typeof guardada === "object") {
+      fechaInicio = guardada.fechaInicio || fechaInicio;
+      confirmada = guardada.guardada === true;
+      if (Array.isArray(guardada.sesiones)) {
+        sesiones = guardada.sesiones.map((s, i) => normalizarSesion(s, i));
+      }
+    }
+    if (Array.isArray(guardada)) sesiones = migrarSesionesAntiguas(guardada, categoria);
+    if (!Array.isArray(sesiones)) sesiones = crearSesionesPredeterminadas(numeroSemana, categoria);
+
+    sesiones = sesiones.map((s, i) => normalizarSesion(s, i));
+    sesiones = ajustarSesionesBaseCategoria(sesiones, categoria);
 
     return {
-      ...crearSesionVacia(dia, intensidad),
-      competicion: intensidad === "partido"
-        ? COMPETICIONES_POR_DIVISION[categoria][0]
-        : "",
-      activa: true,
-      extra: false
+      fechaInicio: normalizarALunes(fechaInicio),
+      sesiones,
+      guardada: confirmada
     };
-  });
-}
-
-/* =====================================================
-   ALMACENAMIENTO HÍBRIDO (LOCAL + NUBE FIRESTORE)
-===================================================== */
-
-let almacenGlobalRemoto = {};
-
-function cargarAlmacenLocal() {
-  try {
-    const texto = localStorage.getItem(CLAVE_PLANIFICACION);
-    if (!texto) return {};
-
-    const datos = JSON.parse(texto);
-
-    if (!datos || typeof datos !== "object" || Array.isArray(datos)) {
-      return {};
-    }
-
-    if (Object.keys(datos).some(clave => /^\d+$/.test(clave))) {
-      return { "Sub 16": datos };
-    }
-
-    return datos;
-  } catch (error) {
-    console.error("No se pudo leer la planificación local:", error);
-    return {};
   }
-}
 
-function guardarAlmacenLocal(almacen) {
-  try {
-    localStorage.setItem(CLAVE_PLANIFICACION, JSON.stringify(almacen));
-  } catch (error) {
-    console.warn("No se pudo guardar localmente la planificación.");
-  }
-}
-
-function cargarAlmacen() {
-  if (Object.keys(almacenGlobalRemoto).length > 0) {
-    return almacenGlobalRemoto;
-  }
-  return cargarAlmacenLocal();
-}
-
-async function sincronizarConNubeFirestore() {
-  if (!window.dbFirestore) return;
-
-  try {
-    const docRef = window.firebaseDoc(window.dbFirestore, "planificaciones", "globalADIUR");
-    const docSnap = await window.firebaseGetDoc(docRef);
-
-    if (docSnap.exists()) {
-      const dataNube = docSnap.data();
-      if (dataNube && typeof dataNube === "object") {
-        almacenGlobalRemoto = dataNube;
-        guardarAlmacenLocal(almacenGlobalRemoto);
-        
-        // Actualizar vista con datos frescos de la nube
-        const semana = obtenerSemana(semanaActual, categoriaActual);
-        fechaInicioActual = semana.fechaInicio;
-        sesionesActuales = semana.sesiones;
-        microcicloGuardado = Boolean(semana.guardada);
-        modoEdicion = !microcicloGuardado;
-        renderizarSemana();
+  function guardarDatosAutomaticamente(mostrarMensaje = false) {
+    try {
+      const almacen = cargarAlmacen();
+      if (!almacen[categoriaActual] || typeof almacen[categoriaActual] !== "object") {
+        almacen[categoriaActual] = {};
       }
-    } else {
-      // Si no existe en la nube, subimos lo local actual
-      const local = cargarAlmacenLocal();
-      if (Object.keys(local).length > 0) {
-        await window.firebaseSetDoc(docRef, local);
-        almacenGlobalRemoto = local;
-      }
-    }
-    datosNubeCargados = true;
-  } catch (err) {
-    console.error("Error al sincronizar con Firestore:", err);
-  }
-}
-
-function escucharCambiosNube() {
-  if (!window.dbFirestore) return;
-
-  try {
-    const docRef = window.firebaseDoc(window.dbFirestore, "planificaciones", "globalADIUR");
-    window.firebaseOnSnapshot(docRef, (docSnap) => {
-      if (docSnap.exists()) {
-        const dataNube = docSnap.data();
-        if (dataNube && typeof dataNube === "object") {
-          almacenGlobalRemoto = dataNube;
-          guardarAlmacenLocal(almacenGlobalRemoto);
-
-          const semana = obtenerSemana(semanaActual, categoriaActual);
-          fechaInicioActual = semana.fechaInicio;
-          sesionesActuales = semana.sesiones;
-          microcicloGuardado = Boolean(semana.guardada);
-          modoEdicion = !microcicloGuardado;
-          renderizarSemana();
-        }
-      }
-    });
-  } catch (e) {
-    console.warn("No se pudo iniciar el listener de Firestore:", e);
-  }
-}
-
-function obtenerRegistroSemana(numeroSemana, categoria) {
-  const almacen = cargarAlmacen();
-  const semanas = almacen[categoria];
-
-  if (!semanas || typeof semanas !== "object") return null;
-  return semanas[String(numeroSemana)] || null;
-}
-
-function migrarSesionesAntiguas(listaAntigua, categoria) {
-  if (!Array.isArray(listaAntigua)) return null;
-
-  if (listaAntigua.length >= 7) {
-    const diasConservados = [0, 1, 4, 5];
-
-    return diasConservados.map((dia, posicion) => {
-      const encontrado = listaAntigua.find(registro =>
-        obtenerDiaIndex(registro?.dia) === dia
-      );
-
-      return normalizarSesion(encontrado || listaAntigua[dia] || {}, posicion);
-    });
-  }
-
-  return listaAntigua.map((registro, indice) => {
-    const sesion = normalizarSesion(registro, indice);
-
-    if (sesion.intensidad === "partido" && !sesion.rival) {
-      sesion.rival = detectarRivalEnTexto(registro?.ttt || "");
-      sesion.competicion = detectarCompeticionEnTexto(
-        registro?.ttt || "",
-        categoria
-      );
-    }
-
-    return sesion;
-  });
-}
-
-function ajustarSesionesBaseCategoria(sesiones, categoria) {
-  if (categoria !== "Sub 10" && categoria !== "Sub 12") {
-    return sesiones;
-  }
-
-  const diasBase = DIAS_BASE_POR_CATEGORIA[categoria];
-  const cantidadBase = CANTIDAD_SESIONES_BASE[categoria];
-
-  const extras = sesiones.filter(sesion => sesion.extra);
-  const baseDisponibles = sesiones.filter(sesion => !sesion.extra);
-  const sesionesBaseAjustadas = [];
-
-  for (let indice = 0; indice < cantidadBase; indice++) {
-    const diaObjetivo = diasBase[indice];
-
-    let indiceEncontrado = baseDisponibles.findIndex(
-      sesion => Number(sesion.diaSemana) === diaObjetivo
-    );
-
-    if (indiceEncontrado < 0) {
-      const diasPrioritarios = diaObjetivo === 1
-        ? [0, 2, 3, 4, 5, 6]
-        : diaObjetivo === 3
-          ? [4, 2, 0, 6, 1, 5]
-          : [4, 6, 3, 2, 1, 0];
-
-      for (const diaAlternativo of diasPrioritarios) {
-        indiceEncontrado = baseDisponibles.findIndex(
-          sesion => Number(sesion.diaSemana) === diaAlternativo
-        );
-
-        if (indiceEncontrado >= 0) break;
-      }
-    }
-
-    if (indiceEncontrado >= 0) {
-      const [sesionElegida] = baseDisponibles.splice(indiceEncontrado, 1);
-      sesionElegida.diaSemana = diaObjetivo;
-      sesionElegida.extra = false;
-      sesionesBaseAjustadas.push(sesionElegida);
-    } else {
-      let intensidad = "media";
-
-      if (indice === 1) intensidad = "alta";
-      if (indice === cantidadBase - 1) intensidad = "partido";
-
-      const nuevaSesion = {
-        ...crearSesionVacia(diaObjetivo, intensidad),
-        activa: true,
-        extra: false
+      sesionesActuales.forEach(actualizarCamposLegado);
+      almacen[categoriaActual][String(semanaActual)] = {
+        fechaInicio: fechaInicioActual,
+        sesiones: sesionesActuales,
+        guardada: microcicloGuardado
       };
+      localStorage.setItem(CLAVE_PLANIFICACION, JSON.stringify(almacen));
+      sincronizarCalendarioSemana();
 
-      if (intensidad === "partido") {
-        nuevaSesion.competicion = COMPETICIONES_POR_DIVISION[categoria][0];
-      }
+      const hora = new Date().toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" });
+      actualizarEstadoGuardado(microcicloGuardado ? "Microciclo guardado · " + hora : "Borrador guardado automáticamente · " + hora, false);
+      actualizarSelectorSemana();
 
-      sesionesBaseAjustadas.push(nuevaSesion);
+      if (mostrarMensaje) mostrarNotificacion("Semana " + semanaActual + " guardada.");
+      return true;
+    } catch (e) {
+      actualizarEstadoGuardado("No se pudo guardar.", true);
+      return false;
     }
   }
 
-  const diasOcupados = new Set(
-    sesionesBaseAjustadas.map(sesion => Number(sesion.diaSemana))
-  );
-
-  const extrasAjustadas = extras.map(sesion => {
-    let dia = Number(sesion.diaSemana);
-
-    if (
-      !Number.isInteger(dia) ||
-      dia < 0 ||
-      dia > 6 ||
-      diasOcupados.has(dia)
-    ) {
-      dia = DIAS_SEMANA.findIndex(
-        (nombre, indice) => !diasOcupados.has(indice)
-      );
-    }
-
-    if (dia >= 0 && dia <= 6 && !diasOcupados.has(dia)) {
-      sesion.diaSemana = dia;
-      diasOcupados.add(dia);
-    }
-
-    sesion.extra = true;
-    return sesion;
-  });
-
-  return [...sesionesBaseAjustadas, ...extrasAjustadas];
-}
-
-function obtenerSemana(numeroSemana, categoria) {
-  const guardada = obtenerRegistroSemana(numeroSemana, categoria);
-
-  let fechaInicio = obtenerFechaPredeterminada(numeroSemana);
-  let sesiones = null;
-  let confirmada = false;
-
-  if (guardada && !Array.isArray(guardada) && typeof guardada === "object") {
-    fechaInicio = guardada.fechaInicio || fechaInicio;
-    confirmada = guardada.guardada === true;
-
-    if (Array.isArray(guardada.sesiones)) {
-      sesiones = guardada.sesiones.map((sesion, indice) =>
-        normalizarSesion(sesion, indice)
-      );
-    }
-  }
-
-  if (Array.isArray(guardada)) {
-    sesiones = migrarSesionesAntiguas(guardada, categoria);
-  }
-
-  if (!Array.isArray(sesiones)) {
-    sesiones = crearSesionesPredeterminadas(numeroSemana, categoria);
-  }
-
-  const diasBase = DIAS_BASE_POR_CATEGORIA[categoria] || [0, 1, 4, 5];
-  const cantidadBase = CANTIDAD_SESIONES_BASE[categoria] || 4;
-
-  sesiones = sesiones.map((sesion, indice) =>
-    normalizarSesion(sesion, indice)
-  );
-
-  sesiones = ajustarSesionesBaseCategoria(sesiones, categoria);
-
-  while (sesiones.length < cantidadBase) {
-    sesiones.push(
-      crearSesionVacia(diasBase[sesiones.length] ?? 0)
-    );
-  }
-
-  return {
-    fechaInicio: normalizarALunes(fechaInicio),
-    sesiones,
-    guardada: confirmada
-  };
-}
-
-/* =====================================================
-   GUARDADO AUTOMÁTICO Y NUBE FIRESTORE
-===================================================== */
-
-async function guardarDatosAutomaticamente(mostrarMensaje = false) {
-  try {
-    const almacen = cargarAlmacen();
-
-    if (!almacen[categoriaActual] || typeof almacen[categoriaActual] !== "object") {
-      almacen[categoriaActual] = {};
-    }
-
-    sesionesActuales.forEach(actualizarCamposLegado);
-
-    almacen[categoriaActual][String(semanaActual)] = {
-      fechaInicio: fechaInicioActual,
-      sesiones: sesionesActuales,
-      guardada: microcicloGuardado
-    };
-
-    almacenGlobalRemoto = almacen;
-    guardarAlmacenLocal(almacen);
-    sincronizarCalendarioSemana();
-
-    // Guardar en Firestore nube
-    if (window.dbFirestore) {
-      try {
-        const docRef = window.firebaseDoc(window.dbFirestore, "planificaciones", "globalADIUR");
-        await window.firebaseSetDoc(docRef, almacen);
-      } catch (errNube) {
-        console.error("Error al guardar en Firestore:", errNube);
-      }
-    }
-
-    const hora = new Date().toLocaleTimeString("es-AR", {
-      hour: "2-digit",
-      minute: "2-digit"
-    });
-
-    actualizarEstadoGuardado(
-      microcicloGuardado
-        ? "Microciclo guardado en la nube · " + hora
-        : "Borrador sincronizado · " + hora,
-      false
-    );
-
-    actualizarSelectorSemana();
-
-    if (mostrarMensaje) {
-      mostrarNotificacion(
-        "Semana " + semanaActual + " guardada en la nube y calendario actualizado."
-      );
-    }
-
-    return true;
-  } catch (error) {
-    console.error("No se pudo guardar la planificación:", error);
-    actualizarEstadoGuardado(
-      "No se pudo guardar en la nube. Verificá tu conexión a internet.",
-      true
-    );
-
-    if (mostrarMensaje) {
-      mostrarNotificacion("No se pudo guardar la planificación.");
-    }
-
-    return false;
-  }
-}
-
-function guardarSemana() {
-  if (!modoEdicion) {
-    mostrarNotificacion("El microciclo ya está guardado. Elegí Editar microciclo para modificarlo.");
-    return;
-  }
-
-  microcicloGuardado = true;
-
-  guardarDatosAutomaticamente(false).then((guardado) => {
-    if (!guardado) {
+  window.guardarSemana = function() {
+    if (!modoEdicion) return;
+    microcicloGuardado = true;
+    if (!guardarDatosAutomaticamente(false)) {
       microcicloGuardado = false;
       return;
     }
-
     modoEdicion = false;
     renderizarSemana();
-
-    actualizarEstadoGuardado(
-      "Microciclo guardado en la nube y bloqueado para edición. Podés volver a editarlo cuando lo necesites.",
-      false
-    );
-
-    mostrarNotificacion(
-      "Microciclo guardado correctamente en la nube."
-    );
-  });
-}
-
-function editarSemana() {
-  if (modoEdicion) return;
-
-  modoEdicion = true;
-  microcicloGuardado = false;
-
-  renderizarSemana();
-  guardarDatosAutomaticamente(false);
-
-  actualizarEstadoGuardado(
-    "Modo edición activado. Los cambios se sincronizan en la nube.",
-    false
-  );
-
-  mostrarNotificacion("Microciclo habilitado para editar. Guardalo cuando termines.");
-}
-
-function actualizarEstadoGuardado(texto, esError) {
-  const etiqueta = document.getElementById("estadoGuardado");
-  const punto = document.getElementById("puntoGuardado");
-
-  if (!etiqueta || !punto) return;
-
-  etiqueta.textContent = texto;
-  punto.classList.toggle("error", Boolean(esError));
-}
-
-function mostrarNotificacion(texto) {
-  const mensaje = document.getElementById("mensajeFlotante");
-
-  mensaje.textContent = texto;
-  mensaje.classList.add("visible");
-
-  clearTimeout(temporizadorMensaje);
-
-  temporizadorMensaje = setTimeout(() => {
-    mensaje.classList.remove("visible");
-  }, 3200);
-}
-
-/* =====================================================
-   CALENDARIO COMPARTIDO
-===================================================== */
-
-function leerActividadesCalendario() {
-  try {
-    const datos = JSON.parse(localStorage.getItem(CLAVE_CALENDARIO) || "{}");
-
-    if (datos && typeof datos === "object" && !Array.isArray(datos)) {
-      return datos;
-    }
-
-    return {};
-  } catch (error) {
-    console.error("No se pudieron leer las actividades del calendario:", error);
-    return {};
-  }
-}
-
-function obtenerConfiguracionIntensidad(intensidad) {
-  return CONFIGURACION_INTENSIDAD[intensidad] || CONFIGURACION_INTENSIDAD.media;
-}
-
-function obtenerTextoParaCalendario(sesion, fecha) {
-  if (sesion.intensidad === "suspendido") {
-    return "Sesión suspendida · " + categoriaActual;
-  }
-
-  if (sesion.intensidad === "partido") {
-    const rival = sesion.rival || "Rival a confirmar";
-    const torneo = sesion.competicion || "Competición a confirmar";
-
-    return [
-      "Partido · " + categoriaActual,
-      torneo + " vs. " + rival,
-      "Fecha: " + formatearFecha(fecha, true)
-    ].join("\n");
-  }
-
-  const configuracion = obtenerConfiguracionIntensidad(sesion.intensidad);
-  const lineas = [
-    "Entrenamiento · " + categoriaActual,
-    "Intensidad: " + configuracion.estado
-  ];
-
-  if (sesion.ec.trim() || String(sesion.ecDuracion || "").trim()) {
-    const duracionEC = obtenerDuracionParaTexto(sesion.ecDuracion);
-    const contenidoEC = sesion.ec.trim();
-
-    lineas.push(
-      contenidoEC
-        ? `Entrada en calor${duracionEC}: ${contenidoEC}`
-        : `Entrada en calor${duracionEC}`
-    );
-  }
-
-  lineas.push(...obtenerLineasDeBloquesTTT(sesion.tttBloques));
-  lineas.push(...obtenerLineasDeBloquesFisicos(sesion.fisicoBloques));
-
-  if (lineas.length === 2) {
-    lineas.push("Contenidos pendientes de completar.");
-  }
-
-  return lineas.join("\n");
-}
-
-function crearActividadCalendario(sesion, indice, fecha) {
-  const configuracion = obtenerConfiguracionIntensidad(sesion.intensidad);
-  const esPartido = sesion.intensidad === "partido";
-  const esSuspendido = sesion.intensidad === "suspendido";
-  const club = esPartido ? obtenerClubPorNombre(sesion.rival) : null;
-
-  const idMicrociclo =
-    ORIGEN_PLANIFICACION + ":" + categoriaActual + ":S" + semanaActual;
-
-  let titulo;
-  let color;
-  let estado;
-
-  if (esSuspendido) {
-    titulo = "Sesión suspendida";
-    color = "gris";
-    estado = "Suspendido";
-  } else if (esPartido) {
-    titulo = "Partido · " + (sesion.rival || "Rival a confirmar");
-    color = "azul";
-    estado = "Partido";
-  } else {
-    titulo = "Entrenamiento · Intensidad " + configuracion.estado;
-    color = configuracion.color;
-    estado = configuracion.estado;
-  }
-
-  const imagenRival = esPartido && club ? club.ruta : "";
-  const textoActividad = obtenerTextoParaCalendario(sesion, fecha);
-
-  return {
-    id: idMicrociclo + ":sesion:" + indice,
-    origen: ORIGEN_PLANIFICACION,
-    microcicloId: idMicrociclo,
-    microcicloSemana: String(semanaActual),
-    categoria: categoriaActual,
-    division: categoriaActual,
-    fecha,
-    dia: DIAS_SEMANA[sesion.diaSemana],
-    tipo: esSuspendido ? "suspendido" : (esPartido ? "partido" : "entrenamiento"),
-    intensidad: sesion.intensidad,
-    color,
-    colorFondo: configuracion.hex,
-    estado,
-    nivel: estado,
-    titulo,
-    nombre: titulo,
-    texto: textoActividad,
-    text: textoActividad,
-    descripcion: textoActividad,
-    actividad: textoActividad,
-    rival: esPartido ? sesion.rival : "",
-    equipoRival: esPartido ? sesion.rival : "",
-    competicion: esPartido ? sesion.competicion : "",
-    torneo: esPartido ? sesion.competicion : "",
-    escudoRival: imagenRival,
-    imagen: imagenRival,
-    img: imagenRival,
-    foto: imagenRival,
-    imagenUrl: imagenRival,
-    entradaCalor: (!esPartido && !esSuspendido) ? sesion.ec : "",
-    ec: (!esPartido && !esSuspendido) ? sesion.ec : "",
-    duracionEntradaCalor: (!esPartido && !esSuspendido) ? sesion.ecDuracion : "",
-    ttt: (!esPartido && !esSuspendido) ? sesion.ttt : "",
-    tttBloques: (!esPartido && !esSuspendido) ? clonarObjeto(sesion.tttBloques) : [],
-    fisico: (!esPartido && !esSuspendido) ? sesion.fisico : "",
-    fisicoBloques: (!esPartido && !esSuspendido) ? clonarObjeto(sesion.fisicoBloques) : [],
-    md: obtenerEtiquetaMD(sesion, indice).texto
+    actualizarEstadoGuardado("Microciclo guardado y bloqueado para edición.", false);
+    mostrarNotificacion("Microciclo guardado con éxito.");
   };
-}
 
-function sincronizarCalendarioSemana() {
-  const actividades = leerActividadesCalendario();
+  window.editarSemana = function() {
+    if (modoEdicion) return;
+    modoEdicion = true;
+    microcicloGuardado = false;
+    renderizarSemana();
+    guardarDatosAutomaticamente(false);
+    actualizarEstadoGuardado("Modo edición activado.", false);
+    mostrarNotificacion("Microciclo habilitado para editar.");
+  };
 
-  if (
-    !actividades[categoriaActual] ||
-    typeof actividades[categoriaActual] !== "object" ||
-    Array.isArray(actividades[categoriaActual])
-  ) {
-    actividades[categoriaActual] = {};
+  function actualizarEstadoGuardado(texto, esError) {
+    const etiqueta = document.getElementById("estadoGuardado");
+    const punto = document.getElementById("puntoGuardado");
+    if (!etiqueta || !punto) return;
+    etiqueta.textContent = texto;
+    punto.classList.toggle("error", Boolean(esError));
   }
 
-  const actividadesCategoria = actividades[categoriaActual];
+  function mostrarNotificacion(texto) {
+    const mensaje = document.getElementById("mensajeFlotante");
+    if (!mensaje) return;
+    mensaje.textContent = texto;
+    mensaje.classList.add("visible");
+    clearTimeout(temporizadorMensaje);
+    temporizadorMensaje = setTimeout(() => mensaje.classList.remove("visible"), 3200);
+  }
 
-  const idMicrociclo =
-    ORIGEN_PLANIFICACION + ":" + categoriaActual + ":S" + semanaActual;
+  function leerActividadesCalendario() {
+    try {
+      const datos = JSON.parse(localStorage.getItem(CLAVE_CALENDARIO) || "{}");
+      return (datos && typeof datos === "object" && !Array.isArray(datos)) ? datos : {};
+    } catch (e) { return {}; }
+  }
 
-  Object.keys(actividadesCategoria).forEach(fecha => {
-    const actividad = actividadesCategoria[fecha];
+  function obtenerConfiguracionIntensidad(intensidad) {
+    return CONFIGURACION_INTENSIDAD[intensidad] || CONFIGURACION_INTENSIDAD.media;
+  }
 
-    if (
-      actividad &&
-      typeof actividad === "object" &&
-      actividad.origen === ORIGEN_PLANIFICACION &&
-      actividad.microcicloId === idMicrociclo
-    ) {
-      delete actividadesCategoria[fecha];
+  function obtenerTextoParaCalendario(sesion, fecha) {
+    if (sesion.intensidad === "suspendido") return "Sesión suspendida · " + categoriaActual;
+    if (sesion.intensidad === "partido") {
+      return ["Partido · " + categoriaActual, (sesion.competicion || "Torneo") + " vs. " + (sesion.rival || "Rival")].join("\n");
     }
-  });
+    const cfg = obtenerConfiguracionIntensidad(sesion.intensidad);
+    return ["Entrenamiento · " + categoriaActual, "Intensidad: " + cfg.estado].join("\n");
+  }
 
-  sesionesActuales.forEach((sesion, indice) => {
-    if (!sesion.activa) return;
+  function crearActividadCalendario(sesion, indice, fecha) {
+    const cfg = obtenerConfiguracionIntensidad(sesion.intensidad);
+    const esPartido = sesion.intensidad === "partido";
+    const esSuspendido = sesion.intensidad === "suspendido";
+    const club = esPartido ? obtenerClubPorNombre(sesion.rival) : null;
+    const idMicrociclo = ORIGEN_PLANIFICACION + ":" + categoriaActual + ":S" + semanaActual;
 
-    const fecha = obtenerFechaDeSesion(sesion);
-    if (!fecha) return;
+    return {
+      id: idMicrociclo + ":sesion:" + indice,
+      origen: ORIGEN_PLANIFICACION,
+      microcicloId: idMicrociclo,
+      categoria: categoriaActual,
+      fecha,
+      titulo: esPartido ? "Partido · " + (sesion.rival || "Rival") : "Entrenamiento",
+      texto: obtenerTextoParaCalendario(sesion, fecha)
+    };
+  }
 
-    const nuevaActividad = crearActividadCalendario(sesion, indice, fecha);
-    const actividadAnterior = actividadesCategoria[fecha];
-
-    if (
-      actividadAnterior &&
-      typeof actividadAnterior === "object" &&
-      actividadAnterior.origen !== ORIGEN_PLANIFICACION
-    ) {
-      const textoAnterior = String(
-        actividadAnterior.texto ||
-        actividadAnterior.text ||
-        actividadAnterior.descripcion ||
-        actividadAnterior.actividad ||
-        ""
-      ).trim();
-
-      const textoCombinado = [
-        textoAnterior,
-        nuevaActividad.texto
-      ].filter(Boolean).join("\n\n");
-
-      nuevaActividad.actividadCalendarioOriginal = clonarObjeto(actividadAnterior);
-      nuevaActividad.texto = textoCombinado;
-      nuevaActividad.text = textoCombinado;
-      nuevaActividad.descripcion = textoCombinado;
-      nuevaActividad.actividad = textoCombinado;
+  function sincronizarCalendarioSemana() {
+    const actividades = leerActividadesCalendario();
+    if (!actividades[categoriaActual] || typeof actividades[categoriaActual] !== "object") {
+      actividades[categoriaActual] = {};
     }
+    const actividadesCategoria = actividades[categoriaActual];
+    const idMicrociclo = ORIGEN_PLANIFICACION + ":" + categoriaActual + ":S" + semanaActual;
 
-    actividadesCategoria[fecha] = nuevaActividad;
-  });
+    Object.keys(actividadesCategoria).forEach(fecha => {
+      if (actividadesCategoria[fecha]?.microcicloId === idMicrociclo) {
+        delete actividadesCategoria[fecha];
+      }
+    });
 
-  localStorage.setItem(CLAVE_CALENDARIO, JSON.stringify(actividades));
-}
+    sesionesActuales.forEach((sesion, indice) => {
+      if (!sesion.activa) return;
+      const fecha = obtenerFechaDeSesion(sesion);
+      if (!fecha) return;
+      actividadesCategoria[fecha] = crearActividadCalendario(sesion, indice, fecha);
+    });
 
-/* =====================================================
-   SELECTOR DE MICROCICLOS
-===================================================== */
-
-function obtenerEstadoRegistroSemana(registro, categoria, numero) {
-  if (registro && registro.guardada === true) {
-    return "Guardada";
+    localStorage.setItem(CLAVE_CALENDARIO, JSON.stringify(actividades));
   }
 
-  if (registro) {
-    return "Borrador";
-  }
+  function actualizarSelectorSemana() {
+    const selector = document.getElementById("selectMicrociclo");
+    const almacen = cargarAlmacen();
+    const semanasCategoria = almacen[categoriaActual] || {};
+    const semanasGuardadas = Object.keys(semanasCategoria).map(Number).filter(n => Number.isInteger(n));
 
-  if (categoria === "Sub 16" && microciclosData[numero]) {
-    return "Histórico";
-  }
+    const minSemana = Math.min(32, semanaActual, ...semanasGuardadas);
+    const maxSemana = Math.max(43, semanaActual, ...semanasGuardadas);
 
-  return "Nueva";
-}
+    selector.innerHTML = "";
+    for (let numero = minSemana; numero <= maxSemana; numero++) {
+      const opcion = document.createElement("option");
+      const registro = semanasCategoria[String(numero)];
+      const fechaInicio = registro?.fechaInicio ? normalizarALunes(registro.fechaInicio) : obtenerFechaPredeterminada(numero);
+      const rango = formatearRangoMicrociclo(fechaInicio);
+      const estado = registro?.guardada ? "Guardada" : (registro ? "Borrador" : "Nueva");
 
-function actualizarSelectorSemana() {
-  const selector = document.getElementById("selectMicrociclo");
-  const almacen = cargarAlmacen();
-  const semanasCategoria = almacen[categoriaActual] || {};
-
-  const semanasGuardadas = Object.keys(semanasCategoria)
-    .map(Number)
-    .filter(numero => Number.isInteger(numero));
-
-  const minSemana = Math.min(32, semanaActual, ...semanasGuardadas);
-  const maxSemana = Math.max(43, semanaActual, ...semanasGuardadas);
-
-  selector.innerHTML = "";
-
-  for (let numero = minSemana; numero <= maxSemana; numero++) {
-    const opcion = document.createElement("option");
-    const registro = semanasCategoria[String(numero)];
-
-    const fechaInicio = registro && registro.fechaInicio
-      ? normalizarALunes(registro.fechaInicio)
-      : obtenerFechaPredeterminada(numero);
-
-    const rango = formatearRangoMicrociclo(fechaInicio);
-    const estado = obtenerEstadoRegistroSemana(registro, categoriaActual, numero);
-
-    opcion.value = String(numero);
-    opcion.textContent = `Semana ${numero} · ${rango} · ${estado}`;
-
-    selector.appendChild(opcion);
-  }
-
-  selector.value = String(semanaActual);
-}
-
-function seleccionarSemana(valor) {
-  const numero = Number(valor);
-  if (!Number.isInteger(numero)) return;
-
-  guardarDatosAutomaticamente(false);
-
-  semanaActual = numero;
-
-  const semana = obtenerSemana(semanaActual, categoriaActual);
-
-  fechaInicioActual = semana.fechaInicio;
-  sesionesActuales = semana.sesiones;
-  microcicloGuardado = Boolean(semana.guardada);
-  modoEdicion = !microcicloGuardado;
-
-  renderizarSemana();
-
-  actualizarEstadoGuardado(
-    microcicloGuardado
-      ? "Microciclo guardado en la nube · Modo de solo lectura."
-      : "Borrador sincronizado. Los cambios se guardan automáticamente.",
-    false
-  );
-
-  guardarDatosAutomaticamente(false);
-}
-
-function cambiarSemana(desplazamiento) {
-  seleccionarSemana(semanaActual + desplazamiento);
-}
-
-function seleccionarCategoria(valor) {
-  if (!CATEGORIAS.includes(valor)) return;
-  if (valor === categoriaActual) return;
-
-  guardarDatosAutomaticamente(false);
-
-  categoriaActual = valor;
-  guardarPreferenciaCategoria();
-
-  const semana = obtenerSemana(semanaActual, categoriaActual);
-
-  fechaInicioActual = semana.fechaInicio;
-  sesionesActuales = semana.sesiones;
-  microcicloGuardado = Boolean(semana.guardada);
-  modoEdicion = !microcicloGuardado;
-
-  renderizarSemana();
-
-  actualizarEstadoGuardado(
-    microcicloGuardado
-      ? "Microciclo guardado en la nube · Modo de solo lectura."
-      : "Borrador sincronizado. Los cambios se guardan automáticamente.",
-    false
-  );
-
-  guardarDatosAutomaticamente(false);
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
-
-/* =====================================================
-   SELECTORES DE CAMPOS
-===================================================== */
-
-function crearOpcionesDias(valor) {
-  return DIAS_SEMANA.map((dia, indice) => `
-    <option value="${indice}" ${Number(valor) === indice ? "selected" : ""}>${dia}</option>
-  `).join("");
-}
-
-function crearOpcionesIntensidad(valor) {
-  return Object.entries(CONFIGURACION_INTENSIDAD)
-    .map(([clave, configuracion]) => `
-      <option value="${clave}" ${valor === clave ? "selected" : ""}>${configuracion.etiqueta}</option>
-    `)
-    .join("");
-}
-
-function crearOpcionesCompeticiones(valor) {
-  const opciones = COMPETICIONES_POR_DIVISION[categoriaActual] ||
-    COMPETICIONES_POR_DIVISION["Sub 16"];
-
-  const completas = [...opciones];
-
-  if (valor && !completas.includes(valor)) {
-    completas.push(valor);
-  }
-
-  return completas.map(nombre => `
-    <option value="${escaparHTML(nombre)}" ${valor === nombre ? "selected" : ""}>${escaparHTML(nombre)}</option>
-  `).join("");
-}
-
-function crearOpcionesRivales(valor) {
-  let html = '<option value="">Seleccioná un rival...</option>';
-
-  html += ESCUDOS_CLUBES.map(club => `
-    <option value="${escaparHTML(club.nombre)}" ${valor === club.nombre ? "selected" : ""}>${escaparHTML(club.nombre)}</option>
-  `).join("");
-
-  if (valor && !ESCUDOS_CLUBES.some(club => club.nombre === valor)) {
-    html += `<option value="${escaparHTML(valor)}" selected>${escaparHTML(valor)}</option>`;
-  }
-
-  return html;
-}
-
-function crearOpcionesTipoFisico(valor) {
-  const opciones = [
-    { valor: "", etiqueta: "Seleccionar tipo..." },
-    { valor: "Gimnasio", etiqueta: "Gimnasio" },
-    { valor: "Pasadas", etiqueta: "Pasadas" },
-    { valor: "Pliometría", etiqueta: "Pliometría" }
-  ];
-
-  return opciones.map(opcion => `
-    <option value="${escaparHTML(opcion.valor)}" ${valor === opcion.valor ? "selected" : ""}>${escaparHTML(opcion.etiqueta)}</option>
-  `).join("");
-}
-
-function crearOpcionesDiaRutina(valor) {
-  let html = '<option value="">Seleccionar día...</option>';
-
-  html += DIAS_RUTINA_GIMNASIO.map(dia => `
-    <option value="${escaparHTML(dia)}" ${valor === dia ? "selected" : ""}>${escaparHTML(dia)}</option>
-  `).join("");
-
-  return html;
-}
-
-function crearOpcionesSemanaRutina(valor) {
-  let html = '<option value="">Seleccionar semana...</option>';
-
-  for (let semana = 1; semana <= 6; semana++) {
-    html += `
-      <option value="${semana}" ${String(valor) === String(semana) ? "selected" : ""}>
-        Semana ${semana}
-      </option>
-    `;
-  }
-
-  return html;
-}
-
-/* =====================================================
-   MATCH DAY
-===================================================== */
-
-function obtenerIndicePartido() {
-  return sesionesActuales.findIndex(sesion => sesion.intensidad === "partido");
-}
-
-function obtenerEtiquetaMD(sesion, indiceSesion) {
-  const indicePartido = obtenerIndicePartido();
-
-  if (indicePartido < 0) {
-    return { texto: "MD pendiente", clase: "" };
-  }
-
-  if (sesion.intensidad === "partido") {
-    if (indiceSesion === indicePartido) {
-      return { texto: "MD · PARTIDO", clase: "es-partido" };
+      opcion.value = String(numero);
+      opcion.textContent = `Semana ${numero} · ${rango} · ${estado}`;
+      selector.appendChild(opcion);
     }
-
-    return { texto: "PARTIDO EXTRA", clase: "es-partido" };
+    selector.value = String(semanaActual);
   }
 
-  const diaSesion = Number(sesion.diaSemana);
-  const diaPartido = Number(sesionesActuales[indicePartido].diaSemana);
-  const diferencia = diaSesion - diaPartido;
+  window.seleccionarSemana = function(valor) {
+    const numero = Number(valor);
+    if (!Number.isInteger(numero)) return;
+    guardarDatosAutomaticamente(false);
+    semanaActual = numero;
+    const semana = obtenerSemana(semanaActual, categoriaActual);
+    fechaInicioActual = semana.fechaInicio;
+    sesionesActuales = semana.sesiones;
+    microcicloGuardado = Boolean(semana.guardada);
+    modoEdicion = !microcicloGuardado;
+    renderizarSemana();
+    guardarDatosAutomaticamente(false);
+  };
 
-  if (diferencia === 0) return { texto: "MD", clase: "es-partido" };
-  if (diferencia < 0) return { texto: "MD" + diferencia, clase: "es-previo" };
+  window.cambiarSemana = function(desplazamiento) {
+    window.seleccionarSemana(semanaActual + desplazamiento);
+  };
 
-  return { texto: "MD+" + diferencia, clase: "es-posterior" };
-}
+  window.seleccionarCategoria = function(valor) {
+    if (!CATEGORIAS.includes(valor) || valor === categoriaActual) return;
+    guardarDatosAutomaticamente(false);
+    categoriaActual = valor;
+    guardarPreferenciaCategoria();
+    const semana = obtenerSemana(semanaActual, categoriaActual);
+    fechaInicioActual = semana.fechaInicio;
+    sesionesActuales = semana.sesiones;
+    microcicloGuardado = Boolean(semana.guardada);
+    modoEdicion = !microcicloGuardado;
+    renderizarSemana();
+    guardarDatosAutomaticamente(false);
+  };
 
-function actualizarReferenciaMD() {
-  const indicePartido = obtenerIndicePartido();
-  const texto = document.getElementById("textoReferenciaMD");
-
-  if (indicePartido < 0) {
-    texto.textContent =
-      "Seleccioná PARTIDO en una de las sesiones para calcular automáticamente las referencias MD de las demás sesiones.";
-    return;
+  function obtenerIndicePartido() {
+    return sesionesActuales.findIndex(s => s.intensidad === "partido");
   }
 
-  const partido = sesionesActuales[indicePartido];
-  const fechaPartido = obtenerFechaDeSesion(partido);
+  function obtenerEtiquetaMD(sesion, indiceSesion) {
+    const indicePartido = obtenerIndicePartido();
+    if (indicePartido < 0) return { texto: "MD pendiente", clase: "" };
+    if (sesion.intensidad === "partido") {
+      return indiceSesion === indicePartido ? { texto: "MD · PARTIDO", clase: "es-partido" } : { texto: "PARTIDO EXTRA", clase: "es-partido" };
+    }
+    const diferencia = Number(sesion.diaSemana) - Number(sesionesActuales[indicePartido].diaSemana);
+    if (diferencia === 0) return { texto: "MD", clase: "es-partido" };
+    if (diferencia < 0) return { texto: "MD" + diferencia, clase: "es-previo" };
+    return { texto: "MD+" + diferencia, clase: "es-posterior" };
+  }
 
-  texto.textContent =
-    "Partido de referencia: " +
-    DIAS_SEMANA[partido.diaSemana] + " " +
-    formatearFecha(fechaPartido, true) +
-    ". Las demás sesiones se identifican como MD-n antes del encuentro y MD+n después del encuentro.";
-}
+  function actualizarReferenciaMD() {
+    const indicePartido = obtenerIndicePartido();
+    const texto = document.getElementById("textoReferenciaMD");
+    if (!texto) return;
+    if (indicePartido < 0) {
+      texto.textContent = "Seleccioná PARTIDO en una de las sesiones para calcular automáticamente las referencias MD.";
+      return;
+    }
+    const partido = sesionesActuales[indicePartido];
+    texto.textContent = "Partido de referencia: " + DIAS_SEMANA[partido.diaSemana] + " " + formatearFecha(obtenerFechaDeSesion(partido), true);
+  }
 
-/* =====================================================
-   CAMPO CON DURACIÓN: ENTRADA EN CALOR
-===================================================== */
-
-function campoTexto({
-  indice,
-  campo,
-  etiqueta,
-  valor,
-  placeholder,
-  clase = "",
-  filas = 5,
-  duracion = ""
-}) {
-  return `
-    <div class="campo-entrenamiento campo-con-duracion ${clase}">
-      <div class="campo contenido-entrenamiento">
-        <label for="campo-${indice}-${campo}">${etiqueta}</label>
-        <textarea
-          id="campo-${indice}-${campo}"
-          data-index="${indice}"
-          data-field="${campo}"
-          rows="${filas}"
-          placeholder="${escaparHTML(placeholder)}"
-        >${escaparHTML(valor)}</textarea>
-      </div>
-
-      <div class="campo campo-duracion">
-        <label for="campo-${indice}-${campo}Duracion">DURACIÓN</label>
-        <input
-          id="campo-${indice}-${campo}Duracion"
-          type="number"
-          min="0"
-          step="1"
-          inputmode="numeric"
-          data-index="${indice}"
-          data-field="${campo}Duracion"
-          value="${escaparHTML(duracion)}"
-          placeholder="Min"
-          aria-label="Duración en minutos de ${escaparHTML(etiqueta)}"
-        >
-        <span class="unidad-duracion">min</span>
-      </div>
-    </div>
-  `;
-}
-
-/* =====================================================
-   BLOQUES TTT
-===================================================== */
-
-function renderizarBloquesTTT(sesion, indice) {
-  sesion.tttBloques = normalizarBloquesEntrenamiento(
-    sesion.tttBloques,
-    sesion.ttt || ""
-  );
-
-  const bloquesHTML = sesion.tttBloques.map((bloque, indiceBloque) => `
-    <div class="bloque-subentrenamiento">
-      <div class="cabecera-subbloque">
-        <strong>TTT · BLOQUE ${indiceBloque + 1}</strong>
-        <span class="etiqueta-bloque">${indiceBloque + 1} DE ${sesion.tttBloques.length}</span>
-      </div>
-
-      <div class="campo-con-duracion">
+  function campoTexto({ indice, campo, etiqueta, valor, duracion = "" }) {
+    return `
+      <div class="campo-entrenamiento campo-con-duracion">
         <div class="campo contenido-entrenamiento">
-          <label for="campo-${indice}-tttBloques-${indiceBloque}-contenido">TAREA TÉCNICO-TÁCTICA</label>
-          <textarea
-            id="campo-${indice}-tttBloques-${indiceBloque}-contenido"
-            data-index="${indice}"
-            data-block-group="tttBloques"
-            data-block-index="${indiceBloque}"
-            data-block-field="contenido"
-            rows="5"
-            placeholder="Ejercicios, consignas tácticas, organización, espacios, series, pausas y objetivos..."
-          >${escaparHTML(bloque.contenido)}</textarea>
+          <label for="campo-${indice}-${campo}">${etiqueta}</label>
+          <textarea id="campo-${indice}-${campo}" data-index="${indice}" data-field="${campo}" rows="5">${escaparHTML(valor)}</textarea>
         </div>
-
         <div class="campo campo-duracion">
-          <label for="campo-${indice}-tttBloques-${indiceBloque}-duracion">DURACIÓN</label>
-          <input
-            id="campo-${indice}-tttBloques-${indiceBloque}-duracion"
-            type="number"
-            min="0"
-            step="1"
-            inputmode="numeric"
-            data-index="${indice}"
-            data-block-group="tttBloques"
-            data-block-index="${indiceBloque}"
-            data-block-field="duracion"
-            value="${escaparHTML(bloque.duracion)}"
-            placeholder="Min"
-            aria-label="Duración en minutos de TTT bloque ${indiceBloque + 1}"
-          >
+          <label for="campo-${indice}-${campo}Duracion">DURACIÓN</label>
+          <input id="campo-${indice}-${campo}Duracion" type="number" min="0" data-index="${indice}" data-field="${campo}Duracion" value="${escaparHTML(duracion)}" placeholder="Min">
           <span class="unidad-duracion">min</span>
         </div>
       </div>
-    </div>
-  `).join("");
+    `;
+  }
 
-  const botonAgregar = sesion.tttBloques.length < 3
-    ? `
-      <button
-        type="button"
-        class="boton-agregar-bloque"
-        onclick="agregarBloqueEntrenamiento(${indice}, 'tttBloques')"
-      >
-        <span class="mas">+</span>
-        AGREGAR TERCER BLOQUE
-      </button>
-    `
-    : "";
-
-  return `
-    <div class="subbloques-entrenamiento">
-      ${bloquesHTML}
-      ${botonAgregar}
-    </div>
-  `;
-}
-
-/* =====================================================
-   CAMPOS DINÁMICOS DE FÍSICO
-===================================================== */
-
-function renderizarDetallesFisicos(bloque, indice, indiceBloque) {
-  const base = `
-    data-index="${indice}"
-    data-block-group="fisicoBloques"
-    data-block-index="${indiceBloque}"
-  `;
-
-  if (bloque.tipo === "Gimnasio") {
+  function crearHTMLPreviewRival(nombre) {
+    const club = obtenerClubPorNombre(nombre);
+    if (!club) {
+      return `
+        <div class="placeholder-rival">⚽</div>
+        <span class="nombre-preview-rival">${nombre ? escaparHTML(nombre) : "Seleccioná el rival"}</span>
+      `;
+    }
     return `
-      <div class="detalles-fisicos">
-        <div class="campo">
-          <label for="campo-${indice}-fisico-${indiceBloque}-diaRutina">DÍA DE RUTINA</label>
-          <select
-            id="campo-${indice}-fisico-${indiceBloque}-diaRutina"
-            ${base}
-            data-block-field="diaRutina"
-          >
-            ${crearOpcionesDiaRutina(bloque.diaRutina)}
-          </select>
-        </div>
+      <img class="imagen-rival" src="${escaparHTML(club.ruta)}" alt="Escudo">
+      <span class="nombre-preview-rival">${escaparHTML(club.nombre)}</span>
+    `;
+  }
 
-        <div class="campo">
-          <label for="campo-${indice}-fisico-${indiceBloque}-semanaRutina">SEMANA DE RUTINA</label>
-          <select
-            id="campo-${indice}-fisico-${indiceBloque}-semanaRutina"
-            ${base}
-            data-block-field="semanaRutina"
-          >
-            ${crearOpcionesSemanaRutina(bloque.semanaRutina)}
-          </select>
+  function renderizarContenidoSesion(sesion, indice) {
+    if (sesion.intensidad === "suspendido") {
+      return `<div class="bloque-suspendido"><strong>SESIÓN SUSPENDIDA</strong></div>`;
+    }
+    if (sesion.intensidad === "partido") {
+      return `
+        <div class="bloque-partido">
+          <div class="campo" style="margin-bottom:12px">
+            <label for="campo-${indice}-rival">NOMBRE DEL RIVAL</label>
+            <select id="campo-${indice}-rival" data-index="${indice}" data-field="rival">
+              <option value="">Seleccioná un rival...</option>
+              ${ESCUDOS_CLUBES.map(c => `<option value="${escaparHTML(c.nombre)}" ${sesion.rival === c.nombre ? "selected" : ""}>${escaparHTML(c.nombre)}</option>`).join("")}
+            </select>
+          </div>
+          <div class="preview-rival" id="previewRival-${indice}">
+            ${crearHTMLPreviewRival(sesion.rival)}
+          </div>
         </div>
+      `;
+    }
+    return `
+      <div class="bloque-entrenamiento">
+        <h5 class="titulo-bloque"><span class="numero-bloque">1</span> ENTRADA EN CALOR</h5>
+        ${campoTexto({ indice, campo: "ec", etiqueta: "CONTENIDO", valor: sesion.ec, duracion: sesion.ecDuracion })}
       </div>
     `;
   }
 
-  if (bloque.tipo === "Pasadas") {
+  function crearTarjetaSesion(sesion, indice) {
+    const fecha = obtenerFechaDeSesion(sesion);
+    const md = obtenerEtiquetaMD(sesion, indice);
     return `
-      <div class="detalles-fisicos">
-        <div class="campo campo-area-pasadas">
-          <label for="campo-${indice}-fisico-${indiceBloque}-areaPasadas">ÁREA A TRABAJAR</label>
-          <input
-            id="campo-${indice}-fisico-${indiceBloque}-areaPasadas"
-            type="text"
-            ${base}
-            data-block-field="areaPasadas"
-            value="${escaparHTML(bloque.areaPasadas)}"
-            placeholder="Escribí el área a trabajar..."
-          >
-        </div>
-
-        <div class="campo">
-          <label for="campo-${indice}-fisico-${indiceBloque}-cantidadPasadas">CANTIDAD</label>
-          <input
-            id="campo-${indice}-fisico-${indiceBloque}-cantidadPasadas"
-            type="number"
-            min="1"
-            step="1"
-            inputmode="numeric"
-            ${base}
-            data-block-field="cantidadPasadas"
-            value="${escaparHTML(bloque.cantidadPasadas)}"
-            placeholder="Pasadas"
-          >
-        </div>
-
-        <div class="campo">
-          <label for="campo-${indice}-fisico-${indiceBloque}-metrosPasada">METROS</label>
-          <input
-            id="campo-${indice}-fisico-${indiceBloque}-metrosPasada"
-            type="number"
-            min="1"
-            step="1"
-            inputmode="numeric"
-            ${base}
-            data-block-field="metrosPasada"
-            value="${escaparHTML(bloque.metrosPasada)}"
-            placeholder="Metros"
-          >
-        </div>
-      </div>
-    `;
-  }
-
-  if (bloque.tipo === "Pliometría") {
-    return `
-      <div class="detalles-fisicos">
-        <div class="campo">
-          <label for="campo-${indice}-fisico-${indiceBloque}-cantidadSaltos">CANTIDAD DE SALTOS</label>
-          <input
-            id="campo-${indice}-fisico-${indiceBloque}-cantidadSaltos"
-            type="number"
-            min="1"
-            step="1"
-            inputmode="numeric"
-            ${base}
-            data-block-field="cantidadSaltos"
-            value="${escaparHTML(bloque.cantidadSaltos)}"
-            placeholder="Saltos"
-          >
-        </div>
-      </div>
-    `;
-  }
-
-  return `
-    <div class="detalle-fisico-vacio">
-      Seleccioná Gimnasio, Pasadas o Pliometría para completar los datos del bloque.
-    </div>
-  `;
-}
-
-function renderizarBloquesFisicos(sesion, indice) {
-  sesion.fisicoBloques = normalizarBloquesFisicos(
-    sesion.fisicoBloques,
-    sesion.fisico || ""
-  );
-
-  const bloquesHTML = sesion.fisicoBloques.map((bloque, indiceBloque) => {
-    const notaAnterior = String(bloque.notaAnterior || "").trim();
-
-    return `
-      <div class="bloque-subentrenamiento">
-        <div class="cabecera-subbloque">
-          <strong>FÍSICO · BLOQUE ${indiceBloque + 1}</strong>
-          <span class="etiqueta-bloque">${indiceBloque + 1} DE ${sesion.fisicoBloques.length}</span>
-        </div>
-
-        <div class="campo-con-duracion">
-          <div class="contenido-entrenamiento">
-            <div class="campo tipo-fisico">
-              <label for="campo-${indice}-fisico-${indiceBloque}-tipo">TIPO DE TRABAJO FÍSICO</label>
-              <select
-                id="campo-${indice}-fisico-${indiceBloque}-tipo"
-                data-index="${indice}"
-                data-block-group="fisicoBloques"
-                data-block-index="${indiceBloque}"
-                data-block-field="tipo"
-              >
-                ${crearOpcionesTipoFisico(bloque.tipo)}
-              </select>
-            </div>
-
-            ${renderizarDetallesFisicos(bloque, indice, indiceBloque)}
-
-            ${notaAnterior ? `
-              <div class="aviso-contenido-antiguo">
-                <strong>Contenido anterior conservado</strong>
-                ${escaparHTML(notaAnterior)}
-                <button
-                  type="button"
-                  class="boton-limpiar-legado"
-                  onclick="limpiarContenidoFisicoAnterior(${indice}, ${indiceBloque})"
-                >Quitar contenido anterior</button>
+      <article class="tarjeta-dia" id="sesion-${indice}" data-intensidad="${sesion.intensidad}">
+        <header class="cabecera-dia">
+          <div class="primera-linea-dia">
+            <div class="identidad-dia">
+              <div class="numero-sesion">S${indice + 1}</div>
+              <div>
+                <h4 class="nombre-dia">${escaparHTML(DIAS_SEMANA[sesion.diaSemana])}</h4>
+                <span class="fecha-calculada">${escaparHTML(formatearFecha(fecha, true))}</span>
               </div>
-            ` : ""}
-          </div>
-
-          <div class="campo campo-duracion">
-            <label for="campo-${indice}-fisico-${indiceBloque}-duracion">DURACIÓN</label>
-            <input
-              id="campo-${indice}-fisico-${indiceBloque}-duracion"
-              type="number"
-              min="0"
-              step="1"
-              inputmode="numeric"
-              data-index="${indice}"
-              data-block-group="fisicoBloques"
-              data-block-index="${indiceBloque}"
-              data-block-field="duracion"
-              value="${escaparHTML(bloque.duracion)}"
-              placeholder="Min"
-              aria-label="Duración en minutos de Físico bloque ${indiceBloque + 1}"
-            >
-            <span class="unidad-duracion">min</span>
-          </div>
-        </div>
-      </div>
-    `;
-  }).join("");
-
-  const botonAgregar = sesion.fisicoBloques.length < 3
-    ? `
-      <button
-        type="button"
-        class="boton-agregar-bloque"
-        onclick="agregarBloqueEntrenamiento(${indice}, 'fisicoBloques')"
-      >
-        <span class="mas">+</span>
-        AGREGAR TERCER BLOQUE
-      </button>
-    `
-    : "";
-
-  return `
-    <div class="subbloques-entrenamiento">
-      ${bloquesHTML}
-      ${botonAgregar}
-    </div>
-  `;
-}
-
-/* =====================================================
-   CONTENIDO DE LA SESIÓN EN MODO EDICIÓN
-===================================================== */
-
-function renderizarContenidoSesion(sesion, indice) {
-  if (sesion.intensidad === "suspendido") {
-    return `
-      <div class="bloque-suspendido">
-        <div class="icono-suspendido">—</div>
-        <strong>SESIÓN SUSPENDIDA</strong>
-        <p>No hace falta completar contenidos para este día. Se publicará como suspendido en el calendario.</p>
-      </div>
-    `;
-  }
-
-  if (sesion.intensidad === "partido") {
-    return `
-      <div class="bloque-partido">
-        <h5 class="titulo-bloque">
-          <span class="numero-bloque">MD</span>
-          INFORMACIÓN DEL PARTIDO
-        </h5>
-
-        <div class="campo" style="margin-bottom:12px">
-          <label for="campo-${indice}-rival">NOMBRE DEL RIVAL</label>
-          <select id="campo-${indice}-rival" data-index="${indice}" data-field="rival">
-            ${crearOpcionesRivales(sesion.rival)}
-          </select>
-        </div>
-
-        <div class="preview-rival" id="previewRival-${indice}">
-          ${crearHTMLPreviewRival(sesion.rival)}
-        </div>
-
-        <div class="campo" style="margin-top:12px">
-          <label for="campo-${indice}-competicion">TIPO DE TORNEO</label>
-          <select id="campo-${indice}-competicion" data-index="${indice}" data-field="competicion">
-            ${crearOpcionesCompeticiones(sesion.competicion)}
-          </select>
-        </div>
-      </div>
-    `;
-  }
-
-  return `
-    <div class="bloque-entrenamiento">
-      <h5 class="titulo-bloque">
-        <span class="numero-bloque">1</span>
-        ENTRADA EN CALOR
-      </h5>
-
-      ${campoTexto({
-        indice,
-        campo: "ec",
-        etiqueta: "CONTENIDO DE LA ENTRADA EN CALOR",
-        valor: sesion.ec,
-        duracion: sesion.ecDuracion,
-        placeholder: "Movilidad, activación, coordinación, velocidad, juegos...",
-        filas: 5
-      })}
-    </div>
-
-    <div class="bloque-entrenamiento">
-      <h5 class="titulo-bloque">
-        <span class="numero-bloque">2</span>
-        TTT · TAREA TÉCNICO-TÁCTICA
-      </h5>
-
-      ${renderizarBloquesTTT(sesion, indice)}
-    </div>
-
-    <div class="bloque-entrenamiento">
-      <h5 class="titulo-bloque">
-        <span class="numero-bloque">3</span>
-        FÍSICO
-      </h5>
-
-      ${renderizarBloquesFisicos(sesion, indice)}
-    </div>
-  `;
-}
-
-function crearHTMLPreviewRival(nombre) {
-  const club = obtenerClubPorNombre(nombre);
-
-  if (!club) {
-    return `
-      <div class="placeholder-rival" aria-hidden="true">⚽</div>
-      <span class="nombre-preview-rival">${nombre ? escaparHTML(nombre) : "Seleccioná el rival"}</span>
-      <p class="aviso-imagen-rival">El escudo aparecerá al elegir un club del catálogo.</p>
-    `;
-  }
-
-  return `
-    <img
-      class="imagen-rival"
-      src="${escaparHTML(club.ruta)}"
-      alt="Escudo de ${escaparHTML(club.nombre)}"
-      onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
-    >
-    <div class="placeholder-rival" style="display:none" aria-hidden="true">⚽</div>
-    <span class="nombre-preview-rival">${escaparHTML(club.nombre)}</span>
-  `;
-}
-
-/* =====================================================
-   VISTA DE SOLO LECTURA
-===================================================== */
-
-function crearHTMLContenidoLectura(titulo, contenido, duracion = "", numero = "") {
-  const texto = String(contenido ?? "").trim();
-  const tiempo = String(duracion ?? "").trim();
-
-  if (!texto && !tiempo) return "";
-
-  const identificador = numero ? " · BLOQUE " + numero : "";
-
-  return `
-    <div class="lectura-bloque">
-      <div class="lectura-bloque-cabecera">
-        <strong>${escaparHTML(titulo + identificador)}</strong>
-        ${tiempo ? `<span class="lectura-duracion">${escaparHTML(tiempo)} min</span>` : ""}
-      </div>
-      ${texto
-        ? `<p class="lectura-contenido">${escaparHTML(texto)}</p>`
-        : `<p class="lectura-vacio">Contenido pendiente de completar.</p>`
-      }
-    </div>
-  `;
-}
-
-function crearHTMLLecturaFisica(bloque, indiceBloque) {
-  const descripcion = describirBloqueFisico(bloque);
-  const duracion = String(bloque?.duracion ?? "").trim();
-  const notaAnterior = String(bloque?.notaAnterior ?? "").trim();
-
-  if (!descripcion && !duracion && !notaAnterior) {
-    return "";
-  }
-
-  let contenido = descripcion;
-
-  if (bloque.tipo === "Pasadas") {
-    const detalles = [];
-    if (bloque.areaPasadas) detalles.push("Área: " + bloque.areaPasadas);
-    if (bloque.cantidadPasadas) detalles.push(bloque.cantidadPasadas + " pasadas");
-    if (bloque.metrosPasada) detalles.push(bloque.metrosPasada + " metros");
-    contenido = detalles.length ? detalles.join(" · ") : "Datos de pasadas pendientes";
-  } else if (bloque.tipo === "Gimnasio") {
-    const detalles = [];
-    if (bloque.diaRutina) detalles.push(bloque.diaRutina);
-    if (bloque.semanaRutina) detalles.push("Semana " + bloque.semanaRutina);
-    contenido = detalles.length ? detalles.join(" · ") : "Datos de rutina pendientes";
-  } else if (bloque.tipo === "Pliometría") {
-    contenido = bloque.cantidadSaltos
-      ? bloque.cantidadSaltos + " saltos"
-      : "Cantidad de saltos pendiente";
-  }
-
-  let html = "";
-
-  if (descripcion || duracion) {
-    html += `
-      <div class="lectura-bloque">
-        <div class="lectura-bloque-cabecera">
-          <strong>FÍSICO · BLOQUE ${indiceBloque + 1} · ${escaparHTML(bloque.tipo || "Sin tipo")}</strong>
-          ${duracion ? `<span class="lectura-duracion">${escaparHTML(duracion)} min</span>` : ""}
-        </div>
-        <p class="lectura-contenido">${escaparHTML(contenido || descripcion)}</p>
-      </div>
-    `;
-  }
-
-  if (notaAnterior) {
-    html += `
-      <div class="lectura-bloque">
-        <div class="lectura-bloque-cabecera">
-          <strong>CONTENIDO FÍSICO ANTERIOR · BLOQUE ${indiceBloque + 1}</strong>
-        </div>
-        <p class="lectura-contenido">${escaparHTML(notaAnterior)}</p>
-      </div>
-    `;
-  }
-
-  return html;
-}
-
-function renderizarContenidoSesionLectura(sesion, indice) {
-  if (sesion.intensidad === "suspendido") {
-    return `
-      <div class="bloque-suspendido">
-        <div class="icono-suspendido">—</div>
-        <strong>SESIÓN SUSPENDIDA</strong>
-        <p>Esta sesión quedó registrada como suspendida.</p>
-      </div>
-    `;
-  }
-
-  if (sesion.intensidad === "partido") {
-    const club = obtenerClubPorNombre(sesion.rival);
-    const rival = sesion.rival || "Rival a confirmar";
-    const competicion = sesion.competicion || "Competición a confirmar";
-
-    return `
-      <section class="lectura-seccion">
-        <h5 class="lectura-titulo">
-          <span class="lectura-numero">MD</span>
-          INFORMACIÓN DEL PARTIDO
-        </h5>
-
-        <div class="lectura-partido">
-          <div class="preview-rival">
-            ${club
-              ? `
-                <img
-                  class="imagen-rival"
-                  src="${escaparHTML(club.ruta)}"
-                  alt="Escudo de ${escaparHTML(club.nombre)}"
-                  onerror="this.style.display='none';"
-                >
-              `
-              : `<div class="placeholder-rival" aria-hidden="true">⚽</div>`
-            }
-            <span class="nombre-preview-rival">${escaparHTML(rival)}</span>
-          </div>
-
-          <div class="lectura-etiquetas">
-            <span class="lectura-etiqueta">
-              <strong>Torneo:</strong> ${escaparHTML(competicion)}
-            </span>
-          </div>
-        </div>
-      </section>
-    `;
-  }
-
-  const bloquesTTT = (sesion.tttBloques || [])
-    .map((bloque, indiceBloque) =>
-      crearHTMLContenidoLectura(
-        "TTT · Tarea técnico-táctica",
-        bloque.contenido,
-        bloque.duracion,
-        indiceBloque + 1
-      )
-    )
-    .filter(Boolean)
-    .join("");
-
-  const bloquesFisicos = (sesion.fisicoBloques || [])
-    .map((bloque, indiceBloque) =>
-      crearHTMLLecturaFisica(bloque, indiceBloque)
-    )
-    .filter(Boolean)
-    .join("");
-
-  const contenidoEC = String(sesion.ec || "").trim();
-  const duracionEC = String(sesion.ecDuracion || "").trim();
-
-  return `
-    <section class="lectura-seccion">
-      <h5 class="lectura-titulo">
-        <span class="lectura-numero">1</span>
-        ENTRADA EN CALOR
-      </h5>
-
-      ${contenidoEC || duracionEC
-        ? crearHTMLContenidoLectura(
-            "Entrada en calor",
-            contenidoEC,
-            duracionEC
-          )
-        : `<p class="lectura-vacio">Sin contenido registrado.</p>`
-      }
-    </section>
-
-    <section class="lectura-seccion">
-      <h5 class="lectura-titulo">
-        <span class="lectura-numero">2</span>
-        TTT · TAREA TÉCNICO-TÁCTICA
-      </h5>
-
-      ${bloquesTTT || `<p class="lectura-vacio">Sin bloques técnico-tácticos registrados.</p>`}
-    </section>
-
-    <section class="lectura-seccion">
-      <h5 class="lectura-titulo">
-        <span class="lectura-numero">3</span>
-        FÍSICO
-      </h5>
-
-      ${bloquesFisicos || `<p class="lectura-vacio">Sin bloques físicos registrados.</p>`}
-    </section>
-  `;
-}
-
-/* =====================================================
-   TARJETAS DE SESIÓN · EDICIÓN
-===================================================== */
-
-function crearTarjetaSesion(sesion, indice) {
-  const fecha = obtenerFechaDeSesion(sesion);
-  const md = obtenerEtiquetaMD(sesion, indice);
-
-  const puedeEliminar =
-    Boolean(sesion.extra) &&
-    sesionesActuales.length > (CANTIDAD_SESIONES_BASE[categoriaActual] || 4);
-
-  return `
-    <article class="tarjeta-dia" id="sesion-${indice}" data-intensidad="${sesion.intensidad}">
-
-      <header class="cabecera-dia">
-        <div class="primera-linea-dia">
-          <div class="identidad-dia">
-            <div class="numero-sesion">S${indice + 1}</div>
-            <div>
-              <h4 class="nombre-dia">${escaparHTML(DIAS_SEMANA[sesion.diaSemana])}</h4>
-              <span class="fecha-calculada">${escaparHTML(formatearFecha(fecha, true))}</span>
             </div>
-          </div>
-
-          <div class="acciones-cabecera-dia">
-            <span class="etiqueta-md ${md.clase}">${escaparHTML(md.texto)}</span>
-
-            ${puedeEliminar ? `
-              <button
-                type="button"
-                class="boton-eliminar-sesion"
-                onclick="eliminarSesion(${indice})"
-                title="Eliminar esta sesión adicional"
-                aria-label="Eliminar sesión ${indice + 1}"
-              >×</button>
-            ` : ""}
-          </div>
-        </div>
-
-        <div class="campo">
-          <label for="campo-${indice}-diaSemana">DÍA DE LA SEMANA</label>
-          <select id="campo-${indice}-diaSemana" data-index="${indice}" data-field="diaSemana">
-            ${crearOpcionesDias(sesion.diaSemana)}
-          </select>
-        </div>
-      </header>
-
-      <div class="cuerpo-dia">
-        <div class="campo">
-          <label for="campo-${indice}-fechaCalculada">FECHA AUTOMÁTICA</label>
-          <input
-            id="campo-${indice}-fechaCalculada"
-            type="text"
-            value="${escaparHTML(formatearFecha(fecha, true))}"
-            readonly
-          >
-        </div>
-
-        <div class="campo">
-          <label for="campo-${indice}-intensidad">INTENSIDAD</label>
-          <select id="campo-${indice}-intensidad" data-index="${indice}" data-field="intensidad">
-            ${crearOpcionesIntensidad(sesion.intensidad)}
-          </select>
-        </div>
-
-        ${renderizarContenidoSesion(sesion, indice)}
-      </div>
-
-      <footer class="pie-dia">
-        <strong>SESIÓN ${indice + 1}</strong>
-        · ${sesion.activa ? "Sincronizada en la nube" : "Plan editable"}
-      </footer>
-
-    </article>
-  `;
-}
-
-/* =====================================================
-   TARJETAS DE SESIÓN · SOLO LECTURA
-===================================================== */
-
-function crearTarjetaSesionSoloLectura(sesion, indice) {
-  const md = obtenerEtiquetaMD(sesion, indice);
-  const configuracion = obtenerConfiguracionIntensidad(sesion.intensidad);
-
-  const claseEstado = sesion.intensidad === "partido"
-    ? "partido"
-    : sesion.intensidad === "suspendido"
-      ? "suspendido"
-      : sesion.intensidad;
-
-  const fecha = obtenerFechaDeSesion(sesion);
-
-  return `
-    <article
-      class="tarjeta-dia modo-lectura"
-      id="sesion-${indice}"
-      data-intensidad="${sesion.intensidad}"
-    >
-      <header class="cabecera-dia">
-        <div class="primera-linea-dia">
-          <div class="identidad-dia">
-            <div class="numero-sesion">S${indice + 1}</div>
-            <div>
-              <h4 class="nombre-dia">${escaparHTML(DIAS_SEMANA[sesion.diaSemana])}</h4>
-              <span class="fecha-calculada">${escaparHTML(formatearFecha(fecha, true))}</span>
-            </div>
-          </div>
-
-          <div class="acciones-cabecera-dia">
             <span class="etiqueta-md ${md.clase}">${escaparHTML(md.texto)}</span>
           </div>
+          <div class="campo">
+            <label>INTENSIDAD</label>
+            <select data-index="${indice}" data-field="intensidad">
+              <option value="baja" ${sesion.intensidad === "baja" ? "selected" : ""}>Baja</option>
+              <option value="media" ${sesion.intensidad === "media" ? "selected" : ""}>Media</option>
+              <option value="alta" ${sesion.intensidad === "alta" ? "selected" : ""}>Alta</option>
+              <option value="partido" ${sesion.intensidad === "partido" ? "selected" : ""}>Partido</option>
+              <option value="suspendido" ${sesion.intensidad === "suspendido" ? "selected" : ""}>Suspendido</option>
+            </select>
+          </div>
+        </header>
+        <div class="cuerpo-dia">
+          ${renderizarContenidoSesion(sesion, indice)}
         </div>
-
-        <div class="lectura-etiquetas">
-          <span class="lectura-estado ${claseEstado}">
-            ${escaparHTML(configuracion.etiqueta)}
-          </span>
-        </div>
-      </header>
-
-      <div class="cuerpo-dia">
-        ${renderizarContenidoSesionLectura(sesion, indice)}
-      </div>
-
-      <footer class="pie-dia">
-        <strong>SESIÓN ${indice + 1}</strong>
-        · MICROCICLO GUARDADO EN LA NUBE
-      </footer>
-    </article>
-  `;
-}
-
-/* =====================================================
-   RENDERIZADO GENERAL
-===================================================== */
-
-function actualizarEstadoMicrociclo() {
-  const partidos = sesionesActuales.filter(sesion =>
-    sesion.intensidad === "partido"
-  ).length;
-
-  const suspendidos = sesionesActuales.filter(sesion =>
-    sesion.intensidad === "suspendido"
-  ).length;
-
-  const estado = document.getElementById("estadoMicrociclo");
-  const texto = document.getElementById("textoEstadoMicrociclo");
-
-  estado.classList.remove(
-    "con-partido",
-    "con-suspendido",
-    "microciclo-guardado",
-    "microciclo-edicion"
-  );
-
-  if (!modoEdicion && microcicloGuardado) {
-    estado.classList.add("microciclo-guardado");
-    texto.textContent = "Guardado en nube · Solo lectura";
-    return;
+      </article>
+    `;
   }
 
-  estado.classList.add("microciclo-edicion");
-
-  if (suspendidos > 0) {
-    estado.classList.add("con-suspendido");
-    texto.textContent = "Borrador · Hay sesiones suspendidas";
-  } else if (partidos === 0) {
-    texto.textContent = "Borrador · Partido sin definir";
-  } else if (partidos === 1) {
-    texto.textContent = "Borrador · Partido definido";
-  } else {
-    estado.classList.add("con-partido");
-    texto.textContent = "Borrador · Más de un partido";
+  function crearTarjetaSesionSoloLectura(sesion, indice) {
+    const fecha = obtenerFechaDeSesion(sesion);
+    const md = obtenerEtiquetaMD(sesion, indice);
+    return `
+      <article class="tarjeta-dia modo-lectura" id="sesion-${indice}" data-intensidad="${sesion.intensidad}">
+        <header class="cabecera-dia">
+          <div class="primera-linea-dia">
+            <div class="identidad-dia">
+              <div class="numero-sesion">S${indice + 1}</div>
+              <div>
+                <h4 class="nombre-dia">${escaparHTML(DIAS_SEMANA[sesion.diaSemana])}</h4>
+                <span class="fecha-calculada">${escaparHTML(formatearFecha(fecha, true))}</span>
+              </div>
+            </div>
+            <span class="etiqueta-md ${md.clase}">${escaparHTML(md.texto)}</span>
+          </div>
+        </header>
+        <div class="cuerpo-dia">
+          <p><strong>Intensidad:</strong> ${sesion.intensidad}</p>
+          ${sesion.intensidad === "partido" ? `<p><strong>Rival:</strong> ${sesion.rival || "Sin definir"}</p>` : `<p><strong>Contenido:</strong> ${sesion.ec || "Sin contenido"}</p>`}
+        </div>
+      </article>
+    `;
   }
-}
 
-function actualizarBotonAgregar() {
-  const boton = document.getElementById("botonAgregarSesion");
+  function renderizarSemana() {
+    document.getElementById("selectCategoria").value = categoriaActual;
+    actualizarSelectorSemana();
+    actualizarReferenciaMD();
 
-  const diasOcupados = new Set(
-    sesionesActuales.map(sesion => Number(sesion.diaSemana))
-  );
-
-  const noHayDiasDisponibles = diasOcupados.size >= DIAS_SEMANA.length;
-
-  boton.disabled = !modoEdicion || noHayDiasDisponibles;
-
-  boton.title = !modoEdicion
-    ? "Para agregar una sesión, primero elegí Editar microciclo."
-    : noHayDiasDisponibles
-      ? "Ya hay una sesión asignada a cada día de la semana."
-      : "Agregar una sesión adicional.";
-}
-
-function actualizarControlesEdicion() {
-  const botonGuardar = document.getElementById("botonGuardarSemana");
-  const botonEditar = document.getElementById("botonEditarSemana");
-  const aviso = document.getElementById("avisoSoloLectura");
-
-  botonGuardar.hidden = !modoEdicion;
-  botonEditar.hidden = modoEdicion;
-  aviso.hidden = modoEdicion;
-}
-
-function renderizarSemana() {
-  document.getElementById("selectCategoria").value = categoriaActual;
-
-  actualizarSelectorSemana();
-  actualizarReferenciaMD();
-  actualizarEstadoMicrociclo();
-  actualizarBotonAgregar();
-  actualizarControlesEdicion();
-
-  document.getElementById("gridMicrociclo").innerHTML =
-    sesionesActuales.map((sesion, indice) =>
-      modoEdicion
-        ? crearTarjetaSesion(sesion, indice)
-        : crearTarjetaSesionSoloLectura(sesion, indice)
+    const grid = document.getElementById("gridMicrociclo");
+    grid.innerHTML = sesionesActuales.map((s, i) =>
+      modoEdicion ? crearTarjetaSesion(s, i) : crearTarjetaSesionSoloLectura(s, i)
     ).join("");
-}
 
-/* =====================================================
-   AGREGAR SESIÓN
-===================================================== */
-
-function obtenerPrimerDiaLibre() {
-  const ocupados = new Set(
-    sesionesActuales.map(sesion => Number(sesion.diaSemana))
-  );
-
-  return DIAS_SEMANA.findIndex((dia, indice) => !ocupados.has(indice));
-}
-
-function agregarSesion() {
-  if (!modoEdicion) {
-    mostrarNotificacion("Para agregar una sesión, primero elegí Editar microciclo.");
-    return;
+    document.getElementById("botonGuardarSemana").hidden = !modoEdicion;
+    document.getElementById("botonEditarSemana").hidden = modoEdicion;
+    document.getElementById("avisoSoloLectura").hidden = modoEdicion;
   }
 
-  if (sesionesActuales.length >= DIAS_SEMANA.length) {
-    mostrarNotificacion("Ya hay una sesión asignada a cada día de la semana.");
-    return;
-  }
+  // Event Listeners principales
+  document.addEventListener("DOMContentLoaded", () => {
+    categoriaActual = obtenerCategoriaPredeterminada();
+    const semana = obtenerSemana(semanaActual, categoriaActual);
+    fechaInicioActual = semana.fechaInicio;
+    sesionesActuales = semana.sesiones;
+    microcicloGuardado = Boolean(semana.guardada);
+    modoEdicion = !microcicloGuardado;
 
-  const diaLibre = obtenerPrimerDiaLibre();
+    renderizarSemana();
 
-  if (diaLibre < 0) {
-    mostrarNotificacion("No quedan días libres. Cambiá el día de una sesión existente.");
-    return;
-  }
-
-  const nuevaSesion = {
-    ...crearSesionVacia(diaLibre, "media"),
-    activa: true,
-    extra: true
-  };
-
-  sesionesActuales.push(nuevaSesion);
-
-  renderizarSemana();
-  guardarDatosAutomaticamente(false);
-
-  mostrarNotificacion(
-    "Sesión agregada para el " + DIAS_SEMANA[diaLibre] +
-    ". Elegí la intensidad y completá sus contenidos."
-  );
-
-  const nuevaTarjeta = document.getElementById(
-    "sesion-" + (sesionesActuales.length - 1)
-  );
-
-  if (nuevaTarjeta) {
-    nuevaTarjeta.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-}
-
-/* =====================================================
-   AGREGAR BLOQUE TTT O FÍSICO
-===================================================== */
-
-function agregarBloqueEntrenamiento(indice, grupo) {
-  if (!modoEdicion) {
-    mostrarNotificacion("Primero elegí Editar microciclo.");
-    return;
-  }
-
-  const sesion = sesionesActuales[indice];
-
-  if (!sesion || !["tttBloques", "fisicoBloques"].includes(grupo)) {
-    return;
-  }
-
-  if (!Array.isArray(sesion[grupo])) {
-    sesion[grupo] = grupo === "tttBloques"
-      ? crearBloquesTTTVacios()
-      : crearBloquesFisicosVacios();
-  }
-
-  if (sesion[grupo].length >= 3) {
-    mostrarNotificacion("Esta sección ya tiene sus tres bloques.");
-    return;
-  }
-
-  if (grupo === "tttBloques") {
-    sesion[grupo].push({ contenido: "", duracion: "" });
-  } else {
-    sesion[grupo].push(crearBloqueFisicoVacio());
-  }
-
-  actualizarCamposLegado(sesion);
-  sesion.activa = true;
-
-  renderizarSemana();
-  guardarDatosAutomaticamente(false);
-
-  const textoSeccion = grupo === "tttBloques" ? "TTT" : "Físico";
-  mostrarNotificacion("Se agregó un bloque de " + textoSeccion + ".");
-
-  const nuevoElemento = grupo === "tttBloques"
-    ? document.getElementById(`campo-${indice}-tttBloques-2-contenido`)
-    : document.getElementById(`campo-${indice}-fisico-2-tipo`);
-
-  if (nuevoElemento) {
-    nuevoElemento.scrollIntoView({
-      behavior: "smooth",
-      block: "center"
+    document.getElementById("selectCategoria").addEventListener("change", (e) => {
+      window.seleccionarCategoria(e.target.value);
     });
 
-    nuevoElemento.focus({ preventScroll: true });
-  }
-}
+    document.getElementById("selectMicrociclo").addEventListener("change", (e) => {
+      window.seleccionarSemana(e.target.value);
+    });
 
-function limpiarContenidoFisicoAnterior(indice, indiceBloque) {
-  if (!modoEdicion) {
-    mostrarNotificacion("Primero elegí Editar microciclo.");
-    return;
-  }
+    document.getElementById("botonSemanaAnterior").addEventListener("click", () => window.cambiarSemana(-1));
+    document.getElementById("botonSemanaSiguiente").addEventListener("click", () => window.cambiarSemana(1));
+    document.getElementById("botonGuardarSemana").addEventListener("click", () => window.guardarSemana());
+    document.getElementById("botonEditarSemana").addEventListener("click", () => window.editarSemana());
 
-  const sesion = sesionesActuales[indice];
-
-  if (!sesion || !Array.isArray(sesion.fisicoBloques)) return;
-  if (!sesion.fisicoBloques[indiceBloque]) return;
-
-  sesion.fisicoBloques[indiceBloque].notaAnterior = "";
-
-  actualizarCamposLegado(sesion);
-  sesion.activa = true;
-
-  renderizarSemana();
-  guardarDatosAutomaticamente(false);
-
-  mostrarNotificacion("Se quitó el texto físico anterior.");
-}
-
-/* =====================================================
-   ELIMINAR SESIÓN ADICIONAL
-===================================================== */
-
-function eliminarSesion(indice) {
-  if (!modoEdicion) {
-    mostrarNotificacion("Primero elegí Editar microciclo.");
-    return;
-  }
-
-  const sesion = sesionesActuales[indice];
-  if (!sesion || !sesion.extra) return;
-
-  const confirmado = confirm(
-    "¿Querés eliminar esta sesión adicional?\n\n" +
-    " También se quitará de la nube y del calendario."
-  );
-
-  if (!confirmado) return;
-
-  sesionesActuales.splice(indice, 1);
-
-  renderizarSemana();
-  guardarDatosAutomaticamente(false);
-
-  mostrarNotificacion("La sesión adicional fue eliminada.");
-}
-
-/* =====================================================
-   EDICIÓN DE CAMPOS
-===================================================== */
-
-function procesarEntrada(evento) {
-  if (!modoEdicion) return;
-
-  const elemento = evento.target;
-
-  if (!elemento) return;
-  if (elemento.tagName === "SELECT") return;
-
-  const grupoBloques = elemento.dataset.blockGroup;
-  const tieneCampoNormal = Boolean(elemento.dataset.field);
-
-  if (!grupoBloques && !tieneCampoNormal) return;
-
-  const indice = Number(elemento.dataset.index);
-
-  if (
-    !Number.isInteger(indice) ||
-    !sesionesActuales[indice]
-  ) {
-    return;
-  }
-
-  const sesion = sesionesActuales[indice];
-
-  if (grupoBloques) {
-    const indiceBloque = Number(elemento.dataset.blockIndex);
-    const campoBloque = elemento.dataset.blockField;
-    const bloques = sesion[grupoBloques];
-
-    if (
-      !Array.isArray(bloques) ||
-      !Number.isInteger(indiceBloque) ||
-      !bloques[indiceBloque] ||
-      !campoBloque
-    ) {
-      return;
-    }
-
-    const camposPermitidos = grupoBloques === "tttBloques"
-      ? ["contenido", "duracion"]
-      : [
-          "duracion",
-          "semanaRutina",
-          "areaPasadas",
-          "cantidadPasadas",
-          "metrosPasada",
-          "cantidadSaltos"
-        ];
-
-    if (!camposPermitidos.includes(campoBloque)) return;
-
-    bloques[indiceBloque][campoBloque] =
-      campoBloque === "duracion"
-        ? normalizarDuracion(elemento.value)
-        : elemento.value;
-
-    actualizarCamposLegado(sesion);
-  } else {
-    const campo = elemento.dataset.field;
-
-    if (!campo) return;
-
-    if (campo === "ecDuracion") {
-      sesion[campo] = normalizarDuracion(elemento.value);
-    } else {
-      sesion[campo] = elemento.value;
-    }
-  }
-
-  sesion.activa = true;
-
-  guardarDatosAutomaticamente(false);
-
-  const pie = document.querySelector(`#sesion-${indice} .pie-dia`);
-
-  if (pie) {
-    pie.innerHTML =
-      `<strong>SESIÓN ${indice + 1}</strong> · Sincronizada en la nube`;
-  }
-}
-
-function procesarCambio(evento) {
-  if (!modoEdicion) return;
-
-  const elemento = evento.target;
-
-  if (!elemento) return;
-
-  const grupoBloques = elemento.dataset.blockGroup;
-
-  if (grupoBloques) {
-    const indice = Number(elemento.dataset.index);
-    const indiceBloque = Number(elemento.dataset.blockIndex);
-    const campoBloque = elemento.dataset.blockField;
-
-    if (
-      !Number.isInteger(indice) ||
-      !sesionesActuales[indice] ||
-      !["tttBloques", "fisicoBloques"].includes(grupoBloques)
-    ) {
-      return;
-    }
-
-    const sesion = sesionesActuales[indice];
-    const bloques = sesion[grupoBloques];
-
-    if (
-      !Array.isArray(bloques) ||
-      !Number.isInteger(indiceBloque) ||
-      !bloques[indiceBloque] ||
-      !campoBloque
-    ) {
-      return;
-    }
-
-    const bloque = bloques[indiceBloque];
-
-    if (grupoBloques === "fisicoBloques" && campoBloque === "tipo") {
-      const tipoNuevo = elemento.value;
-
-      if (!["", "Gimnasio", "Pasadas", "Pliometría"].includes(tipoNuevo)) {
-        return;
+    document.getElementById("gridMicrociclo").addEventListener("input", (e) => {
+      if (!modoEdicion) return;
+      const el = e.target;
+      const idx = Number(el.dataset.index);
+      const campo = el.dataset.field;
+      if (Number.isInteger(idx) && sesionesActuales[idx] && campo) {
+        sesionesActuales[idx][campo] = el.value;
+        sesionesActuales[idx].activa = true;
+        guardarDatosAutomaticamente(false);
       }
+    });
 
-      const duracionConservada = bloque.duracion;
-      const notaConservada = bloque.notaAnterior;
-
-      Object.assign(bloque, crearBloqueFisicoVacio());
-
-      bloque.tipo = tipoNuevo;
-      bloque.duracion = duracionConservada;
-      bloque.notaAnterior = notaConservada;
-
-      actualizarCamposLegado(sesion);
-      sesion.activa = true;
-
-      renderizarSemana();
-      guardarDatosAutomaticamente(false);
-      return;
-    }
-
-    if (grupoBloques === "tttBloques") {
-      if (!["contenido", "duracion"].includes(campoBloque)) return;
-
-      bloque[campoBloque] = elemento.value;
-    } else {
-      const camposFisicosPermitidos = [
-        "diaRutina",
-        "semanaRutina",
-        "areaPasadas",
-        "cantidadPasadas",
-        "metrosPasada",
-        "cantidadSaltos",
-        "duracion"
-      ];
-
-      if (!camposFisicosPermitidos.includes(campoBloque)) return;
-
-      if (campoBloque === "semanaRutina") {
-        const semana = Number(elemento.value);
-
-        bloque[campoBloque] =
-          elemento.value !== "" &&
-          Number.isInteger(semana) &&
-          semana >= 1 &&
-          semana <= 6
-            ? String(semana)
-            : "";
-      } else if (campoBloque === "diaRutina") {
-        bloque[campoBloque] = DIAS_RUTINA_GIMNASIO.includes(elemento.value)
-          ? elemento.value
-          : "";
-      } else {
-        bloque[campoBloque] =
-          campoBloque === "duracion"
-            ? normalizarDuracion(elemento.value)
-            : elemento.value;
+    document.getElementById("gridMicrociclo").addEventListener("change", (e) => {
+      if (!modoEdicion) return;
+      const el = e.target;
+      const idx = Number(el.dataset.index);
+      const campo = el.dataset.field;
+      if (Number.isInteger(idx) && sesionesActuales[idx] && campo === "intensidad") {
+        sesionesActuales[idx].intensidad = el.value;
+        renderizarSemana();
+        guardarDatosAutomaticamente(false);
       }
-    }
-
-    actualizarCamposLegado(sesion);
-    sesion.activa = true;
+    });
 
     guardarDatosAutomaticamente(false);
-    return;
-  }
-
-  if (!elemento.dataset.field) return;
-
-  const indice = Number(elemento.dataset.index);
-  const campo = elemento.dataset.field;
-
-  if (!Number.isInteger(indice) || !sesionesActuales[indice]) {
-    return;
-  }
-
-  if (campo === "diaSemana") {
-    const nuevoDia = Number(elemento.value);
-
-    const otroIndice = sesionesActuales.findIndex(
-      (sesion, posicion) =>
-        posicion !== indice &&
-        Number(sesion.diaSemana) === nuevoDia
-    );
-
-    if (otroIndice >= 0) {
-      mostrarNotificacion(
-        "Ya hay una sesión asignada a " +
-        DIAS_SEMANA[nuevoDia] +
-        ". Elegí otro día para evitar duplicados en el calendario."
-      );
-
-      renderizarSemana();
-      return;
-    }
-
-    sesionesActuales[indice].diaSemana = nuevoDia;
-    sesionesActuales[indice].activa = true;
-
-    renderizarSemana();
-    guardarDatosAutomaticamente(false);
-    return;
-  }
-
-  if (campo === "intensidad") {
-    sesionesActuales[indice].intensidad = elemento.value;
-    sesionesActuales[indice].activa = true;
-
-    if (
-      elemento.value === "partido" &&
-      !sesionesActuales[indice].competicion
-    ) {
-      sesionesActuales[indice].competicion =
-        COMPETICIONES_POR_DIVISION[categoriaActual][0];
-    }
-
-    renderizarSemana();
-    guardarDatosAutomaticamente(false);
-    return;
-  }
-
-  sesionesActuales[indice][campo] = elemento.value;
-  sesionesActuales[indice].activa = true;
-
-  renderizarSemana();
-  guardarDatosAutomaticamente(false);
-}
-
-/* =====================================================
-   VISTA DEL RIVAL
-===================================================== */
-
-function actualizarVistaRival(indice) {
-  const sesion = sesionesActuales[indice];
-  if (!sesion) return;
-
-  const preview = document.getElementById("previewRival-" + indice);
-  if (!preview) return;
-
-  preview.innerHTML = crearHTMLPreviewRival(sesion.rival);
-}
-
-/* =====================================================
-   MENÚ LATERAL
-===================================================== */
-
-function alternarSidebar() {
-  const sidebar = document.getElementById("sidebar");
-  const capa = document.getElementById("capaSidebar");
-  const boton = document.getElementById("botonMenu");
-
-  const esMovil = window.matchMedia("(max-width: 760px)").matches;
-
-  if (esMovil) {
-    const visible = sidebar.classList.toggle("visible");
-    capa.classList.toggle("visible", visible);
-    boton.setAttribute("aria-expanded", String(visible));
-  } else {
-    const oculto = sidebar.classList.toggle("oculto");
-    boton.setAttribute("aria-expanded", String(!oculto));
-  }
-}
-
-function toggleGrupo(id) {
-  const grupo = document.getElementById(id);
-  if (grupo) grupo.classList.toggle("cerrado");
-}
-
-function cerrarSesion(evento) {
-  evento.preventDefault();
-
-  const confirmado = confirm("¿Querés cerrar la sesión?");
-  if (!confirmado) return;
-
-  try {
-    localStorage.removeItem("usuarioADIUR");
-  } catch (error) {
-    console.warn("No se pudo limpiar la sesión local.", error);
-  }
-
-  window.location.href = "Loing.html";
-}
-
-/* =====================================================
-   PERFIL
-===================================================== */
-
-function inicializarPerfil() {
-  let usuario = null;
-
-  try {
-    const guardado = localStorage.getItem("usuarioADIUR");
-
-    if (guardado) {
-      try {
-        usuario = JSON.parse(guardado);
-      } catch (error) {
-        usuario = guardado;
-      }
-    }
-  } catch (error) {
-    usuario = null;
-  }
-
-  let nombre = "Entrenador";
-  let rol = "Cuerpo técnico";
-
-  if (typeof usuario === "string" && usuario.trim()) {
-    const clave = normalizarUsuario(usuario);
-
-    if (
-      clave.includes("francisco") ||
-      clave === "fran" ||
-      clave === "franciscoperezbasla"
-    ) {
-      nombre = "Fran";
-    } else if (clave === "toto") {
-      nombre = "Toto";
-    } else {
-      nombre = usuario;
-    }
-  } else if (usuario && typeof usuario === "object") {
-    nombre =
-      usuario.nombre ||
-      usuario.nombreCompleto ||
-      usuario.usuario ||
-      usuario.username ||
-      usuario.user ||
-      "Entrenador";
-
-    rol =
-      usuario.rol ||
-      usuario.categoria ||
-      usuario.perfil ||
-      "Cuerpo técnico";
-  }
-
-  document.getElementById("nombreUsuario").textContent = nombre;
-  document.getElementById("rolUsuario").textContent = rol;
-
-  const iniciales = String(nombre)
-    .trim()
-    .split(/\s+/)
-    .slice(0, 2)
-    .map(palabra => palabra.charAt(0))
-    .join("")
-    .toUpperCase();
-
-  document.getElementById("avatarUsuario").textContent = iniciales || "DT";
-}
-
-/* =====================================================
-   INICIALIZACIÓN
-===================================================== */
-
-function inicializarPlanificacion() {
-  inicializarPerfil();
-
-  categoriaActual = obtenerCategoriaPredeterminada();
-  
-  // Establecer automáticamente la semana según la fecha actual del sistema
-  semanaActual = calcularSemanaActualSegunFecha();
-
-  const semana = obtenerSemana(semanaActual, categoriaActual);
-
-  fechaInicioActual = semana.fechaInicio;
-  sesionesActuales = semana.sesiones;
-  microcicloGuardado = Boolean(semana.guardada);
-  modoEdicion = !microcicloGuardado;
-
-  renderizarSemana();
-
-  document.getElementById("gridMicrociclo")
-    .addEventListener("input", procesarEntrada);
-
-  document.getElementById("gridMicrociclo")
-    .addEventListener("change", procesarCambio);
-
-  actualizarEstadoGuardado(
-    microcicloGuardado
-      ? "Microciclo guardado en la nube · Modo de solo lectura."
-      : "Borrador sincronizado. Los cambios se guardan automáticamente.",
-    false
-  );
-
-  // Sincronizar con Firestore de manera inicial y escuchar cambios remotos
-  sincronizarConNubeFirestore().then(() => {
-    escucharCambiosNube();
   });
-
-  window.addEventListener("resize", () => {
-    if (window.matchMedia("(min-width: 761px)").matches) {
-      document.getElementById("sidebar").classList.remove("visible");
-      document.getElementById("capaSidebar").classList.remove("visible");
-
-      document.getElementById("botonMenu").setAttribute(
-        "aria-expanded",
-        "false"
-      );
-    }
-  });
-}
-
-window.iniciarAplicacionPlanificacion = inicializarPlanificacion;
-
-if (typeof window.dbFirestore !== "undefined") {
-  document.addEventListener("DOMContentLoaded", inicializarPlanificacion);
-}
 </script>
 
 </body>
