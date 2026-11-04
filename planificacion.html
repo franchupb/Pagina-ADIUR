@@ -2540,6 +2540,79 @@ button:disabled {
 <script>
 "use strict";
 
+// =====================================================
+// CONEXIÓN FIREBASE - PLANIFICACIÓN ADIUR
+// =====================================================
+
+window.firebasePlanificacionReady = (async () => {
+
+  const { initializeApp } = await import(
+    "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js"
+  );
+
+  const {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc,
+    serverTimestamp
+  } = await import(
+    "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js"
+  );
+
+  const firebaseConfig = {
+    apiKey: "TU_API_KEY",
+    authDomain: "adiur-b1913.firebaseapp.com",
+    projectId: "adiur-b1913",
+    storageBucket: "adiur-b1913.firebasestorage.app",
+    messagingSenderId: "884643321144",
+    appId: "1:884643321144:web:ba3c314de3a1c9e3545dcd",
+    measurementId: "G-58LL26YXPM"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const referencia = doc(
+    db,
+    "planificacionADIUR",
+    "principal"
+  );
+
+  // Cargar planificación desde la nube
+  window.cargarPlanificacionNube = async () => {
+
+    const resultado = await getDoc(referencia);
+
+    if (resultado.exists()) {
+      return resultado.data().datos || {};
+    }
+
+    return null;
+  };
+
+  // Guardar planificación en la nube
+  let colaGuardado = Promise.resolve();
+
+  window.guardarPlanificacionEnNube = (datos) => {
+
+    const copia = JSON.parse(JSON.stringify(datos));
+
+    colaGuardado = colaGuardado.catch(() => {}).then(() =>
+      setDoc(referencia, {
+        datos: copia,
+        actualizado: serverTimestamp()
+      })
+    );
+
+    return colaGuardado;
+  };
+
+  return true;
+
+})();
+
+
 const CLAVE_PLANIFICACION = "microciclosPlanificacionADIUR_Sub16_v1";
 const CLAVE_CALENDARIO = "actividadesADIUR";
 const ORIGEN_PLANIFICACION = "planificacionMicrocicloADIUR";
@@ -3596,8 +3669,34 @@ function guardarDatosAutomaticamente(mostrarMensaje = false) {
       guardada: microcicloGuardado
     };
 
-    localStorage.setItem(CLAVE_PLANIFICACION, JSON.stringify(almacen));
-    sincronizarCalendarioSemana();
+    
+localStorage.setItem(
+  CLAVE_PLANIFICACION,
+  JSON.stringify(almacen)
+);
+
+// Sincronizar también con Firebase
+window.guardarPlanificacionEnNube(almacen)
+  .then(() => {
+    actualizarEstadoGuardado(
+      "✓ Planificación sincronizada con la nube",
+      false
+    );
+  })
+  .catch(error => {
+    console.error(
+      "Error al guardar planificación en Firebase:",
+      error
+    );
+
+    actualizarEstadoGuardado(
+      "Error al sincronizar con la nube",
+      true
+    );
+  });
+
+sincronizarCalendarioSemana();
+
 
     const hora = new Date().toLocaleTimeString("es-AR", {
       hour: "2-digit",
@@ -5546,8 +5645,50 @@ function inicializarPerfil() {
    INICIALIZACIÓN
 ===================================================== */
 
-function inicializarPlanificacion() {
+async function inicializarPlanificacion() {
   inicializarPerfil();
+
+  // Recuperar los datos de Firebase antes de inicializar la página
+  try {
+
+    await window.firebasePlanificacionReady;
+
+    const datosNube = await window.cargarPlanificacionNube();
+
+    if (
+      datosNube &&
+      Object.keys(datosNube).length > 0
+    ) {
+
+      // La nube tiene prioridad sobre el almacenamiento local
+      localStorage.setItem(
+        CLAVE_PLANIFICACION,
+        JSON.stringify(datosNube)
+      );
+
+    } else {
+
+      // Si todavía no hay datos en la nube,
+      // conservar y subir los datos existentes
+      const datosLocales = cargarAlmacen();
+
+      if (Object.keys(datosLocales).length > 0) {
+        await window.guardarPlanificacionEnNube(datosLocales);
+      }
+    }
+
+  } catch (error) {
+
+    console.error(
+      "No se pudo recuperar la planificación de Firebase:",
+      error
+    );
+
+    console.warn(
+      "Se continuará utilizando el almacenamiento local."
+    );
+
+  }
 
   categoriaActual = obtenerCategoriaPredeterminada();
 
