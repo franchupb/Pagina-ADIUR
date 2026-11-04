@@ -5550,7 +5550,20 @@ function inicializarPlanificacion() {
   inicializarPerfil();
 
   categoriaActual = obtenerCategoriaPredeterminada();
-  semanaActual = 39;
+
+// Calcular automáticamente el microciclo según la fecha actual
+const hoy = new Date();
+const hoyISO = objetoAFechaISO(hoy);
+const lunesActual = normalizarALunes(hoyISO);
+
+const fechaActual = fechaISOaObjeto(lunesActual);
+const fechaReferencia = fechaISOaObjeto(FECHA_REFERENCIA);
+
+const diferenciaSemanas = Math.floor(
+  (fechaActual - fechaReferencia) / (7 * 24 * 60 * 60 * 1000)
+);
+
+semanaActual = SEMANA_REFERENCIA + diferenciaSemanas;
 
   const semana = obtenerSemana(semanaActual, categoriaActual);
 
