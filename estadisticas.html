@@ -414,6 +414,74 @@ a {
 }
 
 /* =====================================================
+   RESUMEN DE PARTIDOS E INFORMES (MÓDULO PARTIDOS)
+===================================================== */
+
+.resumen-partidos-externos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.card-fuente-externa {
+  background: white;
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  padding: 16px 18px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+}
+
+.card-fuente-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--borde);
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+}
+
+.card-fuente-header h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 900;
+  color: var(--negro);
+}
+
+.card-fuente-header a {
+  font-size: 11.5px;
+  font-weight: bold;
+  color: var(--naranja-oscuro);
+}
+
+.card-fuente-header a:hover {
+  text-decoration: underline;
+}
+
+.lista-fuente-scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 210px;
+  overflow-y: auto;
+}
+
+.item-partido-info {
+  background: #fafafa;
+  border: 1px solid var(--borde);
+  border-left: 3px solid var(--naranja);
+  border-radius: 7px;
+  padding: 8px 11px;
+  font-size: 12px;
+}
+
+.item-partido-info .meta {
+  font-size: 11px;
+  color: var(--gris-texto);
+  margin-bottom: 3px;
+}
+
+/* =====================================================
    FICHA INTEGRAL DE LA JUGADORA SELECCIONADA
 ===================================================== */
 
@@ -1024,6 +1092,26 @@ tbody tr:hover td.fija-izquierda {
           </select>
         </div>
 
+        <!-- FILTRO DE MES PARA ASISTENCIA (ENERO A DICIEMBRE + TOTAL) -->
+        <div class="campo-filtro" id="grupoFiltroMesAsistencia" style="display: none;">
+          <label for="filtroMesAsistencia">Mes (Asistencia)</label>
+          <select id="filtroMesAsistencia" class="filtro-destacado" onchange="cambiarMesAsistencia()">
+            <option value="total" selected>Total (Todo el año)</option>
+            <option value="01">Enero</option>
+            <option value="02">Febrero</option>
+            <option value="03">Marzo</option>
+            <option value="04">Abril</option>
+            <option value="05">Mayo</option>
+            <option value="06">Junio</option>
+            <option value="07">Julio</option>
+            <option value="08">Agosto</option>
+            <option value="09">Septiembre</option>
+            <option value="10">Octubre</option>
+            <option value="11">Noviembre</option>
+            <option value="12">Diciembre</option>
+          </select>
+        </div>
+
         <div class="campo-filtro">
           <label for="filtroJugadoraIndividual">Jugadora (Ficha Integral)</label>
           <select id="filtroJugadoraIndividual" onchange="seleccionarJugadoraFicha(this.value)">
@@ -1071,6 +1159,29 @@ tbody tr:hover td.fija-izquierda {
 
       <div class="ficha-grid" id="fichaContenidoGrid">
         <!-- Se llena dinámicamente con datos de testeos, asistencia, informes, tiempos y lesiones -->
+      </div>
+    </section>
+
+    <!-- BLOQUE DE INFORMACIÓN SINCRONIZADA DE Partidos.html e informes.html -->
+    <section class="resumen-partidos-externos" id="bloquePartidosEInformes">
+      <div class="card-fuente-externa">
+        <div class="card-fuente-header">
+          <h4>⚽ Partidos Registrados (Partidos.html)</h4>
+          <a href="Partidos.html">Abrir Partidos →</a>
+        </div>
+        <div class="lista-fuente-scroll" id="listaPartidosExternos">
+          <div class="ficha-vacio">Cargando partidos de la división...</div>
+        </div>
+      </div>
+
+      <div class="card-fuente-externa">
+        <div class="card-fuente-header">
+          <h4>📋 Informes de Competencia (informes.html)</h4>
+          <a href="informes.html">Abrir Informes →</a>
+        </div>
+        <div class="lista-fuente-scroll" id="listaInformesExternos">
+          <div class="ficha-vacio">Cargando informes de la división...</div>
+        </div>
       </div>
     </section>
 
@@ -1245,6 +1356,12 @@ try {
 }
 
 let cacheJugadorasNube = [];
+
+const NOMBRES_MESES = {
+  "01": "Enero", "02": "Febrero", "03": "Marzo", "04": "Abril",
+  "05": "Mayo", "06": "Junio", "07": "Julio", "08": "Agosto",
+  "09": "Septiembre", "10": "Octubre", "11": "Noviembre", "12": "Diciembre"
+};
 
 /* =====================================================
    REGLAS DE TIEMPO POR DIVISIÓN
@@ -1450,23 +1567,59 @@ function coincideJugadora(registro, jugadora) {
   return candidatos.some(c => c === idJug || c === nomJug || (nomSimple && c === nomSimple));
 }
 
+function extraerMesDeFecha(fechaStr) {
+  if (!fechaStr) return null;
+  const str = String(fechaStr).trim();
+
+  // Formato ISO: YYYY-MM-DD o YYYY/MM/DD
+  const matchIso = str.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})/);
+  if (matchIso) {
+    return matchIso[2].padStart(2, "0");
+  }
+
+  // Formato latino: DD/MM/YYYY o DD-MM-YYYY
+  const matchLat = str.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{2,4})/);
+  if (matchLat) {
+    return matchLat[2].padStart(2, "0");
+  }
+
+  // Nombre del mes escrito
+  const norm = normalizarTexto(str);
+  for (const [num, nombre] of Object.entries(NOMBRES_MESES)) {
+    if (norm.includes(normalizarTexto(nombre))) return num;
+  }
+
+  return null;
+}
+
 /* =====================================================
-   CAMBIO DE MÓDULO, DIVISIÓN Y SELECTOR DE JUGADORA
+   CAMBIO DE MÓDULO, MES ASISTENCIA, DIVISIÓN Y JUGADORA
 ===================================================== */
 window.cambiarModuloFiltro = function() {
   const modulo = document.getElementById("filtroModulo").value;
   const grupoComp = document.getElementById("grupoFiltroCompetencia");
+  const grupoMesAsis = document.getElementById("grupoFiltroMesAsistencia");
   const accionesAdmin = document.getElementById("contenedorAccionesAdmin");
+  const bloquePartidosInf = document.getElementById("bloquePartidosEInformes");
 
-  // Mostrar competencia y botón de nueva fecha solo cuando está seleccionado "partidos"
   grupoComp.style.display = (modulo === "partidos") ? "block" : "none";
   accionesAdmin.style.display = (modulo === "partidos") ? "flex" : "none";
+  bloquePartidosInf.style.display = (modulo === "partidos") ? "grid" : "none";
+  grupoMesAsis.style.display = (modulo === "asistencia") ? "block" : "none";
 
   const jugadoraActual = document.getElementById("filtroJugadoraIndividual").value;
   if (jugadoraActual) {
     seleccionarJugadoraFicha(jugadoraActual);
   }
 
+  renderizarVistaActiva();
+};
+
+window.cambiarMesAsistencia = function() {
+  const jugadoraActual = document.getElementById("filtroJugadoraIndividual").value;
+  if (jugadoraActual) {
+    seleccionarJugadoraFicha(jugadoraActual);
+  }
   renderizarVistaActiva();
 };
 
@@ -1530,6 +1683,7 @@ window.seleccionarJugadoraFicha = async function(jugadoraId) {
   if (!jugadora) return;
 
   const moduloActivo = document.getElementById("filtroModulo").value;
+  const mesAsistencia = document.getElementById("filtroMesAsistencia").value;
 
   document.getElementById("fichaAvatar").textContent = jugadora.nombreCompleto.charAt(0).toUpperCase();
   document.getElementById("fichaNombreJugadora").textContent = jugadora.nombreCompleto;
@@ -1542,15 +1696,52 @@ window.seleccionarJugadoraFicha = async function(jugadoraId) {
   grid.innerHTML = `<div class="ficha-vacio">Cargando información de la jugadora...</div>`;
   panel.classList.add("activa");
 
-  const [datosTesteos, datosAsistencia, datosInformes, datosTiempos, datosLesiones] = await Promise.all([
+  const [datosTesteos, datosAsistencia, datosInformes, datosPartidosExt, datosTiempos, datosLesiones] = await Promise.all([
     obtenerInfoTesteosJugadora(jugadora),
-    obtenerInfoAsistenciaJugadora(jugadora),
+    obtenerInfoAsistenciaJugadora(jugadora, moduloActivo === "asistencia" ? mesAsistencia : "total"),
     obtenerInfoInformesJugadora(jugadora),
+    obtenerInfoPartidosExternosJugadora(jugadora),
     obtenerInfoTiemposJugadora(jugadora),
     obtenerInfoLesionesJugadora(jugadora)
   ]);
 
   let tarjetasHtml = "";
+
+  if (moduloActivo === "partidos") {
+    tarjetasHtml += `
+      <div class="ficha-card">
+        <div class="ficha-card-titulo">
+          <span>⚽ Partidos (Partidos.html)</span>
+          <a href="Partidos.html">Ir a Partidos →</a>
+        </div>
+        ${datosPartidosExt}
+      </div>`;
+  }
+
+  if (moduloActivo === "partidos" || moduloActivo === "informes") {
+    tarjetasHtml += `
+      <div class="ficha-card">
+        <div class="ficha-card-titulo">
+          <span>📋 Informes (informes.html)</span>
+          <a href="informes.html">Ir a Informes →</a>
+        </div>
+        ${datosInformes}
+      </div>`;
+  }
+
+  if (moduloActivo === "partidos" || moduloActivo === "asistencia") {
+    const etiquetaPeriodo = (moduloActivo === "asistencia" && mesAsistencia !== "total")
+      ? `(${NOMBRES_MESES[mesAsistencia]})`
+      : `(Total)`;
+    tarjetasHtml += `
+      <div class="ficha-card">
+        <div class="ficha-card-titulo">
+          <span>📅 Asistencia ${etiquetaPeriodo}</span>
+          <a href="asistencia.html">Ir a Asistencia →</a>
+        </div>
+        ${datosAsistencia.html}
+      </div>`;
+  }
 
   if (moduloActivo === "partidos" || moduloActivo === "testeos") {
     tarjetasHtml += `
@@ -1560,28 +1751,6 @@ window.seleccionarJugadoraFicha = async function(jugadoraId) {
           <a href="testeos.html">Ir a Testeos →</a>
         </div>
         ${datosTesteos.html}
-      </div>`;
-  }
-
-  if (moduloActivo === "partidos" || moduloActivo === "asistencia") {
-    tarjetasHtml += `
-      <div class="ficha-card">
-        <div class="ficha-card-titulo">
-          <span>📅 Asistencia</span>
-          <a href="asistencia.html">Ir a Asistencia →</a>
-        </div>
-        ${datosAsistencia.html}
-      </div>`;
-  }
-
-  if (moduloActivo === "partidos") {
-    tarjetasHtml += `
-      <div class="ficha-card">
-        <div class="ficha-card-titulo">
-          <span>📋 Informes Técnicos</span>
-          <a href="informes.html">Ir a Informes →</a>
-        </div>
-        ${datosInformes}
       </div>`;
   }
 
@@ -1617,6 +1786,93 @@ window.cerrarFichaJugadora = function() {
   if (selectJug) selectJug.value = "";
   renderizarVistaActiva();
 };
+
+/* --- EXTRAER PARTIDOS DE Partidos.html --- */
+async function obtenerTodosPartidosExternos() {
+  let partidos = [];
+
+  if (nubeActiva && db) {
+    try {
+      const snap = await getDocs(collection(db, "partidos"));
+      snap.forEach(d => partidos.push({ id: d.id, ...d.data() }));
+    } catch (e) {}
+  }
+
+  ["partidosADIUR", "registroPartidosADIUR", "fixtureADIUR", "partidosJugadosADIUR"].forEach(k => {
+    const raw = localStorage.getItem(k);
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) partidos.push(...parsed);
+      } catch (e) {}
+    }
+  });
+
+  return partidos;
+}
+
+async function obtenerTodosInformesExternos() {
+  let informes = [];
+
+  if (nubeActiva && db) {
+    try {
+      const snap = await getDocs(collection(db, "informes"));
+      snap.forEach(d => informes.push({ id: d.id, ...d.data() }));
+    } catch (e) {}
+  }
+
+  ["informesADIUR", "informesJugadorasADIUR", "informesPartidosADIUR", "informesTecnicosADIUR"].forEach(k => {
+    const raw = localStorage.getItem(k);
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) informes.push(...parsed);
+      } catch (e) {}
+    }
+  });
+
+  return informes;
+}
+
+async function obtenerInfoPartidosExternosJugadora(jugadora) {
+  const partidos = await obtenerTodosPartidosExternos();
+  const divNorm = jugadora.categoria.toLowerCase().replace(/\s+/g, "");
+
+  const deJugadora = partidos.filter(p => {
+    if (!p) return false;
+    // Si tiene lista de convocadas o jugadoras
+    if (Array.isArray(p.jugadoras)) {
+      return p.jugadoras.some(item =>
+        typeof item === "string"
+          ? normalizarTexto(item) === normalizarTexto(jugadora.nombreCompleto)
+          : coincideJugadora(item, jugadora)
+      );
+    }
+    if (Array.isArray(p.convocadas)) {
+      return p.convocadas.some(c => normalizarTexto(c) === normalizarTexto(jugadora.nombreCompleto) || normalizarTexto(c) === normalizarTexto(jugadora.id));
+    }
+    if (coincideJugadora(p, jugadora)) return true;
+    const cat = (p.categoria || p.division || "").toLowerCase().replace(/\s+/g, "");
+    return cat === divNorm;
+  });
+
+  if (deJugadora.length === 0) {
+    return `<div class="ficha-vacio">Sin partidos cargados en Partidos.html para esta jugadora.</div>`;
+  }
+
+  return `<div class="ficha-lista-items">` + deJugadora.slice(0, 6).map(p => {
+    const rival = p.rival || p.equipoRival || p.contrincante || "Rival";
+    const fecha = p.fecha || "";
+    const resultado = p.resultado || (p.golesAdiur !== undefined && p.golesRival !== undefined ? `${p.golesAdiur} - ${p.golesRival}` : "");
+    const comp = p.competencia || p.torneo || "";
+    return `
+      <div class="ficha-item-box">
+        <strong>vs. ${rival}</strong> ${resultado ? `<span class="badge-titular">${resultado}</span>` : ""}
+        <div style="color:#666;font-size:11px;margin-top:3px;">${fecha} ${comp ? `· ${comp}` : ""}</div>
+      </div>
+    `;
+  }).join("") + `</div>`;
+}
 
 /* --- 1. EXTRAER DATOS DE testeos.html --- */
 async function obtenerInfoTesteosJugadora(jugadora) {
@@ -1683,95 +1939,140 @@ async function obtenerInfoTesteosJugadora(jugadora) {
   };
 }
 
-/* --- 2. EXTRAER DATOS DE asistencia.html --- */
-async function obtenerInfoAsistenciaJugadora(jugadora) {
+/* --- 2. EXTRAER DATOS DE asistencia.html (CON FILTRO DE MES O TOTAL) --- */
+async function obtenerInfoAsistenciaJugadora(jugadora, mesFiltro = "total") {
   let registros = [];
 
   if (nubeActiva && db) {
     try {
       const snap = await getDocs(collection(db, "asistencia"));
-      snap.forEach(d => registros.push(d.data()));
+      snap.forEach(d => {
+        const dato = d.data();
+        // Si el ID del documento contiene la fecha (ej: Sub_14_2026-11-15), la preservamos
+        if (!dato.fecha && d.id) {
+          const matchFechaId = d.id.match(/(\d{4}[-/]\d{1,2}[-/]\d{1,2})/);
+          if (matchFechaId) dato.fecha = matchFechaId[1];
+        }
+        registros.push(dato);
+      });
     } catch (e) {}
   }
 
-  ["asistenciaADIUR", "asistenciasADIUR", "registroAsistenciaADIUR"].forEach(k => {
-    const raw = localStorage.getItem(k);
-    if (raw) {
-      try {
-        const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed)) registros.push(...parsed);
-        else if (typeof parsed === "object" && parsed !== null) {
-          Object.values(parsed).forEach(v => {
-            if (Array.isArray(v)) registros.push(...v);
-            else if (typeof v === "object") registros.push(v);
-          });
-        }
-      } catch (e) {}
+  // Leer todas las posibles estructuras guardadas por asistencia.html en localStorage
+  const clavesPosibles = ["asistenciaADIUR", "asistenciasADIUR", "registroAsistenciaADIUR"];
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k && k.toLowerCase().includes("asistencia") && !clavesPosibles.includes(k)) {
+      clavesPosibles.push(k);
     }
+  }
+
+  clavesPosibles.forEach(k => {
+    const raw = localStorage.getItem(k);
+    if (!raw) return;
+    try {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        registros.push(...parsed);
+      } else if (typeof parsed === "object" && parsed !== null) {
+        Object.entries(parsed).forEach(([claveObj, val]) => {
+          if (Array.isArray(val)) {
+            val.forEach(item => {
+              if (item && typeof item === "object") {
+                if (!item.fecha) item.fecha = claveObj;
+                registros.push(item);
+              }
+            });
+          } else if (typeof val === "object" && val !== null) {
+            const copia = { ...val };
+            if (!copia.fecha) copia.fecha = claveObj;
+            registros.push(copia);
+          }
+        });
+      }
+    } catch (e) {}
   });
 
-  let presentes = 0, ausentes = 0, tarde = 0, total = 0;
+  let presentes = 0, ausentes = 0, tarde = 0, justificados = 0, total = 0;
+  const fechasProcesadas = new Set();
 
   registros.forEach(reg => {
     if (!reg) return;
-    if (reg.jugadoras && typeof reg.jugadoras === "object") {
-      const key = Object.keys(reg.jugadoras).find(k => normalizarTexto(k) === normalizarTexto(jugadora.nombreCompleto) || normalizarTexto(k) === normalizarTexto(jugadora.id));
+
+    // Filtrar por mes si no es "total"
+    const fechaReg = reg.fecha || reg.dia || reg.fechaEntrenamiento || "";
+    if (mesFiltro && mesFiltro !== "total") {
+      const mesReg = reg.mes ? String(reg.mes).padStart(2, "0") : extraerMesDeFecha(fechaReg);
+      if (mesReg !== mesFiltro) return;
+    }
+
+    // Estructura A: objeto de sesión con mapa { jugadoras: { "Nombre": "Presente" } } o { asistencias: { ... } }
+    const mapaJugadoras = reg.jugadoras || reg.asistencias || reg.detalle;
+    if (mapaJugadoras && typeof mapaJugadoras === "object" && !Array.isArray(mapaJugadoras)) {
+      const key = Object.keys(mapaJugadoras).find(k =>
+        normalizarTexto(k) === normalizarTexto(jugadora.nombreCompleto) ||
+        normalizarTexto(k) === normalizarTexto(jugadora.id)
+      );
       if (key) {
-        const estado = normalizarTexto(reg.jugadoras[key]?.estado || reg.jugadoras[key]);
-        total++;
-        if (estado.includes("presente") || estado === "p") presentes++;
-        else if (estado.includes("tarde") || estado === "t") { tarde++; presentes++; }
-        else if (estado.includes("ausente") || estado === "a" || estado.includes("falta")) ausentes++;
+        const claveUnica = `${fechaReg}_${key}`;
+        if (fechaReg && fechasProcesadas.has(claveUnica)) return;
+        if (fechaReg) fechasProcesadas.add(claveUnica);
+
+        const rawEstado = typeof mapaJugadoras[key] === "object"
+          ? (mapaJugadoras[key].estado || mapaJugadoras[key].asistencia || "")
+          : mapaJugadoras[key];
+        const estado = normalizarTexto(rawEstado);
+
+        if (estado) {
+          total++;
+          if (estado.includes("presente") || estado === "p" || estado === "si") presentes++;
+          else if (estado.includes("tarde") || estado === "t") { tarde++; presentes++; }
+          else if (estado.includes("justific") || estado.includes("lesion") || estado === "j") justificados++;
+          else if (estado.includes("ausente") || estado === "a" || estado.includes("falta") || estado === "no") ausentes++;
+        }
       }
-    } else if (coincideJugadora(reg, jugadora)) {
+    }
+    // Estructura B: registro individual por jugadora
+    else if (coincideJugadora(reg, jugadora)) {
+      const claveUnica = `${fechaReg}_${jugadora.nombreCompleto}`;
+      if (fechaReg && fechasProcesadas.has(claveUnica)) return;
+      if (fechaReg) fechasProcesadas.add(claveUnica);
+
       const estado = normalizarTexto(reg.estado || reg.asistencia || reg.situacion);
-      total++;
-      if (estado.includes("presente") || estado === "p") presentes++;
-      else if (estado.includes("tarde") || estado === "t") { tarde++; presentes++; }
-      else if (estado.includes("ausente") || estado === "a" || estado.includes("falta")) ausentes++;
+      if (estado) {
+        total++;
+        if (estado.includes("presente") || estado === "p" || estado === "si") presentes++;
+        else if (estado.includes("tarde") || estado === "t") { tarde++; presentes++; }
+        else if (estado.includes("justific") || estado.includes("lesion") || estado === "j") justificados++;
+        else if (estado.includes("ausente") || estado === "a" || estado.includes("falta") || estado === "no") ausentes++;
+      }
     }
   });
 
   if (total === 0) {
+    const msgMes = mesFiltro !== "total" ? `en ${NOMBRES_MESES[mesFiltro]}` : "cargados";
     return {
-      total: 0, presentes: 0, ausentes: 0, tarde: 0, porcentaje: 0,
-      html: `<div class="ficha-vacio">Sin registros de asistencia cargados.</div>`
+      total: 0, presentes: 0, ausentes: 0, tarde: 0, justificados: 0, porcentaje: 0,
+      html: `<div class="ficha-vacio">Sin registros de asistencia ${msgMes}.</div>`
     };
   }
 
   const porcentaje = Math.round((presentes / total) * 100);
   return {
-    total, presentes, ausentes, tarde, porcentaje,
+    total, presentes, ausentes, tarde, justificados, porcentaje,
     html: `
       <div class="dato-fila"><span class="etiqueta">Porcentaje de asistencia</span><strong>${porcentaje}%</strong></div>
       <div class="dato-fila"><span class="etiqueta">Presentes</span><strong>${presentes} de ${total}</strong></div>
       <div class="dato-fila"><span class="etiqueta">Ausentes</span><strong>${ausentes}</strong></div>
       <div class="dato-fila"><span class="etiqueta">Llegadas tarde</span><strong>${tarde}</strong></div>
+      ${justificados > 0 ? `<div class="dato-fila"><span class="etiqueta">Justificados / Lesión</span><strong>${justificados}</strong></div>` : ""}
     `
   };
 }
 
 /* --- 3. EXTRAER DATOS DE informes.html --- */
 async function obtenerInfoInformesJugadora(jugadora) {
-  let informes = [];
-
-  if (nubeActiva && db) {
-    try {
-      const snap = await getDocs(collection(db, "informes"));
-      snap.forEach(d => informes.push({ id: d.id, ...d.data() }));
-    } catch (e) {}
-  }
-
-  ["informesADIUR", "informesJugadorasADIUR", "informesPartidosADIUR"].forEach(k => {
-    const raw = localStorage.getItem(k);
-    if (raw) {
-      try {
-        const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed)) informes.push(...parsed);
-      } catch (e) {}
-    }
-  });
-
+  const informes = await obtenerTodosInformesExternos();
   const deJugadora = informes.filter(inf => inf && coincideJugadora(inf, jugadora));
 
   if (deJugadora.length === 0) {
@@ -1779,7 +2080,7 @@ async function obtenerInfoInformesJugadora(jugadora) {
   }
 
   return `<div class="ficha-lista-items">` + deJugadora.slice(0, 5).map(inf => {
-    const titulo = inf.titulo || inf.tipo || inf.aspecto || "Informe técnico";
+    const titulo = inf.titulo || inf.tipo || inf.aspecto || inf.rival || "Informe técnico";
     const fecha = inf.fecha || "";
     const detalle = inf.detalle || inf.observaciones || inf.descripcion || inf.comentario || "";
     return `
@@ -1889,6 +2190,7 @@ async function obtenerInfoLesionesJugadora(jugadora) {
 window.renderizarVistaActiva = async function() {
   const modulo = document.getElementById("filtroModulo").value;
   if (modulo === "partidos") {
+    await renderizarPanelPartidosEInformesExternos();
     renderizarEstadisticas();
   } else if (modulo === "asistencia") {
     await renderizarTablaAsistencia();
@@ -1901,32 +2203,96 @@ window.renderizarVistaActiva = async function() {
   }
 };
 
-/* --- TABLA MÓDULO: ASISTENCIA --- */
+/* --- BLOQUE SUPERIOR DE PARTIDOS.HTML E INFORMES.HTML EN MÓDULO PARTIDOS --- */
+async function renderizarPanelPartidosEInformesExternos() {
+  const divisionSeleccionada = document.getElementById("filtroDivision").value;
+  const divNorm = divisionSeleccionada.toLowerCase().replace(/\s+/g, "");
+
+  const [partidos, informes] = await Promise.all([
+    obtenerTodosPartidosExternos(),
+    obtenerTodosInformesExternos()
+  ]);
+
+  const partidosDiv = partidos.filter(p => {
+    if (!p) return false;
+    const cat = (p.categoria || p.division || "").toLowerCase().replace(/\s+/g, "");
+    return !cat || cat === divNorm;
+  });
+
+  const informesDiv = informes.filter(inf => {
+    if (!inf) return false;
+    const cat = (inf.categoria || inf.division || "").toLowerCase().replace(/\s+/g, "");
+    return !cat || cat === divNorm;
+  });
+
+  const contPartidos = document.getElementById("listaPartidosExternos");
+  if (partidosDiv.length === 0) {
+    contPartidos.innerHTML = `<div class="ficha-vacio">No hay partidos registrados en Partidos.html para ${divisionSeleccionada}.</div>`;
+  } else {
+    contPartidos.innerHTML = partidosDiv.slice(0, 8).map(p => {
+      const rival = p.rival || p.equipoRival || p.contrincante || "Rival";
+      const fecha = p.fecha || "";
+      const comp = p.competencia || p.torneo || "";
+      const res = p.resultado || (p.golesAdiur !== undefined && p.golesRival !== undefined ? `${p.golesAdiur} - ${p.golesRival}` : "");
+      return `
+        <div class="item-partido-info">
+          <div class="meta">${fecha} ${comp ? `· ${comp}` : ""}</div>
+          <strong>ADIUR vs. ${rival}</strong> ${res ? `<span class="badge-titular" style="margin-left:6px;">${res}</span>` : ""}
+        </div>
+      `;
+    }).join("");
+  }
+
+  const contInformes = document.getElementById("listaInformesExternos");
+  if (informesDiv.length === 0) {
+    contInformes.innerHTML = `<div class="ficha-vacio">No hay informes cargados en informes.html para ${divisionSeleccionada}.</div>`;
+  } else {
+    contInformes.innerHTML = informesDiv.slice(0, 8).map(inf => {
+      const titulo = inf.titulo || inf.rival || inf.tipo || "Informe";
+      const jug = inf.jugadora || inf.nombreJugadora || "";
+      const fecha = inf.fecha || "";
+      const texto = inf.detalle || inf.observaciones || inf.descripcion || inf.comentario || "";
+      return `
+        <div class="item-partido-info">
+          <div class="meta">${fecha} ${jug ? `· Jugadora: <strong>${jug}</strong>` : ""}</div>
+          <strong>${titulo}</strong>
+          <div style="color:#444;margin-top:2px;">${texto}</div>
+        </div>
+      `;
+    }).join("");
+  }
+}
+
+/* --- TABLA MÓDULO: ASISTENCIA (CON MES O TOTAL) --- */
 async function renderizarTablaAsistencia() {
   const divisionSeleccionada = document.getElementById("filtroDivision").value;
+  const mesSeleccionado = document.getElementById("filtroMesAsistencia").value;
+  const etiquetaPeriodo = mesSeleccionado === "total" ? "Total Anual" : NOMBRES_MESES[mesSeleccionado];
   const jugadoras = obtenerJugadorasFiltradasActuales();
 
   const trHead = document.getElementById("encabezadoTabla");
   trHead.innerHTML = `
     <th class="fija-izquierda">Jugadora</th>
     <th>Posición</th>
-    <th>Total Sesiones</th>
+    <th>Período</th>
+    <th>Entrenamientos</th>
     <th>Presentes</th>
     <th>Ausentes</th>
     <th>Llegadas Tarde</th>
+    <th>Justif. / Lesión</th>
     <th>% Asistencia</th>
   `;
 
   const tbody = document.getElementById("cuerpoTablaEstadisticas");
-  tbody.innerHTML = `<tr><td colspan="7" style="padding:20px;color:#777;">Cargando registros de asistencia...</td></tr>`;
+  tbody.innerHTML = `<tr><td colspan="9" style="padding:20px;color:#777;">Cargando asistencia de ${etiquetaPeriodo}...</td></tr>`;
 
   if (jugadoras.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7" style="padding:30px;color:#777;">No hay jugadoras en ${divisionSeleccionada} con los filtros aplicados.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="9" style="padding:30px;color:#777;">No hay jugadoras en ${divisionSeleccionada} con los filtros aplicados.</td></tr>`;
     return;
   }
 
   const filas = await Promise.all(jugadoras.map(async j => {
-    const info = await obtenerInfoAsistenciaJugadora(j);
+    const info = await obtenerInfoAsistenciaJugadora(j, mesSeleccionado);
     const idEscapado = String(j.id).replace(/'/g, "\\'");
     const badgeColor = info.total === 0 ? "badge-suplente" : (info.porcentaje >= 75 ? "badge-titular" : "badge-fuera");
     return `
@@ -1937,10 +2303,12 @@ async function renderizarTablaAsistencia() {
           </span>
         </td>
         <td>${j.posicion}</td>
+        <td><strong>${etiquetaPeriodo}</strong></td>
         <td>${info.total}</td>
         <td><strong>${info.presentes}</strong></td>
         <td>${info.ausentes}</td>
         <td>${info.tarde}</td>
+        <td>${info.justificados}</td>
         <td><span class="${badgeColor}">${info.total > 0 ? info.porcentaje + "%" : "Sin datos"}</span></td>
       </tr>
     `;
