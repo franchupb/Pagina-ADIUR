@@ -170,8 +170,6 @@ a {
   margin-left: -258px;
 }
 
-/* Inicio seleccionado */
-
 .menu-inicio {
   display: flex;
   align-items: center;
@@ -197,8 +195,6 @@ a {
   font-size: 17px;
   line-height: 1;
 }
-
-/* Categorías */
 
 .grupo-menu {
   margin-bottom: 8px;
@@ -238,8 +234,6 @@ a {
 .grupo-menu:not(.cerrado) .flecha {
   transform: rotate(90deg);
 }
-
-/* Opciones desplegables */
 
 .submenu {
   display: flex;
@@ -285,8 +279,6 @@ a {
 .submenu a.activo .nav-punto {
   background: var(--naranja);
 }
-
-/* Cerrar sesión */
 
 .separador-sesion {
   border-top: 1px solid #e8e8e8;
@@ -412,6 +404,181 @@ a {
 
 .btn-primario:hover {
   background: var(--naranja-oscuro);
+}
+
+/* =====================================================
+   FICHA INTEGRAL DE LA JUGADORA SELECCIONADA
+===================================================== */
+
+.ficha-jugadora-panel {
+  background: white;
+  border: 2px solid var(--naranja);
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 16px rgba(244, 119, 33, 0.08);
+  display: none;
+}
+
+.ficha-jugadora-panel.activa {
+  display: block;
+}
+
+.ficha-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  border-bottom: 2px solid var(--borde);
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+}
+
+.ficha-identidad {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.ficha-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--naranja);
+  color: white;
+  font-size: 20px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ficha-identidad h3 {
+  margin: 0 0 4px;
+  font-size: 20px;
+}
+
+.ficha-identidad span {
+  font-size: 12px;
+  color: var(--gris-texto);
+  font-weight: bold;
+}
+
+.btn-cerrar-ficha {
+  background: var(--gris);
+  border: 1px solid var(--borde);
+  color: var(--negro);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.btn-cerrar-ficha:hover {
+  background: #e2e4e8;
+}
+
+.ficha-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: 16px;
+}
+
+.ficha-card {
+  background: #fafafa;
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ficha-card-titulo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: var(--negro);
+  border-bottom: 1px solid var(--borde);
+  padding-bottom: 8px;
+}
+
+.ficha-card-titulo a {
+  font-size: 11px;
+  color: var(--naranja-oscuro);
+  text-transform: none;
+  font-weight: bold;
+}
+
+.ficha-card-titulo a:hover {
+  text-decoration: underline;
+}
+
+.dato-fila {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12.5px;
+  padding: 4px 0;
+  border-bottom: 1px dashed #ececec;
+}
+
+.dato-fila:last-child {
+  border-bottom: none;
+}
+
+.dato-fila span.etiqueta {
+  color: var(--gris-texto);
+}
+
+.dato-fila strong {
+  color: var(--negro);
+}
+
+.ficha-lista-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 185px;
+  overflow-y: auto;
+}
+
+.ficha-item-box {
+  background: white;
+  border: 1px solid var(--borde);
+  border-left: 3px solid var(--naranja);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 12px;
+}
+
+.ficha-item-box.lesion {
+  border-left-color: var(--rojo);
+  background: #fff8f8;
+}
+
+.ficha-vacio {
+  font-size: 12px;
+  color: var(--gris-texto);
+  font-style: italic;
+  padding: 8px 0;
+}
+
+.enlace-jugadora-tabla {
+  color: var(--negro);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.enlace-jugadora-tabla:hover {
+  color: var(--naranja-oscuro);
+  text-decoration: underline;
 }
 
 /* =====================================================
@@ -680,7 +847,7 @@ tbody tr:hover td.fija-izquierda {
   <aside class="sidebar" id="sidebar">
 
     <!-- INICIO -->
-    <a class="menu-inicio" href="Pagina Principal.html" aria-current="page">
+    <a class="menu-inicio" href="Pàgina Principal.html" aria-current="page">
       <span class="icono-inicio" aria-hidden="true">⌂</span>
       INICIO
     </a>
@@ -820,8 +987,8 @@ tbody tr:hover td.fija-izquierda {
 
     <div class="encabezado-seccion">
       <div>
-        <h2>Panel de Estadísticas</h2>
-        <p>Seguimiento de rendimiento, partidos jugados, goles y asistencias por división.</p>
+        <h2>Panel de Estadísticas y Ficha Individual</h2>
+        <p>Seguimiento de rendimiento, partidos jugados y consulta integral por jugadora.</p>
       </div>
     </div>
 
@@ -836,6 +1003,13 @@ tbody tr:hover td.fija-izquierda {
             <option value="Sub 14" selected>Sub 14</option>
             <option value="Sub 16">Sub 16</option>
             <option value="Primera">Primera</option>
+          </select>
+        </div>
+
+        <div class="campo-filtro">
+          <label for="filtroJugadoraIndividual">Seleccionar Jugadora (Ficha Integral)</label>
+          <select id="filtroJugadoraIndividual" onchange="seleccionarJugadoraFicha(this.value)">
+            <option value="">-- Ver todas / Elegir jugadora --</option>
           </select>
         </div>
 
@@ -863,6 +1037,24 @@ tbody tr:hover td.fija-izquierda {
         <button class="btn-accion btn-primario" onclick="abrirModalNuevaFecha()">+ Agregar Fecha / Jornada</button>
       </div>
     </div>
+
+    <!-- PANEL DE INFORMACIÓN CONSOLIDADA DE LA JUGADORA SELECCIONADA -->
+    <section class="ficha-jugadora-panel" id="panelFichaJugadora">
+      <div class="ficha-header">
+        <div class="ficha-identidad">
+          <div class="ficha-avatar" id="fichaAvatar">J</div>
+          <div>
+            <h3 id="fichaNombreJugadora">Nombre Jugadora</h3>
+            <span id="fichaSubtituloJugadora">División · Posición</span>
+          </div>
+        </div>
+        <button class="btn-cerrar-ficha" onclick="cerrarFichaJugadora()">✕ Cerrar ficha</button>
+      </div>
+
+      <div class="ficha-grid" id="fichaContenidoGrid">
+        <!-- Se llena dinámicamente con datos de testeos, asistencia, informes, tiempos y lesiones -->
+      </div>
+    </section>
 
     <!-- TABLA PRINCIPAL -->
     <div class="panel" style="padding: 0; overflow: hidden;">
@@ -1010,7 +1202,32 @@ tbody tr:hover td.fija-izquierda {
   </div>
 </div>
 
-<script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/* =====================================================
+   CONEXIÓN A FIRESTORE (adiur-b1913)
+===================================================== */
+const firebaseConfig = {
+  projectId: "adiur-b1913",
+  appId: "1:1032379124859:web:adiur-fem-web",
+  authDomain: "adiur-b1913.firebaseapp.com",
+  storageBucket: "adiur-b1913.appspot.com"
+};
+
+let db = null;
+let nubeActiva = false;
+try {
+  const app = initializeApp(firebaseConfig);
+  db = getFirestore(app);
+  nubeActiva = true;
+} catch (e) {
+  console.warn("Firebase en modo local:", e);
+}
+
+let cacheJugadorasNube = [];
+
 /* =====================================================
    REGLAS DE TIEMPO POR DIVISIÓN
 ===================================================== */
@@ -1041,19 +1258,14 @@ if (!usuarioGuardado) {
 
 const usuarioNormalizado = (usuarioGuardado || "").trim().toLowerCase();
 
-const esFran = ["fran", "francisco"].includes(usuarioNormalizado);
+const esFran = ["fran", "francisco", "francisco perez basla"].includes(usuarioNormalizado);
 const esToto = usuarioNormalizado === "toto";
-
-const esBianca = [
-  "biancadominguez",
-  "bianca"
-].includes(usuarioNormalizado);
+const esBianca = ["biancadominguez", "bianca"].includes(usuarioNormalizado);
 
 const nombreMostrar = usuarioGuardado || "Usuario";
 
 document.getElementById("nombreUsuario").textContent = nombreMostrar;
-document.getElementById("avatarUsuario").textContent =
-  nombreMostrar.charAt(0).toUpperCase();
+document.getElementById("avatarUsuario").textContent = nombreMostrar.charAt(0).toUpperCase();
 
 document.getElementById("rolUsuario").textContent =
   esFran ? "Administrador" :
@@ -1061,75 +1273,56 @@ document.getElementById("rolUsuario").textContent =
   esBianca ? "Jugadora · Sub 14" :
   "Club ADIUR";
 
-/* Permisos de visualización del menú */
 if (esBianca) {
   document.getElementById("grupoPlantel")?.remove();
   document.getElementById("grupoRendimientos")?.remove();
-
   document.querySelectorAll("[data-ocultar-bianca]").forEach(enlace => {
     enlace.style.display = "none";
   });
 }
 
-function cerrarSesion(event) {
+window.cerrarSesion = function(event) {
   event.preventDefault();
   localStorage.removeItem("usuarioADIUR");
   window.location.href = "Loing.html";
-}
+};
 
 /* =====================================================
    MENÚ LATERAL
 ===================================================== */
-
-function alternarSidebar() {
+window.alternarSidebar = function() {
   const sidebar = document.getElementById("sidebar");
   const capa = document.getElementById("capaSidebar");
   const boton = document.getElementById("botonMenu");
 
   sidebar.classList.toggle("oculto");
-
   const abierto = !sidebar.classList.contains("oculto");
-
   boton.setAttribute("aria-expanded", String(abierto));
 
   if (window.innerWidth <= 760) {
     capa.classList.toggle("visible", abierto);
   }
-}
+};
 
-function toggleGrupo(id) {
+window.toggleGrupo = function(id) {
   const grupo = document.getElementById(id);
   if (!grupo) return;
-
   grupo.classList.toggle("cerrado");
-
   const titulo = grupo.querySelector(".titulo-grupo");
-
   if (titulo) {
-    titulo.setAttribute(
-      "aria-expanded",
-      String(!grupo.classList.contains("cerrado"))
-    );
+    titulo.setAttribute("aria-expanded", String(!grupo.classList.contains("cerrado")));
   }
-}
-
-/* Navegación por teclado */
+};
 
 document.querySelectorAll(".titulo-grupo[role='button']").forEach(titulo => {
   titulo.addEventListener("keydown", event => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
-
       const grupo = titulo.closest(".grupo-menu");
-
-      if (grupo) {
-        toggleGrupo(grupo.id);
-      }
+      if (grupo) toggleGrupo(grupo.id);
     }
   });
 });
-
-/* Adaptar la barra lateral según el tamaño de pantalla */
 
 function ajustarSidebarPorPantalla() {
   const sidebar = document.getElementById("sidebar");
@@ -1151,33 +1344,76 @@ ajustarSidebarPorPantalla();
 window.addEventListener("resize", ajustarSidebarPorPantalla);
 
 /* =====================================================
-   ESTRUCTURA DE DATOS Y LOCALSTORAGE
+   SINCRONIZACIÓN DE JUGADORAS DESDE jugadoras.html
 ===================================================== */
-function obtenerClaveDatosEstadisticas(division) {
-  return "estadisticasADIUR_" + division.replace(/\s+/g, '_');
+async function sincronizarJugadorasDesdeBase() {
+  let lista = [];
+  if (nubeActiva && db) {
+    try {
+      const snapCol = await getDocs(collection(db, "jugadoras"));
+      snapCol.forEach(docSnap => lista.push({ id: docSnap.id, ...docSnap.data() }));
+
+      if (lista.length === 0) {
+        const docPlantel = await getDoc(doc(db, "plantel", "jugadoras"));
+        if (docPlantel.exists() && Array.isArray(docPlantel.data().lista)) {
+          lista = docPlantel.data().lista;
+        }
+      }
+    } catch (e) {
+      console.warn("Leyendo jugadoras de localStorage:", e);
+    }
+  }
+
+  if (lista.length === 0) {
+    const rawLocal = localStorage.getItem("jugadorasADIUR") || localStorage.getItem("plantelADIUR");
+    if (rawLocal) {
+      try { lista = JSON.parse(rawLocal); } catch (e) {}
+    }
+  }
+
+  cacheJugadorasNube = lista.map((j, index) => {
+    const nombreCompleto = (j.nombre && j.apellido)
+      ? `${j.nombre.trim()} ${j.apellido.trim()}`
+      : (j.nombre || j.nombreCompleto || `Jugadora ${index + 1}`).trim();
+    return {
+      ...j,
+      id: j.id || nombreCompleto,
+      nombreCompleto,
+      categoria: (j.categoria || j.division || "").trim(),
+      posicion: (j.posicion || "Sin asignar").trim()
+    };
+  });
 }
 
 function obtenerJugadoras() {
-  let datos = localStorage.getItem("jugadorasADIUR") || localStorage.getItem("plantelADIUR");
-  let lista = [];
-  if (datos) {
-    try { lista = JSON.parse(datos); } catch(e) { lista = []; }
-  }
-  if (!lista || lista.length === 0) {
-    lista = [
-      { id: "1", nombre: "Martina Pérez", categoria: "Sub 14", posicion: "Mediocampista" },
-      { id: "2", nombre: "Lucía Gómez", categoria: "Sub 14", posicion: "Delantera" },
-      { id: "3", nombre: "Camila Benítez", categoria: "Sub 14", posicion: "Defensora" },
-      { id: "4", nombre: "Sofía Martínez", categoria: "Sub 14", posicion: "Arquera" },
-      { id: "5", nombre: "Valentina Rossi", categoria: "Sub 12", posicion: "Delantera" },
-      { id: "6", nombre: "Julieta Fernández", categoria: "Sub 16", posicion: "Mediocampista" },
-      { id: "7", nombre: "Carla Sosa", categoria: "Primera", posicion: "Delantera" }
-    ];
-  }
-  return lista;
+  return cacheJugadorasNube;
 }
 
-function cambiarDivision() {
+function normalizarTexto(txt) {
+  return (txt || "").toString().trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
+function coincideJugadora(registro, jugadora) {
+  const idJug = normalizarTexto(jugadora.id);
+  const nomJug = normalizarTexto(jugadora.nombreCompleto);
+  const nomSimple = normalizarTexto(jugadora.nombre);
+
+  const candidatos = [
+    registro.jugadoraId,
+    registro.idJugadora,
+    registro.jugadora,
+    registro.nombreJugadora,
+    registro.nombre,
+    registro.alumna
+  ].map(normalizarTexto).filter(Boolean);
+
+  return candidatos.some(c => c === idJug || c === nomJug || (nomSimple && c === nomSimple));
+}
+
+/* =====================================================
+   CAMBIO DE DIVISIÓN Y SELECTOR DE JUGADORA
+===================================================== */
+window.cambiarDivision = function() {
   const division = document.getElementById("filtroDivision").value;
   const selectComp = document.getElementById("filtroCompetencia");
   selectComp.innerHTML = "";
@@ -1197,7 +1433,362 @@ function cambiarDivision() {
       selectComp.appendChild(opt);
     });
   }
+
+  actualizarSelectorJugadorasDivision(division);
+  cerrarFichaJugadora();
   renderizarEstadisticas();
+};
+
+function actualizarSelectorJugadorasDivision(division) {
+  const selectJug = document.getElementById("filtroJugadoraIndividual");
+  const divNorm = division.toLowerCase().replace(/\s+/g, "");
+  const jugadorasDiv = obtenerJugadoras()
+    .filter(j => j.categoria.toLowerCase().replace(/\s+/g, "") === divNorm)
+    .sort((a, b) => a.nombreCompleto.localeCompare(b.nombreCompleto));
+
+  selectJug.innerHTML = `<option value="">-- Elegir jugadora de ${division} (${jugadorasDiv.length}) --</option>`;
+  jugadorasDiv.forEach(j => {
+    const opt = document.createElement("option");
+    opt.value = j.id;
+    opt.textContent = `${j.nombreCompleto} (${j.posicion})`;
+    selectJug.appendChild(opt);
+  });
+}
+
+/* =====================================================
+   CONSOLIDACIÓN DE DATOS DE LAS 5 PÁGINAS POR JUGADORA
+===================================================== */
+window.seleccionarJugadoraFicha = async function(jugadoraId) {
+  const selectJug = document.getElementById("filtroJugadoraIndividual");
+  if (selectJug.value !== jugadoraId) selectJug.value = jugadoraId;
+
+  const panel = document.getElementById("panelFichaJugadora");
+  if (!jugadoraId) {
+    panel.classList.remove("activa");
+    return;
+  }
+
+  const jugadora = obtenerJugadoras().find(j => String(j.id) === String(jugadoraId));
+  if (!jugadora) return;
+
+  document.getElementById("fichaAvatar").textContent = jugadora.nombreCompleto.charAt(0).toUpperCase();
+  document.getElementById("fichaNombreJugadora").textContent = jugadora.nombreCompleto;
+  document.getElementById("fichaSubtituloJugadora").textContent =
+    `${jugadora.categoria} · ${jugadora.posicion}` +
+    (jugadora.dni ? ` · DNI: ${jugadora.dni}` : "") +
+    (jugadora.fechaNacimiento ? ` · Nac: ${jugadora.fechaNacimiento}` : "");
+
+  const grid = document.getElementById("fichaContenidoGrid");
+  grid.innerHTML = `<div class="ficha-vacio">Cargando información de Testeos, Asistencia, Informes, Tiempos y Lesiones...</div>`;
+  panel.classList.add("activa");
+  panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+  const [datosTesteos, datosAsistencia, datosInformes, datosTiempos, datosLesiones] = await Promise.all([
+    obtenerInfoTesteosJugadora(jugadora),
+    obtenerInfoAsistenciaJugadora(jugadora),
+    obtenerInfoInformesJugadora(jugadora),
+    obtenerInfoTiemposJugadora(jugadora),
+    obtenerInfoLesionesJugadora(jugadora)
+  ]);
+
+  grid.innerHTML = `
+    <!-- 1. TESTEOS -->
+    <div class="ficha-card">
+      <div class="ficha-card-titulo">
+        <span>📊 Testeos Físicos</span>
+        <a href="testeos.html">Ir a Testeos →</a>
+      </div>
+      ${datosTesteos}
+    </div>
+
+    <!-- 2. ASISTENCIA -->
+    <div class="ficha-card">
+      <div class="ficha-card-titulo">
+        <span>📅 Asistencia</span>
+        <a href="asistencia.html">Ir a Asistencia →</a>
+      </div>
+      ${datosAsistencia}
+    </div>
+
+    <!-- 3. INFORMES -->
+    <div class="ficha-card">
+      <div class="ficha-card-titulo">
+        <span>📋 Informes Técnicos</span>
+        <a href="informes.html">Ir a Informes →</a>
+      </div>
+      ${datosInformes}
+    </div>
+
+    <!-- 4. TIEMPOS -->
+    <div class="ficha-card">
+      <div class="ficha-card-titulo">
+        <span>⏱️ Tiempos y Cargas</span>
+        <a href="tiempos.html">Ir a Tiempos →</a>
+      </div>
+      ${datosTiempos}
+    </div>
+
+    <!-- 5. LESIONES -->
+    <div class="ficha-card">
+      <div class="ficha-card-titulo">
+        <span>🩺 Historial de Lesiones</span>
+        <a href="lesiones.html">Ir a Lesiones →</a>
+      </div>
+      ${datosLesiones}
+    </div>
+  `;
+};
+
+window.cerrarFichaJugadora = function() {
+  document.getElementById("panelFichaJugadora").classList.remove("activa");
+  const selectJug = document.getElementById("filtroJugadoraIndividual");
+  if (selectJug) selectJug.value = "";
+};
+
+/* --- 1. EXTRAER DATOS DE testeos.html --- */
+async function obtenerInfoTesteosJugadora(jugadora) {
+  const meses = ["Diciembre", "Noviembre", "Octubre", "Septiembre", "Agosto", "Julio", "Junio", "Mayo", "Abril", "Marzo", "Febrero", "Enero"];
+  const divKey = jugadora.categoria.replace(/\s+/g, "_");
+  let encontrado = null;
+  let mesEncontrado = "";
+  let columnas = [];
+
+  for (const mes of meses) {
+    const clave = `${divKey}_${mes}`;
+    let data = null;
+
+    if (nubeActiva && db) {
+      try {
+        const snap = await getDoc(doc(db, "testeos_adiur", clave));
+        if (snap.exists()) data = snap.data();
+      } catch (e) {}
+    }
+    if (!data) {
+      const raw = localStorage.getItem("testeos_adiur_" + clave);
+      if (raw) { try { data = JSON.parse(raw); } catch (e) {} }
+    }
+
+    if (data && data.valores) {
+      const claveJug = Object.keys(data.valores).find(k => normalizarTexto(k) === normalizarTexto(jugadora.nombreCompleto));
+      if (claveJug && Object.values(data.valores[claveJug]).some(v => v !== "" && v !== null && v !== undefined)) {
+        encontrado = data.valores[claveJug];
+        mesEncontrado = mes;
+        columnas = data.columnas || [];
+        break;
+      }
+    }
+  }
+
+  if (!encontrado) {
+    return `<div class="ficha-vacio">Sin testeos registrados para esta jugadora.</div>`;
+  }
+
+  const peso = parseFloat(String(encontrado.peso || "").replace(",", "."));
+  let alt = parseFloat(String(encontrado.altura || "").replace(",", "."));
+  if (alt > 3) alt = alt / 100;
+  const imc = (!isNaN(peso) && !isNaN(alt) && alt > 0) ? (peso / (alt * alt)).toFixed(2) : "-";
+
+  const itemsVisibles = columnas
+    .filter(c => !c.esComp && !c.esCalculadoIMC && encontrado[c.id])
+    .slice(0, 6)
+    .map(c => `<div class="dato-fila"><span class="etiqueta">${c.grupo} · ${c.label}</span><strong>${encontrado[c.id]}</strong></div>`)
+    .join("");
+
+  return `
+    <div class="dato-fila"><span class="etiqueta">Último mes evaluado</span><strong>${mesEncontrado}</strong></div>
+    ${itemsVisibles}
+    <div class="dato-fila"><span class="etiqueta">I.M.C Calculado</span><strong>${imc}</strong></div>
+  `;
+}
+
+/* --- 2. EXTRAER DATOS DE asistencia.html --- */
+async function obtenerInfoAsistenciaJugadora(jugadora) {
+  let registros = [];
+
+  if (nubeActiva && db) {
+    try {
+      const snap = await getDocs(collection(db, "asistencia"));
+      snap.forEach(d => registros.push(d.data()));
+    } catch (e) {}
+  }
+
+  const clavesLocales = ["asistenciaADIUR", "asistenciasADIUR", "registroAsistenciaADIUR"];
+  clavesLocales.forEach(k => {
+    const raw = localStorage.getItem(k);
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) registros.push(...parsed);
+        else if (typeof parsed === "object" && parsed !== null) {
+          Object.values(parsed).forEach(v => {
+            if (Array.isArray(v)) registros.push(...v);
+            else if (typeof v === "object") registros.push(v);
+          });
+        }
+      } catch (e) {}
+    }
+  });
+
+  let presentes = 0, ausentes = 0, tarde = 0, total = 0;
+
+  registros.forEach(reg => {
+    if (!reg) return;
+    if (reg.jugadoras && typeof reg.jugadoras === "object") {
+      const key = Object.keys(reg.jugadoras).find(k => normalizarTexto(k) === normalizarTexto(jugadora.nombreCompleto) || normalizarTexto(k) === normalizarTexto(jugadora.id));
+      if (key) {
+        const estado = normalizarTexto(reg.jugadoras[key]?.estado || reg.jugadoras[key]);
+        total++;
+        if (estado.includes("presente") || estado === "p") presentes++;
+        else if (estado.includes("tarde") || estado === "t") { tarde++; presentes++; }
+        else if (estado.includes("ausente") || estado === "a" || estado.includes("falta")) ausentes++;
+      }
+    } else if (coincideJugadora(reg, jugadora)) {
+      const estado = normalizarTexto(reg.estado || reg.asistencia || reg.situacion);
+      total++;
+      if (estado.includes("presente") || estado === "p") presentes++;
+      else if (estado.includes("tarde") || estado === "t") { tarde++; presentes++; }
+      else if (estado.includes("ausente") || estado === "a" || estado.includes("falta")) ausentes++;
+    }
+  });
+
+  if (total === 0) {
+    return `<div class="ficha-vacio">Sin registros de asistencia cargados.</div>`;
+  }
+
+  const porcentaje = Math.round((presentes / total) * 100);
+  return `
+    <div class="dato-fila"><span class="etiqueta">Porcentaje de asistencia</span><strong>${porcentaje}%</strong></div>
+    <div class="dato-fila"><span class="etiqueta">Presentes</span><strong>${presentes} de ${total}</strong></div>
+    <div class="dato-fila"><span class="etiqueta">Ausentes</span><strong>${ausentes}</strong></div>
+    <div class="dato-fila"><span class="etiqueta">Llegadas tarde</span><strong>${tarde}</strong></div>
+  `;
+}
+
+/* --- 3. EXTRAER DATOS DE informes.html --- */
+async function obtenerInfoInformesJugadora(jugadora) {
+  let informes = [];
+
+  if (nubeActiva && db) {
+    try {
+      const snap = await getDocs(collection(db, "informes"));
+      snap.forEach(d => informes.push({ id: d.id, ...d.data() }));
+    } catch (e) {}
+  }
+
+  ["informesADIUR", "informesJugadorasADIUR", "informesPartidosADIUR"].forEach(k => {
+    const raw = localStorage.getItem(k);
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) informes.push(...parsed);
+      } catch (e) {}
+    }
+  });
+
+  const deJugadora = informes.filter(inf => inf && coincideJugadora(inf, jugadora));
+
+  if (deJugadora.length === 0) {
+    return `<div class="ficha-vacio">No hay informes individuales registrados para esta jugadora.</div>`;
+  }
+
+  return `<div class="ficha-lista-items">` + deJugadora.slice(0, 5).map(inf => {
+    const titulo = inf.titulo || inf.tipo || inf.aspecto || "Informe técnico";
+    const fecha = inf.fecha || "";
+    const detalle = inf.detalle || inf.observaciones || inf.descripcion || inf.comentario || "";
+    return `
+      <div class="ficha-item-box">
+        <strong>${titulo}</strong> ${fecha ? `<span style="color:#777;font-size:11px;">(${fecha})</span>` : ""}
+        <div style="margin-top:3px;color:#444;">${detalle}</div>
+      </div>
+    `;
+  }).join("") + `</div>`;
+}
+
+/* --- 4. EXTRAER DATOS DE tiempos.html --- */
+async function obtenerInfoTiemposJugadora(jugadora) {
+  let tiempos = [];
+
+  if (nubeActiva && db) {
+    try {
+      const snap = await getDocs(collection(db, "tiempos"));
+      snap.forEach(d => tiempos.push({ id: d.id, ...d.data() }));
+    } catch (e) {}
+  }
+
+  ["tiemposADIUR", "registroTiemposADIUR", "tiemposEntrenamientoADIUR"].forEach(k => {
+    const raw = localStorage.getItem(k);
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) tiempos.push(...parsed);
+      } catch (e) {}
+    }
+  });
+
+  const deJugadora = tiempos.filter(t => t && coincideJugadora(t, jugadora));
+
+  if (deJugadora.length === 0) {
+    return `<div class="ficha-vacio">Sin registros de tiempos cargados para esta jugadora.</div>`;
+  }
+
+  return `<div class="ficha-lista-items">` + deJugadora.slice(0, 5).map(t => {
+    const prueba = t.prueba || t.ejercicio || t.distancia || t.tipo || "Registro de tiempo";
+    const marca = t.tiempo || t.marca || t.valor || t.resultado || "-";
+    const fecha = t.fecha || "";
+    return `
+      <div class="dato-fila">
+        <span class="etiqueta">${prueba} ${fecha ? `(${fecha})` : ""}</span>
+        <strong>${marca}</strong>
+      </div>
+    `;
+  }).join("") + `</div>`;
+}
+
+/* --- 5. EXTRAER DATOS DE lesiones.html --- */
+async function obtenerInfoLesionesJugadora(jugadora) {
+  let lesiones = [];
+
+  if (nubeActiva && db) {
+    try {
+      const snap = await getDocs(collection(db, "lesiones"));
+      snap.forEach(d => lesiones.push({ id: d.id, ...d.data() }));
+    } catch (e) {}
+  }
+
+  ["lesionesADIUR", "registroLesionesADIUR", "historialLesionesADIUR"].forEach(k => {
+    const raw = localStorage.getItem(k);
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) lesiones.push(...parsed);
+      } catch (e) {}
+    }
+  });
+
+  const deJugadora = lesiones.filter(l => l && coincideJugadora(l, jugadora));
+
+  if (deJugadora.length === 0) {
+    return `<div class="dato-fila"><span class="etiqueta">Estado físico</span><strong style="color:#18743b;">✓ Sin lesiones registradas</strong></div>`;
+  }
+
+  return `<div class="ficha-lista-items">` + deJugadora.slice(0, 5).map(l => {
+    const tipo = l.lesion || l.tipo || l.diagnostico || l.zona || "Lesión";
+    const estado = l.estado || l.recuperacion || "En seguimiento";
+    const fecha = l.fecha || l.fechaInicio || "";
+    return `
+      <div class="ficha-item-box lesion">
+        <strong>${tipo}</strong> · <span style="font-size:11px;font-weight:bold;">${estado}</span>
+        ${fecha ? `<div style="color:#777;font-size:11px;margin-top:2px;">Fecha: ${fecha}</div>` : ""}
+      </div>
+    `;
+  }).join("") + `</div>`;
+}
+
+/* =====================================================
+   ESTRUCTURA DE DATOS Y LOCALSTORAGE (TABLA DE PARTIDOS)
+===================================================== */
+function obtenerClaveDatosEstadisticas(division) {
+  return "estadisticasADIUR_" + division.replace(/\s+/g, '_');
 }
 
 function obtenerJornadasActuales() {
@@ -1239,26 +1830,29 @@ function guardarDatosPartidosJugadoras(datos) {
 /* =====================================================
    RENDERIZAR TABLA DE ESTADÍSTICAS
 ===================================================== */
-function renderizarEstadisticas() {
+window.renderizarEstadisticas = function() {
   const divisionSeleccionada = document.getElementById("filtroDivision").value;
   const filtroPos = document.getElementById("filtroPosicion").value;
-  
+  const divNorm = divisionSeleccionada.toLowerCase().replace(/\s+/g, "");
+
   const todasJugadoras = obtenerJugadoras();
   const jugadorasDivision = todasJugadoras.filter(j => {
-    const cat = (j.categoria || "").trim().toLowerCase();
-    return cat === divisionSeleccionada.toLowerCase();
+    const cat = (j.categoria || "").toLowerCase().replace(/\s+/g, "");
+    return cat === divNorm;
   });
 
-  const jugadorasFiltradas = jugadorasDivision.filter(j => {
-    if (filtroPos === "todas") return true;
-    const pos = (j.posicion || "").trim().toLowerCase();
-    if (filtroPos === "arqueras") return pos.includes("arquera");
-    if (filtroPos === "defensoras") return pos.includes("defensora");
-    if (filtroPos === "mediocampistas") return pos.includes("mediocampista");
-    if (filtroPos === "delanteras") return pos.includes("delantera");
-    if (filtroPos === "polivalentes") return pos.includes("polivalente") || pos.includes("polifuncional");
-    return true;
-  });
+  const jugadorasFiltradas = jugadorasDivision
+    .filter(j => {
+      if (filtroPos === "todas") return true;
+      const pos = (j.posicion || "").trim().toLowerCase();
+      if (filtroPos === "arqueras") return pos.includes("arquera");
+      if (filtroPos === "defensoras") return pos.includes("defensora");
+      if (filtroPos === "mediocampistas") return pos.includes("mediocampista");
+      if (filtroPos === "delanteras") return pos.includes("delantera");
+      if (filtroPos === "polivalentes") return pos.includes("polivalente") || pos.includes("polifuncional");
+      return true;
+    })
+    .sort((a, b) => a.nombreCompleto.localeCompare(b.nombreCompleto));
 
   const jornadas = obtenerJornadasActuales();
   const registrosPartidos = obtenerDatosPartidosJugadoras();
@@ -1301,7 +1895,7 @@ function renderizarEstadisticas() {
   }
 
   jugadorasFiltradas.forEach(jugadora => {
-    const jId = jugadora.id || jugadora.nombre;
+    const jId = jugadora.id || jugadora.nombreCompleto;
     const historialJugadora = registrosPartidos[jId] || {};
 
     let pj = 0, min = 0, amarillas = 0, rojas = 0, goles = 0, asistencias = 0, titulares = 0;
@@ -1321,10 +1915,15 @@ function renderizarEstadisticas() {
 
     const minPorPj = pj > 0 ? (min / pj).toFixed(1) : "0.0";
     const goles90 = min > 0 ? ((goles * 90) / min).toFixed(2) : "0.00";
+    const idEscapado = String(jId).replace(/'/g, "\\'");
 
     let tr = document.createElement("tr");
     let htmlRow = `
-      <td class="fija-izquierda"><strong>${jugadora.nombre}</strong></td>
+      <td class="fija-izquierda">
+        <span class="enlace-jugadora-tabla" title="Ver ficha completa de ${jugadora.nombreCompleto}" onclick="seleccionarJugadoraFicha('${idEscapado}')">
+          <strong>${jugadora.nombreCompleto}</strong>
+        </span>
+      </td>
       <td>${jugadora.posicion || "Sin asignar"}</td>
       <td><strong>${pj}</strong></td>
       <td>${min}</td>
@@ -1355,25 +1954,25 @@ function renderizarEstadisticas() {
         }
       }
 
-      htmlRow += `<td class="celda-partido" onclick="abrirModalPartido('${jId}', '${jornada.id}', '${jugadora.nombre.replace(/'/g, "\\'")}')">${contenidoCelda}</td>`;
+      htmlRow += `<td class="celda-partido" onclick="abrirModalPartido('${idEscapado}', '${jornada.id}', '${jugadora.nombreCompleto.replace(/'/g, "\\'")}')">${contenidoCelda}</td>`;
     });
 
     tr.innerHTML = htmlRow;
     tbody.appendChild(tr);
   });
-}
+};
 
 /* =====================================================
    GESTIÓN DE MODALES Y EDICIÓN
 ===================================================== */
-function abrirModalNuevaFecha() {
+window.abrirModalNuevaFecha = function() {
   document.getElementById("formFecha").reset();
   const jornadas = obtenerJornadasActuales();
   document.getElementById("numeroJornada").value = jornadas.length + 1;
   document.getElementById("modalFecha").classList.add("activo");
-}
+};
 
-function guardarNuevaFecha(event) {
+window.guardarNuevaFecha = function(event) {
   event.preventDefault();
   const num = document.getElementById("numeroJornada").value;
   const rival = document.getElementById("rivalFecha").value;
@@ -1390,9 +1989,9 @@ function guardarNuevaFecha(event) {
 
   cerrarModal("modalFecha");
   renderizarEstadisticas();
-}
+};
 
-function abrirModalPartido(jugadoraId, jornadaId, nombreJugadora) {
+window.abrirModalPartido = function(jugadoraId, jornadaId, nombreJugadora) {
   const divisionActual = document.getElementById("filtroDivision").value;
   const reglasTiempo = obtenerMinutosReglamentarios(divisionActual);
 
@@ -1423,15 +2022,15 @@ function abrirModalPartido(jugadoraId, jornadaId, nombreJugadora) {
 
   actualizarCamposConvocatoria();
   document.getElementById("modalPartidoJugadora").classList.add("activo");
-}
+};
 
-function actualizarCamposConvocatoria() {
+window.actualizarCamposConvocatoria = function() {
   const convocada = document.getElementById("convocadaSelect").value;
   const contenedor = document.getElementById("camposRendimientoPartido");
   contenedor.style.display = convocada === "si" ? "block" : "none";
-}
+};
 
-function guardarDatosPartidoJugadora(event) {
+window.guardarDatosPartidoJugadora = function(event) {
   event.preventDefault();
   const jugadoraId = document.getElementById("editJugadoraId").value;
   const jornadaId = document.getElementById("editJornadaId").value;
@@ -1459,13 +2058,14 @@ function guardarDatosPartidoJugadora(event) {
   guardarDatosPartidosJugadoras(registrosPartidos);
   cerrarModal("modalPartidoJugadora");
   renderizarEstadisticas();
-}
+};
 
-function cerrarModal(id) {
+window.cerrarModal = function(id) {
   document.getElementById(id).classList.remove("activo");
-}
+};
 
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", async () => {
+  await sincronizarJugadorasDesdeBase();
   cambiarDivision();
 });
 </script>
