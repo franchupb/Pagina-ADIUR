@@ -353,9 +353,9 @@ a {
 
 .controles-filtros {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(195px, 1fr));
   gap: 15px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .campo-filtro label {
@@ -381,11 +381,18 @@ a {
   border-color: var(--naranja);
 }
 
+.campo-filtro select.filtro-destacado {
+  border-color: var(--naranja);
+  background: var(--naranja-claro);
+  color: var(--naranja-oscuro);
+  font-weight: bold;
+}
+
 .acciones-tabla {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  margin-bottom: 15px;
+  margin-top: 10px;
 }
 
 .btn-accion {
@@ -582,7 +589,7 @@ a {
 }
 
 /* =====================================================
-   TABLA DE ESTADÍSTICAS
+   TABLA DE ESTADÍSTICAS Y MÓDULOS
 ===================================================== */
 
 .tabla-contenedor {
@@ -664,9 +671,9 @@ tbody tr:hover td.fija-izquierda {
   font-weight: bold;
 }
 
-.badge-titular { background: #e0f5e7; color: #18743b; padding: 2px 6px; border-radius: 4px; }
-.badge-suplente { background: #fff3cd; color: #856404; padding: 2px 6px; border-radius: 4px; }
-.badge-fuera { background: #f8d7da; color: #721c24; padding: 2px 6px; border-radius: 4px; }
+.badge-titular { background: #e0f5e7; color: #18743b; padding: 3px 8px; border-radius: 5px; font-weight: bold; font-size: 11px; }
+.badge-suplente { background: #fff3cd; color: #856404; padding: 3px 8px; border-radius: 5px; font-weight: bold; font-size: 11px; }
+.badge-fuera { background: #f8d7da; color: #721c24; padding: 3px 8px; border-radius: 5px; font-weight: bold; font-size: 11px; }
 
 .th-jornada {
   min-width: 110px;
@@ -988,13 +995,24 @@ tbody tr:hover td.fija-izquierda {
     <div class="encabezado-seccion">
       <div>
         <h2>Panel de Estadísticas y Ficha Individual</h2>
-        <p>Seguimiento de rendimiento, partidos jugados y consulta integral por jugadora.</p>
+        <p>Filtrá por módulo (Partidos, Asistencia, Tiempos, Lesiones o Testeos) o elegí una jugadora para ver su ficha completa.</p>
       </div>
     </div>
 
     <!-- FILTROS PRINCIPALES -->
     <div class="panel">
       <div class="controles-filtros">
+        <div class="campo-filtro">
+          <label for="filtroModulo">Módulo / Vista</label>
+          <select id="filtroModulo" class="filtro-destacado" onchange="cambiarModuloFiltro()">
+            <option value="partidos" selected>⚽ Partidos</option>
+            <option value="asistencia">📅 Asistencia</option>
+            <option value="tiempos">⏱️ Tiempos</option>
+            <option value="lesiones">🩺 Lesiones</option>
+            <option value="testeos">📊 Testeos</option>
+          </select>
+        </div>
+
         <div class="campo-filtro">
           <label for="filtroDivision">División</label>
           <select id="filtroDivision" onchange="cambiarDivision()">
@@ -1007,22 +1025,22 @@ tbody tr:hover td.fija-izquierda {
         </div>
 
         <div class="campo-filtro">
-          <label for="filtroJugadoraIndividual">Seleccionar Jugadora (Ficha Integral)</label>
+          <label for="filtroJugadoraIndividual">Jugadora (Ficha Integral)</label>
           <select id="filtroJugadoraIndividual" onchange="seleccionarJugadoraFicha(this.value)">
             <option value="">-- Ver todas / Elegir jugadora --</option>
           </select>
         </div>
 
-        <div class="campo-filtro">
+        <div class="campo-filtro" id="grupoFiltroCompetencia">
           <label for="filtroCompetencia">Competencia</label>
-          <select id="filtroCompetencia" onchange="renderizarEstadisticas()">
+          <select id="filtroCompetencia" onchange="renderizarVistaActiva()">
             <!-- Se llena dinámicamente -->
           </select>
         </div>
 
         <div class="campo-filtro">
           <label for="filtroPosicion">Posición / Jugadoras</label>
-          <select id="filtroPosicion" onchange="renderizarEstadisticas()">
+          <select id="filtroPosicion" onchange="renderizarVistaActiva()">
             <option value="todas">Todas las jugadoras</option>
             <option value="arqueras">Arqueras</option>
             <option value="defensoras">Defensoras</option>
@@ -1056,7 +1074,7 @@ tbody tr:hover td.fija-izquierda {
       </div>
     </section>
 
-    <!-- TABLA PRINCIPAL -->
+    <!-- TABLA PRINCIPAL DINÁMICA SEGÚN FILTRO DE MÓDULO -->
     <div class="panel" style="padding: 0; overflow: hidden;">
       <div class="tabla-contenedor">
         <table id="tablaEstadisticas">
@@ -1389,6 +1407,28 @@ function obtenerJugadoras() {
   return cacheJugadorasNube;
 }
 
+function obtenerJugadorasFiltradasActuales() {
+  const divisionSeleccionada = document.getElementById("filtroDivision").value;
+  const filtroPos = document.getElementById("filtroPosicion").value;
+  const jugadoraSelId = document.getElementById("filtroJugadoraIndividual").value;
+  const divNorm = divisionSeleccionada.toLowerCase().replace(/\s+/g, "");
+
+  return obtenerJugadoras()
+    .filter(j => (j.categoria || "").toLowerCase().replace(/\s+/g, "") === divNorm)
+    .filter(j => {
+      if (jugadoraSelId && String(j.id) !== String(jugadoraSelId)) return false;
+      if (filtroPos === "todas") return true;
+      const pos = (j.posicion || "").trim().toLowerCase();
+      if (filtroPos === "arqueras") return pos.includes("arquera");
+      if (filtroPos === "defensoras") return pos.includes("defensora");
+      if (filtroPos === "mediocampistas") return pos.includes("mediocampista");
+      if (filtroPos === "delanteras") return pos.includes("delantera");
+      if (filtroPos === "polivalentes") return pos.includes("polivalente") || pos.includes("polifuncional");
+      return true;
+    })
+    .sort((a, b) => a.nombreCompleto.localeCompare(b.nombreCompleto));
+}
+
 function normalizarTexto(txt) {
   return (txt || "").toString().trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
@@ -1411,8 +1451,25 @@ function coincideJugadora(registro, jugadora) {
 }
 
 /* =====================================================
-   CAMBIO DE DIVISIÓN Y SELECTOR DE JUGADORA
+   CAMBIO DE MÓDULO, DIVISIÓN Y SELECTOR DE JUGADORA
 ===================================================== */
+window.cambiarModuloFiltro = function() {
+  const modulo = document.getElementById("filtroModulo").value;
+  const grupoComp = document.getElementById("grupoFiltroCompetencia");
+  const accionesAdmin = document.getElementById("contenedorAccionesAdmin");
+
+  // Mostrar competencia y botón de nueva fecha solo cuando está seleccionado "partidos"
+  grupoComp.style.display = (modulo === "partidos") ? "block" : "none";
+  accionesAdmin.style.display = (modulo === "partidos") ? "flex" : "none";
+
+  const jugadoraActual = document.getElementById("filtroJugadoraIndividual").value;
+  if (jugadoraActual) {
+    seleccionarJugadoraFicha(jugadoraActual);
+  }
+
+  renderizarVistaActiva();
+};
+
 window.cambiarDivision = function() {
   const division = document.getElementById("filtroDivision").value;
   const selectComp = document.getElementById("filtroCompetencia");
@@ -1436,7 +1493,7 @@ window.cambiarDivision = function() {
 
   actualizarSelectorJugadorasDivision(division);
   cerrarFichaJugadora();
-  renderizarEstadisticas();
+  renderizarVistaActiva();
 };
 
 function actualizarSelectorJugadorasDivision(division) {
@@ -1456,7 +1513,7 @@ function actualizarSelectorJugadorasDivision(division) {
 }
 
 /* =====================================================
-   CONSOLIDACIÓN DE DATOS DE LAS 5 PÁGINAS POR JUGADORA
+   CONSOLIDACIÓN DE DATOS POR JUGADORA
 ===================================================== */
 window.seleccionarJugadoraFicha = async function(jugadoraId) {
   const selectJug = document.getElementById("filtroJugadoraIndividual");
@@ -1465,11 +1522,14 @@ window.seleccionarJugadoraFicha = async function(jugadoraId) {
   const panel = document.getElementById("panelFichaJugadora");
   if (!jugadoraId) {
     panel.classList.remove("activa");
+    renderizarVistaActiva();
     return;
   }
 
   const jugadora = obtenerJugadoras().find(j => String(j.id) === String(jugadoraId));
   if (!jugadora) return;
+
+  const moduloActivo = document.getElementById("filtroModulo").value;
 
   document.getElementById("fichaAvatar").textContent = jugadora.nombreCompleto.charAt(0).toUpperCase();
   document.getElementById("fichaNombreJugadora").textContent = jugadora.nombreCompleto;
@@ -1479,9 +1539,8 @@ window.seleccionarJugadoraFicha = async function(jugadoraId) {
     (jugadora.fechaNacimiento ? ` · Nac: ${jugadora.fechaNacimiento}` : "");
 
   const grid = document.getElementById("fichaContenidoGrid");
-  grid.innerHTML = `<div class="ficha-vacio">Cargando información de Testeos, Asistencia, Informes, Tiempos y Lesiones...</div>`;
+  grid.innerHTML = `<div class="ficha-vacio">Cargando información de la jugadora...</div>`;
   panel.classList.add("activa");
-  panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
 
   const [datosTesteos, datosAsistencia, datosInformes, datosTiempos, datosLesiones] = await Promise.all([
     obtenerInfoTesteosJugadora(jugadora),
@@ -1491,58 +1550,72 @@ window.seleccionarJugadoraFicha = async function(jugadoraId) {
     obtenerInfoLesionesJugadora(jugadora)
   ]);
 
-  grid.innerHTML = `
-    <!-- 1. TESTEOS -->
-    <div class="ficha-card">
-      <div class="ficha-card-titulo">
-        <span>📊 Testeos Físicos</span>
-        <a href="testeos.html">Ir a Testeos →</a>
-      </div>
-      ${datosTesteos}
-    </div>
+  let tarjetasHtml = "";
 
-    <!-- 2. ASISTENCIA -->
-    <div class="ficha-card">
-      <div class="ficha-card-titulo">
-        <span>📅 Asistencia</span>
-        <a href="asistencia.html">Ir a Asistencia →</a>
-      </div>
-      ${datosAsistencia}
-    </div>
+  if (moduloActivo === "partidos" || moduloActivo === "testeos") {
+    tarjetasHtml += `
+      <div class="ficha-card">
+        <div class="ficha-card-titulo">
+          <span>📊 Testeos Físicos</span>
+          <a href="testeos.html">Ir a Testeos →</a>
+        </div>
+        ${datosTesteos.html}
+      </div>`;
+  }
 
-    <!-- 3. INFORMES -->
-    <div class="ficha-card">
-      <div class="ficha-card-titulo">
-        <span>📋 Informes Técnicos</span>
-        <a href="informes.html">Ir a Informes →</a>
-      </div>
-      ${datosInformes}
-    </div>
+  if (moduloActivo === "partidos" || moduloActivo === "asistencia") {
+    tarjetasHtml += `
+      <div class="ficha-card">
+        <div class="ficha-card-titulo">
+          <span>📅 Asistencia</span>
+          <a href="asistencia.html">Ir a Asistencia →</a>
+        </div>
+        ${datosAsistencia.html}
+      </div>`;
+  }
 
-    <!-- 4. TIEMPOS -->
-    <div class="ficha-card">
-      <div class="ficha-card-titulo">
-        <span>⏱️ Tiempos y Cargas</span>
-        <a href="tiempos.html">Ir a Tiempos →</a>
-      </div>
-      ${datosTiempos}
-    </div>
+  if (moduloActivo === "partidos") {
+    tarjetasHtml += `
+      <div class="ficha-card">
+        <div class="ficha-card-titulo">
+          <span>📋 Informes Técnicos</span>
+          <a href="informes.html">Ir a Informes →</a>
+        </div>
+        ${datosInformes}
+      </div>`;
+  }
 
-    <!-- 5. LESIONES -->
-    <div class="ficha-card">
-      <div class="ficha-card-titulo">
-        <span>🩺 Historial de Lesiones</span>
-        <a href="lesiones.html">Ir a Lesiones →</a>
-      </div>
-      ${datosLesiones}
-    </div>
-  `;
+  if (moduloActivo === "partidos" || moduloActivo === "tiempos") {
+    tarjetasHtml += `
+      <div class="ficha-card">
+        <div class="ficha-card-titulo">
+          <span>⏱️ Tiempos y Cargas</span>
+          <a href="tiempos.html">Ir a Tiempos →</a>
+        </div>
+        ${datosTiempos.html}
+      </div>`;
+  }
+
+  if (moduloActivo === "partidos" || moduloActivo === "lesiones") {
+    tarjetasHtml += `
+      <div class="ficha-card">
+        <div class="ficha-card-titulo">
+          <span>🩺 Historial de Lesiones</span>
+          <a href="lesiones.html">Ir a Lesiones →</a>
+        </div>
+        ${datosLesiones.html}
+      </div>`;
+  }
+
+  grid.innerHTML = tarjetasHtml;
+  renderizarVistaActiva();
 };
 
 window.cerrarFichaJugadora = function() {
   document.getElementById("panelFichaJugadora").classList.remove("activa");
   const selectJug = document.getElementById("filtroJugadoraIndividual");
   if (selectJug) selectJug.value = "";
+  renderizarVistaActiva();
 };
 
 /* --- 1. EXTRAER DATOS DE testeos.html --- */
@@ -1580,7 +1653,10 @@ async function obtenerInfoTesteosJugadora(jugadora) {
   }
 
   if (!encontrado) {
-    return `<div class="ficha-vacio">Sin testeos registrados para esta jugadora.</div>`;
+    return {
+      encontrado: false,
+      html: `<div class="ficha-vacio">Sin testeos registrados para esta jugadora.</div>`
+    };
   }
 
   const peso = parseFloat(String(encontrado.peso || "").replace(",", "."));
@@ -1594,11 +1670,17 @@ async function obtenerInfoTesteosJugadora(jugadora) {
     .map(c => `<div class="dato-fila"><span class="etiqueta">${c.grupo} · ${c.label}</span><strong>${encontrado[c.id]}</strong></div>`)
     .join("");
 
-  return `
-    <div class="dato-fila"><span class="etiqueta">Último mes evaluado</span><strong>${mesEncontrado}</strong></div>
-    ${itemsVisibles}
-    <div class="dato-fila"><span class="etiqueta">I.M.C Calculado</span><strong>${imc}</strong></div>
-  `;
+  return {
+    encontrado: true,
+    mes: mesEncontrado,
+    valores: encontrado,
+    imc,
+    html: `
+      <div class="dato-fila"><span class="etiqueta">Último mes evaluado</span><strong>${mesEncontrado}</strong></div>
+      ${itemsVisibles}
+      <div class="dato-fila"><span class="etiqueta">I.M.C Calculado</span><strong>${imc}</strong></div>
+    `
+  };
 }
 
 /* --- 2. EXTRAER DATOS DE asistencia.html --- */
@@ -1612,8 +1694,7 @@ async function obtenerInfoAsistenciaJugadora(jugadora) {
     } catch (e) {}
   }
 
-  const clavesLocales = ["asistenciaADIUR", "asistenciasADIUR", "registroAsistenciaADIUR"];
-  clavesLocales.forEach(k => {
+  ["asistenciaADIUR", "asistenciasADIUR", "registroAsistenciaADIUR"].forEach(k => {
     const raw = localStorage.getItem(k);
     if (raw) {
       try {
@@ -1652,16 +1733,22 @@ async function obtenerInfoAsistenciaJugadora(jugadora) {
   });
 
   if (total === 0) {
-    return `<div class="ficha-vacio">Sin registros de asistencia cargados.</div>`;
+    return {
+      total: 0, presentes: 0, ausentes: 0, tarde: 0, porcentaje: 0,
+      html: `<div class="ficha-vacio">Sin registros de asistencia cargados.</div>`
+    };
   }
 
   const porcentaje = Math.round((presentes / total) * 100);
-  return `
-    <div class="dato-fila"><span class="etiqueta">Porcentaje de asistencia</span><strong>${porcentaje}%</strong></div>
-    <div class="dato-fila"><span class="etiqueta">Presentes</span><strong>${presentes} de ${total}</strong></div>
-    <div class="dato-fila"><span class="etiqueta">Ausentes</span><strong>${ausentes}</strong></div>
-    <div class="dato-fila"><span class="etiqueta">Llegadas tarde</span><strong>${tarde}</strong></div>
-  `;
+  return {
+    total, presentes, ausentes, tarde, porcentaje,
+    html: `
+      <div class="dato-fila"><span class="etiqueta">Porcentaje de asistencia</span><strong>${porcentaje}%</strong></div>
+      <div class="dato-fila"><span class="etiqueta">Presentes</span><strong>${presentes} de ${total}</strong></div>
+      <div class="dato-fila"><span class="etiqueta">Ausentes</span><strong>${ausentes}</strong></div>
+      <div class="dato-fila"><span class="etiqueta">Llegadas tarde</span><strong>${tarde}</strong></div>
+    `
+  };
 }
 
 /* --- 3. EXTRAER DATOS DE informes.html --- */
@@ -1728,20 +1815,26 @@ async function obtenerInfoTiemposJugadora(jugadora) {
   const deJugadora = tiempos.filter(t => t && coincideJugadora(t, jugadora));
 
   if (deJugadora.length === 0) {
-    return `<div class="ficha-vacio">Sin registros de tiempos cargados para esta jugadora.</div>`;
+    return {
+      lista: [],
+      html: `<div class="ficha-vacio">Sin registros de tiempos cargados para esta jugadora.</div>`
+    };
   }
 
-  return `<div class="ficha-lista-items">` + deJugadora.slice(0, 5).map(t => {
-    const prueba = t.prueba || t.ejercicio || t.distancia || t.tipo || "Registro de tiempo";
-    const marca = t.tiempo || t.marca || t.valor || t.resultado || "-";
-    const fecha = t.fecha || "";
-    return `
-      <div class="dato-fila">
-        <span class="etiqueta">${prueba} ${fecha ? `(${fecha})` : ""}</span>
-        <strong>${marca}</strong>
-      </div>
-    `;
-  }).join("") + `</div>`;
+  return {
+    lista: deJugadora,
+    html: `<div class="ficha-lista-items">` + deJugadora.slice(0, 5).map(t => {
+      const prueba = t.prueba || t.ejercicio || t.distancia || t.tipo || "Registro de tiempo";
+      const marca = t.tiempo || t.marca || t.valor || t.resultado || "-";
+      const fecha = t.fecha || "";
+      return `
+        <div class="dato-fila">
+          <span class="etiqueta">${prueba} ${fecha ? `(${fecha})` : ""}</span>
+          <strong>${marca}</strong>
+        </div>
+      `;
+    }).join("") + `</div>`
+  };
 }
 
 /* --- 5. EXTRAER DATOS DE lesiones.html --- */
@@ -1768,20 +1861,242 @@ async function obtenerInfoLesionesJugadora(jugadora) {
   const deJugadora = lesiones.filter(l => l && coincideJugadora(l, jugadora));
 
   if (deJugadora.length === 0) {
-    return `<div class="dato-fila"><span class="etiqueta">Estado físico</span><strong style="color:#18743b;">✓ Sin lesiones registradas</strong></div>`;
+    return {
+      lista: [],
+      html: `<div class="dato-fila"><span class="etiqueta">Estado físico</span><strong style="color:#18743b;">✓ Sin lesiones registradas</strong></div>`
+    };
   }
 
-  return `<div class="ficha-lista-items">` + deJugadora.slice(0, 5).map(l => {
-    const tipo = l.lesion || l.tipo || l.diagnostico || l.zona || "Lesión";
-    const estado = l.estado || l.recuperacion || "En seguimiento";
-    const fecha = l.fecha || l.fechaInicio || "";
+  return {
+    lista: deJugadora,
+    html: `<div class="ficha-lista-items">` + deJugadora.slice(0, 5).map(l => {
+      const tipo = l.lesion || l.tipo || l.diagnostico || l.zona || "Lesión";
+      const estado = l.estado || l.recuperacion || "En seguimiento";
+      const fecha = l.fecha || l.fechaInicio || "";
+      return `
+        <div class="ficha-item-box lesion">
+          <strong>${tipo}</strong> · <span style="font-size:11px;font-weight:bold;">${estado}</span>
+          ${fecha ? `<div style="color:#777;font-size:11px;margin-top:2px;">Fecha: ${fecha}</div>` : ""}
+        </div>
+      `;
+    }).join("") + `</div>`
+  };
+}
+
+/* =====================================================
+   ENRUTADOR DE RENDERIZADO SEGÚN MÓDULO ELEGIDO EN FILTRO
+===================================================== */
+window.renderizarVistaActiva = async function() {
+  const modulo = document.getElementById("filtroModulo").value;
+  if (modulo === "partidos") {
+    renderizarEstadisticas();
+  } else if (modulo === "asistencia") {
+    await renderizarTablaAsistencia();
+  } else if (modulo === "tiempos") {
+    await renderizarTablaTiempos();
+  } else if (modulo === "lesiones") {
+    await renderizarTablaLesiones();
+  } else if (modulo === "testeos") {
+    await renderizarTablaTesteos();
+  }
+};
+
+/* --- TABLA MÓDULO: ASISTENCIA --- */
+async function renderizarTablaAsistencia() {
+  const divisionSeleccionada = document.getElementById("filtroDivision").value;
+  const jugadoras = obtenerJugadorasFiltradasActuales();
+
+  const trHead = document.getElementById("encabezadoTabla");
+  trHead.innerHTML = `
+    <th class="fija-izquierda">Jugadora</th>
+    <th>Posición</th>
+    <th>Total Sesiones</th>
+    <th>Presentes</th>
+    <th>Ausentes</th>
+    <th>Llegadas Tarde</th>
+    <th>% Asistencia</th>
+  `;
+
+  const tbody = document.getElementById("cuerpoTablaEstadisticas");
+  tbody.innerHTML = `<tr><td colspan="7" style="padding:20px;color:#777;">Cargando registros de asistencia...</td></tr>`;
+
+  if (jugadoras.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" style="padding:30px;color:#777;">No hay jugadoras en ${divisionSeleccionada} con los filtros aplicados.</td></tr>`;
+    return;
+  }
+
+  const filas = await Promise.all(jugadoras.map(async j => {
+    const info = await obtenerInfoAsistenciaJugadora(j);
+    const idEscapado = String(j.id).replace(/'/g, "\\'");
+    const badgeColor = info.total === 0 ? "badge-suplente" : (info.porcentaje >= 75 ? "badge-titular" : "badge-fuera");
     return `
-      <div class="ficha-item-box lesion">
-        <strong>${tipo}</strong> · <span style="font-size:11px;font-weight:bold;">${estado}</span>
-        ${fecha ? `<div style="color:#777;font-size:11px;margin-top:2px;">Fecha: ${fecha}</div>` : ""}
-      </div>
+      <tr>
+        <td class="fija-izquierda">
+          <span class="enlace-jugadora-tabla" onclick="seleccionarJugadoraFicha('${idEscapado}')">
+            <strong>${j.nombreCompleto}</strong>
+          </span>
+        </td>
+        <td>${j.posicion}</td>
+        <td>${info.total}</td>
+        <td><strong>${info.presentes}</strong></td>
+        <td>${info.ausentes}</td>
+        <td>${info.tarde}</td>
+        <td><span class="${badgeColor}">${info.total > 0 ? info.porcentaje + "%" : "Sin datos"}</span></td>
+      </tr>
     `;
-  }).join("") + `</div>`;
+  }));
+
+  tbody.innerHTML = filas.join("");
+}
+
+/* --- TABLA MÓDULO: TIEMPOS --- */
+async function renderizarTablaTiempos() {
+  const divisionSeleccionada = document.getElementById("filtroDivision").value;
+  const jugadoras = obtenerJugadorasFiltradasActuales();
+
+  const trHead = document.getElementById("encabezadoTabla");
+  trHead.innerHTML = `
+    <th class="fija-izquierda">Jugadora</th>
+    <th>Posición</th>
+    <th>Registros</th>
+    <th>Última Prueba</th>
+    <th>Última Marca</th>
+    <th>Fecha</th>
+  `;
+
+  const tbody = document.getElementById("cuerpoTablaEstadisticas");
+  tbody.innerHTML = `<tr><td colspan="6" style="padding:20px;color:#777;">Cargando registros de tiempos...</td></tr>`;
+
+  if (jugadoras.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6" style="padding:30px;color:#777;">No hay jugadoras en ${divisionSeleccionada} con los filtros aplicados.</td></tr>`;
+    return;
+  }
+
+  const filas = await Promise.all(jugadoras.map(async j => {
+    const info = await obtenerInfoTiemposJugadora(j);
+    const ultimo = info.lista[0] || null;
+    const idEscapado = String(j.id).replace(/'/g, "\\'");
+    return `
+      <tr>
+        <td class="fija-izquierda">
+          <span class="enlace-jugadora-tabla" onclick="seleccionarJugadoraFicha('${idEscapado}')">
+            <strong>${j.nombreCompleto}</strong>
+          </span>
+        </td>
+        <td>${j.posicion}</td>
+        <td>${info.lista.length}</td>
+        <td>${ultimo ? (ultimo.prueba || ultimo.ejercicio || ultimo.distancia || ultimo.tipo || "Prueba") : "-"}</td>
+        <td><strong>${ultimo ? (ultimo.tiempo || ultimo.marca || ultimo.valor || ultimo.resultado || "-") : "-"}</strong></td>
+        <td>${ultimo ? (ultimo.fecha || "-") : "-"}</td>
+      </tr>
+    `;
+  }));
+
+  tbody.innerHTML = filas.join("");
+}
+
+/* --- TABLA MÓDULO: LESIONES --- */
+async function renderizarTablaLesiones() {
+  const divisionSeleccionada = document.getElementById("filtroDivision").value;
+  const jugadoras = obtenerJugadorasFiltradasActuales();
+
+  const trHead = document.getElementById("encabezadoTabla");
+  trHead.innerHTML = `
+    <th class="fija-izquierda">Jugadora</th>
+    <th>Posición</th>
+    <th>Estado Actual</th>
+    <th>Última Lesión / Zona</th>
+    <th>Fecha Registro</th>
+    <th>Total Historial</th>
+  `;
+
+  const tbody = document.getElementById("cuerpoTablaEstadisticas");
+  tbody.innerHTML = `<tr><td colspan="6" style="padding:20px;color:#777;">Cargando historial de lesiones...</td></tr>`;
+
+  if (jugadoras.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6" style="padding:30px;color:#777;">No hay jugadoras en ${divisionSeleccionada} con los filtros aplicados.</td></tr>`;
+    return;
+  }
+
+  const filas = await Promise.all(jugadoras.map(async j => {
+    const info = await obtenerInfoLesionesJugadora(j);
+    const ultima = info.lista[0] || null;
+    const idEscapado = String(j.id).replace(/'/g, "\\'");
+    const estadoBadge = !ultima
+      ? `<span class="badge-titular">Apta / Sin lesiones</span>`
+      : `<span class="badge-fuera">${ultima.estado || ultima.recuperacion || "Con lesión"}</span>`;
+
+    return `
+      <tr>
+        <td class="fija-izquierda">
+          <span class="enlace-jugadora-tabla" onclick="seleccionarJugadoraFicha('${idEscapado}')">
+            <strong>${j.nombreCompleto}</strong>
+          </span>
+        </td>
+        <td>${j.posicion}</td>
+        <td>${estadoBadge}</td>
+        <td>${ultima ? (ultima.lesion || ultima.tipo || ultima.diagnostico || ultima.zona || "-") : "-"}</td>
+        <td>${ultima ? (ultima.fecha || ultima.fechaInicio || "-") : "-"}</td>
+        <td>${info.lista.length}</td>
+      </tr>
+    `;
+  }));
+
+  tbody.innerHTML = filas.join("");
+}
+
+/* --- TABLA MÓDULO: TESTEOS --- */
+async function renderizarTablaTesteos() {
+  const divisionSeleccionada = document.getElementById("filtroDivision").value;
+  const jugadoras = obtenerJugadorasFiltradasActuales();
+
+  const trHead = document.getElementById("encabezadoTabla");
+  trHead.innerHTML = `
+    <th class="fija-izquierda">Jugadora</th>
+    <th>Último Mes</th>
+    <th>Salto S/Imp</th>
+    <th>Salto C/Imp</th>
+    <th>Vel. 30m</th>
+    <th>Vo2 (30-15)</th>
+    <th>Illinois Mod</th>
+    <th>Peso</th>
+    <th>Altura</th>
+    <th>I.M.C</th>
+  `;
+
+  const tbody = document.getElementById("cuerpoTablaEstadisticas");
+  tbody.innerHTML = `<tr><td colspan="10" style="padding:20px;color:#777;">Cargando planilla de testeos...</td></tr>`;
+
+  if (jugadoras.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="10" style="padding:30px;color:#777;">No hay jugadoras en ${divisionSeleccionada} con los filtros aplicados.</td></tr>`;
+    return;
+  }
+
+  const filas = await Promise.all(jugadoras.map(async j => {
+    const info = await obtenerInfoTesteosJugadora(j);
+    const v = info.valores || {};
+    const idEscapado = String(j.id).replace(/'/g, "\\'");
+    return `
+      <tr>
+        <td class="fija-izquierda">
+          <span class="enlace-jugadora-tabla" onclick="seleccionarJugadoraFicha('${idEscapado}')">
+            <strong>${j.nombreCompleto}</strong>
+          </span>
+        </td>
+        <td><strong>${info.encontrado ? info.mes : "-"}</strong></td>
+        <td>${v.salto_sin || "-"}</td>
+        <td>${v.salto_con || "-"}</td>
+        <td>${v.vel_30 || "-"}</td>
+        <td>${v.vo2_30_15 || "-"}</td>
+        <td>${v.illinois_mod || "-"}</td>
+        <td>${v.peso || "-"}</td>
+        <td>${v.altura || "-"}</td>
+        <td><strong>${info.encontrado ? info.imc : "-"}</strong></td>
+      </tr>
+    `;
+  }));
+
+  tbody.innerHTML = filas.join("");
 }
 
 /* =====================================================
@@ -1828,31 +2143,11 @@ function guardarDatosPartidosJugadoras(datos) {
 }
 
 /* =====================================================
-   RENDERIZAR TABLA DE ESTADÍSTICAS
+   RENDERIZAR TABLA DE ESTADÍSTICAS (PARTIDOS)
 ===================================================== */
 window.renderizarEstadisticas = function() {
   const divisionSeleccionada = document.getElementById("filtroDivision").value;
-  const filtroPos = document.getElementById("filtroPosicion").value;
-  const divNorm = divisionSeleccionada.toLowerCase().replace(/\s+/g, "");
-
-  const todasJugadoras = obtenerJugadoras();
-  const jugadorasDivision = todasJugadoras.filter(j => {
-    const cat = (j.categoria || "").toLowerCase().replace(/\s+/g, "");
-    return cat === divNorm;
-  });
-
-  const jugadorasFiltradas = jugadorasDivision
-    .filter(j => {
-      if (filtroPos === "todas") return true;
-      const pos = (j.posicion || "").trim().toLowerCase();
-      if (filtroPos === "arqueras") return pos.includes("arquera");
-      if (filtroPos === "defensoras") return pos.includes("defensora");
-      if (filtroPos === "mediocampistas") return pos.includes("mediocampista");
-      if (filtroPos === "delanteras") return pos.includes("delantera");
-      if (filtroPos === "polivalentes") return pos.includes("polivalente") || pos.includes("polifuncional");
-      return true;
-    })
-    .sort((a, b) => a.nombreCompleto.localeCompare(b.nombreCompleto));
+  const jugadorasFiltradas = obtenerJugadorasFiltradasActuales();
 
   const jornadas = obtenerJornadasActuales();
   const registrosPartidos = obtenerDatosPartidosJugadoras();
