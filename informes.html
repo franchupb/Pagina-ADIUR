@@ -4385,17 +4385,38 @@ function cargarJugadorasExternas() {
 }
 
 function cargarPlantelPropio() {
-  // Leemos tanto el almacenamiento de informes como el de la pantalla de jugadoras
-  const datosInformes = leerJSON(CLAVE_PLANTEL, []);
-  const datosJugadorasGenerales = leerJSON("adiurJugadorasV1", []) || leerJSON("jugadorasADIUR", []) || [];
-  
-  const mapa = new Map();
+  // Buscamos directamente las claves de almacenamiento que utiliza jugadoras.html
+  let datos = [];
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const clave = localStorage.key(i);
+      if (clave && (clave.includes("jugadoras") || clave.includes("plantel") || clave.includes("adiurJugadoras"))) {
+        const contenido = JSON.parse(localStorage.getItem(clave));
+        if (Array.isArray(contenido)) {
+          datos = datos.concat(contenido);
+        } else if (contenido && typeof contenido === "object") {
+          // Si están guardadas en objetos por categoría
+          Object.values(contenido.categorias || contenido).forEach(val => {
+            if (Array.isArray(val)) datos = datos.concat(val);
+          });
+        }
+      }
+    }
+  } catch (e) {
+    console.warn("Error leyendo plantel unificado", e);
+  }
 
-  [...datosJugadorasGenerales, ...datosInformes].forEach((j, i) => {
+  // Si no encontró nada en las claves dinámicas, usamos las fijas
+  if (!datos.length) {
+    datos = leerJSON(CLAVE_PLANTEL, []) || leerJSON("adiurJugadorasV1", []) || leerJSON("jugadorasADIUR", []) || [];
+  }
+
+  const mapa = new Map();
+  datos.forEach((j, i) => {
     const normalizado = normalizarJugador(j, "propio", i);
     if (normalizado) {
       const key = claveJugador(normalizado.nombre, normalizado.division);
-      if (!mapa.has(key) || normalizado.origen === "propio") {
+      if (!mapa.has(key)) {
         mapa.set(key, normalizado);
       }
     }
