@@ -427,8 +427,6 @@ main {
     min-width: 0;
 }
 
-/* Etiqueta superior naranja */
-
 .page-heading > div:first-child::before {
     content: "COMPETENCIA · PARTIDOS";
     display: block;
@@ -440,8 +438,6 @@ main {
     line-height: 1.4;
 }
 
-/* Título principal */
-
 .page-heading h2 {
     margin: 0 0 8px;
     color: var(--negro);
@@ -450,8 +446,6 @@ main {
     letter-spacing: -.7px;
     line-height: 1.2;
 }
-
-/* Descripción */
 
 .page-heading p {
     max-width: 720px;
@@ -467,6 +461,35 @@ main {
     justify-content: flex-end;
     flex-wrap: wrap;
     gap: 9px;
+}
+
+/* ESTADO DE SINCRONIZACIÓN CON LA NUBE */
+
+.estado-guardado {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 42px;
+    padding: 9px 13px;
+    border-radius: 9px;
+    border: 1px solid #d5eedc;
+    background: #eefaf1;
+    color: #176c34;
+    font-size: 11px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.estado-guardado.guardando {
+    border-color: #f4d9b8;
+    background: #fff6ea;
+    color: #9e5607;
+}
+
+.estado-guardado.offline {
+    border-color: #e4e6eb;
+    background: #f4f5f7;
+    color: #5b606b;
 }
 
 /* BOTONES */
@@ -491,6 +514,12 @@ main {
 .btn:hover {
     transform: translateY(-1px);
     box-shadow: 0 4px 11px rgba(0,0,0,.07);
+}
+
+.btn:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+    transform: none;
 }
 
 .btn-primary {
@@ -1953,6 +1982,10 @@ body.eliminando .btn-puntos {
 
             <div class="botones-fixture">
 
+                <span class="estado-guardado" id="estadoGuardado" aria-live="polite">
+                    ☁️ Sincronizando...
+                </span>
+
                 <button
                     class="btn btn-danger"
                     id="btnEliminarModo"
@@ -2248,8 +2281,46 @@ body.eliminando .btn-puntos {
 
 </div>
 
-<script>
-"use strict";
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+    getFirestore,
+    collection,
+    doc,
+    setDoc,
+    deleteDoc,
+    onSnapshot
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/* =====================================================
+   CONEXIÓN A FIREBASE CLOUD FIRESTORE (adiur-b1913)
+===================================================== */
+
+const firebaseConfig = {
+    projectId: "adiur-b1913",
+    appId: "1:1032379124859:web:adiur-fem-web",
+    authDomain: "adiur-b1913.firebaseapp.com",
+    storageBucket: "adiur-b1913.appspot.com"
+};
+
+let db = null;
+let nubeActiva = false;
+
+try {
+    const app = initializeApp(firebaseConfig);
+    db = getFirestore(app);
+    nubeActiva = true;
+} catch (error) {
+    console.warn("Firebase en modo local:", error);
+}
+
+const elEstadoGuardado = document.getElementById("estadoGuardado");
+
+function actualizarIndicadorGuardado(tipo, texto) {
+    if (!elEstadoGuardado) return;
+    elEstadoGuardado.className = "estado-guardado" + (tipo ? " " + tipo : "");
+    elEstadoGuardado.textContent = texto;
+}
 
 /* =====================================================
    USUARIO Y PERMISOS
@@ -2705,97 +2776,177 @@ selectorRival.addEventListener("change", actualizarEscudoRival);
 completarSelectorRival();
 
 /* =====================================================
-   CARGA Y ALMACENAMIENTO DE PARTIDOS
+   NORMALIZACIÓN Y ALMACENAMIENTO DUAL (NUBE + LOCAL)
 ===================================================== */
 
-function cargarPartidos() {
+function normalizarObjetoPartido(p, indice = 0) {
+    const division = DIVISIONES.includes(p.division)
+        ? p.division
+        : "Sub 10";
+
+    let competicion = p.competicion || "";
+
+    if (division === "Primera") {
+        if (competicion === "Rosarina") {
+            competicion = "Fase Regular - ARF";
+        } else if (competicion === "Regional") {
+            competicion = "Torneo Regional AFA";
+        }
+    }
+
+    let jornada = parseInt(p.jornada ?? p.fechaNumero, 10);
+
+    if (!Number.isFinite(jornada) || jornada < 1) {
+        jornada = 1;
+    }
+
+    const rival = p.rival || p.equipoRival || "";
+    const clubCatalogado = obtenerClubPorNombre(rival);
+
+    let escudoRival = p.escudoRival || p.escudo || "";
+
+    if (!escudoRival && clubCatalogado) {
+        escudoRival = clubCatalogado.ruta;
+    } else if (
+        escudoRival &&
+        !/^data:image\//i.test(escudoRival)
+    ) {
+        escudoRival = rutaImagen(escudoRival);
+    }
+
+    const golesAdiur = p.golesAdiur ?? p.marcadorAdiur ?? "";
+    const golesRival = p.golesRival ?? p.marcadorRival ?? "";
+
+    return {
+        id: String(p.id || ("partido-" + Date.now() + "-" + indice)),
+        division,
+        categoria: division,
+        competicion,
+        jornada,
+        fechaPartido: p.fechaPartido || p.fecha || "",
+        fecha: p.fechaPartido || p.fecha || "",
+        lugarPartido: p.lugarPartido || p.lugar || p.cancha || "",
+        rival,
+        escudoAdiur: LOGO_ADIUR_FIJO,
+        escudoRival,
+        golesAdiur: golesAdiur === "" || golesAdiur === null
+            ? ""
+            : String(golesAdiur),
+        golesRival: golesRival === "" || golesRival === null
+            ? ""
+            : String(golesRival)
+    };
+}
+
+function cargarPartidosLocales() {
     try {
         const texto = localStorage.getItem(CLAVE_FIXTURE);
-
         if (!texto) return [];
-
         const datos = JSON.parse(texto);
-
         if (!Array.isArray(datos)) return [];
-
-        return datos.map((p, indice) => {
-            const division = DIVISIONES.includes(p.division)
-                ? p.division
-                : "Sub 10";
-
-            let competicion = p.competicion || "";
-
-            if (division === "Primera") {
-                if (competicion === "Rosarina") {
-                    competicion = "Fase Regular - ARF";
-                } else if (competicion === "Regional") {
-                    competicion = "Torneo Regional AFA";
-                }
-            }
-
-            let jornada = parseInt(p.jornada ?? p.fechaNumero, 10);
-
-            if (!Number.isFinite(jornada) || jornada < 1) {
-                jornada = 1;
-            }
-
-            const rival = p.rival || p.equipoRival || "";
-            const clubCatalogado = obtenerClubPorNombre(rival);
-
-            let escudoRival = p.escudoRival || p.escudo || "";
-
-            if (!escudoRival && clubCatalogado) {
-                escudoRival = clubCatalogado.ruta;
-            } else if (
-                escudoRival &&
-                !/^data:image\//i.test(escudoRival)
-            ) {
-                escudoRival = rutaImagen(escudoRival);
-            }
-
-            const golesAdiur = p.golesAdiur ?? p.marcadorAdiur ?? "";
-            const golesRival = p.golesRival ?? p.marcadorRival ?? "";
-
-            return {
-                id: p.id || ("partido-" + Date.now() + "-" + indice),
-                division,
-                competicion,
-                jornada,
-                fechaPartido: p.fechaPartido || p.fecha || "",
-                lugarPartido: p.lugarPartido || p.lugar || p.cancha || "",
-                rival,
-                escudoAdiur: LOGO_ADIUR_FIJO,
-                escudoRival,
-                golesAdiur: golesAdiur === "" || golesAdiur === null
-                    ? ""
-                    : String(golesAdiur),
-                golesRival: golesRival === "" || golesRival === null
-                    ? ""
-                    : String(golesRival)
-            };
-        });
-
+        return datos.map((p, indice) => normalizarObjetoPartido(p, indice));
     } catch (error) {
-        console.error("Error cargando fixture:", error);
+        console.error("Error cargando fixture local:", error);
         return [];
     }
 }
 
-let partidos = cargarPartidos();
+let partidos = cargarPartidosLocales();
 let idEditando = null;
 let modoEliminar = false;
+let migracionInicialRealizada = false;
 
-function guardarEnAlmacenamiento() {
+function respaldarEnLocalStorage() {
     try {
         localStorage.setItem(CLAVE_FIXTURE, JSON.stringify(partidos));
+    } catch (error) {
+        console.warn("No se pudo respaldar en localStorage:", error);
+    }
+}
+
+async function guardarPartidoEnNube(partido) {
+    respaldarEnLocalStorage();
+
+    if (!nubeActiva || !db) {
+        actualizarIndicadorGuardado("offline", "💾 Guardado local (sin red)");
+        return true;
+    }
+
+    actualizarIndicadorGuardado("guardando", "⏳ Guardando en la nube...");
+    try {
+        await setDoc(doc(db, "partidos", String(partido.id)), {
+            ...partido,
+            actualizadoPor: usuarioGuardado,
+            actualizadoEl: new Date().toISOString()
+        });
+        actualizarIndicadorGuardado("", "☁️ Guardado en la nube");
         return true;
     } catch (error) {
-        alert(
-            "No se pudieron guardar los cambios. " +
-            "El almacenamiento del navegador puede estar lleno."
-        );
-        return false;
+        console.error("Error guardando partido en Firestore:", error);
+        actualizarIndicadorGuardado("offline", "💾 Guardado local (sin red)");
+        return true;
     }
+}
+
+async function eliminarPartidoEnNube(id) {
+    respaldarEnLocalStorage();
+
+    if (!nubeActiva || !db) {
+        actualizarIndicadorGuardado("offline", "💾 Guardado local (sin red)");
+        return true;
+    }
+
+    actualizarIndicadorGuardado("guardando", "⏳ Eliminando en la nube...");
+    try {
+        await deleteDoc(doc(db, "partidos", String(id)));
+        actualizarIndicadorGuardado("", "☁️ Guardado en la nube");
+        return true;
+    } catch (error) {
+        console.error("Error eliminando partido en Firestore:", error);
+        actualizarIndicadorGuardado("offline", "💾 Guardado local (sin red)");
+        return true;
+    }
+}
+
+function iniciarSincronizacionNube() {
+    if (!nubeActiva || !db) {
+        actualizarIndicadorGuardado("offline", "💾 Guardado local (sin red)");
+        return;
+    }
+
+    onSnapshot(
+        collection(db, "partidos"),
+        async snapshot => {
+            const listaNube = [];
+            snapshot.forEach(docSnap => {
+                listaNube.push(normalizarObjetoPartido({ id: docSnap.id, ...docSnap.data() }));
+            });
+
+            // Si la nube aún está vacía pero había partidos locales previos, migrarlos automáticamente
+            if (listaNube.length === 0 && partidos.length > 0 && !migracionInicialRealizada) {
+                migracionInicialRealizada = true;
+                for (const pLocal of partidos) {
+                    await setDoc(doc(db, "partidos", String(pLocal.id)), {
+                        ...pLocal,
+                        actualizadoPor: usuarioGuardado,
+                        actualizadoEl: new Date().toISOString()
+                    });
+                }
+                actualizarIndicadorGuardado("", "☁️ Guardado en la nube");
+                return;
+            }
+
+            migracionInicialRealizada = true;
+            partidos = listaNube;
+            respaldarEnLocalStorage();
+            renderizarFixture();
+            actualizarIndicadorGuardado("", "☁️ Guardado en la nube");
+        },
+        error => {
+            console.warn("No se pudo suscribir a Firestore:", error);
+            actualizarIndicadorGuardado("offline", "💾 Guardado local (sin red)");
+        }
+    );
 }
 
 /* =====================================================
@@ -3040,7 +3191,7 @@ document.getElementById("formPartido").addEventListener(
     guardarPartido
 );
 
-function guardarPartido(event) {
+async function guardarPartido(event) {
     event.preventDefault();
 
     if (!puedeEditar) {
@@ -3124,13 +3275,15 @@ function guardarPartido(event) {
 
     const partido = {
         id: anterior
-            ? anterior.id
+            ? String(anterior.id)
             : "partido-" + Date.now() + "-" +
                 Math.random().toString(36).slice(2, 8),
         division,
+        categoria: division,
         competicion,
         jornada,
         fechaPartido,
+        fecha: fechaPartido,
         lugarPartido,
         rival,
         escudoAdiur: LOGO_ADIUR_FIJO,
@@ -3139,7 +3292,8 @@ function guardarPartido(event) {
         golesRival: golesRivalIngresados
     };
 
-    const listaAnterior = partidos;
+    const btnGuardar = document.getElementById("btnGuardar");
+    btnGuardar.disabled = true;
 
     partidos = anterior
         ? partidos.map(p =>
@@ -3149,13 +3303,11 @@ function guardarPartido(event) {
         )
         : [...partidos, partido];
 
-    if (!guardarEnAlmacenamiento()) {
-        partidos = listaAnterior;
-        return;
-    }
-
     cerrarModal();
     renderizarFixture();
+
+    await guardarPartidoEnNube(partido);
+    btnGuardar.disabled = false;
 }
 
 /* =====================================================
@@ -3182,7 +3334,7 @@ document.getElementById("btnEliminarModo").addEventListener(
     alternarModoEliminar
 );
 
-function eliminarPartido(id) {
+async function eliminarPartido(id) {
     if (!puedeEliminar) {
         alert("Solo Fran puede eliminar partidos.");
         return;
@@ -3197,16 +3349,10 @@ function eliminarPartido(id) {
 
     if (!confirmar) return;
 
-    const listaAnterior = partidos;
-
     partidos = partidos.filter(p => String(p.id) !== String(id));
-
-    if (!guardarEnAlmacenamiento()) {
-        partidos = listaAnterior;
-        return;
-    }
-
     renderizarFixture();
+
+    await eliminarPartidoEnNube(id);
 }
 
 /* =====================================================
@@ -3517,7 +3663,7 @@ document.addEventListener("keydown", event => {
 
 window.addEventListener("storage", event => {
     if (event.key === CLAVE_FIXTURE) {
-        partidos = cargarPartidos();
+        partidos = cargarPartidosLocales();
         renderizarFixture();
     }
 
@@ -3538,6 +3684,7 @@ actualizarCompeticionesFormulario();
 actualizarFiltroCompeticion();
 actualizarContadoresCategorias();
 renderizarFixture();
+iniciarSincronizacionNube();
 </script>
 
 </body>
