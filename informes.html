@@ -4051,13 +4051,13 @@ function crearIdLegadoFixture(partido, indice, division, competicion, rival, fec
 }
 
 function cargarFixture() {
+    // Si ya se cargó desde Firestore en tiempo real, lo usamos prioritariamente
+    if (Array.isArray(window.partidosFixture) && window.partidosFixture.length > 0) {
+        return window.partidosFixture;
+    }
+
     let datos = null;
-    const posiblesClaves = [
-        typeof CLAVE_FIXTURE !== 'undefined' ? CLAVE_FIXTURE : null,
-        "fixtureADIUR",
-        "partidosFixture",
-        "fixture_adiur"
-    ].filter(Boolean);
+    const posiblesClaves = ["fixtureADIUR", "partidosFixture", "fixture_adiur"];
 
     for (const clave of posiblesClaves) {
         const guardado = localStorage.getItem(clave);
@@ -4074,55 +4074,32 @@ function cargarFixture() {
 
     if (!Array.isArray(datos)) return [];
 
-    return datos.filter(p => p && typeof p === "object" && !Array.isArray(p)).map((p, indice) => {
-        const division = normalizarDivision(p.division || p.categoria || p.category || "");
-        const rival = String(p.rival || p.equipoRival || p.clubRival || "").trim();
-        const club = typeof obtenerClubPorNombre === 'function' ? obtenerClubPorNombre(rival) : null;
-        const competicionOriginal = p.competicion || p.torneo || "";
-        const competicion = typeof normalizarCompeticion === 'function' 
-            ? normalizarCompeticion(division, competicionOriginal) 
-            : competicionOriginal;
-        
-        const fechaCruda = p.fechaPartido || p.fechaReal || p.fechaCalendario || p.fecha || p.date || "";
-        const fechaReal = typeof normalizarFechaInput === 'function' ? normalizarFechaInput(fechaCruda) : fechaCruda;
-        const lugar = String(p.lugarPartido || p.lugar || p.cancha || p.sede || p.venue || "").trim();
-
-        let escudo = p.escudoRival || p.escudo || (club?.ruta) || "";
-        if (escudo && !/^data:image\//i.test(escudo) && club) escudo = club.ruta;
-
-        const jornada = typeof numeroSeguro === 'function' 
-            ? numeroSeguro(p.jornada ?? p.fechaNumero) 
-            : (p.jornada ?? p.fechaNumero ?? "");
-            
-        const idOriginal = p.id;
-        const id = idOriginal !== undefined && idOriginal !== null && String(idOriginal).trim() !== ""
-            ? String(idOriginal)
-            : (typeof crearIdLegadoFixture === 'function' 
-                ? crearIdLegadoFixture(p, indice, division, competicion, rival, fechaReal, lugar) 
-                : "fixture-" + indice);
-
-        const golesAdiur = p.golesAdiur ?? p.marcadorAdiur ?? "";
-        const golesRival = p.golesRival ?? p.marcadorRival ?? "";
+    return datos.map((p, indice) => {
+        const division = normalizarDivision(p.division || p.categoria || "");
+        const rival = String(p.rival || p.equipoRival || "").trim();
+        const club = obtenerClubPorNombre(rival);
+        const competicion = normalizarCompeticion(division, p.competicion || p.torneo || "");
+        const fechaReal = normalizarFechaInput(p.fechaPartido || p.fechaReal || p.fecha || "");
+        const lugar = String(p.lugarPartido || p.lugar || "").trim();
 
         return {
             ...p,
-            id,
+            id: String(p.id || "fixture-" + indice),
             division,
             competicion,
-            jornada,
+            jornada: numeroSeguro(p.jornada ?? p.fechaNumero),
             rival,
             escudoAdiur: p.escudoAdiur || "Logo ADIUR.jpg",
-            escudoRival: escudo,
-            golesAdiur: golesAdiur === null ? "" : String(golesAdiur),
-            golesRival: golesRival === null ? "" : String(golesRival),
+            escudoRival: p.escudoRival || club?.ruta || "",
+            golesAdiur: p.golesAdiur ?? p.marcadorAdiur ?? "",
+            golesRival: p.golesRival ?? p.marcadorRival ?? "",
             fechaReal,
-            hora: p.hora || p.horario || "",
+            hora: p.hora || "",
             lugar,
             localia: p.localia || p.condicion || ""
         };
     }).filter(p => p.rival && p.division);
 }
-
 function actualizarSelectorFixture() {
     // Forzar la recarga inmediata del fixture desde localStorage para evitar arrays vacíos
     window.partidosFixture = cargarFixture();
@@ -5791,7 +5768,67 @@ function inicializar() {
       }
     });
   }
+// Escucha en tiempo real de la base de datos de jugadoras en Firebase
+    if (typeof db !== "undefined") {
+        onSnapshot(collection(db, "jugadoras"), (snapshot) => {
+            let listaNube = [];
+            snapshot.forEach((docSnap) => {
+                listaNube.push({ id: docSnap.id, ...docSnap.data() });
+            });
+            if (listaNube.length > 0) {
+                window.jugadorasGlobales = procesarListaJugadoras(listaNube);
+                if (typeof renderizarJugadorasFormulario === "function") {
+                    renderizarJugadorasFormulario();
+                }
+            }
+        });
+    } // <--- Aquí termina el bloque de jugadoras (Línea 593 en tu imagen)
 
+    // ==========================================
+    // PEGA ESTO AQUÍ (NUEVO BLOQUE PARA PARTIDOS):
+    // ==========================================
+    if (typeof db !== "undefined") {
+        onSnapshot(collection(db, "partidos"), (snapshot) => {
+            let fixtureNube = [];
+            snapshot.forEach((docSnap) => {
+                fixtureNube.push({ id: docSnap.id, ...docSnap.data() });
+            });
+            
+            if (fixtureNube.length > 0) {
+                window.partidosFixture = fixtureNube.map((p, indice) => {
+                    const division = normalizarDivision(p.division || p.categoria || "");
+                    const rival = String(p.rival || p.equipoRival || "").trim();
+                    const club = obtenerClubPorNombre(rival);
+                    const competicion = normalizarCompeticion(division, p.competicion || p.torneo || "");
+                    const fechaReal = normalizarFechaInput(p.fechaPartido || p.fechaReal || p.fecha || "");
+                    const lugar = String(p.lugarPartido || p.lugar || "").trim();
+
+                    return {
+                        ...p,
+                        id: String(p.id || docSnap.id),
+                        division,
+                        competicion,
+                        jornada: numeroSeguro(p.jornada ?? p.fechaNumero),
+                        rival,
+                        escudoAdiur: p.escudoAdiur || "Logo ADIUR.jpg",
+                        escudoRival: p.escudoRival || club?.ruta || "",
+                        golesAdiur: p.golesAdiur ?? p.marcadorAdiur ?? "",
+                        golesRival: p.golesRival ?? p.marcadorRival ?? "",
+                        fechaReal,
+                        hora: p.hora || "",
+                        lugar,
+                        localia: p.localia || p.condicion || ""
+                    };
+                }).filter(p => p.rival && p.division);
+
+                actualizarSelectorFixture();
+            }
+        });
+    }
+    // ==========================================
+
+    actualizarSelectorFixture(); // <--- Línea 595 original
+    completarSelectorRival("");
   actualizarSelectorFixture();
   completarSelectorRival("");
   actualizarCompeticiones();
