@@ -4051,64 +4051,79 @@ function crearIdLegadoFixture(partido, indice, division, competicion, rival, fec
 }
 
 function cargarFixture() {
-  const clavesPosibles = [CLAVE_FIXTURE, "fixtureADIUR", "partidosFixture", "fixturesADIUR"];
-  let datosRaw = null;
-  
-  for (const clave of clavesPosibles) {
-    const item = localStorage.getItem(clave);
-    if (item) {
-      try {
-        const parsed = JSON.parse(item);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          datosRaw = parsed;
-          break;
+    // Intentar leer de múltiples claves posibles en localStorage para evitar desacoples
+    let datos = null;
+    const posiblesClaves = [
+        typeof CLAVE_FIXTURE !== 'undefined' ? CLAVE_FIXTURE : null,
+        "fixtureADIUR",
+        "partidosFixture",
+        "fixture_adiur"
+    ].filter(Boolean);
+
+    for (const clave of posiblesClaves) {
+        const guardado = localStorage.getItem(clave);
+        if (guardado) {
+            try {
+                const parsed = JSON.parse(guardado);
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    datos = parsed;
+                    break;
+                }
+            } catch (e) {
+                // Si falla el parseo de una clave, continúa probando con la siguiente
+            }
         }
-      } catch (e) {}
     }
-  }
 
-  if (!datosRaw) return [];
+    if (!Array.isArray(datos)) return [];
 
-  return datosRaw.filter(p => p && typeof p === "object" && !Array.isArray(p)).map((p, indice) => {
-    const divisionCruda = p.division || p.categoria || p.category || p.categoría || "";
-    const division = normalizarDivision(divisionCruda);
-    const rival = String(p.rival || p.equipoRival || p.clubRival || "").trim();
-    const club = obtenerClubPorNombre(rival);
-    const competicionOriginal = p.competicion || p.torneo || "";
-    const competicion = normalizarCompeticion(division, competicionOriginal);
-    const fechaCruda = p.fechaPartido || p.fechaReal || p.fechaCalendario || p.fecha || p.date || "";
-    const fechaReal = normalizarFechaInput(fechaCruda);
-    const lugar = String(p.lugarPartido || p.lugar || p.cancha || p.sede || p.venue || "").trim();
+    return datos.filter(p => p && typeof p === "object" && !Array.isArray(p)).map((p, indice) => {
+        const division = normalizarDivision(p.division || p.categoria || p.category || "");
+        const rival = String(p.rival || p.equipoRival || p.clubRival || "").trim();
+        const club = typeof obtenerClubPorNombre === 'function' ? obtenerClubPorNombre(rival) : null;
+        const competicionOriginal = p.competicion || p.torneo || "";
+        const competicion = typeof normalizarCompeticion === 'function' 
+            ? normalizarCompeticion(division, competicionOriginal) 
+            : competicionOriginal;
+        
+        const fechaCruda = p.fechaPartido || p.fechaReal || p.fechaCalendario || p.fecha || p.date || "";
+        const fechaReal = typeof normalizarFechaInput === 'function' ? normalizarFechaInput(fechaCruda) : fechaCruda;
+        const lugar = String(p.lugarPartido || p.lugar || p.cancha || p.sede || p.venue || "").trim();
 
-    let escudo = p.escudoRival || p.escudo || club?.ruta || "";
-    if (escudo && !/^data:image\//i.test(escudo) && club) escudo = club.ruta;
+        let escudo = p.escudoRival || p.escudo || (club?.ruta) || "";
+        if (escudo && !/^data:image\//i.test(escudo) && club) escudo = club.ruta;
 
-    const jornada = numeroSeguro(p.jornada ?? p.fechaNumero);
-    const idOriginal = p.id;
-    const id = idOriginal !== undefined && idOriginal !== null && String(idOriginal).trim() !== ""
-      ? String(idOriginal)
-      : crearIdLegadoFixture(p, indice, division, competicion, rival, fechaReal, lugar);
+        const jornada = typeof numeroSeguro === 'function' 
+            ? numeroSeguro(p.jornada ?? p.fechaNumero) 
+            : (p.jornada ?? p.fechaNumero ?? "");
+            
+        const idOriginal = p.id;
+        const id = idOriginal !== undefined && idOriginal !== null && String(idOriginal).trim() !== ""
+            ? String(idOriginal)
+            : (typeof crearIdLegadoFixture === 'function' 
+                ? crearIdLegadoFixture(p, indice, division, competicion, rival, fechaReal, lugar) 
+                : "fixture-" + indice);
 
-    const golesAdiur = p.golesAdiur ?? p.marcadorAdiur ?? p.golesFavor ?? "";
-    const golesRival = p.golesRival ?? p.marcadorRival ?? p.golesContra ?? "";
+        const golesAdiur = p.golesAdiur ?? p.marcadorAdiur ?? "";
+        const golesRival = p.golesRival ?? p.marcadorRival ?? "";
 
-    return {
-      ...p,
-      id,
-      division,
-      competicion,
-      jornada,
-      rival,
-      escudoAdiur: p.escudoAdiur || "Logo ADIUR.jpg",
-      escudoRival: escudo,
-      golesAdiur: golesAdiur === null ? "" : String(golesAdiur),
-      golesRival: golesRival === null ? "" : String(golesRival),
-      fechaReal,
-      hora: p.hora || p.horario || "",
-      lugar,
-      localia: p.localia || p.condicion || "Local"
-    };
-  }).filter(p => p.rival);
+        return {
+            ...p,
+            id,
+            division,
+            competicion,
+            jornada,
+            rival,
+            escudoAdiur: p.escudoAdiur || "Logo ADIUR.jpg",
+            escudoRival: escudo,
+            golesAdiur: golesAdiur === null ? "" : String(golesAdiur),
+            golesRival: golesRival === null ? "" : String(golesRival),
+            fechaReal,
+            hora: p.hora || p.horario || "",
+            lugar,
+            localia: p.localia || p.condicion || ""
+        };
+    }).filter(p => p.rival && p.division);
 }
 
 function actualizarSelectorFixture() {
