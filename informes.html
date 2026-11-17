@@ -4409,13 +4409,21 @@ function procesarListaJugadoras(listaCruda) {
 
 // Función unificada que lee prioritariamente de la nube de Firebase en tiempo real
 function cargarPlantelPropio() {
-  if (window.jugadorasGlobales && Array.isArray(window.jugadorasGlobales) && window.jugadorasGlobales.length > 0) {
-    return window.jugadorasGlobales;
+  // Prioridad: jugadoras sincronizadas desde Firebase.
+  const datosNube = window.jugadorasGlobales;
+
+  if (Array.isArray(datosNube) && datosNube.length > 0) {
+    return datosNube
+      .map((j, i) => normalizarJugador(j, "propio", i))
+      .filter(Boolean);
   }
-  
-  // Respaldo local por si la red falla
-  const datosLocales = leerJSON("jugadorasADIUR", []) || leerJSON(CLAVE_PLANTEL, []);
-  return procesarListaJugadoras(Array.isArray(datosLocales) ? datosLocales : []);
+
+  // Respaldo local por si Firebase todavía no cargó o no hay conexión.
+  const datosLocales = leerJSON("jugadorasADIUR", null) || leerJSON(CLAVE_PLANTEL, []);
+
+  return (Array.isArray(datosLocales) ? datosLocales : [])
+    .map((j, i) => normalizarJugador(j, "propio", i))
+    .filter(Boolean);
 }
 
 function obtenerPlantelCompleto() {
@@ -4446,13 +4454,33 @@ function grupoPosicion(valor) {
 }
 
 function jugadoresParaDivision(division) {
-  if (!DIVISIONES.includes(division)) return [];
-  // La convocatoria solo ofrece jugadoras activas de la categoría seleccionada.
-  return jugadoresExternos.filter(j=>j.division===division && jugadoraEstaActiva(j))
-    .sort((a,b)=>{
-      const orden={POR:0,DEF:1,MED:2,DEL:3,OTR:4};
-      const diferencia=orden[grupoPosicion(a.posicion)]-orden[grupoPosicion(b.posicion)];
-      return diferencia || a.nombre.localeCompare(b.nombre,"es");
+  const divisionNormalizada = normalizarDivision(division);
+
+  if (!divisionNormalizada || !DIVISIONES.includes(divisionNormalizada)) {
+    return [];
+  }
+
+  // Unifica las jugadoras propias con las fuentes externas.
+  // Después filtra por división y estado.
+  return obtenerPlantelCompleto()
+    .filter(j =>
+      normalizarDivision(j.division || j.categoria) === divisionNormalizada &&
+      jugadoraEstaActiva(j)
+    )
+    .sort((a, b) => {
+      const orden = {
+        POR: 0,
+        DEF: 1,
+        MED: 2,
+        DEL: 3,
+        OTR: 4
+      };
+
+      const diferencia =
+        orden[grupoPosicion(a.posicion)] -
+        orden[grupoPosicion(b.posicion)];
+
+      return diferencia || a.nombre.localeCompare(b.nombre, "es");
     });
 }
 
@@ -6167,14 +6195,22 @@ function inicializar() {
       snapshot.forEach((docSnap) => {
         listaNube.push({ id: docSnap.id, ...docSnap.data() });
       });
-      if (listaNube.length > 0) {
-        window.jugadorasGlobales = procesarListaJugadoras(listaNube);
-        
-        // Refrescamos automáticamente la tabla de formación del paso 2 si ya está activa
-        if (typeof renderizarJugadorasFormulario === "function") {
-          renderizarJugadorasFormulario();
-        }
-      }
+      window.jugadorasGlobales = listaNube;
+
+// Actualizamos el plantel propio con los datos recibidos de Firebase.
+if (listaNube.length > 0) {
+  plantelPropio = listaNube
+    .map((j, i) => normalizarJugador(j, "propio", i))
+    .filter(Boolean);
+} else {
+  // Si Firebase no tiene registros, utilizamos el respaldo local.
+  plantelPropio = cargarPlantelPropio();
+}
+
+// Actualizamos la formación si ya está abierta.
+if (typeof renderizarJugadorasFormulario === "function") {
+  renderizarJugadorasFormulario();
+}
     });
   }
   // ============================
