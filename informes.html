@@ -2779,6 +2779,10 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 }
 
 </style>
+
+<!-- Firebase SDK para Sincronización en la Nube (Firestore) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 </head>
 
 <body>
@@ -3492,6 +3496,156 @@ let mensajeTimer = null;
 let guardando = false;
 
 const $ = id => document.getElementById(id);
+
+/* =====================================================
+   NUBE (FIREBASE FIRESTORE) Y LECTURA DE jugadoras.html
+===================================================== */
+const firebaseConfig = {
+  projectId: "adiur-b1913"
+};
+if (typeof firebase !== "undefined") {
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+}
+const db = (typeof firebase !== "undefined") ? firebase.firestore() : null;
+
+async function cargarJugadorasDesdeJugadorasHtml() {
+  try {
+    const resp = await fetch("jugadoras.html", { cache: "no-store" });
+    if (!resp.ok) return;
+    const texto = await resp.text();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(texto, "text/html");
+
+    const extraidas = [];
+    const vistos = new Set();
+
+    // 1) Buscar posibles JSON embebidos en scripts de jugadoras.html
+    doc.querySelectorAll("script").forEach(sc => {
+      const code = sc.textContent || "";
+      const matches = code.match(/\[\s*\{[\s\S]*?\}\s*\]/g) || [];
+      matches.forEach(m => {
+        try {
+          const arr = JSON.parse(m);
+          if (Array.isArray(arr)) {
+            extraerJugadores(arr, extraidas, "", 0);
+          }
+        } catch (_) {}
+      });
+    });
+
+    // 2) Buscar elementos del DOM (tablas o tarjetas) en jugadoras.html
+    doc.querySelectorAll("tr, [data-jugadora], [data-nombre], .jugadora-card, .card-jugadora, .player-card").forEach((el, idx) => {
+      const txt = el.textContent || "";
+      let divDetectada = normalizarDivision(el.dataset?.division || el.dataset?.categoria || "");
+      if (!divDetectada) {
+        for (const d of DIVISIONES) {
+          if (new RegExp("\\b" + d.replace(" ", "\\s*") + "\\b", "i").test(txt)) {
+            divDetectada = d;
+            break;
+          }
+        }
+      }
+
+      let nombre = el.dataset?.nombre || el.dataset?.jugadora || "";
+      let posicion = el.dataset?.posicion || el.dataset?.puesto || "";
+      let dorsal = el.dataset?.dorsal || el.dataset?.numero || "";
+      let estado = el.dataset?.estado || "";
+
+      if (!nombre) {
+        const celdas = el.querySelectorAll("td");
+        if (celdas.length >= 1) {
+          nombre = celdas[0].textContent.trim();
+          if (celdas[1] && !posicion) posicion = celdas[1].textContent.trim();
+          if (celdas[2] && !dorsal) dorsal = celdas[2].textContent.trim();
+          if (celdas[3] && !estado) estado = celdas[3].textContent.trim();
+        } else {
+          const titulo = el.querySelector("h3, h4, strong, .nombre, .jugadora-nombre");
+          if (titulo) nombre = titulo.textContent.trim();
+        }
+      }
+
+      if (nombre && nombre.length > 2 && !/^(nombre|jugadora|posicion|posición|dorsal|division|división|estado|acciones)$/i.test(nombre)) {
+        extraidas.push({
+          objeto: {
+            id: "jug-html-" + idx,
+            nombre,
+            division: divDetectada,
+            posicion: posicion || "Sin posición",
+            dorsal,
+            estado
+          },
+          divisionPadre: divDetectada
+        });
+      }
+    });
+
+    const normalizadas = extraidas
+      .map((item, i) => normalizarJugador(item.objeto, "jugadoras_html", i, item.divisionPadre))
+      .filter(Boolean)
+      .filter(j => {
+        const key = claveJugador(j.nombre, j.division);
+        if (vistos.has(key)) return false;
+        vistos.add(key);
+        return true;
+      });
+
+    if (normalizadas.length > 0) {
+      const mapa = new Map();
+      jugadoresExternos.forEach(j => mapa.set(claveJugador(j.nombre, j.division), j));
+      normalizadas.forEach(j => mapa.set(claveJugador(j.nombre, j.division), j));
+      jugadoresExternos = [...mapa.values()];
+    }
+  } catch (e) {
+    console.warn("No se pudo leer jugadoras.html automáticamente:", e);
+  }
+}
+
+async function cargarPartidosNube() {
+  if (!db) return;
+  try {
+    const snap = await db.collection("informes_partidos").get();
+    const remotos = [];
+    snap.forEach(doc => {
+      remotos.push(normalizarPartidoGuardado({ id: doc.id, ...doc.data() }));
+    });
+    if (remotos.length > 0) {
+      const mapa = new Map();
+      partidos.forEach(p => mapa.set(String(p.id), p));
+      remotos.forEach(p => mapa.set(String(p.id), p));
+      partidos = [...mapa.values()];
+      guardarJSON(CLAVE_PARTIDOS, partidos);
+      renderizarTodo();
+    } else if (partidos.length > 0) {
+      // Si la nube está vacía pero hay partidos locales, subirlos para sincronizar
+      for (const p of partidos) {
+        await db.collection("informes_partidos").doc(String(p.id)).set(p);
+      }
+    }
+  } catch (e) {
+    console.warn("Error al sincronizar informes desde la nube:", e);
+  }
+}
+
+async function guardarPartidoNube(p) {
+  if (!db) return;
+  try {
+    await db.collection("informes_partidos").doc(String(p.id)).set(p);
+  } catch (e) {
+    console.error("Error al guardar informe en la nube:", e);
+    mostrarMensaje("Guardado localmente, pero falló la sincronización con la nube.", "error");
+  }
+}
+
+async function borrarPartidoNube(id) {
+  if (!db) return;
+  try {
+    await db.collection("informes_partidos").doc(String(id)).delete();
+  } catch (e) {
+    console.error("Error al eliminar informe en la nube:", e);
+  }
+}
 
 /* =====================================================
    ASISTENTE DE CARGA DEL INFORME
@@ -4716,7 +4870,7 @@ function actualizarFilaJugador(elemento) {
     fila.dataset.tiempoEntrada = "";
   }
   fila.querySelectorAll(".opcion-condicion").forEach(label=>{
-    const radio=label.querySelector("input[type=radio]");
+    const radio=label.querySelector("input");
     radio.checked=citada.checked && radio.value===condicion.value;
     radio.dataset.previo=radio.checked?"si":"no";
     label.classList.toggle("seleccionada",radio.checked);
@@ -5531,6 +5685,8 @@ function guardarPartido(evento) {
     return;
   }
 
+  guardarPartidoNube(p);
+
   renderizarTodo();
   nuevoPartido();
   cambiarVista("partidos");
@@ -5551,6 +5707,7 @@ function borrarPartido(id) {
     return;
   }
 
+  borrarPartidoNube(id);
   renderizarTodo();
   mostrarMensaje("Informe eliminado y estadísticas recalculadas.","exito");
 }
@@ -5769,58 +5926,21 @@ function renderizarPartidos() {
         </div>
 
         <div class="partido-detalles">
-          <span class="etiqueta etiqueta-verde">♙ ${participaron} participantes</span>
-          <span class="etiqueta etiqueta-naranja">⚽ ${goles} goles</span>
-          <span class="etiqueta">◷ ${minutos} minutos</span>
-          <span class="etiqueta etiqueta-amarilla">🟨 ${amarillas} amarillas</span>
-          <span class="etiqueta">🟥 ${rojas} rojas</span>
+          <span class="etiqueta etiqueta-naranja">${participaron} jugadoras</span>
+          <span class="etiqueta">${minutos} min. totales</span>
+          <span class="etiqueta etiqueta-verde">${goles} goles</span>
+          ${amarillas?`<span class="etiqueta etiqueta-amarilla">${amarillas} amarillas</span>`:""}
+          ${rojas?`<span class="etiqueta" style="background:var(--rojo-fondo);color:var(--rojo);">${rojas} rojas</span>`:""}
         </div>
 
         ${p.observaciones?`<div class="partido-observaciones">${escaparHTML(p.observaciones)}</div>`:""}
 
         <div class="partido-acciones">
-          <button class="btn btn-secondary btn-small" type="button" onclick="verDetallePartido('${escaparHTML(p.id)}')">Ver detalle</button>
           <button class="btn btn-secondary btn-small" type="button" onclick="editarPartido('${escaparHTML(p.id)}')">Editar</button>
           <button class="btn btn-danger btn-small" type="button" onclick="borrarPartido('${escaparHTML(p.id)}')">Eliminar</button>
         </div>
       </article>`;
   }).join("");
-}
-
-function verDetallePartido(id) {
-  const p=partidos.find(p=>String(p.id)===String(id));
-  if (!p) return;
-
-  const jugadoras=(p.jugadoras||[])
-    .filter(j=>j.jugo||j.minutos||j.goles||j.amarillas||j.rojas)
-    .sort((a,b)=>a.nombre.localeCompare(b.nombre,"es"))
-    .map(j=>`${j.nombre}: ${j.minutos} min · ${j.goles} goles · ${j.amarillas} amarillas · ${j.rojas} rojas`);
-
-  const goles=(p.golesEventos||[]).filter(g=>g.jugadora)
-    .map(g=>`${g.jugadora}: ${g.minuto===null?"minuto sin indicar":g.minuto+"′"} ${g.tiempo||""}`);
-
-  const tarjetas=(p.tarjetasEventos||[]).filter(t=>t.jugadora)
-    .map(t=>`${t.jugadora}: ${t.tipo} · ${t.minuto===null?"minuto sin indicar":t.minuto+"′"} ${t.tiempo||""}`);
-
-  alert([
-    `${formatearFecha(p.fecha)} — ${p.division} — ${p.torneo}`,
-    `ADIUR ${p.golesFavor??"–"} - ${p.golesContra??"–"} ${p.rival}`,
-    `Jornada: ${p.jornada||"Sin indicar"}`,
-    `Lugar: ${p.lugar||"Sin indicar"}`,
-    `Duración: ${p.duracionPartido} minutos`,
-    "",
-    "PARTICIPACIÓN",
-    ...(jugadoras.length?jugadoras:["Sin estadísticas individuales."]),
-    "",
-    "GOLES",
-    ...(goles.length?goles:["Sin detalle individual."]),
-    "",
-    "TARJETAS",
-    ...(tarjetas.length?tarjetas:["Sin tarjetas registradas."]),
-    "",
-    "OBSERVACIONES",
-    p.observaciones||"Sin observaciones."
-  ].join("\n"));
 }
 
 function limpiarFiltrosPartidos() {
@@ -5832,205 +5952,151 @@ function limpiarFiltrosPartidos() {
 }
 
 /* =====================================================
-   EXPORTACIÓN Y RESPALDO
+   EXPORTACIÓN CSV
 ===================================================== */
 
-function csvCelda(valor) {
+function celdaCSV(valor) {
   let texto=String(valor??"");
   if (/^[=+\-@]/.test(texto)) texto="'"+texto;
-  return '"'+texto.replace(/"/g,'""')+'"';
+  return `"${texto.replace(/"/g,'""')}"`;
 }
 
-function descargarArchivo(nombre,contenido,tipo) {
-  const blob=new Blob([contenido],{type:tipo});
-  const url=URL.createObjectURL(blob);
+function descargarCSV(nombre,filas) {
+  const contenido="\uFEFF"+filas.map(f=>f.map(celdaCSV).join(";")).join("\r\n");
   const enlace=document.createElement("a");
-  enlace.href=url;
+  enlace.href=URL.createObjectURL(new Blob([contenido],{type:"text/csv;charset=utf-8;"}));
   enlace.download=nombre;
-  document.body.appendChild(enlace);
   enlace.click();
-  enlace.remove();
-  setTimeout(()=>URL.revokeObjectURL(url),1200);
+  setTimeout(()=>URL.revokeObjectURL(enlace.href),500);
 }
 
 function exportarPartidosCSV() {
-  const filas=[[
-    "Fecha","Hora","División","Competición","Jornada","Condición","Rival","Lugar",
-    "Goles ADIUR","Goles rival","Duración","Participantes","Goles individuales",
-    "Amarillas","Rojas","Minutos totales","Observaciones"
-  ]];
+  if (!partidos.length) {
+    mostrarMensaje("No hay partidos para exportar.","error");
+    return;
+  }
 
-  partidos.forEach(p=>{
-    const js=p.jugadoras||[];
-    filas.push([
-      p.fecha,p.hora,p.division,p.torneo,p.jornada,p.localia,p.rival,p.lugar,
-      p.golesFavor,p.golesContra,p.duracionPartido,
-      js.filter(j=>j.jugo||j.minutos>0).length,
-      js.reduce((s,j)=>s+numeroSeguro(j.goles),0),
-      js.reduce((s,j)=>s+numeroSeguro(j.amarillas),0),
-      js.reduce((s,j)=>s+numeroSeguro(j.rojas),0),
-      js.reduce((s,j)=>s+numeroSeguro(j.minutos),0),
-      p.observaciones
-    ]);
-  });
-
-  descargarArchivo("ADIUR_Informes_Partidos.csv",
-    "\uFEFF"+filas.map(f=>f.map(csvCelda).join(";")).join("\r\n"),
-    "text/csv;charset=utf-8;"
-  );
-
-  mostrarMensaje("Historial exportado.","exito");
+  descargarCSV(`informes-partidos-adiur-${fechaHoy()}.csv`,[
+    ["Fecha","División","Competición","Jornada","Condición","Rival","Goles ADIUR","Goles rival","Duración","Lugar","Hora","Observaciones"],
+    ...partidos.map(p=>[
+      p.fecha,p.division,p.torneo,p.jornada||"",p.localia,p.rival,
+      p.golesFavor,p.golesContra,p.duracionPartido,p.lugar,p.hora||"",p.observaciones
+    ])
+  ]);
 }
 
 function exportarEstadisticasCSV() {
   const lista=obtenerEstadisticasFiltradas();
-  const filas=[["Jugadora","División","Partidos","Minutos","Promedio","Goles","Amarillas","Rojas"]];
+  if (!lista.length) {
+    mostrarMensaje("No hay estadísticas para exportar.","error");
+    return;
+  }
 
-  lista.forEach(j=>filas.push([
-    j.nombre,j.division,j.partidos,j.minutos,
-    j.partidos?Math.round(j.minutos/j.partidos):0,
-    j.goles,j.amarillas,j.rojas
-  ]));
-
-  descargarArchivo("ADIUR_Estadisticas.csv",
-    "\uFEFF"+filas.map(f=>f.map(csvCelda).join(";")).join("\r\n"),
-    "text/csv;charset=utf-8;"
-  );
-
-  mostrarMensaje("Estadísticas exportadas.","exito");
+  descargarCSV(`estadisticas-adiur-${fechaHoy()}.csv`,[
+    ["Jugadora","División","Partidos","Minutos","Promedio","Goles","Amarillas","Rojas"],
+    ...lista.map(j=>[
+      j.nombre,j.division,j.partidos,j.minutos,
+      j.partidos?Math.round(j.minutos/j.partidos):0,
+      j.goles,j.amarillas,j.rojas
+    ])
+  ]);
 }
 
 /* =====================================================
-   NAVEGACIÓN E INICIALIZACIÓN
+   NAVEGACIÓN Y BARRA LATERAL
 ===================================================== */
 
 function cambiarVista(nombre) {
-  ["cargar","partidos","estadisticas"].forEach(v=>{
-    $("vista-"+v).classList.toggle("activa",v===nombre);
-  });
-
-  document.querySelectorAll(".pestana").forEach(b=>{
-    b.classList.toggle("activa",b.dataset.vista===nombre);
-  });
+  document.querySelectorAll(".pestana").forEach(p=>
+    p.classList.toggle("activa",p.dataset.vista===nombre)
+  );
+  document.querySelectorAll(".vista").forEach(v=>
+    v.classList.toggle("activa",v.id===`vista-${nombre}`)
+  );
 
   if (nombre==="partidos") renderizarPartidos();
   if (nombre==="estadisticas") renderizarEstadisticas();
+}
 
-  if (window.innerWidth<=900) {
-    $("sidebar").classList.remove("visible");
-    $("capaSidebar").classList.remove("visible");
-    $("botonMenu").setAttribute("aria-expanded","false");
-  }
+function esMovil() {
+  return window.innerWidth<=900;
 }
 
 function alternarMenu() {
-  if (window.innerWidth<=900) {
-    const visible=$("sidebar").classList.toggle("visible");
-    $("capaSidebar").classList.toggle("visible",visible);
-    $("botonMenu").setAttribute("aria-expanded",String(visible));
+  const sidebar=$("sidebar");
+  const capa=$("capaSidebar");
+  const boton=$("botonMenu");
+
+  if (esMovil()) {
+    const abierto=sidebar.classList.toggle("visible");
+    capa.classList.toggle("visible",abierto);
+    boton.setAttribute("aria-expanded",String(abierto));
   } else {
-    const oculto=$("sidebar").classList.toggle("oculta");
-    $("botonMenu").setAttribute("aria-expanded",String(!oculto));
+    const oculto=sidebar.classList.toggle("oculta");
+    boton.setAttribute("aria-expanded",String(!oculto));
   }
 }
 
-function sincronizarEstadoMenuResponsive() {
-  const movil = window.innerWidth <= 900;
-  const menu = $("sidebar");
-  const capa = $("capaSidebar");
-
-  if (movil) {
-    menu.classList.remove("oculta");
-    menu.classList.remove("visible");
-    capa.classList.remove("visible");
-    $("botonMenu").setAttribute("aria-expanded", "false");
-  } else {
-    menu.classList.remove("visible");
-    capa.classList.remove("visible");
-    $("botonMenu").setAttribute("aria-expanded", String(!menu.classList.contains("oculta")));
-  }
+function cerrarMenuMovil() {
+  $("sidebar").classList.remove("visible");
+  $("capaSidebar").classList.remove("visible");
+  $("botonMenu").setAttribute("aria-expanded","false");
 }
 
-function configurarNavegacion() {
+function configurarMenuLateral() {
+  document.querySelectorAll(".grupo-menu").forEach(grupo=>{
+    const boton=grupo.querySelector(".titulo-grupo");
+    const nombre=boton?.textContent.replace("›","").trim()||"";
+    const abierto=gruposAbiertos.has(nombre);
+
+    grupo.classList.toggle("cerrado",!abierto);
+    boton?.setAttribute("aria-expanded",String(abierto));
+
+    boton?.addEventListener("click",()=>{
+      const nuevoEstado=grupo.classList.contains("cerrado");
+      grupo.classList.toggle("cerrado",!nuevoEstado);
+      boton.setAttribute("aria-expanded",String(nuevoEstado));
+      if (nuevoEstado) gruposAbiertos.add(nombre);
+      else gruposAbiertos.delete(nombre);
+    });
+  });
+
   $("botonMenu").addEventListener("click",alternarMenu);
-  window.addEventListener("resize",sincronizarEstadoMenuResponsive);
-  sincronizarEstadoMenuResponsive();
+  $("capaSidebar").addEventListener("click",cerrarMenuMovil);
 
-  $("capaSidebar").addEventListener("click",()=>{
-    $("sidebar").classList.remove("visible");
-    $("capaSidebar").classList.remove("visible");
-    $("botonMenu").setAttribute("aria-expanded","false");
-  });
-
-  document.querySelectorAll(".titulo-grupo").forEach(boton=>{
-    const grupo=boton.closest(".grupo-menu");
-    const titulo=boton.querySelector(".grupo-izquierdo span:last-child")?.textContent?.trim();
-
-    if (titulo&&!gruposAbiertos.has(titulo)) grupo.classList.add("cerrado");
-    boton.setAttribute("aria-expanded", String(!grupo.classList.contains("cerrado")));
-
-    boton.addEventListener("click",()=>{
-      grupo.classList.toggle("cerrado");
-      boton.setAttribute("aria-expanded", String(!grupo.classList.contains("cerrado")));
-      if (!titulo) return;
-
-      if (grupo.classList.contains("cerrado")) gruposAbiertos.delete(titulo);
-      else gruposAbiertos.add(titulo);
-    });
-  });
-
-  document.querySelectorAll(".pestana").forEach(b=>{
-    b.addEventListener("click",()=>cambiarVista(b.dataset.vista));
-  });
-
-  $("cerrarSesion").addEventListener("click",evento=>{
-    evento.preventDefault();
-    try {
-      localStorage.removeItem(CLAVE_SESION);
-    } catch (error) {
-      console.warn("No se pudo limpiar la sesión guardada.", error);
-    }
-    window.location.href="Loing.html";
-  });
-
-  // En pantallas pequeñas, cerrar el panel al navegar desde cualquier enlace.
-  document.querySelectorAll(".barra-lateral a").forEach(enlace=>{
-    enlace.addEventListener("click",()=>{
-      if (window.innerWidth <= 900 && enlace.id !== "cerrarSesion") {
-        $("sidebar").classList.remove("visible");
-        $("capaSidebar").classList.remove("visible");
-        $("botonMenu").setAttribute("aria-expanded","false");
-      }
-    });
-  });
-
-  // Perfil accesible, igual que en Partidos.html.
-  $("botonPerfil").addEventListener("click",()=>{
-    $("fondoPerfil").classList.add("visible");
-    $("fondoPerfil").setAttribute("aria-hidden","false");
-    $("cerrarPerfil").focus();
-  });
-
-  const cerrarPerfil = () => {
-    $("fondoPerfil").classList.remove("visible");
-    $("fondoPerfil").setAttribute("aria-hidden","true");
-    $("botonPerfil").focus();
-  };
-
-  $("cerrarPerfil").addEventListener("click",cerrarPerfil);
-  $("fondoPerfil").addEventListener("click",evento=>{
-    if (evento.target.id === "fondoPerfil") cerrarPerfil();
-  });
-  document.addEventListener("keydown",evento=>{
-    if (evento.key === "Escape") {
-      if ($("fondoPerfil").classList.contains("visible")) cerrarPerfil();
-      if (window.innerWidth <= 900) {
-        $("sidebar").classList.remove("visible");
-        $("capaSidebar").classList.remove("visible");
-        $("botonMenu").setAttribute("aria-expanded","false");
-      }
+  window.addEventListener("resize",()=>{
+    if (!esMovil()) {
+      $("sidebar").classList.remove("visible");
+      $("capaSidebar").classList.remove("visible");
     }
   });
+}
+
+function cargarPerfil() {
+  const nombre=usuarioActual();
+  $("nombrePerfil").textContent=nombre;
+  $("avatarPerfil").textContent=iniciales(nombre);
+  const avatarModal=$("avatarPerfilModal");
+  const tituloModal=$("tituloPerfil");
+  if (avatarModal) avatarModal.textContent=iniciales(nombre);
+  if (tituloModal) tituloModal.textContent=nombre;
+
+  const botonPerfil=$("botonPerfil");
+  const fondoPerfil=$("fondoPerfil");
+  const cerrarPerfil=$("cerrarPerfil");
+  if (botonPerfil && fondoPerfil) {
+    botonPerfil.addEventListener("click",()=>{
+      fondoPerfil.classList.add("visible");
+      fondoPerfil.setAttribute("aria-hidden","false");
+    });
+    const ocultarPerfil=()=>{
+      fondoPerfil.classList.remove("visible");
+      fondoPerfil.setAttribute("aria-hidden","true");
+    };
+    cerrarPerfil?.addEventListener("click",ocultarPerfil);
+    fondoPerfil.addEventListener("click",e=>{ if (e.target===fondoPerfil) ocultarPerfil(); });
+    document.addEventListener("keydown",e=>{ if (e.key==="Escape" && fondoPerfil.classList.contains("visible")) ocultarPerfil(); });
+  }
 }
 
 function renderizarTodo() {
@@ -6039,62 +6105,28 @@ function renderizarTodo() {
   renderizarEstadisticas();
 }
 
-function obtenerRolVisible(usuario) {
-  const clave = normalizarTexto(usuario).replace(/[\s._-]+/g, "");
-  if (["fran", "francisco", "franciscoperezbasla"].includes(clave)) return "Administrador";
-  if (clave === "toto") return "Cuerpo técnico";
-  if (["bianca", "biancadominguez"].includes(clave)) return "Jugadora · Sub 14";
-  return "Club ADIUR";
-}
-
-function inicializar() {
-  const usuario=usuarioActual();
-  $("nombrePerfil").textContent=usuario;
-  $("avatarPerfil").textContent=iniciales(usuario);
-  const rol = obtenerRolVisible(usuario);
-  $("rolPerfil").textContent = rol;
-  $("tituloPerfil").textContent = usuario;
-  $("avatarPerfilModal").textContent = iniciales(usuario);
-  $("rolPerfilModal").textContent = rol;
-
-  plantelPropio=cargarPlantelPropio();
-  jugadoresExternos=cargarJugadorasExternas();
-  partidosFixture=cargarFixture();
-  cargarPartidos();
-
-  actualizarSelectorFixture();
-  completarSelectorRival("");
-  actualizarCompeticiones();
-  configurarNavegacion();
-
-  $("formularioPartido").addEventListener("submit",guardarPartido);
-
-  $("seleccionFixture").addEventListener("change",cargarDesdeFixture);
+function inicializarEventos() {
+  document.querySelectorAll(".pestana").forEach(boton=>
+    boton.addEventListener("click",()=>cambiarVista(boton.dataset.vista))
+  );
 
   $("division").addEventListener("change",()=>{
-    const golesPrevios=leerEventosGoles();
-    const tarjetasPrevias=leerEventosTarjetas();
     aplicarDuracionCategoria();
+    actualizarResumen();
+    $("fixtureIdVinculado").value = "";
+    $("seleccionFixture").value = "";
     actualizarSelectorFixture();
     actualizarCompeticiones();
-    renderizarJugadorasFormulario();
-    renderizarEventosGoles(golesPrevios);
-    renderizarEventosTarjetas(tarjetasPrevias);
-    sincronizarEventosConConvocatoria(true);
-    actualizarResumen();
+    renderizarJugadorasFormulario([]);
+    sincronizarEventosConConvocatoria(false);
+    actualizarMarcadorVisual();
+    actualizarResumenRevision();
   });
 
   $("competicion").addEventListener("change",actualizarMarcadorVisual);
-
-  $("rival").addEventListener("change",()=>{
-    actualizarEscudoRival();
-    actualizarAvisoGoles();
-  });
-
-  $("rivalOtro").addEventListener("input",()=>{
-    mostrarEscudoRival("",$("rivalOtro").value.trim());
-    actualizarMarcadorVisual();
-  });
+  $("seleccionFixture").addEventListener("change",cargarDesdeFixture);
+  $("rival").addEventListener("change",actualizarEscudoRival);
+  $("rivalOtro").addEventListener("input",actualizarEscudoRival);
 
   $("golesAdiur").addEventListener("input",()=>{
     actualizarMarcadorVisual();
@@ -6103,65 +6135,56 @@ function inicializar() {
 
   $("golesRival").addEventListener("input",actualizarMarcadorVisual);
 
-  $("duracionPartido").addEventListener("input",()=>{
-    // El campo es de solo lectura; este listener queda como resguardo para mantener
-    // consistentes los topes internos si la duración se modifica desde el código.
-    aplicarDuracionCategoria();
-    recalcularTodasLasFilas();
-  });
+  $("formularioPartido").addEventListener("submit",guardarPartido);
 
-  $("buscarPartido").addEventListener("input",renderizarPartidos);
-  $("filtroDivisionPartidos").addEventListener("change",renderizarPartidos);
-  $("filtroTorneoPartidos").addEventListener("change",renderizarPartidos);
-  $("ordenPartidos").addEventListener("change",renderizarPartidos);
+  [
+    "buscarPartido",
+    "filtroDivisionPartidos",
+    "filtroTorneoPartidos",
+    "ordenPartidos"
+  ].forEach(id=>$(id).addEventListener("input",renderizarPartidos));
 
-  $("buscarEstadistica").addEventListener("input",renderizarEstadisticas);
-  $("filtroDivisionEstadisticas").addEventListener("change",renderizarEstadisticas);
-  $("filtroTorneoEstadisticas").addEventListener("change",renderizarEstadisticas);
-  $("ordenEstadisticas").addEventListener("change",renderizarEstadisticas);
-
-  renderizarTodo();
-  nuevoPartido();
-  mostrarPasoCarga(1);
+  [
+    "buscarEstadistica",
+    "filtroDivisionEstadisticas",
+    "filtroTorneoEstadisticas",
+    "ordenEstadisticas"
+  ].forEach(id=>$(id).addEventListener("input",renderizarEstadisticas));
 }
 
-inicializar();
+async function iniciar() {
+  cargarPerfil();
+  configurarMenuLateral();
+  plantelPropio=cargarPlantelPropio();
+  jugadoresExternos=cargarJugadorasExternas();
+  await cargarJugadorasDesdeJugadorasHtml();
+  partidosFixture=cargarFixture();
+  cargarPartidos();
+  actualizarSelectorFixture();
+  inicializarEventos();
+  nuevoPartido();
+  renderizarTodo();
+  await cargarPartidosNube();
+}
 
-window.addEventListener("storage",evento=>{
-  if (evento.key===CLAVE_FIXTURE) {
-    const idVinculadoAntes = $("fixtureIdVinculado").value || $("seleccionFixture").value;
-    partidosFixture=cargarFixture();
-    actualizarSelectorFixture();
-
-    const sigueExistiendo = idVinculadoAntes && partidosFixture.some(p => String(p.id) === String(idVinculadoAntes));
-    if (idVinculadoAntes && sigueExistiendo) {
-      mostrarMensaje("El fixture se actualizó. Los datos ya escritos en el informe se conservaron; volvé a seleccionar el partido para recuperar cambios recientes.","exito");
-    } else {
-      mostrarMensaje("El fixture se actualizó. Revisá la asociación del informe si el partido fue eliminado.","exito");
-    }
-  }
-
-  if (evento.key===CLAVE_PLANTEL) {
+window.addEventListener("storage",e=>{
+  if (!e.key) return;
+  if ([CLAVE_PLANTEL,CLAVE_FIXTURE].includes(e.key) || e.key.toLowerCase().includes("jugadora")) {
     plantelPropio=cargarPlantelPropio();
     jugadoresExternos=cargarJugadorasExternas();
-    renderizarJugadorasFormulario();
+    partidosFixture=cargarFixture();
+    actualizarSelectorFixture();
+    renderizarJugadorasFormulario(leerParticipacionesFormulario());
     renderizarEventosGoles(leerEventosGoles());
     renderizarEventosTarjetas(leerEventosTarjetas());
-    sincronizarEventosConConvocatoria(true);
-    renderizarEstadisticas();
   }
-
-  if (evento.key===CLAVE_PARTIDOS) {
-    // Mantener la lista y los acumulados sincronizados si otro informe se modifica en otra pestaña.
+  if (e.key===CLAVE_PARTIDOS) {
     cargarPartidos();
     renderizarTodo();
-    mostrarMensaje("Los informes se actualizaron desde otra pestaña.","exito");
-  }
-
-  if (evento.key===CLAVE_SESION && !evento.newValue) {
-    window.location.href="Loing.html";
   }
 });
+
+iniciar();
 </script>
 
 </body>
