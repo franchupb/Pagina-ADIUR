@@ -4385,11 +4385,23 @@ function cargarJugadorasExternas() {
 }
 
 function cargarPlantelPropio() {
-  const datos = leerJSON(CLAVE_PLANTEL,[]);
-  if (!Array.isArray(datos)) return [];
+  // Leemos tanto el almacenamiento de informes como el de la pantalla de jugadoras
+  const datosInformes = leerJSON(CLAVE_PLANTEL, []);
+  const datosJugadorasGenerales = leerJSON("adiurJugadorasV1", []) || leerJSON("jugadorasADIUR", []) || [];
+  
+  const mapa = new Map();
 
-  return datos.map((j,i)=>normalizarJugador(j,"propio",i))
-    .filter(Boolean).map(j=>({...j,origen:"propio"}));
+  [...datosJugadorasGenerales, ...datosInformes].forEach((j, i) => {
+    const normalizado = normalizarJugador(j, "propio", i);
+    if (normalizado) {
+      const key = claveJugador(normalizado.nombre, normalizado.division);
+      if (!mapa.has(key) || normalizado.origen === "propio") {
+        mapa.set(key, normalizado);
+      }
+    }
+  });
+
+  return [...mapa.values()];
 }
 
 function obtenerPlantelCompleto() {
