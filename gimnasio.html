@@ -996,8 +996,6 @@ a:focus-visible,
   line-height: 1.6;
 }
 
-/* AHORA CADA EJERCICIO OCUPA SU PROPIA FILA */
-
 .lista-ejercicios-editor {
   display: flex;
   flex-direction: column;
@@ -1113,8 +1111,6 @@ a:focus-visible,
   padding: 16px 17px;
 }
 
-/* REPETICIONES INICIALES, SOLO PARA PRINCIPALES */
-
 .referencia-repeticiones {
   display: flex;
   align-items: center;
@@ -1172,8 +1168,6 @@ a:focus-visible,
   background: #f4f4f4;
   color: #666;
 }
-
-/* TRES DÍAS DE CARGA INICIAL */
 
 .dias-editor {
    display: grid;
@@ -1798,7 +1792,6 @@ a:focus-visible,
   text-align: center;
 }
 
-/* El escudo acompaña al bloque de títulos desde su izquierda, como en la referencia. */
 .planilla-cabecera img {
   position: absolute;
   top: 50%;
@@ -1845,7 +1838,6 @@ a:focus-visible,
   text-transform: uppercase;
 }
 
-/* La planilla terminada se organiza por bloques independientes. */
 .planilla-bloque {
   margin-top: 13px;
   break-inside: avoid;
@@ -2017,7 +2009,6 @@ a:focus-visible,
   height: 20px;
 }
 
-/* Con varias personas, las rutinas se acomodan en dos columnas como máximo. */
 .planillas-personas {
   display: block;
   min-width: 0;
@@ -2860,7 +2851,6 @@ a:focus-visible,
     font-size: 10px;
   }
 
-  /* La impresión también distribuye las copias en dos columnas máximo. */
   #printRoutine .planillas-personas.varias-personas {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -3319,6 +3309,58 @@ a:focus-visible,
 "use strict";
 
 /* =====================================================
+   CONEXIÓN FIREBASE - GIMNASIO ADIUR
+===================================================== */
+
+window.firebaseGimnasioReady = (async () => {
+  const { initializeApp } = await import(
+    "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js"
+  );
+  const {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc,
+    serverTimestamp
+  } = await import(
+    "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js"
+  );
+
+  const firebaseConfig = {
+    projectId: "adiur-b1913",
+    appId: "1:1032379124859:web:adiur-fem-web",
+    authDomain: "adiur-b1913.firebaseapp.com",
+    storageBucket: "adiur-b1913.appspot.com"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const dbCloud = getFirestore(app);
+  const referenciaCloud = doc(dbCloud, "gimnasioADIUR", "principal");
+
+  window.cargarGimnasioNube = async () => {
+    const resultado = await getDoc(referenciaCloud);
+    if (resultado.exists()) {
+      return resultado.data().datos || null;
+    }
+    return null;
+  };
+
+  let colaGuardado = Promise.resolve();
+  window.guardarGimnasioEnNube = (datos) => {
+    const copia = JSON.parse(JSON.stringify(datos));
+    colaGuardado = colaGuardado.catch(() => {}).then(() =>
+      setDoc(referenciaCloud, {
+        datos: copia,
+        actualizado: serverTimestamp()
+      })
+    );
+    return colaGuardado;
+  };
+
+  return true;
+})();
+
+/* =====================================================
    FUNCIONES GENERALES
 ===================================================== */
 
@@ -3448,7 +3490,6 @@ function obtenerTiempoBaseEjercicio(ejercicio, diasAntiguos = null) {
 
   if (guardado !== null) return guardado;
 
-  // Compatibilidad con rutinas guardadas en la versión anterior, que usaba D1-D2-D3.
   const dias = Array.isArray(diasAntiguos)
     ? diasAntiguos
     : (Array.isArray(ejercicio?.dias) ? ejercicio.dias : []);
@@ -3481,12 +3522,6 @@ function formatearTiempo(valor) {
   return segundos === null ? "" : `${segundos}″`;
 }
 
-/*
- * Los ejercicios principales solo usan repeticiones iniciales.
- * Los complementarios guardan un tiempo base semanal y calculan:
- * S1 = base, S2 = base + 5 segundos, S3 = base,
- * S4 = base + 10 segundos y S5 = igual a S4.
- */
 function generarPeriodizacionEjercicio(rutina, ejercicio, indiceEjercicio = 0) {
   const plantilla = obtenerPlantillaPeriodizacion(rutina.semanas);
   const esPrincipal = indiceEjercicio < 4;
@@ -3705,7 +3740,7 @@ function buscarJugadoraSesion() {
 }
 
 /* =====================================================
-   ALMACENAMIENTO
+   ALMACENAMIENTO (LOCAL Y NUBE)
 ===================================================== */
 
 function claveGeneral(division) {
@@ -3765,7 +3800,6 @@ function rutinaTieneDatos(rutina) {
     if (String(ejercicio.nombre || "").trim()) return true;
     if (indice >= 4 && String(ejercicio.tiempoBase ?? "").trim()) return true;
 
-    // Permite reconocer borradores antiguos que aún guardaban el tiempo en D1-D2-D3.
     return indice >= 4 && (ejercicio.dias || []).some(dia =>
       String(dia.tiempo ?? "").trim()
     );
@@ -3826,9 +3860,7 @@ function normalizarRutina(rutina) {
             const dia = diasOriginales[diaIndice] || {};
 
             return {
-              // El peso ya no forma parte de las rutinas ni de su planilla.
               peso: "",
-              // Los complementarios ahora guardan un único tiempo base semanal.
               tiempo: "",
               repeticiones: esPrincipal ? (dia.repeticiones ?? "") : ""
             };
@@ -3844,7 +3876,6 @@ function normalizarRutina(rutina) {
 function cargarDB() {
   try {
     const datos = JSON.parse(localStorage.getItem(KEY) || "{}");
-
     return datos && typeof datos === "object" ? datos : {};
   } catch {
     return {};
@@ -3854,6 +3885,14 @@ function cargarDB() {
 function guardarDB() {
   try {
     localStorage.setItem(KEY, JSON.stringify(db));
+    
+    // Sincronización automática con Firebase Cloud Firestore
+    if (window.guardarGimnasioEnNube) {
+      window.guardarGimnasioEnNube(db).catch(error => {
+        console.warn("No se pudo sincronizar automáticamente con la nube:", error);
+      });
+    }
+
     return true;
   } catch (error) {
     mostrarEstado(
@@ -4288,7 +4327,7 @@ function renderizarEditor() {
               value="${escaparHTML(ejercicio.repeticionesBase)}"
               data-repeticiones-base="${indice}"
               ${puedeEditarEstructura() ? "" : "disabled"}
-            >
+            />
           </div>
         ` : `
           <div class="aviso aviso-progresion-tiempo">
@@ -4308,8 +4347,6 @@ function renderizarEditor() {
     }
   });
 
-  /* Guardar los nombres de los ejercicios. */
-
   contenedor.querySelectorAll("[data-ejercicio-nombre]").forEach(input => {
     input.addEventListener("change", () => {
       const indice = Number(input.dataset.ejercicioNombre);
@@ -4320,8 +4357,6 @@ function renderizarEditor() {
       guardarBorradorActual();
     });
   });
-
-  /* Guardar las repeticiones iniciales de los principales. */
 
   contenedor.querySelectorAll("[data-repeticiones-base]").forEach(input => {
     input.addEventListener("change", () => {
@@ -4346,8 +4381,6 @@ function renderizarEditor() {
       );
     });
   });
-
-  /* Guardar el tiempo base semanal de los complementarios y refrescar los valores automáticos. */
 
   contenedor.querySelectorAll("[data-tiempo-base]").forEach(input => {
     const indiceEjercicio = Number(input.dataset.tiempoBase);
@@ -4383,7 +4416,6 @@ function renderizarEditor() {
       mostrarEstado("Tiempo base actualizado. La progresión semanal se recalculó automáticamente.");
     });
   });
-
 }
 
 /* =====================================================
@@ -4394,7 +4426,6 @@ function guardarBorradorActual() {
   if (!rutinaActual) return;
 
   rutinaActual.semanas = Number(semanasSelect.value) === 4 ? 4 : 5;
-
   rutinaActual.actualizada = new Date().toISOString();
 
   const division = divisionSelect.value;
@@ -4614,9 +4645,6 @@ function construirPlanillaHTML(rutina, division, cantidadPersonas = 1) {
       : '<span class="ejercicio-sin-nombre">Ejercicio pendiente</span>';
   };
 
-  /* EJERCICIOS PRINCIPALES: cada semana muestra los días que le corresponden.
-     La última semana de una rutina de cinco semanas tiene D1 y D2 únicamente.
-     Cada repetición lleva debajo un casillero ancho para anotar el peso a mano. */
   const encabezadosSemanasPrincipales = plantilla.map(semana => {
     const cantidadDias = semana.repeticiones.length;
     return `<th class="semana-planilla" colspan="${cantidadDias}">SEMANA ${semana.numero}</th>`;
@@ -4662,7 +4690,6 @@ function construirPlanillaHTML(rutina, division, cantidadPersonas = 1) {
     `;
   });
 
-  /* Complementarios: un único tiempo por semana, sin D1-D2-D3 ni casillero de peso. */
   const encabezadosSemanasComplementarios = plantilla.map(semana => `
     <th class="semana-planilla">SEMANA ${semana.numero}</th>
   `).join("");
@@ -4691,8 +4718,6 @@ function construirPlanillaHTML(rutina, division, cantidadPersonas = 1) {
     `;
   });
 
-  /* El rectángulo principal se genera una sola vez. Solo se repite el cuerpo
-     (ambos bloques de ejercicios y el espacio de Nombre y Apellido). */
   const cuerpoPersonaHTML = `
     <div class="planilla-persona">
       <section class="planilla-bloque">
@@ -5378,8 +5403,23 @@ document.addEventListener("keydown", evento => {
    INICIALIZACIÓN
 ===================================================== */
 
-function inicializar() {
+async function inicializar() {
   configurarMenu();
+
+  // Sincronización inicial desde la nube
+  try {
+    await window.firebaseGimnasioReady;
+    const datosNube = await window.cargarGimnasioNube();
+
+    if (datosNube && typeof datosNube === "object" && Object.keys(datosNube).length > 0) {
+      db = datosNube;
+      localStorage.setItem(KEY, JSON.stringify(db));
+    } else if (Object.keys(db).length > 0) {
+      await window.guardarGimnasioEnNube(db);
+    }
+  } catch (error) {
+    console.warn("No se pudo cargar la base de datos de gimnasio desde la nube, utilizando almacenamiento local:", error);
+  }
 
   $("nombrePerfil").textContent = nombreSesion(usuario);
 
