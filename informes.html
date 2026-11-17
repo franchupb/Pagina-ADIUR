@@ -6101,6 +6101,37 @@ function obtenerRolVisible(usuario) {
   return "Club ADIUR";
 }
 
+// =====================================================
+// RECIBIR JUGADORAS DESDE FIREBASE
+// =====================================================
+
+window.recibirJugadorasFirebase = function(listaNube) {
+
+  // Guardamos la lista recibida desde Firestore.
+  window.jugadorasGlobales = Array.isArray(listaNube)
+    ? listaNube
+    : [];
+
+  // Convertimos los registros al formato utilizado por Informes.
+  plantelPropio = window.jugadorasGlobales
+    .map((j, i) => normalizarJugador(j, "propio", i))
+    .filter(Boolean);
+
+  // Actualizamos la formación y las estadísticas.
+  renderizarJugadorasFormulario();
+
+  renderizarEventosGoles(leerEventosGoles());
+  renderizarEventosTarjetas(leerEventosTarjetas());
+
+  renderizarEstadisticas();
+
+  console.log(
+    "ADIUR Informes: jugadoras recibidas desde Firebase:",
+    plantelPropio.length,
+    plantelPropio
+  );
+};
+  
 function inicializar() {
   const usuario=usuarioActual();
   $("nombrePerfil").textContent=usuario;
@@ -6188,31 +6219,6 @@ function inicializar() {
   partidosFixture=cargarFixture();
   cargarPartidos();
 
-  // >>> PEGÁS EL PUNTO 2 ACÁ <<<
-  if (typeof db !== "undefined" && typeof collection !== "undefined" && typeof onSnapshot !== "undefined") {
-    onSnapshot(collection(db, "jugadoras"), (snapshot) => {
-      let listaNube = [];
-      snapshot.forEach((docSnap) => {
-        listaNube.push({ id: docSnap.id, ...docSnap.data() });
-      });
-      window.jugadorasGlobales = listaNube;
-
-// Actualizamos el plantel propio con los datos recibidos de Firebase.
-if (listaNube.length > 0) {
-  plantelPropio = listaNube
-    .map((j, i) => normalizarJugador(j, "propio", i))
-    .filter(Boolean);
-} else {
-  // Si Firebase no tiene registros, utilizamos el respaldo local.
-  plantelPropio = cargarPlantelPropio();
-}
-
-// Actualizamos la formación si ya está abierta.
-if (typeof renderizarJugadorasFormulario === "function") {
-  renderizarJugadorasFormulario();
-}
-    });
-  }
   // ============================
 
   actualizarSelectorFixture();
@@ -6321,5 +6327,78 @@ window.addEventListener("storage",evento=>{
 });
 </script>
 
+<script type="module">
+
+  import {
+    initializeApp
+  } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
+
+  import {
+    getFirestore,
+    collection,
+    onSnapshot
+  } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
+
+
+  // MISMA CONFIGURACIÓN QUE JUGADORAS.HTML
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCc0dPIEkaKxbHoRC2CgZK412dXVGPOdTI",
+    authDomain: "adiur-b1913.firebaseapp.com",
+    projectId: "adiur-b1913",
+    storageBucket: "adiur-b1913.firebasestorage.app",
+    messagingSenderId: "884643321144",
+    appId: "1:884643321144:web:ba3c314de3a1c9e3545dcd",
+    measurementId: "G-58LL26YXPM"
+  };
+
+
+  // INICIALIZAR FIREBASE
+
+  const app = initializeApp(firebaseConfig);
+  const dbInformes = getFirestore(app);
+
+
+  // ESCUCHAR LA COLECCIÓN DE JUGADORAS
+
+  onSnapshot(
+    collection(dbInformes, "jugadoras"),
+
+    (snapshot) => {
+
+      const listaNube = [];
+
+      snapshot.forEach((documento) => {
+
+        listaNube.push({
+          id: documento.id,
+          ...documento.data()
+        });
+
+      });
+
+      // Enviar los datos al JavaScript principal de Informes.
+
+      if (typeof window.recibirJugadorasFirebase === "function") {
+
+        window.recibirJugadorasFirebase(listaNube);
+
+      }
+
+    },
+
+    (error) => {
+
+      console.error(
+        "Error al cargar las jugadoras desde Firebase:",
+        error
+      );
+
+    }
+
+  );
+
+</script>
+  
 </body>
 </html>
