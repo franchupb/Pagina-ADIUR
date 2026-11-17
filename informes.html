@@ -4384,45 +4384,38 @@ function cargarJugadorasExternas() {
   });
 }
 
+// Funciones de normalización para asegurar compatibilidad con la nube
+function obtenerNombreJugadora(jugadora) {
+  const directo = jugadora.nombre || jugadora.nombreCompleto || jugadora.nombre_completo;
+  if (directo) return String(directo).trim();
+  return [jugadora.nombres, jugadora.apellido, jugadora.apellidos].filter(Boolean).join(" ").trim();
+}
+
+function obtenerCategoriaJugadora(jugadora) {
+  return String(jugadora.categoria || jugadora.division || jugadora.categoría || "Sin categoría").trim().replace(/\s+/g, " ");
+}
+
+function procesarListaJugadoras(listaCruda) {
+  return listaCruda
+    .filter(j => j && typeof j === "object")
+    .map(j => ({
+      ...j,
+      nombre: obtenerNombreJugadora(j),
+      categoria: obtenerCategoriaJugadora(j)
+    }))
+    .filter(j => j.nombre.trim() !== "")
+    .sort((a, b) => a.nombre.localeCompare(b.nombre, "es", { sensitivity: "base", ignorePunctuation: true }));
+}
+
+// Función unificada que lee prioritariamente de la nube de Firebase en tiempo real
 function cargarPlantelPropio() {
-  // Buscamos directamente las claves de almacenamiento que utiliza jugadoras.html
-  let datos = [];
-  try {
-    for (let i = 0; i < localStorage.length; i++) {
-      const clave = localStorage.key(i);
-      if (clave && (clave.includes("jugadoras") || clave.includes("plantel") || clave.includes("adiurJugadoras"))) {
-        const contenido = JSON.parse(localStorage.getItem(clave));
-        if (Array.isArray(contenido)) {
-          datos = datos.concat(contenido);
-        } else if (contenido && typeof contenido === "object") {
-          // Si están guardadas en objetos por categoría
-          Object.values(contenido.categorias || contenido).forEach(val => {
-            if (Array.isArray(val)) datos = datos.concat(val);
-          });
-        }
-      }
-    }
-  } catch (e) {
-    console.warn("Error leyendo plantel unificado", e);
+  if (window.jugadorasGlobales && Array.isArray(window.jugadorasGlobales) && window.jugadorasGlobales.length > 0) {
+    return window.jugadorasGlobales;
   }
-
-  // Si no encontró nada en las claves dinámicas, usamos las fijas
-  if (!datos.length) {
-    datos = leerJSON(CLAVE_PLANTEL, []) || leerJSON("adiurJugadorasV1", []) || leerJSON("jugadorasADIUR", []) || [];
-  }
-
-  const mapa = new Map();
-  datos.forEach((j, i) => {
-    const normalizado = normalizarJugador(j, "propio", i);
-    if (normalizado) {
-      const key = claveJugador(normalizado.nombre, normalizado.division);
-      if (!mapa.has(key)) {
-        mapa.set(key, normalizado);
-      }
-    }
-  });
-
-  return [...mapa.values()];
+  
+  // Respaldo local por si la red falla
+  const datosLocales = leerJSON("jugadorasADIUR", []) || leerJSON(CLAVE_PLANTEL, []);
+  return procesarListaJugadoras(Array.isArray(datosLocales) ? datosLocales : []);
 }
 
 function obtenerPlantelCompleto() {
@@ -6152,7 +6145,102 @@ function inicializar() {
   $("filtroDivisionEstadisticas").addEventListener("change",renderizarEstadisticas);
   $("filtroTorneoEstadisticas").addEventListener("change",renderizarEstadisticas);
   $("ordenEstadisticas").addEventListener("change",renderizarEstadisticas);
+function inicializar() {
+  const usuario=usuarioActual();
+  $("nombrePerfil").textContent=usuario;
+  $("avatarPerfil").textContent=iniciales(usuario);
+  const rol = obtenerRolVisible(usuario);
+  $("rolPerfil").textContent = rol;
+  $("tituloPerfil").textContent = usuario;
+  $("avatarPerfilModal").textContent = iniciales(usuario);
+  $("rolPerfilModal").textContent = rol;
 
+  plantelPropio=cargarPlantelPropio();
+  jugadoresExternos=cargarJugadorasExternas();
+  partidosFixture=cargarFixture();
+  cargarPartidos();
+
+  // >>> PEGÁS EL PUNTO 2 ACÁ <<<
+  if (typeof db !== "undefined" && typeof collection !== "undefined" && typeof onSnapshot !== "undefined") {
+    onSnapshot(collection(db, "jugadoras"), (snapshot) => {
+      let listaNube = [];
+      snapshot.forEach((docSnap) => {
+        listaNube.push({ id: docSnap.id, ...docSnap.data() });
+      });
+      if (listaNube.length > 0) {
+        window.jugadorasGlobales = procesarListaJugadoras(listaNube);
+        
+        // Refrescamos automáticamente la tabla de formación del paso 2 si ya está activa
+        if (typeof renderizarJugadorasFormulario === "function") {
+          renderizarJugadorasFormulario();
+        }
+      }
+    });
+  }
+  // ============================
+
+  actualizarSelectorFixture();
+  completarSelectorRival("");
+  actualizarCompeticiones();
+  configurarNavegacion();
+
+  $("formularioPartido").addEventListener("submit",guardarPartido);
+
+  $("seleccionFixture").addEventListener("change",cargarDesdeFixture);
+
+  $("division").addEventListener("change",()=>{
+    const golesPrevios=leerEventosGoles();
+    const tarjetasPrevias=leerEventosTarjetas();
+    aplicarDuracionCategoria();
+    actualizarSelectorFixture();
+    actualizarCompeticiones();
+    renderizarJugadorasFormulario();
+    renderizarEventosGoles(golesPrevios);
+    renderizarEventosTarjetas(tarjetasPrevias);
+    sincronizarEventosConConvocatoria(true);
+    actualizarResumen();
+  });
+
+  $("competicion").addEventListener("change",actualizarMarcadorVisual);
+
+  $("rival").addEventListener("change",()=>{
+    actualizarEscudoRival();
+    actualizarAvisoGoles();
+  });
+
+  $("rivalOtro").addEventListener("input",()=>{
+    mostrarEscudoRival("",$("rivalOtro").value.trim());
+    actualizarMarcadorVisual();
+  });
+
+  $("golesAdiur").addEventListener("input",()=>{
+    actualizarMarcadorVisual();
+    actualizarAvisoGoles();
+  });
+
+  $("golesRival").addEventListener("input",actualizarMarcadorVisual);
+
+  $("duracionPartido").addEventListener("input",()=>{
+    // El campo es de solo lectura; este listener queda como resguardo para mantener
+    // consistentes los topes internos si la duración se modifica desde el código.
+    aplicarDuracionCategoria();
+    recalcularTodasLasFilas();
+  });
+
+  $("buscarPartido").addEventListener("input",renderizarPartidos);
+  $("filtroDivisionPartidos").addEventListener("change",renderizarPartidos);
+  $("filtroTorneoPartidos").addEventListener("change",renderizarPartidos);
+  $("ordenPartidos").addEventListener("change",renderizarPartidos);
+
+  $("buscarEstadistica").addEventListener("input",renderizarEstadisticas);
+  $("filtroDivisionEstadisticas").addEventListener("change",renderizarEstadisticas);
+  $("filtroTorneoEstadisticas").addEventListener("change",renderizarEstadisticas);
+  $("ordenEstadisticas").addEventListener("change",renderizarEstadisticas);
+
+  renderizarTodo();
+  nuevoPartido();
+  mostrarPasoCarga(1);
+}
   renderizarTodo();
   nuevoPartido();
   mostrarPasoCarga(1);
