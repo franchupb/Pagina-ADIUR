@@ -9,10 +9,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-<!-- Firebase SDK para Sincronización en la Nube (Firestore) -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-
 <style>
 :root {
   --naranja: #f47721;
@@ -2815,7 +2811,7 @@ button:disabled { opacity: .5; cursor: not-allowed; }
   <aside class="barra-lateral" id="sidebar">
     <div class="etiqueta-menu">Menú principal</div>
 
-    <a class="menu-inicio" href="Pagina Principal.html">
+    <a class="menu-inicio" href="Pàgina Principal.html">
       <span class="icono-menu">⌂</span>
       <span>Inicio</span>
     </a>
@@ -3437,18 +3433,6 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 "use strict";
 
 /* =====================================================
-   CONFIGURACIÓN DE FIREBASE CLOUD FIRESTORE
-===================================================== */
-const firebaseConfig = {
-  projectId: "adiur-b1913"
-};
-
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
-const db = firebase.firestore();
-
-/* =====================================================
    CONFIGURACIÓN
 ===================================================== */
 
@@ -3810,4 +3794,2375 @@ function numeroSeguro(valor) {
 function numeroOpcional(valor) {
   if (valor==="" || valor===null || valor===undefined) return null;
   const n = Number(valor);
-  return Number.isFinite(n) && n>=0 ? Math
+  return Number.isFinite(n) && n>=0 ? Math.floor(n) : null;
+}
+
+function escaparHTML(valor) {
+  return String(valor ?? "").replace(/[&<>"']/g,c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  })[c]);
+}
+
+function iniciales(nombre) {
+  const partes = String(nombre || "").trim().split(/\s+/).filter(Boolean);
+  if (!partes.length) return "DT";
+  if (partes.length===1) return partes[0].slice(0,2).toUpperCase();
+  return (partes[0][0]+partes[partes.length-1][0]).toUpperCase();
+}
+
+function fechaHoy() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+}
+
+function formatearFecha(valor) {
+  if (!valor) return "Sin fecha";
+  const partes = String(valor).split("-");
+  if (partes.length!==3) return String(valor);
+  return `${partes[2]}/${partes[1]}/${partes[0]}`;
+}
+
+function normalizarFechaInput(valor) {
+  if (valor===null || valor===undefined || valor==="") return "";
+  const texto = String(valor).trim();
+
+  if (/^\d{4}-\d{2}-\d{2}$/.test(texto)) return texto;
+
+  const corta = texto.match(/^(\d{1,2})[/-](\d{1,2})[/-](\d{4})$/);
+  if (corta) {
+    return `${corta[3]}-${String(corta[2]).padStart(2,"0")}-${String(corta[1]).padStart(2,"0")}`;
+  }
+
+  if (/^\d{1,2}$/.test(texto)) return "";
+
+  const d = new Date(texto);
+  if (Number.isNaN(d.getTime())) return "";
+
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+}
+
+function mostrarMensaje(texto,tipo="") {
+  const elemento = $("mensajeFlotante");
+  elemento.textContent = texto;
+  elemento.className = "mensaje-flotante visible"+(tipo ? " "+tipo : "");
+  clearTimeout(mensajeTimer);
+  mensajeTimer = setTimeout(()=>elemento.classList.remove("visible"),3800);
+}
+
+function nombreCompleto(objeto) {
+  if (typeof objeto==="string") return objeto.trim();
+  if (!objeto || typeof objeto!=="object") return "";
+
+  const directo = objeto.nombreCompleto || objeto.nombre_completo ||
+    objeto.fullName || objeto.full_name || objeto.jugadora ||
+    objeto.jugador || objeto.nombre || objeto.name;
+
+  if (typeof directo==="string" && directo.trim()) return directo.trim();
+
+  return [
+    objeto.nombres || objeto.firstName || "",
+    objeto.apellido || objeto.apellidos || objeto.lastName || ""
+  ].filter(Boolean).join(" ").trim();
+}
+
+function claveJugador(nombre,division) {
+  return normalizarTexto(nombre)+"|"+(normalizarDivision(division)||String(division||""));
+}
+
+function usuarioActual() {
+  const valor = localStorage.getItem(CLAVE_SESION) || "";
+  if (!valor) return "Cuerpo técnico";
+
+  try {
+    const objeto = JSON.parse(valor);
+    if (objeto && typeof objeto==="object") {
+      return String(objeto.nombre || objeto.nombreUsuario || objeto.usuario ||
+        objeto.username || objeto.user || "Cuerpo técnico");
+    }
+  } catch (_) {}
+
+  return valor.trim() || "Cuerpo técnico";
+}
+
+/* =====================================================
+   ESCUDOS Y RIVAL
+===================================================== */
+
+function obtenerClubPorNombre(nombre) {
+  return ESCUDOS_CLUBES.find(c=>normalizarTexto(c.nombre)===normalizarTexto(nombre)) || null;
+}
+
+function rutaEscudoClub(nombre) {
+  return obtenerClubPorNombre(nombre)?.ruta || "";
+}
+
+function completarSelectorRival(nombreActual="") {
+  const selector = $("rival");
+  selector.replaceChildren();
+
+  const primero = document.createElement("option");
+  primero.value = "";
+  primero.textContent = "Seleccionar club...";
+  selector.appendChild(primero);
+
+  ESCUDOS_CLUBES.forEach(club=>{
+    const opcion = document.createElement("option");
+    opcion.value = club.nombre;
+    opcion.textContent = club.nombre;
+    opcion.dataset.ruta = club.ruta;
+    selector.appendChild(opcion);
+  });
+
+  const otro = document.createElement("option");
+  otro.value = "__otro__";
+  otro.textContent = "Otro club...";
+  selector.appendChild(otro);
+
+  const existe = ESCUDOS_CLUBES.some(c=>normalizarTexto(c.nombre)===normalizarTexto(nombreActual));
+
+  if (nombreActual && !existe) {
+    selector.value = "__otro__";
+    $("campoRivalOtro").classList.remove("oculto");
+    $("rivalOtro").value = nombreActual;
+  } else {
+    selector.value = nombreActual || "";
+    $("campoRivalOtro").classList.add("oculto");
+    $("rivalOtro").value = "";
+  }
+}
+
+function nombreRivalActual() {
+  return $("rival").value==="__otro__"
+    ? $("rivalOtro").value.trim()
+    : $("rival").value.trim();
+}
+
+function mostrarEscudoRival(ruta,nombre="") {
+  const imagen = $("previewRival");
+  const placeholder = $("placeholderRival");
+  const mini = $("rivalMiniEscudo");
+
+  if (!ruta) {
+    imagen.removeAttribute("src");
+    imagen.classList.add("oculto");
+    placeholder.classList.remove("oculto");
+    $("nombreEscudoRival").textContent = nombre || "Club rival";
+    $("ayudaEscudoRival").textContent = nombre
+      ? "No hay un escudo asignado en el catálogo."
+      : "Seleccioná un rival para ver su escudo.";
+    mini.classList.add("oculto");
+    $("rivalMiniTexto").textContent = nombre || "RIVAL";
+    return;
+  }
+
+  imagen.onload = ()=>{
+    imagen.classList.remove("oculto");
+    placeholder.classList.add("oculto");
+    $("nombreEscudoRival").textContent = nombre || "Club rival";
+    $("ayudaEscudoRival").textContent = "Escudo encontrado";
+    mini.src = ruta;
+    mini.classList.remove("oculto");
+    $("rivalMiniTexto").textContent = nombre || "RIVAL";
+  };
+
+  imagen.onerror = ()=>{
+    imagen.classList.add("oculto");
+    placeholder.classList.remove("oculto");
+    $("nombreEscudoRival").textContent = nombre || "Club rival";
+    $("ayudaEscudoRival").textContent = "No se pudo cargar el archivo del escudo.";
+    mini.classList.add("oculto");
+  };
+
+  imagen.src = /^data:image\//i.test(ruta) ? ruta : encodeURI(ruta);
+}
+
+function actualizarMarcadorVisual() {
+  const rival = nombreRivalActual() || "RIVAL";
+  $("nombreRivalMarcador").textContent = rival;
+  // La visualización de cancha fue retirada del HTML; se actualiza solo si existe.
+  const rivalCancha = $("rivalCancha");
+  if (rivalCancha) rivalCancha.textContent = "VS. " + rival;
+  $("tituloPlanilla").textContent = `${$("division").value || "CATEGORÍA"} · ${$("competicion").value || "INFORME"}`;
+  $("rivalMiniTexto").textContent = rival;
+
+  $("marcadorMiniAdiur").textContent = $("golesAdiur").value==="" ? "–" : $("golesAdiur").value;
+  $("marcadorMiniRival").textContent = $("golesRival").value==="" ? "–" : $("golesRival").value;
+}
+
+function actualizarEscudoRival() {
+  if ($("rival").value==="__otro__") {
+    $("campoRivalOtro").classList.remove("oculto");
+    mostrarEscudoRival("",$("rivalOtro").value.trim());
+  } else {
+    $("campoRivalOtro").classList.add("oculto");
+    const club = obtenerClubPorNombre($("rival").value);
+    mostrarEscudoRival(club?.ruta || "",club?.nombre || "");
+  }
+
+  actualizarMarcadorVisual();
+}
+
+/* =====================================================
+   FIXTURE: Partidos.html
+===================================================== */
+
+function normalizarCompeticion(division,competicion) {
+  if (division==="Primera") {
+    if (competicion==="Rosarina") return "Fase Regular - ARF";
+    if (competicion==="Regional") return "Torneo Regional AFA";
+  }
+
+  if (competicion==="Regional") return "Torneo Regional AFA";
+  return competicion || "";
+}
+
+function crearIdLegadoFixture(partido, indice, division, competicion, rival, fecha, lugar) {
+  // Partidos.html genera IDs únicos al crear registros. Para registros antiguos sin ID,
+  // se construye una referencia determinista a partir de sus datos disponibles.
+  const base = [
+    division,
+    normalizarTexto(competicion),
+    String(partido.jornada ?? partido.fechaNumero ?? ""),
+    normalizarTexto(rival),
+    fecha,
+    normalizarTexto(lugar)
+  ].join("|");
+
+  if (!base.replace(/\|/g, "")) return "fixture-legado-" + indice;
+
+  let hash = 2166136261;
+  for (let i = 0; i < base.length; i++) {
+    hash ^= base.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+  return "fixture-legado-" + (hash >>> 0).toString(36);
+}
+
+function cargarFixture() {
+  const datos = leerJSON(CLAVE_FIXTURE, []);
+  if (!Array.isArray(datos)) return [];
+
+  return datos.filter(p => p && typeof p === "object" && !Array.isArray(p)).map((p, indice) => {
+    // Esquema real de Partidos.html: id, division, competicion, jornada,
+    // fechaPartido, lugarPartido, rival, escudoRival, golesAdiur y golesRival.
+    const division = normalizarDivision(p.division || p.categoria || p.category);
+    const rival = String(p.rival || p.equipoRival || p.clubRival || "").trim();
+    const club = obtenerClubPorNombre(rival);
+    const competicionOriginal = p.competicion || p.torneo || "";
+    const competicion = normalizarCompeticion(division, competicionOriginal);
+    const fechaCruda = p.fechaPartido || p.fechaReal || p.fechaCalendario || p.fecha || p.date || "";
+    const fechaReal = normalizarFechaInput(fechaCruda);
+    const lugar = String(p.lugarPartido || p.lugar || p.cancha || p.sede || p.venue || "").trim();
+
+    let escudo = p.escudoRival || p.escudo || club?.ruta || "";
+    if (escudo && !/^data:image\//i.test(escudo) && club) escudo = club.ruta;
+
+    const jornada = numeroSeguro(p.jornada ?? p.fechaNumero);
+    const idOriginal = p.id;
+    const id = idOriginal !== undefined && idOriginal !== null && String(idOriginal).trim() !== ""
+      ? String(idOriginal)
+      : crearIdLegadoFixture(p, indice, division, competicion, rival, fechaReal, lugar);
+
+    const golesAdiur = p.golesAdiur ?? p.marcadorAdiur ?? "";
+    const golesRival = p.golesRival ?? p.marcadorRival ?? "";
+
+    return {
+      ...p,
+      id,
+      division,
+      competicion,
+      jornada,
+      rival,
+      escudoAdiur: p.escudoAdiur || "Logo ADIUR.jpg",
+      escudoRival: escudo,
+      golesAdiur: golesAdiur === null ? "" : String(golesAdiur),
+      golesRival: golesRival === null ? "" : String(golesRival),
+      fechaReal,
+      hora: p.hora || p.horario || "",
+      lugar,
+      localia: p.localia || p.condicion || ""
+    };
+  }).filter(p => p.rival && p.division);
+}
+function actualizarSelectorFixture() {
+  const selector = $("seleccionFixture");
+  const divisionSeleccionada = normalizarDivision($("division").value);
+  // El vínculo se realiza por ID, nunca por posición del array.
+  const valorAnterior = selector.value || $("fixtureIdVinculado").value || "";
+  const informeEnEdicion = partidos.find(p => String(p.id) === String($("partidoId").value || ""));
+
+  selector.replaceChildren();
+
+  if (!divisionSeleccionada) {
+    const opcion = document.createElement("option");
+    opcion.value = "";
+    opcion.textContent = "Primero seleccioná una categoría...";
+    selector.appendChild(opcion);
+    selector.value = "";
+    selector.disabled = true;
+    $("fixtureIdVinculado").value = "";
+    actualizarBloqueoInforme();
+    return;
+  }
+
+  const opcionInicial = document.createElement("option");
+  opcionInicial.value = "";
+  opcionInicial.textContent = "Seleccionar un partido cargado (opcional)...";
+  selector.appendChild(opcionInicial);
+
+  const coincidencias = partidosFixture.filter(partido =>
+    normalizarDivision(partido.division || partido.categoria) === divisionSeleccionada
+  );
+
+  coincidencias.forEach(partido => {
+    const opcion = document.createElement("option");
+    opcion.value = String(partido.id);
+
+    const resultado = partido.golesAdiur !== "" && partido.golesRival !== ""
+      ? `ADIUR ${partido.golesAdiur}-${partido.golesRival}`
+      : "Resultado pendiente";
+
+    opcion.textContent = [
+      partido.competicion,
+      partido.jornada ? "Fecha " + partido.jornada : "",
+      partido.rival,
+      partido.fechaReal ? formatearFecha(partido.fechaReal) : "Fecha pendiente",
+      partido.lugar || "",
+      resultado
+    ].filter(Boolean).join(" · ");
+
+    selector.appendChild(opcion);
+  });
+
+  if (!coincidencias.length) {
+    // Si se edita un informe cuyo partido original ya no figura en el fixture,
+    // no se destruye su referencia histórica sin avisar ni se borra el informe.
+    const conservarReferenciaHistorica = Boolean(
+      informeEnEdicion &&
+      informeEnEdicion.fixtureId &&
+      String(informeEnEdicion.fixtureId) === String(valorAnterior) &&
+      normalizarDivision(informeEnEdicion.division) === divisionSeleccionada
+    );
+
+    opcionInicial.textContent = conservarReferenciaHistorica
+      ? "Partido asociado no disponible · se conserva la referencia histórica"
+      : "No hay partidos cargados para " + divisionSeleccionada;
+
+    selector.disabled = true;
+    selector.value = "";
+    $("fixtureIdVinculado").value = conservarReferenciaHistorica
+      ? String(informeEnEdicion.fixtureId)
+      : "";
+  } else {
+    selector.disabled = false;
+    const anteriorCoincide = valorAnterior !== "" && coincidencias.some(partido =>
+      String(partido.id) === String(valorAnterior)
+    );
+
+    selector.value = anteriorCoincide ? String(valorAnterior) : "";
+
+    if (anteriorCoincide) {
+      $("fixtureIdVinculado").value = String(valorAnterior);
+    } else {
+      const conservarReferenciaHistorica = Boolean(
+        informeEnEdicion &&
+        informeEnEdicion.fixtureId &&
+        String(informeEnEdicion.fixtureId) === String(valorAnterior) &&
+        normalizarDivision(informeEnEdicion.division) === divisionSeleccionada
+      );
+      $("fixtureIdVinculado").value = conservarReferenciaHistorica
+        ? String(informeEnEdicion.fixtureId)
+        : "";
+    }
+  }
+
+  actualizarBloqueoInforme();
+}
+function actualizarBloqueoInforme() {
+  // El informe siempre se puede completar manualmente; vincular un partido del fixture es opcional.
+  const formulario = $("formularioPartido");
+  if (!formulario) return;
+  formulario.classList.remove("informe-bloqueado");
+  const aviso = document.getElementById("avisoSinPartido");
+  if (aviso) aviso.remove();
+}
+
+function actualizarCompeticiones(preferida="") {
+  const division = $("division").value;
+  const opciones = COMPETICIONES_POR_DIVISION[division] || ["Rosarina"];
+  const selector = $("competicion");
+  selector.replaceChildren();
+
+  opciones.forEach(nombre=>{
+    const opcion = document.createElement("option");
+    opcion.value = nombre;
+    opcion.textContent = nombre;
+    selector.appendChild(opcion);
+  });
+
+  if (preferida && !opciones.includes(preferida)) {
+    const opcion = document.createElement("option");
+    opcion.value = preferida;
+    opcion.textContent = preferida+" (registro anterior)";
+    selector.appendChild(opcion);
+    selector.value = preferida;
+  } else {
+    selector.value = opciones.includes(preferida) ? preferida : opciones[0];
+  }
+
+  actualizarMarcadorVisual();
+}
+
+function cargarDesdeFixture() {
+  const valor = $("seleccionFixture").value;
+  const p = valor === ""
+    ? null
+    : partidosFixture.find(partido => String(partido.id) === String(valor));
+
+  if (!p) {
+    $("fixtureIdVinculado").value = "";
+    $("avisoDatosFixture").className = "aviso neutro";
+    $("avisoDatosFixture").innerHTML = `<span>ⓘ</span><div>No vinculaste un partido del fixture. Podés completar los datos manualmente; la convocatoria se organiza según la categoría seleccionada.</div>`;
+    actualizarBloqueoInforme();
+    return;
+  }
+  $("fixtureIdVinculado").value = p.id;
+  $("division").value = p.division;
+  aplicarDuracionCategoria();
+  actualizarCompeticiones(p.competicion);
+
+  $("jornada").value = p.jornada || "";
+  $("fechaReal").value = p.fechaReal || "";
+  $("lugar").value = p.lugar || "";
+  if (p.localia) $("localia").value = p.localia;
+
+  completarSelectorRival(p.rival);
+  $("rival").value = obtenerClubPorNombre(p.rival) ? p.rival : "__otro__";
+
+  if ($("rival").value==="__otro__") $("rivalOtro").value = p.rival;
+
+  mostrarEscudoRival(p.escudoRival || rutaEscudoClub(p.rival),p.rival);
+
+  $("golesAdiur").value = p.golesAdiur==="" ? "" : p.golesAdiur;
+  $("golesRival").value = p.golesRival==="" ? "" : p.golesRival;
+
+  const faltan = [];
+  if (!p.fechaReal) faltan.push("fecha real");
+  if (!p.lugar) faltan.push("lugar");
+  if (p.golesAdiur==="" || p.golesRival==="") faltan.push("marcador");
+
+  if (faltan.length) {
+    $("avisoDatosFixture").className = "aviso";
+    $("avisoDatosFixture").innerHTML = `
+      <span>ⓘ</span>
+      <div>Se recuperaron los datos disponibles. Completá ${escaparHTML(faltan.join(", "))} cuando no estén registrados en el fixture.</div>`;
+  } else {
+    $("avisoDatosFixture").className = "aviso exito";
+    $("avisoDatosFixture").innerHTML = `<span>✓</span><div>Datos del partido recuperados desde el fixture.</div>`;
+  }
+
+  actualizarBloqueoInforme();
+  actualizarMarcadorVisual();
+  renderizarJugadorasFormulario();
+  renderizarEventosGoles([]);
+  renderizarEventosTarjetas([]);
+}
+
+/* =====================================================
+   PLANTEL
+===================================================== */
+
+function normalizarJugador(objeto,origen="externo",indice=0,divisionPadre="") {
+  const nombre = nombreCompleto(objeto);
+  if (!nombre) return null;
+
+  const divisionOriginal = typeof objeto==="object"
+    ? objeto.division || objeto.categoria || objeto.category || divisionPadre
+    : divisionPadre;
+
+  const dorsal = typeof objeto==="object"
+    ? objeto.dorsal ?? objeto.numeroCamiseta ?? objeto.numero ?? objeto.camiseta ?? ""
+    : "";
+
+  const posicionOriginal = typeof objeto==="object"
+    ? objeto.posicion || objeto.puesto || objeto.position || objeto.demarcacion || objeto.funcion || ""
+    : "";
+  const estadoOriginal = typeof objeto==="object"
+    ? objeto.estado || objeto.estadoJugadora || objeto.situacion || objeto.status || objeto.condicion || ""
+    : "";
+  const textoEstado = normalizarTexto(estadoOriginal);
+  const estadoInactivo = /lesion|inactiv|baja|retirad|suspendid|desvinculad|no activa|no activo/.test(textoEstado)
+    || objeto?.activa===false || objeto?.activo===false || objeto?.estaActiva===false || objeto?.estaActivo===false
+    || objeto?.lesionada===true || objeto?.lesionado===true || objeto?.inactiva===true || objeto?.inactivo===true;
+  return {
+    id:String(objeto?.id || `${origen}-${indice}-${normalizarTexto(nombre).replace(/\s/g,"-")}`),
+    nombre,
+    division:normalizarDivision(divisionOriginal),
+    dorsal:dorsal==="" ? "" : String(dorsal),
+    posicion:String(posicionOriginal||"Sin posición"),
+    estado:String(estadoOriginal||""),
+    activa:!estadoInactivo,
+    origen
+  };
+}
+
+function pareceJugador(objeto) {
+  if (!objeto || typeof objeto!=="object" || Array.isArray(objeto)) return false;
+  if (!nombreCompleto(objeto)) return false;
+
+  const claves = Object.keys(objeto).map(normalizarTexto);
+  return claves.some(k=>["division","categoria","dorsal","numero","apellido","nombre","nombrecompleto","fullname"].includes(k));
+}
+
+function extraerJugadores(valor,salida,divisionPadre="",profundidad=0) {
+  if (profundidad>7 || valor==null) return;
+
+  if (Array.isArray(valor)) {
+    valor.forEach(item=>{
+      if (pareceJugador(item)) salida.push({objeto:item,divisionPadre});
+      else extraerJugadores(item,salida,divisionPadre,profundidad+1);
+    });
+    return;
+  }
+
+  if (typeof valor!=="object") return;
+
+  if (pareceJugador(valor)) {
+    salida.push({objeto:valor,divisionPadre});
+    return;
+  }
+
+  Object.entries(valor).forEach(([clave,contenido])=>{
+    const division = normalizarDivision(clave) || divisionPadre;
+    const claveNormalizada = normalizarTexto(clave);
+
+    if (
+      claveNormalizada.includes("jugadora") ||
+      claveNormalizada.includes("jugador") ||
+      claveNormalizada.includes("plantel") ||
+      claveNormalizada.includes("roster") ||
+      claveNormalizada.includes("player") ||
+      normalizarDivision(clave)
+    ) {
+      extraerJugadores(contenido,salida,division,profundidad+1);
+    }
+  });
+}
+
+function cargarJugadorasExternas() {
+  const salida = [];
+  const excluidas = new Set([
+    CLAVE_PARTIDOS,CLAVE_PLANTEL,CLAVE_FIXTURE,CLAVE_SESION,CLAVE_INFORMES_ANTERIORES
+  ]);
+
+  for (let i=0;i<localStorage.length;i++) {
+    const clave = localStorage.key(i);
+    if (!clave || excluidas.has(clave)) continue;
+
+    const nombreClave = normalizarTexto(clave);
+    const parecePlantel =
+      nombreClave.includes("jugadora") ||
+      nombreClave.includes("jugador") ||
+      nombreClave.includes("plantel") ||
+      nombreClave.includes("roster") ||
+      nombreClave.includes("player");
+
+    if (!parecePlantel) continue;
+
+    extraerJugadores(leerJSON(clave,null),salida,"",0);
+  }
+
+  const vistos = new Set();
+
+  return salida.map((j,i)=>
+    normalizarJugador(j.objeto,"externo",i,j.divisionPadre)
+  ).filter(Boolean).filter(j=>{
+    const key = claveJugador(j.nombre,j.division);
+    if (vistos.has(key)) return false;
+    vistos.add(key);
+    return true;
+  });
+}
+
+function cargarPlantelPropio() {
+  const datos = leerJSON(CLAVE_PLANTEL,[]);
+  if (!Array.isArray(datos)) return [];
+
+  return datos.map((j,i)=>normalizarJugador(j,"propio",i))
+    .filter(Boolean).map(j=>({...j,origen:"propio"}));
+}
+
+function obtenerPlantelCompleto() {
+  const mapa = new Map();
+
+  [...jugadoresExternos,...plantelPropio].forEach(j=>{
+    const key = claveJugador(j.nombre,j.division);
+    const anterior = mapa.get(key);
+    if (!anterior || j.origen==="propio") mapa.set(key,j);
+  });
+
+  return [...mapa.values()].sort((a,b)=>a.nombre.localeCompare(b.nombre,"es"));
+}
+
+function jugadoraEstaActiva(j) {
+  if (j.activa===false) return false;
+  const estado=normalizarTexto(j.estado||"");
+  return !/lesion|inactiv|baja|retirad|suspendid|desvinculad|no activa|no activo/.test(estado);
+}
+
+function grupoPosicion(valor) {
+  const p=normalizarTexto(valor||"");
+  if (/arquer|portera|portero|\bpor\b|goalkeeper/.test(p)) return "POR";
+  if (/defens|central|lateral|marcador|\bdef\b/.test(p)) return "DEF";
+  if (/mediocamp|volante|mediapunt|enganche|\bmed\b/.test(p)) return "MED";
+  if (/delanter|atacante|extrema|punta|\bdel\b/.test(p)) return "DEL";
+  return "OTR";
+}
+
+function jugadoresParaDivision(division) {
+  if (!DIVISIONES.includes(division)) return [];
+  // La convocatoria solo ofrece jugadoras activas de la categoría seleccionada.
+  return jugadoresExternos.filter(j=>j.division===division && jugadoraEstaActiva(j))
+    .sort((a,b)=>{
+      const orden={POR:0,DEF:1,MED:2,DEL:3,OTR:4};
+      const diferencia=orden[grupoPosicion(a.posicion)]-orden[grupoPosicion(b.posicion)];
+      return diferencia || a.nombre.localeCompare(b.nombre,"es");
+    });
+}
+
+function agregarJugadoraRapida() {
+  const nombre = $("nombreNuevaJugadora").value.trim();
+  const division = $("divisionNuevaJugadora").value;
+  const dorsal = $("dorsalNuevaJugadora").value;
+
+  if (!nombre) {
+    mostrarMensaje("Ingresá el nombre y apellido.","error");
+    $("nombreNuevaJugadora").focus();
+    return;
+  }
+
+  const existe = obtenerPlantelCompleto().some(j=>
+    normalizarTexto(j.nombre)===normalizarTexto(nombre) && j.division===division
+  );
+
+  if (existe) {
+    mostrarMensaje("Esa jugadora ya existe en la división seleccionada.","error");
+    return;
+  }
+
+  plantelPropio.push({
+    id:idUnico(),
+    nombre,
+    division,
+    dorsal:dorsal ? String(numeroSeguro(dorsal)) : "",
+    origen:"propio"
+  });
+
+  if (!guardarJSON(CLAVE_PLANTEL,plantelPropio)) {
+    plantelPropio.pop();
+    return;
+  }
+
+  $("nombreNuevaJugadora").value = "";
+  $("dorsalNuevaJugadora").value = "";
+
+  if ($("division").value===division) renderizarJugadorasFormulario();
+
+  renderizarEventosGoles(leerEventosGoles());
+  renderizarEventosTarjetas(leerEventosTarjetas());
+
+  mostrarMensaje("Jugadora agregada al plantel de informes.","exito");
+}
+
+/* =====================================================
+   CÁLCULO DE MINUTOS
+===================================================== */
+
+function calcularMinutos(jugo,titular,entrada,salida,duracion) {
+  if (!jugo) return 0;
+
+  const limite = Math.min(150,Math.max(1,numeroSeguro(duracion)||90));
+  const inicio = titular ? 0 : entrada;
+
+  if (inicio===null || inicio===undefined) return 0;
+
+  const fin = salida===null || salida===undefined ? limite : salida;
+  return Math.max(0,Math.min(limite,fin)-Math.min(limite,Math.max(0,inicio)));
+}
+
+function leerParticipacionesFormulario() {
+  return [...$("cuerpoTablaJugadoras").querySelectorAll("tr[data-jugador]")].map(fila=>{
+    const citada = fila.querySelector(".jugadora-citada").checked;
+    const condicion = fila.querySelector(".jugadora-condicion").value;
+    const titular = citada && condicion === "titular";
+    const entrada = !citada ? null : (titular ? 0 : numeroOpcional(fila.querySelector(".jugadora-entrada").value));
+    const salida = citada && titular ? numeroOpcional(fila.querySelector(".jugadora-salida").value) : null;
+    const jugo = citada && (titular || entrada !== null);
+    const duracion = numeroSeguro($("duracionPartido").value)||90;
+
+    return {
+      id:fila.dataset.jugador,
+      nombre:fila.dataset.nombre,
+      division:fila.dataset.division || $("division").value,
+      citada,
+      jugo,
+      titular,
+      condicion: citada ? (titular ? "Titular" : "Suplente") : "No citada",
+      posicion:fila.dataset.posicion || "",
+      minutoIngreso:entrada,
+      minutoSalida:salida,
+      tiempoIngreso:fila.dataset.tiempoEntrada || (entrada!==null ? formatoTiempo(entrada,duracion).tiempo : ""),
+      sustituyeA:fila.dataset.sustituyeA||"",
+      minutos:calcularMinutos(jugo,titular,entrada,salida,duracion)
+    };
+  });
+}
+
+function posicionesIniciales(indice) {
+  if (indice===0) return "POR";
+  if (indice<=4) return "DEF";
+  if (indice<=7) return "MED";
+  return "DEL";
+}
+
+function renderizarJugadorasFormulario(datosGuardados=[]) {
+  const division = $("division").value;
+  const actuales = jugadoresParaDivision(division);
+  const mapaGuardadas = new Map();
+
+  (datosGuardados||[]).forEach(j=>{
+    mapaGuardadas.set(claveJugador(j.nombre,j.division||division),j);
+  });
+
+  const lista = [...actuales];
+
+  lista.sort((a,b)=>{
+    const orden={POR:0,DEF:1,MED:2,DEL:3,OTR:4};
+    const diferencia=orden[grupoPosicion(a.posicion)]-orden[grupoPosicion(b.posicion)];
+    return diferencia || a.nombre.localeCompare(b.nombre,"es");
+  });
+  $("cantidadJugadoras").textContent=`${lista.length} ${lista.length===1?"jugadora":"jugadoras"}`;
+  $("avisoPlantel").classList.toggle("oculto",actuales.length>0 || !division);
+  $("avisoPlantel").textContent = !division
+    ? "Primero seleccioná una categoría en la opción general."
+    : "No se encontraron jugadoras para esta categoría en los datos disponibles de Jugadoras.html. Revisá que el plantel esté guardado y que cada jugadora tenga asignada su división.";
+
+  if (!lista.length) {
+    $("cuerpoTablaJugadoras").innerHTML=`
+      <tr><td colspan="2">
+        <div class="vacío">
+          <div class="vacio-icono">♙</div>
+          <h4>${division ? "No hay jugadoras para esta categoría" : "Seleccioná una categoría"}</h4>
+          <p>${division ? "La lista se carga desde Jugadoras.html. Comprobá que existan jugadoras guardadas en la división seleccionada." : "La convocatoria aparecerá cuando elijas la categoría en la parte superior del formulario."}</p>
+        </div>
+      </td></tr>`;
+    dibujarCancha();
+    renderizarCambios();
+    return;
+  }
+
+  const duracion = numeroSeguro($("duracionPartido").value)||90;
+  let grupoActual="";
+  const filasJugadoras=[];
+  lista.forEach((j,indice)=>{
+    const grupo=grupoPosicion(j.posicion);
+    if (grupo!==grupoActual) {
+      grupoActual=grupo;
+      const titulos={POR:"ARQUERAS",DEF:"DEFENSORAS",MED:"MEDIOCAMPISTAS",DEL:"DELANTERAS",OTR:"OTRAS POSICIONES"};
+      filasJugadoras.push(`<tr class="fila-grupo-posicion"><td colspan="2"><span class="punto-posicion"></span>${titulos[grupo]}</td></tr>`);
+    }
+    const g = mapaGuardadas.get(claveJugador(j.nombre,j.division||division))||{};
+    const titular = Boolean(g.titular);
+    const minutosAntiguos = numeroSeguro(g.minutos);
+    const citada = g.citada !== undefined
+      ? Boolean(g.citada)
+      : Boolean(g.jugo) || titular || minutosAntiguos > 0 || numeroSeguro(g.goles)>0 || numeroSeguro(g.amarillas)>0 || numeroSeguro(g.rojas)>0;
+
+    let entrada = g.minutoIngreso ?? "";
+    let salida = g.minutoSalida ?? "";
+    if (minutosAntiguos>0 && g.minutoIngreso===undefined && g.minutoSalida===undefined) {
+      if (titular) { entrada=0; salida=""; }
+      else { entrada=Math.max(0,duracion-minutosAntiguos); salida=""; }
+    }
+    if (entrada!=="" && entrada!==null) entrada=Math.min(duracion,Math.max(0,numeroSeguro(entrada)));
+    if (salida!=="" && salida!==null) salida=Math.min(duracion,Math.max(0,numeroSeguro(salida)));
+
+    const condicion = !citada ? "" : (titular ? "titular" : "suplente");
+    const jugo = Boolean(g.jugo)||minutosAntiguos>0||titular;
+
+    filasJugadoras.push(`
+      <tr data-jugador="${escaparHTML(j.id)}"
+          data-nombre="${escaparHTML(j.nombre)}"
+          data-division="${escaparHTML(j.division||division)}"
+          data-posicion="${escaparHTML(j.posicion||"Sin posición")}"
+          data-tiempo-entrada="${escaparHTML(g.tiempoIngreso|| (entrada!=="" ? formatoTiempo(entrada,duracion).tiempo : ""))}"
+          data-sustituye-a="${escaparHTML(g.sustituyeA||"")}">
+        <td class="celda-condicion">
+          <div class="opciones-condicion" role="group" aria-label="Condición de ${escaparHTML(j.nombre)}">
+            <label class="opcion-condicion titular ${condicion==="titular"?"seleccionada":""}">
+              <input type="radio" name="condicion-${escaparHTML(j.id)}" value="titular" data-previo="${condicion==="titular"?"si":"no"}" ${condicion==="titular"?"checked":""} onclick="seleccionarCondicionJugadora(this,'titular')">
+              <span>Titular</span>
+            </label>
+            <label class="opcion-condicion suplente ${condicion==="suplente"?"seleccionada":""}">
+              <input type="radio" name="condicion-${escaparHTML(j.id)}" value="suplente" data-previo="${condicion==="suplente"?"si":"no"}" ${condicion==="suplente"?"checked":""} onclick="seleccionarCondicionJugadora(this,'suplente')">
+              <span>Suplente</span>
+            </label>
+          </div>
+          <input type="checkbox" class="jugadora-citada control-interno" aria-label="Citada ${escaparHTML(j.nombre)}" ${citada?"checked":""} onchange="actualizarFilaJugador(this)">
+          <select class="jugadora-condicion control-interno" aria-label="Condición de ${escaparHTML(j.nombre)}" onchange="actualizarFilaJugador(this)">
+            <option value="" ${condicion===""?"selected":""}>No citada</option>
+            <option value="titular" ${condicion==="titular"?"selected":""}>Titular</option>
+            <option value="suplente" ${condicion==="suplente"?"selected":""}>Suplente</option>
+          </select>
+        </td>
+        <td>
+          <div class="jugadora-nombre">
+            <div class="jugadora-avatar">${escaparHTML(iniciales(j.nombre))}</div>
+            <div><strong>${escaparHTML(j.nombre)}</strong>
+              <small>${escaparHTML(j.posicion||"Sin posición")}${j.dorsal?" · Nº "+escaparHTML(j.dorsal):""}</small>
+            </div>
+          </div>
+        </td>
+        <td class="controles-minutos-ocultos">
+          <input type="number" class="jugadora-entrada" min="0" max="${duracion}"
+            value="${entrada===null?"":escaparHTML(entrada)}" aria-label="Minuto de entrada de ${escaparHTML(j.nombre)}"
+            ${!citada||titular?"disabled":""} onchange="actualizarFilaJugador(this)">
+          <input type="number" class="jugadora-salida" min="0" max="${duracion}"
+            value="${salida===null?"":escaparHTML(salida)}" aria-label="Minuto de salida de ${escaparHTML(j.nombre)}"
+            ${!citada||!titular?"disabled":""} onchange="actualizarFilaJugador(this)">
+          <span class="minutos-calculados ${jugo&&minutosAntiguos>0?"":"cero"}">${minutosAntiguos}</span>
+        </td>
+      </tr>`);
+  });
+  $("cuerpoTablaJugadoras").innerHTML=filasJugadoras.join("");
+
+  recalcularTodasLasFilas();
+  sincronizarEventosConConvocatoria(false);
+}
+
+function seleccionarCondicionJugadora(radio, condicionElegida) {
+  const fila=radio.closest("tr[data-jugador]");
+  if (!fila) return;
+  const seleccionado=radio.checked;
+  const checkbox=fila.querySelector(".jugadora-citada");
+  const select=fila.querySelector(".jugadora-condicion");
+  const radios=[...fila.querySelectorAll(".opcion-condicion input[type=radio]")];
+  if (radio.dataset.previo==="si") {
+    radio.checked=false;
+    radio.dataset.previo="no";
+    checkbox.checked=false;
+    select.value="";
+  } else {
+    radios.forEach(r=>{r.dataset.previo="no";});
+    radio.dataset.previo="si";
+    checkbox.checked=true;
+    select.value=condicionElegida;
+  }
+  fila.querySelectorAll(".opcion-condicion").forEach(label=>label.classList.toggle("seleccionada",label.querySelector("input").checked));
+  actualizarFilaJugador(select);
+}
+
+function actualizarFilaJugador(elemento) {
+  const fila = elemento.closest("tr");
+  if (!fila) return;
+
+  const citada = fila.querySelector(".jugadora-citada");
+  const condicion = fila.querySelector(".jugadora-condicion");
+  const entrada = fila.querySelector(".jugadora-entrada");
+  const salida = fila.querySelector(".jugadora-salida");
+  const condicionAnterior = fila.dataset.condicionAntes || "suplente";
+
+  if (elemento.classList.contains("jugadora-citada")) {
+    if (!citada.checked) {
+      condicion.value = "";
+      entrada.value = "";
+      salida.value = "";
+    } else if (!condicion.value) {
+      condicion.value = "suplente";
+    }
+  }
+
+  if (elemento.classList.contains("jugadora-condicion")) {
+    if (citada.checked && !condicion.value) condicion.value = "suplente";
+    if (condicion.value === "titular") {
+      const titulares = [...$("cuerpoTablaJugadoras").querySelectorAll("tr[data-jugador]")]
+        .filter(otra => otra !== fila && otra.querySelector(".jugadora-citada").checked && otra.querySelector(".jugadora-condicion").value === "titular");
+      if (citada.checked && titulares.length >= 11) {
+        condicion.value = "suplente";
+        mostrarMensaje("La formación puede tener como máximo 11 titulares.","error");
+      }
+      entrada.value = "0";
+    } else if (condicionAnterior === "titular") {
+      entrada.value = "";
+      salida.value = "";
+    }
+  }
+
+  condicion.disabled = !citada.checked;
+  entrada.disabled = !citada.checked || condicion.value !== "suplente";
+  salida.disabled = !citada.checked || condicion.value !== "titular";
+  if (!citada.checked) {
+    condicion.value = "";
+    entrada.value = "";
+    salida.value = "";
+  } else if (condicion.value === "titular") {
+    entrada.value = "0";
+  }
+
+  fila.dataset.citadaAntes = String(citada.checked);
+  fila.dataset.condicionAntes = condicion.value;
+  if (!citada.checked || condicion.value !== "suplente") {
+    fila.dataset.sustituyeA = "";
+    fila.dataset.tiempoEntrada = "";
+  }
+  fila.querySelectorAll(".opcion-condicion").forEach(label=>{
+    const radio=label.querySelector("input[type=radio]");
+    radio.checked=citada.checked && radio.value===condicion.value;
+    radio.dataset.previo=radio.checked?"si":"no";
+    label.classList.toggle("seleccionada",radio.checked);
+  });
+  recalcularFila(fila);
+  dibujarCancha();
+  renderizarCambios();
+  sincronizarEventosConConvocatoria(true);
+}
+
+function recalcularFila(fila) {
+  const citada = fila.querySelector(".jugadora-citada").checked;
+  const titular = citada && fila.querySelector(".jugadora-condicion").value === "titular";
+  const entrada = !citada ? null : (titular ? 0 : numeroOpcional(fila.querySelector(".jugadora-entrada").value));
+  const salida = citada && titular ? numeroOpcional(fila.querySelector(".jugadora-salida").value) : null;
+  const jugo = citada && (titular || entrada !== null);
+  const duracion = numeroSeguro($("duracionPartido").value)||90;
+  const minutos = calcularMinutos(jugo,titular,entrada,salida,duracion);
+
+  const etiqueta = fila.querySelector(".minutos-calculados");
+  etiqueta.textContent = minutos;
+  etiqueta.classList.toggle("cero",minutos===0);
+  fila.dataset.citadaAntes = String(citada);
+  fila.dataset.condicionAntes = fila.querySelector(".jugadora-condicion").value;
+}
+
+function recalcularTodasLasFilas() {
+  $("cuerpoTablaJugadoras").querySelectorAll("tr[data-jugador]").forEach(recalcularFila);
+  dibujarCancha();
+  renderizarCambios();
+}
+
+/* =====================================================
+   CANCHA Y FORMACIÓN
+===================================================== */
+
+function dibujarCancha() {
+  // La visualización de cancha fue retirada. Se mantiene esta función vacía
+  // para compatibilidad con las llamadas existentes del sistema.
+  const resumen = document.getElementById("resumenTitulares");
+  if (resumen) {
+    const titulares = [...document.querySelectorAll("#cuerpoTablaJugadoras tr[data-jugador]")]
+      .filter(fila=>fila.querySelector(".jugadora-citada")?.checked && fila.querySelector(".jugadora-condicion")?.value === "titular").length;
+    resumen.textContent = `${titulares} titulares`;
+  }
+}
+
+function formatoTiempo(minuto,duracion) {
+  if (minuto===null||minuto===undefined||minuto==="") return {minuto:"",tiempo:"1T"};
+
+  const mitad=mediaDuracionPartido(duracion);
+  const valor=numeroSeguro(minuto);
+
+  if (valor<=mitad) return {minuto:String(valor),tiempo:"1T"};
+  return {minuto:String(valor-mitad),tiempo:"2T"};
+}
+
+function minutoAbsolutoPorTiempo(minutoLocal,tiempo,duracion) {
+  if (minutoLocal===null || minutoLocal===undefined || minutoLocal==="") return null;
+  const mitad=mediaDuracionPartido(duracion);
+  const valor=numeroOpcional(minutoLocal);
+  if (valor===null) return null;
+  return Math.min(duracion, valor + (tiempo==="2T" ? mitad : 0));
+}
+
+function renderizarCambios() {
+  const participaciones = leerParticipacionesFormulario().filter(j=>j.citada);
+  const suplentes = participaciones.filter(j=>!j.titular);
+  const titulares = participaciones.filter(j=>j.titular);
+  const duracion = duracionPorDivision() || numeroSeguro($("duracionPartido").value) || 90;
+  const mitad = mediaDuracionPartido(duracion);
+  if (!suplentes.length) {
+    $("tablaCambios").innerHTML = `<tr><td colspan="4"><div class="vacio-eventos">Primero seleccioná las titulares y suplentes en Formación.</div></td></tr>`;
+    return;
+  }
+  const filas = suplentes.map(j=>{
+    const fila=[...$("cuerpoTablaJugadoras").querySelectorAll("tr[data-jugador]")]
+      .find(tr=>String(tr.dataset.jugador)===String(j.id));
+    if (!fila) return "";
+    const entrada=fila.querySelector(".jugadora-entrada");
+    const minutoAbsoluto=numeroOpcional(entrada.value);
+    const datoTiempo=formatoTiempo(minutoAbsoluto,duracion);
+    const tiempo=fila.dataset.tiempoEntrada || datoTiempo.tiempo;
+    const minuto=minutoAbsoluto===null ? "" : (tiempo==="2T" ? String(minutoAbsoluto-mitad) : String(minutoAbsoluto));
+    const seleccionada=fila.dataset.sustituyeA||"";
+    const opciones=titulares.map(t=>`<option value="${escaparHTML(t.id)}" ${String(t.id)===String(seleccionada)?"selected":""}>${escaparHTML(t.nombre)}</option>`).join("");
+    return `<tr class="evento-cambio-fila" data-cambio-jugadora="${escaparHTML(j.id)}">
+      <td><strong>${escaparHTML(j.nombre)}</strong></td>
+      <td><input class="minuto-cambio-editor" type="number" min="0" max="${mitad}" value="${escaparHTML(minuto)}" placeholder="Min." aria-label="Minuto de entrada de ${escaparHTML(j.nombre)}" onchange="actualizarMinutoCambio(this,'entrada')"></td>
+      <td><select class="tiempo-cambio-editor" aria-label="Tiempo de entrada de ${escaparHTML(j.nombre)}" onchange="actualizarTiempoCambio(this)"><option value="1T" ${tiempo==="1T"?"selected":""}>1T</option><option value="2T" ${tiempo==="2T"?"selected":""}>2T</option></select></td>
+      <td><select class="titular-sale-selector" aria-label="Titular que sale por ${escaparHTML(j.nombre)}" onchange="actualizarTitularCambio(this)"><option value="">Seleccionar titular...</option>${opciones}</select></td>
+    </tr>`;
+  }).join("");
+  $("tablaCambios").innerHTML = filas || `<tr><td colspan="4"><div class="vacio-eventos">No hay suplentes disponibles para registrar cambios.</div></td></tr>`;
+}
+
+function actualizarMinutoCambio(input, tipo) {
+  const filaEvento=input.closest("tr[data-cambio-jugadora]");
+  if (!filaEvento) return;
+  const id=filaEvento.dataset.cambioJugadora;
+  const filaJugador=[...$("cuerpoTablaJugadoras").querySelectorAll("tr[data-jugador]")]
+    .find(tr=>String(tr.dataset.jugador)===String(id));
+  if (!filaJugador) return;
+  const control=filaJugador.querySelector(".jugadora-entrada");
+  const duracion=duracionPorDivision()||numeroSeguro($("duracionPartido").value)||90;
+  const mitad=mediaDuracionPartido(duracion);
+  const minutoLocal=numeroOpcional(input.value);
+  if (minutoLocal!==null && (minutoLocal<0 || minutoLocal>mitad)) {
+    mostrarMensaje(`El minuto debe estar entre 0 y ${mitad} dentro del tiempo seleccionado.`,"error");
+    const datoAnterior=formatoTiempo(numeroOpcional(control.value),duracion);
+    input.value=datoAnterior.minuto;
+    const selectorTiempo=filaEvento.querySelector(".tiempo-cambio-editor");
+    if (selectorTiempo) selectorTiempo.value=datoAnterior.tiempo;
+    return;
+  }
+  const tiempo=filaEvento.querySelector(".tiempo-cambio-editor")?.value||"1T";
+  filaJugador.dataset.tiempoEntrada=tiempo;
+  const minutoAbsoluto=minutoAbsolutoPorTiempo(minutoLocal,tiempo,duracion);
+  control.value=minutoAbsoluto===null?"":String(minutoAbsoluto);
+  const titularId=filaEvento.querySelector(".titular-sale-selector")?.value||"";
+  const filaTitular=[...$("cuerpoTablaJugadoras").querySelectorAll("tr[data-jugador]")]
+    .find(tr=>String(tr.dataset.jugador)===String(titularId));
+  if (filaTitular) filaTitular.querySelector(".jugadora-salida").value=minutoAbsoluto===null?"":String(minutoAbsoluto);
+  recalcularTodasLasFilas();
+  actualizarResumenRevision();
+}
+
+function actualizarTiempoCambio(select) {
+  const fila=select.closest("tr[data-cambio-jugadora]");
+  const minuto=fila?.querySelector(".minuto-cambio-editor");
+  if (minuto) actualizarMinutoCambio(minuto,"entrada");
+}
+
+function actualizarTitularCambio(select) {
+  const filaEvento=select.closest("tr[data-cambio-jugadora]");
+  if (!filaEvento) return;
+  const suplenteId=filaEvento.dataset.cambioJugadora;
+  const filas=[...$("cuerpoTablaJugadoras").querySelectorAll("tr[data-jugador]")];
+  const filaSuplente=filas.find(tr=>String(tr.dataset.jugador)===String(suplenteId));
+  if (!filaSuplente) return;
+  const anterior=filaSuplente.dataset.sustituyeA||"";
+  const nuevo=select.value||"";
+  const minuto=numeroOpcional(filaSuplente.querySelector(".jugadora-entrada").value);
+  if (anterior && anterior!==nuevo) {
+    const filaAnterior=filas.find(tr=>String(tr.dataset.jugador)===String(anterior));
+    if (filaAnterior) {
+      const sigueReemplazada=filas.some(tr=>tr!==filaSuplente && tr.dataset.sustituyeA===anterior);
+      if (!sigueReemplazada) filaAnterior.querySelector(".jugadora-salida").value="";
+    }
+  }
+  filaSuplente.dataset.sustituyeA=nuevo;
+  if (nuevo) {
+    const filaTitular=filas.find(tr=>String(tr.dataset.jugador)===String(nuevo));
+    if (filaTitular) filaTitular.querySelector(".jugadora-salida").value=minuto===null?"":String(minuto);
+  }
+  recalcularTodasLasFilas();
+  actualizarResumenRevision();
+}
+
+/* =====================================================
+   GOLES
+===================================================== */
+
+function nombresDisponibles() {
+  const nombres = new Map();
+  leerParticipacionesFormulario().filter(j=>j.citada).forEach(j=>{
+    nombres.set(normalizarTexto(j.nombre),j.nombre);
+  });
+  return [...nombres.values()].sort((a,b)=>a.localeCompare(b,"es"));
+}
+
+function opcionesJugadoras(valor="") {
+  const nombres = nombresDisponibles();
+  return `
+    <option value="">${nombres.length ? "Elegir jugadora citada..." : "Primero citá jugadoras en Formación"}</option>
+    ${nombres.map(n=>`<option value="${escaparHTML(n)}" ${normalizarTexto(n)===normalizarTexto(valor)?"selected":""}>${escaparHTML(n)}</option>`).join("")}`;
+}
+
+function filaGol(g,i) {
+  const mitad=mediaDuracionPartido(duracionPorDivision()||numeroSeguro($("duracionPartido").value)||90);
+  const minuto=numeroOpcional(g.minuto);
+  const minutoVisible=minuto===null?"":Math.min(mitad,minuto);
+  return `
+    <article class="evento-registro evento-gol-registro" data-gol-id="${escaparHTML(g.id||idUnico())}">
+      <div class="evento-registro-cabecera">
+        <span class="evento-numero gol-numero-texto" aria-label="Gol número ${i+1}">${String(i+1).padStart(2,"0")}</span>
+        <label class="evento-campo evento-campo-jugadora">
+          <span>Jugadora que convirtió</span>
+          <select class="gol-jugadora" aria-label="Goleadora" onchange="alCambiarGoleadora(this)">
+            ${opcionesJugadoras(g.jugadora||"")}
+          </select>
+        </label>
+        <button class="evento-eliminar" type="button" onclick="eliminarEvento(this,'gol')" aria-label="Eliminar gol" title="Eliminar gol">×</button>
+      </div>
+      <div class="evento-registro-detalles">
+        <label class="evento-campo">
+          <span>Tiempo</span>
+          <select class="gol-tiempo" aria-label="Tiempo del gol">
+            <option value="">Elegir tiempo</option>
+            <option value="1T" ${g.tiempo==="1T"?"selected":""}>Primer tiempo</option>
+            <option value="2T" ${g.tiempo==="2T"?"selected":""}>Segundo tiempo</option>
+          </select>
+        </label>
+        <label class="evento-campo evento-campo-minuto">
+          <span>Minuto</span>
+          <input class="gol-minuto" type="number" min="0" max="${mitad}"
+            value="${minutoVisible===""?"":escaparHTML(minutoVisible)}"
+            placeholder="${mitad}′ máx." aria-label="Minuto del gol">
+        </label>
+      </div>
+    </article>`;
+}
+
+function renderizarEventosGoles(eventos=[]) {
+  const lista=eventos||[];
+  $("tablaGoles").innerHTML=lista.length
+    ? lista.map(filaGol).join("")
+    : `<div class="eventos-vacio"><span class="eventos-vacio-icono">⚽</span><div><strong>Todavía no hay goles cargados</strong><small>Agregá un registro por cada gol del partido.</small></div></div>`;
+  renumerarGoles();
+  actualizarAvisoGoles();
+}
+
+function agregarEventoGol() {
+  if (!nombresDisponibles().length) {
+    mostrarMensaje("Primero seleccioná la categoría y marcá las jugadoras citadas en Formación.","error");
+    return;
+  }
+  const eventos=leerEventosGoles();
+  eventos.push({id:idUnico(),jugadora:"",tiempo:"",minuto:null});
+  renderizarEventosGoles(eventos);
+}
+
+function leerEventosGoles() {
+  return [...$("tablaGoles").querySelectorAll(".evento-gol-registro[data-gol-id]")].map(fila=>({
+    id:fila.dataset.golId,
+    jugadora:fila.querySelector(".gol-jugadora").value.trim(),
+    tiempo:fila.querySelector(".gol-tiempo").value,
+    minuto:numeroOpcional(fila.querySelector(".gol-minuto").value)
+  }));
+}
+
+function renumerarGoles() {
+  [...$("tablaGoles").querySelectorAll(".evento-gol-registro[data-gol-id]")].forEach((fila,i)=>{
+    const etiqueta=fila.querySelector(".gol-numero-texto");
+    if (etiqueta) {
+      etiqueta.textContent=String(i+1).padStart(2,"0");
+      etiqueta.setAttribute("aria-label",`Gol número ${i+1}`);
+    }
+  });
+}
+
+function marcarJugadoraComoParticipante(nombre) {
+  const fila=[...$("cuerpoTablaJugadoras").querySelectorAll("tr[data-jugador]")]
+    .find(tr=>normalizarTexto(tr.dataset.nombre)===normalizarTexto(nombre));
+
+  if (fila) {
+    const checkbox=fila.querySelector(".jugadora-citada");
+    if (checkbox && !checkbox.checked) {
+      checkbox.checked=true;
+      actualizarFilaJugador(checkbox);
+    }
+  }
+}
+
+function alCambiarGoleadora() {
+  // La convocatoria se define exclusivamente en el paso Formación.
+  actualizarAvisoGoles();
+}
+
+/* =====================================================
+   TARJETAS
+===================================================== */
+
+function filaTarjeta(t,i) {
+  const mitad=mediaDuracionPartido(duracionPorDivision()||numeroSeguro($("duracionPartido").value)||90);
+  const minuto=numeroOpcional(t.minuto);
+  const minutoVisible=minuto===null?"":Math.min(mitad,minuto);
+  return `
+    <article class="evento-registro evento-tarjeta-registro" data-tarjeta-id="${escaparHTML(t.id||idUnico())}">
+      <div class="evento-registro-cabecera">
+        <span class="evento-numero tarjeta-numero-texto" aria-label="Tarjeta número ${(i||0)+1}">${String((i||0)+1).padStart(2,"0")}</span>
+        <label class="evento-campo evento-campo-jugadora">
+          <span>Jugadora</span>
+          <select class="tarjeta-jugadora" aria-label="Jugadora amonestada" onchange="alCambiarTarjeta(this)">
+            ${opcionesJugadoras(t.jugadora||"")}
+          </select>
+        </label>
+        <button class="evento-eliminar" type="button" onclick="eliminarEvento(this,'tarjeta')" aria-label="Eliminar tarjeta" title="Eliminar tarjeta">×</button>
+      </div>
+      <div class="evento-registro-detalles">
+        <label class="evento-campo evento-campo-tipo">
+          <span>Tipo de tarjeta</span>
+          <select class="tarjeta-tipo" aria-label="Tipo de tarjeta">
+            <option value="Amarilla" ${t.tipo!=="Roja"?"selected":""}>🟨 Amarilla</option>
+            <option value="Roja" ${t.tipo==="Roja"?"selected":""}>🟥 Roja</option>
+          </select>
+        </label>
+        <label class="evento-campo">
+          <span>Tiempo</span>
+          <select class="tarjeta-tiempo" aria-label="Tiempo de tarjeta">
+            <option value="">Elegir tiempo</option>
+            <option value="1T" ${t.tiempo==="1T"?"selected":""}>Primer tiempo</option>
+            <option value="2T" ${t.tiempo==="2T"?"selected":""}>Segundo tiempo</option>
+          </select>
+        </label>
+        <label class="evento-campo evento-campo-minuto">
+          <span>Minuto</span>
+          <input class="tarjeta-minuto" type="number" min="0" max="${mitad}"
+            value="${minutoVisible===""?"":escaparHTML(minutoVisible)}"
+            placeholder="${mitad}′ máx." aria-label="Minuto de tarjeta">
+        </label>
+      </div>
+    </article>`;
+}
+
+function renderizarEventosTarjetas(eventos=[]) {
+  const lista=eventos||[];
+  $("tablaTarjetas").innerHTML=lista.length
+    ? lista.map((evento,i)=>filaTarjeta(evento,i)).join("")
+    : `<div class="eventos-vacio"><span class="eventos-vacio-icono">🟨</span><div><strong>Todavía no hay tarjetas cargadas</strong><small>Agregá una por cada amonestación o expulsión.</small></div></div>`;
+  renumerarTarjetas();
+}
+
+function sincronizarEventosConConvocatoria(mostrarAviso=true) {
+  const permitidas = new Set(leerParticipacionesFormulario().filter(j=>j.citada).map(j=>normalizarTexto(j.nombre)));
+  const golesAntes = leerEventosGoles();
+  const tarjetasAntes = leerEventosTarjetas();
+  const goles = golesAntes.filter(g=>!g.jugadora || permitidas.has(normalizarTexto(g.jugadora)));
+  const tarjetas = tarjetasAntes.filter(t=>!t.jugadora || permitidas.has(normalizarTexto(t.jugadora)));
+  const quitados = (golesAntes.length-goles.length)+(tarjetasAntes.length-tarjetas.length);
+
+  renderizarEventosGoles(goles);
+  renderizarEventosTarjetas(tarjetas);
+  if (mostrarAviso && quitados>0) mostrarMensaje(`Se quitaron ${quitados} evento(s) de jugadoras que ya no están citadas.`,"error");
+}
+
+function agregarEventoTarjeta() {
+  if (!nombresDisponibles().length) {
+    mostrarMensaje("Primero seleccioná la categoría y marcá las jugadoras citadas en Formación.","error");
+    return;
+  }
+  const eventos=leerEventosTarjetas();
+  eventos.push({id:idUnico(),jugadora:"",tipo:"Amarilla",tiempo:"",minuto:null});
+  renderizarEventosTarjetas(eventos);
+}
+
+function leerEventosTarjetas() {
+  return [...$("tablaTarjetas").querySelectorAll(".evento-tarjeta-registro[data-tarjeta-id]")].map(fila=>({
+    id:fila.dataset.tarjetaId,
+    jugadora:fila.querySelector(".tarjeta-jugadora").value.trim(),
+    tipo:fila.querySelector(".tarjeta-tipo").value,
+    minuto:numeroOpcional(fila.querySelector(".tarjeta-minuto").value),
+    tiempo:fila.querySelector(".tarjeta-tiempo").value
+  }));
+}
+
+function alCambiarTarjeta() {
+  // La lista de tarjetas está limitada a jugadoras citadas.
+}
+
+function renumerarTarjetas() {
+  [...$("tablaTarjetas").querySelectorAll(".evento-tarjeta-registro[data-tarjeta-id]")].forEach((fila,i)=>{
+    const etiqueta=fila.querySelector(".tarjeta-numero-texto");
+    if (etiqueta) {
+      etiqueta.textContent=String(i+1).padStart(2,"0");
+      etiqueta.setAttribute("aria-label",`Tarjeta número ${i+1}`);
+    }
+  });
+}
+
+function eliminarEvento(boton,tipo) {
+  const fila=boton.closest(".evento-registro");
+  if (fila) fila.remove();
+
+  if (tipo==="gol") {
+    if (!$("tablaGoles").querySelector(".evento-gol-registro")) renderizarEventosGoles([]);
+    else renumerarGoles();
+    actualizarAvisoGoles();
+  } else if (tipo==="tarjeta") {
+    if (!$("tablaTarjetas").querySelector(".evento-tarjeta-registro")) renderizarEventosTarjetas([]);
+    else renumerarTarjetas();
+  }
+}
+
+function migrarGolesAntiguos(p) {
+  if (Array.isArray(p.golesEventos)&&p.golesEventos.length) return p.golesEventos;
+
+  const eventos=[];
+  (p.jugadoras||[]).forEach(j=>{
+    for (let i=0;i<numeroSeguro(j.goles);i++) {
+      eventos.push({id:idUnico(),jugadora:j.nombre,tiempo:"",minuto:null});
+    }
+  });
+  return eventos;
+}
+
+function migrarTarjetasAntiguas(p) {
+  if (Array.isArray(p.tarjetasEventos)&&p.tarjetasEventos.length) return p.tarjetasEventos;
+
+  const eventos=[];
+  (p.jugadoras||[]).forEach(j=>{
+    for (let i=0;i<numeroSeguro(j.amarillas);i++) {
+      eventos.push({id:idUnico(),jugadora:j.nombre,tipo:"Amarilla",tiempo:"",minuto:null});
+    }
+    for (let i=0;i<numeroSeguro(j.rojas);i++) {
+      eventos.push({id:idUnico(),jugadora:j.nombre,tipo:"Roja",tiempo:"",minuto:null});
+    }
+  });
+  return eventos;
+}
+
+/* =====================================================
+   COHERENCIA DEL MARCADOR
+===================================================== */
+
+function actualizarAvisoGoles() {
+  const aviso=$("avisoGolesIndividuales");
+  const texto=$("textoAvisoGoles");
+
+  if ($("golesAdiur").value==="") {
+    aviso.classList.add("oculto");
+    return;
+  }
+
+  const marcador=numeroSeguro($("golesAdiur").value);
+  const individuales=leerEventosGoles().filter(g=>g.jugadora).length;
+
+  if (marcador!==individuales) {
+    aviso.className="aviso neutro";
+    texto.innerHTML=`El marcador indica <strong>${marcador} goles</strong>, pero hay <strong>${individuales} goles individuales</strong> detallados. Revisá si falta cargar algún gol.`;
+  } else {
+    aviso.className="aviso exito";
+    texto.innerHTML=`Los goles individuales coinciden con el marcador de ADIUR: <strong>${marcador}</strong>.`;
+  }
+}
+
+/* =====================================================
+   ALMACENAMIENTO Y MIGRACIÓN
+===================================================== */
+
+function normalizarPartidoGuardado(p) {
+  const division=normalizarDivision(p.division)||"Primera";
+  const duracion=numeroSeguro(p.duracionPartido)||90;
+
+  const jugadoras=Array.isArray(p.jugadoras)?p.jugadoras.map(j=>{
+    const titular=Boolean(j.titular);
+    const minutos=numeroSeguro(j.minutos);
+    let entrada=j.minutoIngreso;
+    let salida=j.minutoSalida;
+
+    if (minutos>0&&entrada===undefined&&salida===undefined) {
+      if (titular) {
+        entrada=0;
+        salida=null;
+      } else {
+        entrada=Math.max(0,duracion-minutos);
+        salida=null;
+      }
+    }
+
+    const goles = numeroSeguro(j.goles);
+    const amarillas = numeroSeguro(j.amarillas);
+    const rojas = numeroSeguro(j.rojas);
+    const jugo = Boolean(j.jugo)||minutos>0;
+    const citada = j.citada===undefined
+      ? (jugo||titular||goles>0||amarillas>0||rojas>0)
+      : Boolean(j.citada);
+
+    return {
+      ...j,
+      nombre:nombreCompleto(j)||"Jugadora sin nombre",
+      division:normalizarDivision(j.division)||division,
+      citada,
+      jugo,
+      titular,
+      posicion:j.posicion||"MED",
+      minutoIngreso:entrada===undefined?null:entrada,
+      minutoSalida:salida===undefined?null:salida,
+      minutos,
+      goles,
+      amarillas,
+      rojas
+    };
+  }):[];
+
+  return {
+    ...p,
+    id:String(p.id||idUnico()),
+    fecha:p.fecha||p.fechaReal||p.fechaPartido||"",
+    division,
+    torneo:p.torneo||p.competicion||"Rosarina",
+    jornada:numeroSeguro(p.jornada),
+    rival:p.rival||p.nombre||"Rival sin nombre",
+    escudoRival:p.escudoRival||p.foto||"",
+    lugar:p.lugar||p.cancha||"",
+    hora:p.hora||"",
+    localia:p.localia||"Local",
+    golesFavor:p.golesFavor===undefined ? numeroOpcional(p.golesAdiur) : numeroOpcional(p.golesFavor),
+    golesContra:p.golesContra===undefined ? numeroOpcional(p.golesRival) : numeroOpcional(p.golesContra),
+    duracionPartido:duracion,
+    formacion:p.formacion||"433",
+    observaciones:p.observaciones||"",
+    jugadoras,
+    golesEventos:Array.isArray(p.golesEventos)?p.golesEventos:[],
+    tarjetasEventos:Array.isArray(p.tarjetasEventos)?p.tarjetasEventos:[]
+  };
+}
+
+function cargarPartidos() {
+  const actuales=leerJSON(CLAVE_PARTIDOS,null);
+
+  if (Array.isArray(actuales)) {
+    partidos=actuales.map(normalizarPartidoGuardado);
+    return;
+  }
+
+  const anteriores=leerJSON(CLAVE_INFORMES_ANTERIORES,[]);
+
+  if (Array.isArray(anteriores)&&anteriores.length) {
+    partidos=anteriores.map((p,i)=>{
+      const resultado=String(p.resultado||"").match(/(\d+)\s*[-:]\s*(\d+)/);
+      return normalizarPartidoGuardado({
+        ...p,
+        id:p.id||"migrado-"+i+"-"+idUnico(),
+        fecha:p.fecha||p.fechaPartido||"",
+        rival:p.rival||p.clubRival||p.nombre||"Rival sin nombre",
+        torneo:p.torneo||p.competicion||"Rosarina",
+        golesFavor:p.golesFavor??(resultado?Number(resultado[1]):null),
+        golesContra:p.golesContra??(resultado?Number(resultado[2]):null)
+      });
+    });
+    guardarJSON(CLAVE_PARTIDOS,partidos);
+  } else {
+    partidos=[];
+  }
+}
+
+/* =====================================================
+   LIMPIAR Y EDITAR PARTIDO
+===================================================== */
+
+function nuevoPartido() {
+  $("formularioPartido").reset();
+  $("partidoId").value="";
+  $("fixtureIdVinculado").value="";
+  $("division").value="";
+  actualizarSelectorFixture();
+
+  $("fechaReal").value="";
+  $("lugar").value="";
+  $("jornada").value="";
+  $("duracionPartido").value="";
+  aplicarDuracionCategoria();
+  $("golesAdiur").value="";
+  $("golesRival").value="";
+  $("observaciones").value="";
+  $("localia").value="Local";
+
+  $("tituloFormulario").textContent="Datos del encuentro";
+  $("estadoFormulario").textContent="Nuevo informe";
+  $("botonGuardar").textContent="Guardar informe";
+
+  $("avisoDatosFixture").className="aviso neutro";
+  $("avisoDatosFixture").innerHTML=`<span>ⓘ</span><div>Seleccioná un encuentro del fixture o completá los datos manualmente.</div>`;
+
+  completarSelectorRival("");
+  actualizarCompeticiones();
+  mostrarEscudoRival("");
+  actualizarMarcadorVisual();
+  renderizarJugadorasFormulario([]);
+  renderizarEventosGoles([]);
+  renderizarEventosTarjetas([]);
+  actualizarAvisoGoles();
+  actualizarBloqueoInforme();
+  mostrarPasoCarga(1);
+}
+
+function editarPartido(id) {
+  const p=partidos.find(p=>String(p.id)===String(id));
+  if (!p) {
+    mostrarMensaje("No se encontró el informe seleccionado.","error");
+    return;
+  }
+
+  $("formularioPartido").reset();
+  $("partidoId").value=p.id;
+  $("fixtureIdVinculado").value=p.fixtureId||"";
+  $("seleccionFixture").value="";
+
+  $("division").value=p.division;
+  aplicarDuracionCategoria();
+  actualizarSelectorFixture();
+  $("seleccionFixture").value = p.fixtureId || "";
+  actualizarCompeticiones(p.torneo);
+  $("jornada").value=p.jornada||"";
+  $("fechaReal").value=normalizarFechaInput(p.fecha);
+  $("localia").value=p.localia||"Local";
+  $("lugar").value=p.lugar||"";
+  $("golesAdiur").value=p.golesFavor===null?"":p.golesFavor;
+  $("golesRival").value=p.golesContra===null?"":p.golesContra;
+  $("observaciones").value=p.observaciones||"";
+
+  completarSelectorRival(p.rival);
+  if ($("rival").value==="__otro__") $("rivalOtro").value=p.rival;
+  mostrarEscudoRival(p.escudoRival||rutaEscudoClub(p.rival),p.rival);
+
+  $("tituloFormulario").textContent="Editar informe de partido";
+  $("estadoFormulario").textContent="Editando";
+  $("botonGuardar").textContent="Guardar cambios";
+
+  renderizarJugadorasFormulario(p.jugadoras||[]);
+  renderizarEventosGoles(migrarGolesAntiguos(p));
+  renderizarEventosTarjetas(migrarTarjetasAntiguas(p));
+  sincronizarEventosConConvocatoria(false);
+  actualizarMarcadorVisual();
+  actualizarAvisoGoles();
+
+  cambiarVista("cargar");
+  mostrarPasoCarga(1);
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* =====================================================
+   VALIDACIÓN Y GUARDADO
+===================================================== */
+
+function validarParticipaciones(participaciones,duracion) {
+  const titulares = participaciones.filter(j=>j.citada && j.titular);
+  if (titulares.length>11) return "No puede haber más de 11 titulares.";
+
+  for (const j of participaciones) {
+    if (!j.citada || !j.jugo) continue;
+    if (!j.titular && j.minutoIngreso===null) {
+      return `Ingresá el minuto de entrada de ${j.nombre} si participó como suplente.`;
+    }
+    if (j.minutoIngreso!==null && j.minutoIngreso>duracion) {
+      return `El minuto de entrada de ${j.nombre} supera la duración del encuentro.`;
+    }
+    if (j.minutoSalida!==null && j.minutoSalida>duracion) {
+      return `El minuto de salida de ${j.nombre} supera la duración del encuentro.`;
+    }
+    if (j.minutoSalida!==null && j.minutoIngreso!==null && j.minutoSalida<j.minutoIngreso) {
+      return `La salida de ${j.nombre} no puede ser anterior a su ingreso.`;
+    }
+  }
+  return "";
+}
+
+function guardarPartido(evento) {
+  evento.preventDefault();
+  if (guardando) return;
+
+  const id=$("partidoId").value;
+  const division=$("division").value;
+  const torneo=$("competicion").value;
+  const fecha=$("fechaReal").value;
+  const rival=nombreRivalActual();
+  const jornadaTexto=$("jornada").value.trim();
+  const duracion=duracionPorDivision(division) || numeroSeguro($("duracionPartido").value);
+  const gfTexto=$("golesAdiur").value;
+  const gcTexto=$("golesRival").value;
+
+  if (!DIVISIONES.includes(division)) {
+    mostrarMensaje("Seleccioná una categoría antes de guardar el informe.","error");
+    $("division").focus();
+    return;
+  }
+
+  if (jornadaTexto !== "" && (!Number.isInteger(Number(jornadaTexto)) || Number(jornadaTexto) < 1 || Number(jornadaTexto) > 99)) {
+    mostrarMensaje("La jornada debe ser un número entero entre 1 y 99.","error");
+    $("jornada").focus();
+    return;
+  }
+
+  if (!fecha) {
+    mostrarMensaje("Seleccioná la fecha real del partido.","error");
+    $("fechaReal").focus();
+    return;
+  }
+
+  if (!rival) {
+    mostrarMensaje("Seleccioná el club rival.","error");
+    $("rival").focus();
+    return;
+  }
+
+  if (!torneo) {
+    mostrarMensaje("Seleccioná una competición.","error");
+    return;
+  }
+
+  if (gfTexto===""||gcTexto==="") {
+    mostrarMensaje("Completá el marcador de ambos equipos.","error");
+    return;
+  }
+
+  const gf=Number(gfTexto);
+  const gc=Number(gcTexto);
+
+  if (!Number.isInteger(gf)||gf<0||gf>99||!Number.isInteger(gc)||gc<0||gc>99) {
+    mostrarMensaje("Los goles deben ser números enteros entre 0 y 99.","error");
+    return;
+  }
+
+  const duracionEsperada=duracionPorDivision(division);
+  if (!duracionEsperada || duracion!==duracionEsperada) {
+    mostrarMensaje("La duración del partido se define automáticamente según la categoría.","error");
+    aplicarDuracionCategoria();
+    return;
+  }
+
+  const participaciones=leerParticipacionesFormulario();
+  const error=validarParticipaciones(participaciones,duracion);
+
+  if (error) {
+    mostrarMensaje(error,"error");
+    return;
+  }
+
+  const golesEventos=leerEventosGoles();
+  const tarjetasEventos=leerEventosTarjetas();
+
+  const golIncompleto=golesEventos.some(g=>!g.jugadora&&(g.tiempo||g.minuto!==null));
+  if (golIncompleto) {
+    mostrarMensaje("Completá la goleadora o eliminá la fila incompleta de goles.","error");
+    return;
+  }
+
+  const tarjetaIncompleta=tarjetasEventos.some(t=>!t.jugadora&&(t.tiempo||t.minuto!==null));
+  if (tarjetaIncompleta) {
+    mostrarMensaje("Completá la jugadora o eliminá la fila incompleta de tarjetas.","error");
+    return;
+  }
+
+  const golesValidos=golesEventos.filter(g=>g.jugadora);
+  const tarjetasValidas=tarjetasEventos.filter(t=>t.jugadora);
+
+  const mitadDuracion = mediaDuracionPartido(duracion);
+  for (const g of golesValidos) {
+    if (g.minuto!==null&&g.minuto>mitadDuracion) {
+      mostrarMensaje(`El minuto del gol de ${g.jugadora} debe estar entre 0 y ${mitadDuracion} dentro del tiempo seleccionado.`,"error");
+      return;
+    }
+  }
+
+  for (const t of tarjetasValidas) {
+    if (t.minuto!==null&&t.minuto>mitadDuracion) {
+      mostrarMensaje(`El minuto de la tarjeta de ${t.jugadora} debe estar entre 0 y ${mitadDuracion} dentro del tiempo seleccionado.`,"error");
+      return;
+    }
+  }
+
+  const anterior=id?partidos.find(p=>String(p.id)===String(id)):null;
+
+  const jugadorasRegistradas=participaciones.map(j=>{
+    const goles=golesValidos.filter(g=>normalizarTexto(g.jugadora)===normalizarTexto(j.nombre)).length;
+    const amarillas=tarjetasValidas.filter(t=>normalizarTexto(t.jugadora)===normalizarTexto(j.nombre)&&t.tipo==="Amarilla").length;
+    const rojas=tarjetasValidas.filter(t=>normalizarTexto(t.jugadora)===normalizarTexto(j.nombre)&&t.tipo==="Roja").length;
+    return {...j,goles,amarillas,rojas};
+  }).filter(j=>j.citada);
+
+  const p={
+    id:id||idUnico(),
+    // El campo oculto es la fuente de verdad. Si el usuario desvinculó el fixture,
+    // se guarda el vacío explícitamente en lugar de restaurar la asociación anterior.
+    fixtureId:$("fixtureIdVinculado").value || "",
+    fecha,
+    division,
+    torneo,
+    jornada:numeroSeguro($("jornada").value),
+    localia:$("localia").value||"Local",
+    rival,
+    escudoRival:rutaEscudoClub(rival)||anterior?.escudoRival||"",
+    lugar:$("lugar").value.trim(),
+    golesFavor:gf,
+    golesContra:gc,
+    duracionPartido:duracion,
+    observaciones:$("observaciones").value.trim(),
+    jugadoras:jugadorasRegistradas.map(j=>({
+      id:j.id,
+      nombre:j.nombre,
+      division:j.division||division,
+      citada:Boolean(j.citada),
+      jugo:j.jugo,
+      titular:j.titular,
+      posicion:j.posicion,
+      minutoIngreso:j.titular?0:j.minutoIngreso,
+      minutoSalida:j.minutoSalida,
+      tiempoIngreso:j.tiempoIngreso,
+      minutos:j.minutos,
+      goles:j.goles,
+      amarillas:j.amarillas,
+      rojas:j.rojas
+    })),
+    golesEventos:golesValidos.map(g=>({...g,id:g.id||idUnico()})),
+    tarjetasEventos:tarjetasValidas.map(t=>({...t,id:t.id||idUnico()})),
+    creadoEn:anterior?.creadoEn||new Date().toISOString(),
+    actualizadoEn:new Date().toISOString()
+  };
+
+  const anteriorLista=partidos;
+  guardando=true;
+  partidos=id
+    ? partidos.map(existente=>String(existente.id)===String(id)?p:existente)
+    : [p,...partidos];
+
+  const ok=guardarJSON(CLAVE_PARTIDOS,partidos);
+  guardando=false;
+
+  if (!ok) {
+    partidos=anteriorLista;
+    return;
+  }
+
+  renderizarTodo();
+  nuevoPartido();
+  cambiarVista("partidos");
+  mostrarMensaje(id?"Informe actualizado y estadísticas recalculadas.":"Informe guardado correctamente.","exito");
+}
+
+function borrarPartido(id) {
+  const p=partidos.find(p=>String(p.id)===String(id));
+  if (!p) return;
+
+  if (!confirm(`¿Eliminar el informe contra ${p.rival} del ${formatearFecha(p.fecha)}?\n\nSus datos dejarán de integrar los acumulados.`)) return;
+
+  const anterior=partidos;
+  partidos=partidos.filter(p=>String(p.id)!==String(id));
+
+  if (!guardarJSON(CLAVE_PARTIDOS,partidos)) {
+    partidos=anterior;
+    return;
+  }
+
+  renderizarTodo();
+  mostrarMensaje("Informe eliminado y estadísticas recalculadas.","exito");
+}
+
+/* =====================================================
+   ESTADÍSTICAS ACUMULADAS
+===================================================== */
+
+function obtenerEstadisticasFiltradas() {
+  const division=$("filtroDivisionEstadisticas").value;
+  const torneo=$("filtroTorneoEstadisticas").value;
+  const busqueda=normalizarTexto($("buscarEstadistica").value);
+  const mapa=new Map();
+
+  partidos.forEach(p=>{
+    if (division&&p.division!==division) return;
+    if (torneo&&p.torneo!==torneo) return;
+
+    (p.jugadoras||[]).forEach(j=>{
+      if (!j.nombre) return;
+
+      const div=normalizarDivision(j.division)||p.division;
+      const key=claveJugador(j.nombre,div);
+
+      if (!mapa.has(key)) {
+        mapa.set(key,{
+          nombre:j.nombre,division:div,partidos:0,minutos:0,goles:0,amarillas:0,rojas:0
+        });
+      }
+
+      const s=mapa.get(key);
+      if (j.jugo||numeroSeguro(j.minutos)>0) s.partidos++;
+      s.minutos+=numeroSeguro(j.minutos);
+      s.goles+=numeroSeguro(j.goles);
+      s.amarillas+=numeroSeguro(j.amarillas);
+      s.rojas+=numeroSeguro(j.rojas);
+    });
+  });
+
+  let lista=[...mapa.values()].filter(j=>normalizarTexto(j.nombre).includes(busqueda));
+
+  const orden=$("ordenEstadisticas").value;
+  const ordenadores={
+    minutos:(a,b)=>b.minutos-a.minutos,
+    goles:(a,b)=>b.goles-a.goles,
+    partidos:(a,b)=>b.partidos-a.partidos,
+    amarillas:(a,b)=>b.amarillas-a.amarillas,
+    rojas:(a,b)=>b.rojas-a.rojas,
+    nombre:(a,b)=>a.nombre.localeCompare(b.nombre,"es")
+  };
+
+  lista.sort(ordenadores[orden]||ordenadores.minutos);
+  return lista;
+}
+
+function actualizarResumen() {
+  const divisionSeleccionada = $("division")?.value || "";
+  const partidosCategoria = divisionSeleccionada
+    ? partidos.filter(p=>normalizarDivision(p.division)===divisionSeleccionada)
+    : [];
+
+  $("totalPartidos").textContent=partidosCategoria.length;
+  $("totalGolesEquipo").textContent=partidosCategoria.reduce((s,p)=>s+numeroSeguro(p.golesFavor),0);
+
+  const goleadoras=new Map();
+  partidosCategoria.forEach(p=>{
+    const eventos = Array.isArray(p.golesEventos) ? p.golesEventos.filter(g=>g.jugadora) : [];
+    if (eventos.length) {
+      eventos.forEach(g=>{
+        const nombre=String(g.jugadora||"").trim();
+        if (!nombre) return;
+        const clave=normalizarTexto(nombre);
+        if (!goleadoras.has(clave)) goleadoras.set(clave,{nombre,goles:0});
+        goleadoras.get(clave).goles++;
+      });
+    } else {
+      (p.jugadoras||[]).forEach(j=>{
+        const nombre=String(j.nombre||"").trim();
+        const goles=numeroSeguro(j.goles);
+        if (!nombre||goles<=0) return;
+        const clave=normalizarTexto(nombre);
+        if (!goleadoras.has(clave)) goleadoras.set(clave,{nombre,goles:0});
+        goleadoras.get(clave).goles+=goles;
+      });
+    }
+  });
+  const topGoleadoras=[...goleadoras.values()]
+    .sort((a,b)=>b.goles-a.goles||a.nombre.localeCompare(b.nombre,"es"))
+    .slice(0,3);
+  $("listaGoleadoras").innerHTML=topGoleadoras.length
+    ?topGoleadoras.map((j,i)=>`<div class="goleadora-mini"><span class="goleadora-nombre"><span class="goleadora-orden">${i+1}</span>${escaparHTML(j.nombre)}</span><strong>${j.goles} ${j.goles===1?"gol":"goles"}</strong></div>`).join("")
+    :(divisionSeleccionada?"<span>Sin goleadoras registradas en esta categoría</span>":"<span>Seleccioná una categoría para ver las goleadoras</span>");
+
+  const amarillas=partidosCategoria.reduce((s,p)=>s+(p.jugadoras||[]).reduce((t,j)=>t+numeroSeguro(j.amarillas),0),0);
+  const rojas=partidosCategoria.reduce((s,p)=>s+(p.jugadoras||[]).reduce((t,j)=>t+numeroSeguro(j.rojas),0),0);
+  $("totalAmarillas").textContent=amarillas;
+  $("totalRojas").textContent=rojas;
+  $("totalTarjetas").textContent=amarillas+rojas;
+}
+
+function renderizarEstadisticas() {
+  const lista=obtenerEstadisticasFiltradas();
+
+  $("cuerpoEstadisticas").innerHTML=lista.map(j=>{
+    const promedio=j.partidos?Math.round(j.minutos/j.partidos):0;
+    return `
+      <tr>
+        <td>
+          <div class="jugadora-nombre">
+            <div class="jugadora-avatar">${escaparHTML(iniciales(j.nombre))}</div>
+            <div>
+              <strong>${escaparHTML(j.nombre)}</strong>
+              <small>${escaparHTML(j.division)}</small>
+            </div>
+          </div>
+        </td>
+        <td><span class="numero-destacado">${j.partidos}</span></td>
+        <td><span class="numero-destacado">${j.minutos}</span></td>
+        <td>${promedio}</td>
+        <td><span class="numero-destacado">${j.goles}</span></td>
+        <td><span class="numero-tarjeta">${j.amarillas}</span></td>
+        <td><span class="numero-rojo">${j.rojas}</span></td>
+      </tr>`;
+  }).join("");
+
+  $("estadisticasVacias").classList.toggle("oculto",lista.length>0);
+  renderizarRanking("rankingGoleadoras",lista,"goles","goles");
+  renderizarRanking("rankingMinutos",lista,"minutos","minutos");
+}
+
+function renderizarRanking(id,lista,campo,etiqueta) {
+  const ranking=lista.filter(j=>j[campo]>0)
+    .sort((a,b)=>b[campo]-a[campo]||a.nombre.localeCompare(b.nombre,"es"))
+    .slice(0,5);
+
+  if (!ranking.length) {
+    $(id).innerHTML=`<div class="vacío"><h4>Sin datos todavía</h4><p>El ranking aparecerá cuando se registren ${etiqueta}.</p></div>`;
+    return;
+  }
+
+  $(id).innerHTML=ranking.map((j,i)=>`
+    <div class="ranking-fila">
+      <div class="ranking-posicion">${i+1}</div>
+      <div class="ranking-nombre">
+        <strong>${escaparHTML(j.nombre)}</strong>
+        <small>${escaparHTML(j.division)} · ${j.partidos} partidos</small>
+      </div>
+      <div class="ranking-valor">${j[campo]}<small>${etiqueta}</small></div>
+    </div>
+  `).join("");
+}
+
+/* =====================================================
+   HISTORIAL
+===================================================== */
+
+function renderizarPartidos() {
+  const buscar=normalizarTexto($("buscarPartido").value);
+  const division=$("filtroDivisionPartidos").value;
+  const torneo=$("filtroTorneoPartidos").value;
+  const orden=$("ordenPartidos").value;
+
+  let lista=partidos.filter(p=>{
+    const texto=normalizarTexto([p.rival,p.lugar,p.division,p.torneo,p.localia].join(" "));
+    return (!buscar||texto.includes(buscar))&&(!division||p.division===division)&&(!torneo||p.torneo===torneo);
+  });
+
+  lista.sort((a,b)=>{
+    const diferencia=String(a.fecha||"").localeCompare(String(b.fecha||""));
+    return orden==="asc"?diferencia:-diferencia;
+  });
+
+  $("contadorPartidos").textContent=`${lista.length} ${lista.length===1?"partido encontrado":"partidos encontrados"}`;
+
+  if (!lista.length) {
+    $("listaPartidos").innerHTML=`
+      <div class="vacío">
+        <div class="vacio-icono">⚽</div>
+        <h4>No hay informes para mostrar</h4>
+        <p>Cargá un encuentro o cambiá los filtros de búsqueda.</p>
+        <button class="btn btn-primary" style="margin-top:12px;" type="button"
+          onclick="nuevoPartido();cambiarVista('cargar')">＋ Cargar partido</button>
+      </div>`;
+    return;
+  }
+
+  $("listaPartidos").innerHTML=lista.map(p=>{
+    const jugadoras=p.jugadoras||[];
+    const participaron=jugadoras.filter(j=>j.jugo||j.minutos>0).length;
+    const goles=(p.golesEventos||[]).filter(g=>g.jugadora).length||
+      jugadoras.reduce((s,j)=>s+numeroSeguro(j.goles),0);
+    const amarillas=jugadoras.reduce((s,j)=>s+numeroSeguro(j.amarillas),0);
+    const rojas=jugadoras.reduce((s,j)=>s+numeroSeguro(j.rojas),0);
+    const minutos=jugadoras.reduce((s,j)=>s+numeroSeguro(j.minutos),0);
+
+    const escudo=p.escudoRival
+      ? `<img src="${escaparHTML(p.escudoRival)}" alt="Escudo rival" onerror="this.style.display='none'">`
+      : "⚽";
+
+    const marcador=p.golesFavor!==null&&p.golesContra!==null
+      ? `${p.golesFavor}<small>–</small>${p.golesContra}`
+      : "–";
+
+    return `
+      <article class="partido-card">
+        <div class="partido-superior">
+          <div class="partido-identidad">
+            <div class="escudo-partido">${escudo}</div>
+            <div>
+              <h4>ADIUR FEMENINO vs. ${escaparHTML(p.rival)}</h4>
+              <p>${escaparHTML(formatearFecha(p.fecha))} · ${escaparHTML(p.division)} · ${escaparHTML(p.torneo)}${p.jornada?" · Jornada "+p.jornada:""}</p>
+              <p>${escaparHTML(p.localia||"Condición sin especificar")}${p.hora?" · "+escaparHTML(p.hora):""}${p.lugar?" · "+escaparHTML(p.lugar):""}</p>
+            </div>
+          </div>
+          <div class="resultado-partido">${marcador}</div>
+        </div>
+
+        <div class="partido-detalles">
+          <span class="etiqueta etiqueta-verde">♙ ${participaron} participantes</span>
+          <span class="etiqueta etiqueta-naranja">⚽ ${goles} goles</span>
+          <span class="etiqueta">◷ ${minutos} minutos</span>
+          <span class="etiqueta etiqueta-amarilla">🟨 ${amarillas} amarillas</span>
+          <span class="etiqueta">🟥 ${rojas} rojas</span>
+        </div>
+
+        ${p.observaciones?`<div class="partido-observaciones">${escaparHTML(p.observaciones)}</div>`:""}
+
+        <div class="partido-acciones">
+          <button class="btn btn-secondary btn-small" type="button" onclick="verDetallePartido('${escaparHTML(p.id)}')">Ver detalle</button>
+          <button class="btn btn-secondary btn-small" type="button" onclick="editarPartido('${escaparHTML(p.id)}')">Editar</button>
+          <button class="btn btn-danger btn-small" type="button" onclick="borrarPartido('${escaparHTML(p.id)}')">Eliminar</button>
+        </div>
+      </article>`;
+  }).join("");
+}
+
+function verDetallePartido(id) {
+  const p=partidos.find(p=>String(p.id)===String(id));
+  if (!p) return;
+
+  const jugadoras=(p.jugadoras||[])
+    .filter(j=>j.jugo||j.minutos||j.goles||j.amarillas||j.rojas)
+    .sort((a,b)=>a.nombre.localeCompare(b.nombre,"es"))
+    .map(j=>`${j.nombre}: ${j.minutos} min · ${j.goles} goles · ${j.amarillas} amarillas · ${j.rojas} rojas`);
+
+  const goles=(p.golesEventos||[]).filter(g=>g.jugadora)
+    .map(g=>`${g.jugadora}: ${g.minuto===null?"minuto sin indicar":g.minuto+"′"} ${g.tiempo||""}`);
+
+  const tarjetas=(p.tarjetasEventos||[]).filter(t=>t.jugadora)
+    .map(t=>`${t.jugadora}: ${t.tipo} · ${t.minuto===null?"minuto sin indicar":t.minuto+"′"} ${t.tiempo||""}`);
+
+  alert([
+    `${formatearFecha(p.fecha)} — ${p.division} — ${p.torneo}`,
+    `ADIUR ${p.golesFavor??"–"} - ${p.golesContra??"–"} ${p.rival}`,
+    `Jornada: ${p.jornada||"Sin indicar"}`,
+    `Lugar: ${p.lugar||"Sin indicar"}`,
+    `Duración: ${p.duracionPartido} minutos`,
+    "",
+    "PARTICIPACIÓN",
+    ...(jugadoras.length?jugadoras:["Sin estadísticas individuales."]),
+    "",
+    "GOLES",
+    ...(goles.length?goles:["Sin detalle individual."]),
+    "",
+    "TARJETAS",
+    ...(tarjetas.length?tarjetas:["Sin tarjetas registradas."]),
+    "",
+    "OBSERVACIONES",
+    p.observaciones||"Sin observaciones."
+  ].join("\n"));
+}
+
+function limpiarFiltrosPartidos() {
+  $("buscarPartido").value="";
+  $("filtroDivisionPartidos").value="";
+  $("filtroTorneoPartidos").value="";
+  $("ordenPartidos").value="desc";
+  renderizarPartidos();
+}
+
+/* =====================================================
+   EXPORTACIÓN Y RESPALDO
+===================================================== */
+
+function csvCelda(valor) {
+  let texto=String(valor??"");
+  if (/^[=+\-@]/.test(texto)) texto="'"+texto;
+  return '"'+texto.replace(/"/g,'""')+'"';
+}
+
+function descargarArchivo(nombre,contenido,tipo) {
+  const blob=new Blob([contenido],{type:tipo});
+  const url=URL.createObjectURL(blob);
+  const enlace=document.createElement("a");
+  enlace.href=url;
+  enlace.download=nombre;
+  document.body.appendChild(enlace);
+  enlace.click();
+  enlace.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1200);
+}
+
+function exportarPartidosCSV() {
+  const filas=[[
+    "Fecha","Hora","División","Competición","Jornada","Condición","Rival","Lugar",
+    "Goles ADIUR","Goles rival","Duración","Participantes","Goles individuales",
+    "Amarillas","Rojas","Minutos totales","Observaciones"
+  ]];
+
+  partidos.forEach(p=>{
+    const js=p.jugadoras||[];
+    filas.push([
+      p.fecha,p.hora,p.division,p.torneo,p.jornada,p.localia,p.rival,p.lugar,
+      p.golesFavor,p.golesContra,p.duracionPartido,
+      js.filter(j=>j.jugo||j.minutos>0).length,
+      js.reduce((s,j)=>s+numeroSeguro(j.goles),0),
+      js.reduce((s,j)=>s+numeroSeguro(j.amarillas),0),
+      js.reduce((s,j)=>s+numeroSeguro(j.rojas),0),
+      js.reduce((s,j)=>s+numeroSeguro(j.minutos),0),
+      p.observaciones
+    ]);
+  });
+
+  descargarArchivo("ADIUR_Informes_Partidos.csv",
+    "\uFEFF"+filas.map(f=>f.map(csvCelda).join(";")).join("\r\n"),
+    "text/csv;charset=utf-8;"
+  );
+
+  mostrarMensaje("Historial exportado.","exito");
+}
+
+function exportarEstadisticasCSV() {
+  const lista=obtenerEstadisticasFiltradas();
+  const filas=[["Jugadora","División","Partidos","Minutos","Promedio","Goles","Amarillas","Rojas"]];
+
+  lista.forEach(j=>filas.push([
+    j.nombre,j.division,j.partidos,j.minutos,
+    j.partidos?Math.round(j.minutos/j.partidos):0,
+    j.goles,j.amarillas,j.rojas
+  ]));
+
+  descargarArchivo("ADIUR_Estadisticas.csv",
+    "\uFEFF"+filas.map(f=>f.map(csvCelda).join(";")).join("\r\n"),
+    "text/csv;charset=utf-8;"
+  );
+
+  mostrarMensaje("Estadísticas exportadas.","exito");
+}
+
+/* =====================================================
+   NAVEGACIÓN E INICIALIZACIÓN
+===================================================== */
+
+function cambiarVista(nombre) {
+  ["cargar","partidos","estadisticas"].forEach(v=>{
+    $("vista-"+v).classList.toggle("activa",v===nombre);
+  });
+
+  document.querySelectorAll(".pestana").forEach(b=>{
+    b.classList.toggle("activa",b.dataset.vista===nombre);
+  });
+
+  if (nombre==="partidos") renderizarPartidos();
+  if (nombre==="estadisticas") renderizarEstadisticas();
+
+  if (window.innerWidth<=900) {
+    $("sidebar").classList.remove("visible");
+    $("capaSidebar").classList.remove("visible");
+    $("botonMenu").setAttribute("aria-expanded","false");
+  }
+}
+
+function alternarMenu() {
+  if (window.innerWidth<=900) {
+    const visible=$("sidebar").classList.toggle("visible");
+    $("capaSidebar").classList.toggle("visible",visible);
+    $("botonMenu").setAttribute("aria-expanded",String(visible));
+  } else {
+    const oculto=$("sidebar").classList.toggle("oculta");
+    $("botonMenu").setAttribute("aria-expanded",String(!oculto));
+  }
+}
+
+function sincronizarEstadoMenuResponsive() {
+  const movil = window.innerWidth <= 900;
+  const menu = $("sidebar");
+  const capa = $("capaSidebar");
+
+  if (movil) {
+    menu.classList.remove("oculta");
+    menu.classList.remove("visible");
+    capa.classList.remove("visible");
+    $("botonMenu").setAttribute("aria-expanded", "false");
+  } else {
+    menu.classList.remove("visible");
+    capa.classList.remove("visible");
+    $("botonMenu").setAttribute("aria-expanded", String(!menu.classList.contains("oculta")));
+  }
+}
+
+function configurarNavegacion() {
+  $("botonMenu").addEventListener("click",alternarMenu);
+  window.addEventListener("resize",sincronizarEstadoMenuResponsive);
+  sincronizarEstadoMenuResponsive();
+
+  $("capaSidebar").addEventListener("click",()=>{
+    $("sidebar").classList.remove("visible");
+    $("capaSidebar").classList.remove("visible");
+    $("botonMenu").setAttribute("aria-expanded","false");
+  });
+
+  document.querySelectorAll(".titulo-grupo").forEach(boton=>{
+    const grupo=boton.closest(".grupo-menu");
+    const titulo=boton.querySelector(".grupo-izquierdo span:last-child")?.textContent?.trim();
+
+    if (titulo&&!gruposAbiertos.has(titulo)) grupo.classList.add("cerrado");
+    boton.setAttribute("aria-expanded", String(!grupo.classList.contains("cerrado")));
+
+    boton.addEventListener("click",()=>{
+      grupo.classList.toggle("cerrado");
+      boton.setAttribute("aria-expanded", String(!grupo.classList.contains("cerrado")));
+      if (!titulo) return;
+
+      if (grupo.classList.contains("cerrado")) gruposAbiertos.delete(titulo);
+      else gruposAbiertos.add(titulo);
+    });
+  });
+
+  document.querySelectorAll(".pestana").forEach(b=>{
+    b.addEventListener("click",()=>cambiarVista(b.dataset.vista));
+  });
+
+  $("cerrarSesion").addEventListener("click",evento=>{
+    evento.preventDefault();
+    try {
+      localStorage.removeItem(CLAVE_SESION);
+    } catch (error) {
+      console.warn("No se pudo limpiar la sesión guardada.", error);
+    }
+    window.location.href="Loing.html";
+  });
+
+  // En pantallas pequeñas, cerrar el panel al navegar desde cualquier enlace.
+  document.querySelectorAll(".barra-lateral a").forEach(enlace=>{
+    enlace.addEventListener("click",()=>{
+      if (window.innerWidth <= 900 && enlace.id !== "cerrarSesion") {
+        $("sidebar").classList.remove("visible");
+        $("capaSidebar").classList.remove("visible");
+        $("botonMenu").setAttribute("aria-expanded","false");
+      }
+    });
+  });
+
+  // Perfil accesible, igual que en Partidos.html.
+  $("botonPerfil").addEventListener("click",()=>{
+    $("fondoPerfil").classList.add("visible");
+    $("fondoPerfil").setAttribute("aria-hidden","false");
+    $("cerrarPerfil").focus();
+  });
+
+  const cerrarPerfil = () => {
+    $("fondoPerfil").classList.remove("visible");
+    $("fondoPerfil").setAttribute("aria-hidden","true");
+    $("botonPerfil").focus();
+  };
+
+  $("cerrarPerfil").addEventListener("click",cerrarPerfil);
+  $("fondoPerfil").addEventListener("click",evento=>{
+    if (evento.target.id === "fondoPerfil") cerrarPerfil();
+  });
+  document.addEventListener("keydown",evento=>{
+    if (evento.key === "Escape") {
+      if ($("fondoPerfil").classList.contains("visible")) cerrarPerfil();
+      if (window.innerWidth <= 900) {
+        $("sidebar").classList.remove("visible");
+        $("capaSidebar").classList.remove("visible");
+        $("botonMenu").setAttribute("aria-expanded","false");
+      }
+    }
+  });
+}
+
+function renderizarTodo() {
+  actualizarResumen();
+  renderizarPartidos();
+  renderizarEstadisticas();
+}
+
+function obtenerRolVisible(usuario) {
+  const clave = normalizarTexto(usuario).replace(/[\s._-]+/g, "");
+  if (["fran", "francisco", "franciscoperezbasla"].includes(clave)) return "Administrador";
+  if (clave === "toto") return "Cuerpo técnico";
+  if (["bianca", "biancadominguez"].includes(clave)) return "Jugadora · Sub 14";
+  return "Club ADIUR";
+}
+
+function inicializar() {
+  const usuario=usuarioActual();
+  $("nombrePerfil").textContent=usuario;
+  $("avatarPerfil").textContent=iniciales(usuario);
+  const rol = obtenerRolVisible(usuario);
+  $("rolPerfil").textContent = rol;
+  $("tituloPerfil").textContent = usuario;
+  $("avatarPerfilModal").textContent = iniciales(usuario);
+  $("rolPerfilModal").textContent = rol;
+
+  plantelPropio=cargarPlantelPropio();
+  jugadoresExternos=cargarJugadorasExternas();
+  partidosFixture=cargarFixture();
+  cargarPartidos();
+
+  actualizarSelectorFixture();
+  completarSelectorRival("");
+  actualizarCompeticiones();
+  configurarNavegacion();
+
+  $("formularioPartido").addEventListener("submit",guardarPartido);
+
+  $("seleccionFixture").addEventListener("change",cargarDesdeFixture);
+
+  $("division").addEventListener("change",()=>{
+    const golesPrevios=leerEventosGoles();
+    const tarjetasPrevias=leerEventosTarjetas();
+    aplicarDuracionCategoria();
+    actualizarSelectorFixture();
+    actualizarCompeticiones();
+    renderizarJugadorasFormulario();
+    renderizarEventosGoles(golesPrevios);
+    renderizarEventosTarjetas(tarjetasPrevias);
+    sincronizarEventosConConvocatoria(true);
+    actualizarResumen();
+  });
+
+  $("competicion").addEventListener("change",actualizarMarcadorVisual);
+
+  $("rival").addEventListener("change",()=>{
+    actualizarEscudoRival();
+    actualizarAvisoGoles();
+  });
+
+  $("rivalOtro").addEventListener("input",()=>{
+    mostrarEscudoRival("",$("rivalOtro").value.trim());
+    actualizarMarcadorVisual();
+  });
+
+  $("golesAdiur").addEventListener("input",()=>{
+    actualizarMarcadorVisual();
+    actualizarAvisoGoles();
+  });
+
+  $("golesRival").addEventListener("input",actualizarMarcadorVisual);
+
+  $("duracionPartido").addEventListener("input",()=>{
+    // El campo es de solo lectura; este listener queda como resguardo para mantener
+    // consistentes los topes internos si la duración se modifica desde el código.
+    aplicarDuracionCategoria();
+    recalcularTodasLasFilas();
+  });
+
+  $("buscarPartido").addEventListener("input",renderizarPartidos);
+  $("filtroDivisionPartidos").addEventListener("change",renderizarPartidos);
+  $("filtroTorneoPartidos").addEventListener("change",renderizarPartidos);
+  $("ordenPartidos").addEventListener("change",renderizarPartidos);
+
+  $("buscarEstadistica").addEventListener("input",renderizarEstadisticas);
+  $("filtroDivisionEstadisticas").addEventListener("change",renderizarEstadisticas);
+  $("filtroTorneoEstadisticas").addEventListener("change",renderizarEstadisticas);
+  $("ordenEstadisticas").addEventListener("change",renderizarEstadisticas);
+
+  renderizarTodo();
+  nuevoPartido();
+  mostrarPasoCarga(1);
+}
+
+inicializar();
+
+window.addEventListener("storage",evento=>{
+  if (evento.key===CLAVE_FIXTURE) {
+    const idVinculadoAntes = $("fixtureIdVinculado").value || $("seleccionFixture").value;
+    partidosFixture=cargarFixture();
+    actualizarSelectorFixture();
+
+    const sigueExistiendo = idVinculadoAntes && partidosFixture.some(p => String(p.id) === String(idVinculadoAntes));
+    if (idVinculadoAntes && sigueExistiendo) {
+      mostrarMensaje("El fixture se actualizó. Los datos ya escritos en el informe se conservaron; volvé a seleccionar el partido para recuperar cambios recientes.","exito");
+    } else {
+      mostrarMensaje("El fixture se actualizó. Revisá la asociación del informe si el partido fue eliminado.","exito");
+    }
+  }
+
+  if (evento.key===CLAVE_PLANTEL) {
+    plantelPropio=cargarPlantelPropio();
+    jugadoresExternos=cargarJugadorasExternas();
+    renderizarJugadorasFormulario();
+    renderizarEventosGoles(leerEventosGoles());
+    renderizarEventosTarjetas(leerEventosTarjetas());
+    sincronizarEventosConConvocatoria(true);
+    renderizarEstadisticas();
+  }
+
+  if (evento.key===CLAVE_PARTIDOS) {
+    // Mantener la lista y los acumulados sincronizados si otro informe se modifica en otra pestaña.
+    cargarPartidos();
+    renderizarTodo();
+    mostrarMensaje("Los informes se actualizaron desde otra pestaña.","exito");
+  }
+
+  if (evento.key===CLAVE_SESION && !evento.newValue) {
+    window.location.href="Loing.html";
+  }
+});
+</script>
+
+</body>
+</html>
