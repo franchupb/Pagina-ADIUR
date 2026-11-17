@@ -4426,40 +4426,41 @@ function cargarDesdeFixture() {
    PLANTEL
 ===================================================== */
 
-function normalizarJugador(objeto,origen="externo",indice=0,divisionPadre="") {
+function normalizarJugador(objeto, origen = "externo", indice = 0, divisionPadre = "") {
   const nombre = nombreCompleto(objeto);
   if (!nombre) return null;
 
-  const divisionOriginal = typeof objeto==="object"
-    ? objeto.division || objeto.categoria || objeto.category || divisionPadre
+  const divisionOriginal = typeof objeto === "object"
+    ? objeto.division || objeto.categoria || objeto.category || objeto.div || divisionPadre
     : divisionPadre;
 
-  const dorsal = typeof objeto==="object"
+  const dorsal = typeof objeto === "object"
     ? objeto.dorsal ?? objeto.numeroCamiseta ?? objeto.numero ?? objeto.camiseta ?? ""
     : "";
 
-  const posicionOriginal = typeof objeto==="object"
-    ? objeto.posicion || objeto.puesto || objeto.position || objeto.demarcacion || objeto.funcion || ""
+  const posicionOriginal = typeof objeto === "object"
+    ? objeto.posicion || objeto.puesto || objeto.position || objeto.demarcacion || ""
     : "";
-  const estadoOriginal = typeof objeto==="object"
-    ? objeto.estado || objeto.estadoJugadora || objeto.situacion || objeto.status || objeto.condicion || ""
+    
+  const estadoOriginal = typeof objeto === "object"
+    ? objeto.estado || objeto.estadoJugadora || objeto.situacion || objeto.status || ""
     : "";
+    
   const textoEstado = normalizarTexto(estadoOriginal);
   const estadoInactivo = /lesion|inactiv|baja|retirad|suspendid|desvinculad|no activa|no activo/.test(textoEstado)
-    || objeto?.activa===false || objeto?.activo===false || objeto?.estaActiva===false || objeto?.estaActivo===false
-    || objeto?.lesionada===true || objeto?.lesionado===true || objeto?.inactiva===true || objeto?.inactivo===true;
+    || objeto?.activa === false || objeto?.activo === false;
+
   return {
-    id:String(objeto?.id || `${origen}-${indice}-${normalizarTexto(nombre).replace(/\s/g,"-")}`),
+    id: String(objeto?.id || `${origen}-${indice}-${normalizarTexto(nombre).replace(/\s/g, "-")}`),
     nombre,
-    division:normalizarDivision(divisionOriginal),
-    dorsal:dorsal==="" ? "" : String(dorsal),
-    posicion:String(posicionOriginal||"Sin posición"),
-    estado:String(estadoOriginal||""),
-    activa:!estadoInactivo,
+    division: normalizarDivision(divisionOriginal), // Aquí se estandariza a "Sub 10", "Sub 14", "Primera", etc.
+    dorsal: dorsal === "" ? "" : String(dorsal),
+    posicion: String(posicionOriginal || "Sin posición"),
+    estado: String(estadoOriginal || ""),
+    activa: !estadoInactivo,
     origen
   };
 }
-
 function pareceJugador(objeto) {
   if (!objeto || typeof objeto!=="object" || Array.isArray(objeto)) return false;
   if (!nombreCompleto(objeto)) return false;
@@ -4505,33 +4506,22 @@ function extraerJugadores(valor,salida,divisionPadre="",profundidad=0) {
 
 function cargarJugadorasExternas() {
   const salida = [];
-  const excluidas = new Set([
-    CLAVE_PARTIDOS,CLAVE_PLANTEL,CLAVE_FIXTURE,CLAVE_SESION,CLAVE_INFORMES_ANTERIORES
-  ]);
-
-  for (let i=0;i<localStorage.length;i++) {
-    const clave = localStorage.key(i);
-    if (!clave || excluidas.has(clave)) continue;
-
-    const nombreClave = normalizarTexto(clave);
-    const parecePlantel =
-      nombreClave.includes("jugadora") ||
-      nombreClave.includes("jugador") ||
-      nombreClave.includes("plantel") ||
-      nombreClave.includes("roster") ||
-      nombreClave.includes("player");
-
-    if (!parecePlantel) continue;
-
-    extraerJugadores(leerJSON(clave,null),salida,"",0);
-  }
+  // Agregamos también la clave habitual por si jugadoras.html guarda ahí
+  const clavesPosibles = [CLAVE_PLANTEL, "adiurJugadorasV1", "adiurJugadoras", "plantelADIUR"];
+  
+  clavesPosibles.forEach(clave => {
+    const datos = leerJSON(clave, []);
+    if (Array.isArray(datos)) {
+      datos.forEach((j, i) => {
+        const normalizado = normalizarJugador(j, "local", i);
+        if (normalizado) salida.push(normalizado);
+      });
+    }
+  });
 
   const vistos = new Set();
-
-  return salida.map((j,i)=>
-    normalizarJugador(j.objeto,"externo",i,j.divisionPadre)
-  ).filter(Boolean).filter(j=>{
-    const key = claveJugador(j.nombre,j.division);
+  return salida.filter(j => {
+    const key = claveJugador(j.nombre, j.division);
     if (vistos.has(key)) return false;
     vistos.add(key);
     return true;
@@ -4539,49 +4529,42 @@ function cargarJugadorasExternas() {
 }
 
 function cargarPlantelPropio() {
-  const datos = leerJSON(CLAVE_PLANTEL,[]);
+  const datos = leerJSON(CLAVE_PLANTEL, []);
   if (!Array.isArray(datos)) return [];
 
-  return datos.map((j,i)=>normalizarJugador(j,"propio",i))
-    .filter(Boolean).map(j=>({...j,origen:"propio"}));
+  return datos.map((j, i) => normalizarJugador(j, "propio", i))
+    .filter(Boolean).map(j => ({ ...j, origen: "propio" }));
 }
 
 function obtenerPlantelCompleto() {
+  // Aseguramos refrescar desde las fuentes locales
+  jugadoresExternos = cargarJugadorasExternas();
+  plantelPropio = cargarPlantelPropio();
+  
   const mapa = new Map();
-
-  [...jugadoresExternos,...plantelPropio].forEach(j=>{
-    const key = claveJugador(j.nombre,j.division);
+  [...jugadoresExternos, ...plantelPropio].forEach(j => {
+    const key = claveJugador(j.nombre, j.division);
     const anterior = mapa.get(key);
-    if (!anterior || j.origen==="propio") mapa.set(key,j);
+    if (!anterior || j.origen === "propio") mapa.set(key, j);
   });
 
-  return [...mapa.values()].sort((a,b)=>a.nombre.localeCompare(b.nombre,"es"));
-}
-
-function jugadoraEstaActiva(j) {
-  if (j.activa===false) return false;
-  const estado=normalizarTexto(j.estado||"");
-  return !/lesion|inactiv|baja|retirad|suspendid|desvinculad|no activa|no activo/.test(estado);
-}
-
-function grupoPosicion(valor) {
-  const p=normalizarTexto(valor||"");
-  if (/arquer|portera|portero|\bpor\b|goalkeeper/.test(p)) return "POR";
-  if (/defens|central|lateral|marcador|\bdef\b/.test(p)) return "DEF";
-  if (/mediocamp|volante|mediapunt|enganche|\bmed\b/.test(p)) return "MED";
-  if (/delanter|atacante|extrema|punta|\bdel\b/.test(p)) return "DEL";
-  return "OTR";
+  return [...mapa.values()].sort((a, b) => a.nombre.localeCompare(b.nombre, "es"));
 }
 
 function jugadoresParaDivision(division) {
   if (!DIVISIONES.includes(division)) return [];
-  // La convocatoria solo ofrece jugadoras activas de la categoría seleccionada.
-  return jugadoresExternos.filter(j=>j.division===division && jugadoraEstaActiva(j))
-    .sort((a,b)=>{
-      const orden={POR:0,DEF:1,MED:2,DEL:3,OTR:4};
-      const diferencia=orden[grupoPosicion(a.posicion)]-orden[grupoPosicion(b.posicion)];
-      return diferencia || a.nombre.localeCompare(b.nombre,"es");
-    });
+
+  // Obtenemos todo el plantel unificado y fresco
+  const plantelTotal = obtenerPlantelCompleto();
+
+  return plantelTotal.filter(j => {
+    const divJugadora = normalizarDivision(j.division || j.categoria || "");
+    return divJugadora === division && jugadoraEstaActiva(j);
+  }).sort((a, b) => {
+    const orden = { POR: 0, DEF: 1, MED: 2, DEL: 3, OTR: 4 };
+    const diferencia = orden[grupoPosicion(a.posicion)] - orden[grupoPosicion(b.posicion)];
+    return diferencia || a.nombre.localeCompare(b.nombre, "es");
+  });
 }
 
 function agregarJugadoraRapida() {
