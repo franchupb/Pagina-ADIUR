@@ -5777,8 +5777,8 @@ function inicializar() {
       }
     });
 
-    // Listener de Partidos / Fixture
-    onSnapshot(collection(db, "partidos"), (snapshot) => {
+    // Función auxiliar para procesar y unificar los datos del fixture/partidos desde la nube
+    const procesarSnapshotFixture = (snapshot) => {
       let fixtureNube = [];
       snapshot.forEach((docSnap) => {
         fixtureNube.push({ id: docSnap.id, ...docSnap.data() });
@@ -5810,11 +5810,15 @@ function inicializar() {
             lugar,
             localia: p.localia || p.condicion || "Local"
           };
-        }); // Quitamos el filtro estricto para asegurarnos de que no se pierdan partidos si falta algún campo menor
+        });
 
         actualizarSelectorFixture();
       }
-    });
+    };
+
+    // Escuchamos ambas colecciones en la nube ("partidos" y "fixture")
+    onSnapshot(collection(db, "partidos"), procesarSnapshotFixture);
+    onSnapshot(collection(db, "fixture"), procesarSnapshotFixture);
   }
 
   actualizarSelectorFixture();
@@ -5896,6 +5900,6 @@ window.actualizarMinutoCambio = actualizarMinutoCambio;
 window.actualizarTiempoCambio = actualizarTiempoCambio;
 window.actualizarTitularCambio = actualizarTitularCambio;
 </script>
-
+  
 </body>
 </html>
