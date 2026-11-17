@@ -2561,13 +2561,10 @@ window.firebasePlanificacionReady = (async () => {
   );
 
   const firebaseConfig = {
-    apiKey: "TU_API_KEY",
-    authDomain: "adiur-b1913.firebaseapp.com",
     projectId: "adiur-b1913",
-    storageBucket: "adiur-b1913.firebasestorage.app",
-    messagingSenderId: "884643321144",
-    appId: "1:884643321144:web:ba3c314de3a1c9e3545dcd",
-    measurementId: "G-58LL26YXPM"
+    appId: "1:1032379124859:web:adiur-fem-web",
+    authDomain: "adiur-b1913.firebaseapp.com",
+    storageBucket: "adiur-b1913.appspot.com"
   };
 
   const app = initializeApp(firebaseConfig);
@@ -3669,34 +3666,32 @@ function guardarDatosAutomaticamente(mostrarMensaje = false) {
       guardada: microcicloGuardado
     };
 
-    
-localStorage.setItem(
-  CLAVE_PLANIFICACION,
-  JSON.stringify(almacen)
-);
-
-// Sincronizar también con Firebase
-window.guardarPlanificacionEnNube(almacen)
-  .then(() => {
-    actualizarEstadoGuardado(
-      "✓ Planificación sincronizada con la nube",
-      false
-    );
-  })
-  .catch(error => {
-    console.error(
-      "Error al guardar planificación en Firebase:",
-      error
+    localStorage.setItem(
+      CLAVE_PLANIFICACION,
+      JSON.stringify(almacen)
     );
 
-    actualizarEstadoGuardado(
-      "Error al sincronizar con la nube",
-      true
-    );
-  });
+    // Sincronizar también con Firebase
+    window.guardarPlanificacionEnNube(almacen)
+      .then(() => {
+        actualizarEstadoGuardado(
+          "✓ Planificación sincronizada con la nube",
+          false
+        );
+      })
+      .catch(error => {
+        console.error(
+          "Error al guardar planificación en Firebase:",
+          error
+        );
 
-sincronizarCalendarioSemana();
+        actualizarEstadoGuardado(
+          "Error al sincronizar con la nube",
+          true
+        );
+      });
 
+    sincronizarCalendarioSemana();
 
     const hora = new Date().toLocaleTimeString("es-AR", {
       hour: "2-digit",
@@ -4612,7 +4607,7 @@ function renderizarContenidoSesion(sesion, indice) {
 
         <div class="campo" style="margin-bottom:12px">
           <label for="campo-${indice}-rival">NOMBRE DEL RIVAL</label>
-          <select id="campo-${indice}-rival" data-index="${indice}" data-field="rival">
+          <select id="campo-${indice}-rival" data-index="${indice}" data-field="rival" onchange="actualizarVistaRival(${indice})">
             ${crearOpcionesRivales(sesion.rival)}
           </select>
         </div>
