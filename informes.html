@@ -4399,19 +4399,37 @@ function obtenerNombreJugadora(jugadora) {
 }
 
 function obtenerCategoriaJugadora(jugadora) {
-  return String(jugadora.categoria || jugadora.division || jugadora.categoría || "Sin categoría").trim().replace(/\s+/g, " ");
+  const valorCrudo = jugadora.categoria || jugadora.division || jugadora.categoría || jugadora.división || jugadora.category || "Sin categoría";
+  return normalizarDivision(String(valorCrudo));
 }
 
 function procesarListaJugadoras(listaCruda) {
   return listaCruda
     .filter(j => j && typeof j === "object")
-    .map(j => ({
-      ...j,
-      nombre: obtenerNombreJugadora(j),
-      division: normalizarDivision(obtenerCategoriaJugadora(j))
-    }))
+    .map(j => {
+      const nombre = obtenerNombreJugadora(j);
+      const divisionNormalizada = obtenerCategoriaJugadora(j);
+      return {
+        ...j,
+        nombre: nombre,
+        division: divisionNormalizada,
+        posicion: j.posicion || j.puesto || j.position || "Sin posición"
+      };
+    })
     .filter(j => j.nombre.trim() !== "")
     .sort((a, b) => a.nombre.localeCompare(b.nombre, "es", { sensitivity: "base", ignorePunctuation: true }));
+}
+
+function jugadoresParaDivision(division) {
+  if (!DIVISIONES.includes(division)) return [];
+  const plantel = obtenerPlantelCompleto();
+  
+  return plantel.filter(j => normalizarDivision(j.division) === normalizarDivision(division) && jugadoraEstaActiva(j))
+    .sort((a,b)=>{
+      const orden={POR:0,DEF:1,MED:2,DEL:3,OTR:4};
+      const diferencia=orden[grupoPosicion(a.posicion)]-orden[grupoPosicion(b.posicion)];
+      return diferencia || a.nombre.localeCompare(b.nombre,"es");
+    });
 }
 
 function cargarPlantelPropio() {
