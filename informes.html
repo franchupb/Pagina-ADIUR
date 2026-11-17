@@ -4051,11 +4051,27 @@ function crearIdLegadoFixture(partido, indice, division, competicion, rival, fec
 }
 
 function cargarFixture() {
-  const datos = leerJSON(CLAVE_FIXTURE, []);
-  if (!Array.isArray(datos)) return [];
+  const clavesPosibles = [CLAVE_FIXTURE, "fixtureADIUR", "partidosFixture", "fixturesADIUR"];
+  let datosRaw = null;
+  
+  for (const clave of clavesPosibles) {
+    const item = localStorage.getItem(clave);
+    if (item) {
+      try {
+        const parsed = JSON.parse(item);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          datosRaw = parsed;
+          break;
+        }
+      } catch (e) {}
+    }
+  }
 
-  return datos.filter(p => p && typeof p === "object" && !Array.isArray(p)).map((p, indice) => {
-    const division = normalizarDivision(p.division || p.categoria || p.category);
+  if (!datosRaw) return [];
+
+  return datosRaw.filter(p => p && typeof p === "object" && !Array.isArray(p)).map((p, indice) => {
+    const divisionCruda = p.division || p.categoria || p.category || p.categoría || "";
+    const division = normalizarDivision(divisionCruda);
     const rival = String(p.rival || p.equipoRival || p.clubRival || "").trim();
     const club = obtenerClubPorNombre(rival);
     const competicionOriginal = p.competicion || p.torneo || "";
@@ -4073,8 +4089,8 @@ function cargarFixture() {
       ? String(idOriginal)
       : crearIdLegadoFixture(p, indice, division, competicion, rival, fechaReal, lugar);
 
-    const golesAdiur = p.golesAdiur ?? p.marcadorAdiur ?? "";
-    const golesRival = p.golesRival ?? p.marcadorRival ?? "";
+    const golesAdiur = p.golesAdiur ?? p.marcadorAdiur ?? p.golesFavor ?? "";
+    const golesRival = p.golesRival ?? p.marcadorRival ?? p.golesContra ?? "";
 
     return {
       ...p,
@@ -4090,9 +4106,9 @@ function cargarFixture() {
       fechaReal,
       hora: p.hora || p.horario || "",
       lugar,
-      localia: p.localia || p.condicion || ""
+      localia: p.localia || p.condicion || "Local"
     };
-  }).filter(p => p.rival && p.division);
+  }).filter(p => p.rival);
 }
 
 function actualizarSelectorFixture() {
@@ -4108,7 +4124,6 @@ function actualizarSelectorFixture() {
     opcion.value = "";
     opcion.textContent = "Primero seleccioná una categoría...";
     selector.appendChild(opcion);
-    selector.value = "";
     selector.disabled = true;
     $("fixtureIdVinculado").value = "";
     actualizarBloqueoInforme();
@@ -4120,15 +4135,16 @@ function actualizarSelectorFixture() {
   opcionInicial.textContent = "Seleccionar un partido cargado (opcional)...";
   selector.appendChild(opcionInicial);
 
-  const coincidencias = partidosFixture.filter(partido =>
-    normalizarDivision(partido.division || partido.categoria) === divisionSeleccionada
-  );
+  const coincidencias = partidosFixture.filter(partido => {
+    const divPartido = normalizarDivision(partido.division || partido.categoria);
+    return divPartido === divisionSeleccionada;
+  });
 
   coincidencias.forEach(partido => {
     const opcion = document.createElement("option");
     opcion.value = String(partido.id);
 
-    const resultado = partido.golesAdiur !== "" && partido.golesRival !== ""
+    const resultado = partido.golesAdiur !== "" && partido.golesRival !== "" && partido.golesAdiur !== null && partido.golesRival !== null
       ? `ADIUR ${partido.golesAdiur}-${partido.golesRival}`
       : "Resultado pendiente";
 
@@ -4145,48 +4161,22 @@ function actualizarSelectorFixture() {
   });
 
   if (!coincidencias.length) {
-    const conservarReferenciaHistorica = Boolean(
-      informeEnEdicion &&
-      informeEnEdicion.fixtureId &&
-      String(informeEnEdicion.fixtureId) === String(valorAnterior) &&
-      normalizarDivision(informeEnEdicion.division) === divisionSeleccionada
-    );
-
-    opcionInicial.textContent = conservarReferenciaHistorica
-      ? "Partido asociado no disponible · se conserva la referencia histórica"
-      : "No hay partidos cargados para " + divisionSeleccionada;
-
+    opcionInicial.textContent = "No hay partidos cargados en el fixture para " + divisionSeleccionada;
     selector.disabled = true;
     selector.value = "";
-    $("fixtureIdVinculado").value = conservarReferenciaHistorica
-      ? String(informeEnEdicion.fixtureId)
-      : "";
   } else {
     selector.disabled = false;
     const anteriorCoincide = valorAnterior !== "" && coincidencias.some(partido =>
       String(partido.id) === String(valorAnterior)
     );
-
     selector.value = anteriorCoincide ? String(valorAnterior) : "";
-
     if (anteriorCoincide) {
       $("fixtureIdVinculado").value = String(valorAnterior);
-    } else {
-      const conservarReferenciaHistorica = Boolean(
-        informeEnEdicion &&
-        informeEnEdicion.fixtureId &&
-        String(informeEnEdicion.fixtureId) === String(valorAnterior) &&
-        normalizarDivision(informeEnEdicion.division) === divisionSeleccionada
-      );
-      $("fixtureIdVinculado").value = conservarReferenciaHistorica
-        ? String(informeEnEdicion.fixtureId)
-        : "";
     }
   }
 
   actualizarBloqueoInforme();
 }
-
 function actualizarBloqueoInforme() {
   const formulario = $("formularioPartido");
   if (!formulario) return;
