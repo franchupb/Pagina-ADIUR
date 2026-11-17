@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -396,6 +395,33 @@ a:focus-visible {
   gap: 16px;
 }
 
+/* SELECTOR COMPACTO Y ACCIONES ALINEADAS */
+
+.configuracion-superior {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.campo-categoria {
+  flex: 0 1 230px;
+  width: 230px;
+  max-width: 230px;
+}
+
+.panel-config-acciones {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+  margin: 0;
+}
+
+.panel-config-acciones .btn {
+  white-space: nowrap;
+}
+
 .field {
   display: flex;
   flex-direction: column;
@@ -501,6 +527,10 @@ input[readonly] {
   gap: 10px;
   flex-wrap: wrap;
   align-items: center;
+}
+
+.configuracion-superior .panel-config-acciones {
+  flex-wrap: nowrap;
 }
 
 .section-note {
@@ -821,6 +851,10 @@ hr {
   line-height: 1.6;
 }
 
+.preview-pdf-column {
+  min-width: 0;
+}
+
 .preview-pdf-trigger {
   display: block;
   width: 100%;
@@ -828,23 +862,25 @@ hr {
   border: 1px solid #dedede;
   border-radius: 10px;
   background: #f7f7f7;
+  cursor: pointer;
   transition: border-color .15s, transform .15s, box-shadow .15s;
 }
 
-.preview-pdf-trigger:hover {
+.preview-pdf-trigger:hover,
+.preview-pdf-trigger:focus-visible {
   border-color: var(--naranja);
   transform: translateY(-2px);
   box-shadow: 0 5px 16px #00000010;
 }
 
-.preview-pdf-trigger img {
+.preview-pdf-trigger iframe {
   display: block;
   width: 100%;
   height: 150px;
-  object-fit: contain;
-  object-position: center;
+  border: 0;
   border-radius: 5px;
   background: #fff;
+  pointer-events: none;
 }
 
 .preview-pdf-trigger span {
@@ -854,6 +890,18 @@ hr {
   font-size: 11px;
   font-weight: 900;
   text-align: center;
+}
+
+.pdf-open-link {
+  display: inline-block;
+  margin-top: 9px;
+  color: var(--naranja-oscuro);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.pdf-open-link:hover {
+  text-decoration: underline;
 }
 
 .volumen-layout {
@@ -1041,11 +1089,11 @@ hr {
   width: min(1180px, 100%);
 }
 
-.vista-pdf-imagen {
+.vista-pdf-documento {
   display: block;
   width: 100%;
-  max-height: 76vh;
-  object-fit: contain;
+  height: min(76vh, 900px);
+  min-height: 420px;
   border: 1px solid var(--borde);
   border-radius: 9px;
   background: #f4f4f4;
@@ -1084,7 +1132,7 @@ hr {
     max-width: 360px;
   }
 
-  .preview-pdf-trigger img {
+  .preview-pdf-trigger iframe {
     height: 130px;
   }
 }
@@ -1349,6 +1397,33 @@ hr {
     padding: 15px;
   }
 
+  .configuracion-superior {
+    align-items: flex-end;
+    gap: 10px;
+  }
+
+  .campo-categoria {
+    flex: 0 1 180px;
+    width: 180px;
+    max-width: 180px;
+  }
+
+  .configuracion-superior .panel-config-acciones {
+    flex: 1 1 0;
+    min-width: 0;
+    width: auto;
+    flex-wrap: nowrap;
+  }
+
+  .panel-config-acciones .btn {
+    flex: 1 1 0;
+    min-width: 0;
+    white-space: normal;
+    padding: 9px 8px;
+    font-size: 10px;
+    line-height: 1.35;
+  }
+
   .filters,
   .form-grid {
     grid-template-columns: 1fr;
@@ -1386,6 +1461,22 @@ hr {
 }
 
 @media (max-width: 420px) {
+  .campo-categoria {
+    flex-basis: 100%;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .configuracion-superior .panel-config-acciones {
+    flex-basis: 100%;
+    width: 100%;
+  }
+
+  .panel-config-acciones .btn {
+    font-size: 9px;
+    padding: 8px 5px;
+  }
+
   .barra-superior {
     gap: 6px;
     padding-left: 8px;
@@ -1650,8 +1741,8 @@ hr {
     <section class="panel">
       <h3>Configuración de la calculadora</h3>
 
-      <div class="filters">
-        <div class="field">
+      <div class="configuracion-superior">
+        <div class="field campo-categoria">
           <label for="division">Categoría del plantel</label>
           <select id="division">
             <option>Sub 10</option>
@@ -1661,18 +1752,16 @@ hr {
             <option>Primera</option>
           </select>
         </div>
-      </div>
 
-      <hr>
+        <div class="actions panel-config-acciones">
+          <button class="btn btn-secondary" id="configureDaysBtn" type="button">
+            Configurar días
+          </button>
 
-      <div class="actions panel-config-acciones">
-        <button class="btn btn-secondary" id="configureDaysBtn" type="button">
-          Configurar días
-        </button>
-
-        <button class="btn btn-danger" id="clearCategoryBtn" type="button">
-          Borrar datos de esta categoría
-        </button>
+          <button class="btn btn-danger" id="clearCategoryBtn" type="button">
+            Borrar datos de esta categoría
+          </button>
+        </div>
       </div>
 
       <p class="hint" style="margin:14px 0 0;">
@@ -1682,35 +1771,17 @@ hr {
 
     <section class="panel panel-herramientas" aria-label="Herramientas complementarias de la calculadora">
       <div class="tabs-calculadora" role="tablist" aria-label="Herramientas de entrenamiento">
-        <button class="tab-calculadora activa" id="tabAreas" type="button" role="tab"
-          aria-selected="true" aria-controls="panelAreas" data-tab-target="panelAreas">
-          Áreas funcionales
-        </button>
-        <button class="tab-calculadora" id="tabVolumen" type="button" role="tab"
-          aria-selected="false" aria-controls="panelVolumen" data-tab-target="panelVolumen" tabindex="-1">
+        <button class="tab-calculadora activa" id="tabVolumen" type="button" role="tab"
+          aria-selected="true" aria-controls="panelVolumen" data-tab-target="panelVolumen">
           Calculadora de volúmenes
         </button>
+        <button class="tab-calculadora" id="tabAreas" type="button" role="tab"
+          aria-selected="false" aria-controls="panelAreas" data-tab-target="panelAreas" tabindex="-1">
+          Áreas funcionales
+        </button>
       </div>
 
-      <div class="tab-panel" id="panelAreas" role="tabpanel" aria-labelledby="tabAreas">
-        <div class="preview-pdf-card">
-          <div class="preview-pdf-info">
-            <h3>Referencia de áreas funcionales</h3>
-            <p>
-              Consultá la tabla de áreas funcionales, sus características y referencias de trabajo.
-              Tocá la miniatura para abrir una vista general ampliada sin salir de la calculadora.
-            </p>
-            <span class="badge training">Documento de referencia · 1 página</span>
-          </div>
-          <button class="preview-pdf-trigger" id="previewAreasBtn" type="button"
-            aria-label="Ampliar vista previa del documento de áreas funcionales">
-            <img id="areasPreviewImage" alt="Miniatura del documento PDF Pasadas Áreas Funcionales">
-            <span>VER VISTA GENERAL ↗</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="tab-panel" id="panelVolumen" role="tabpanel" aria-labelledby="tabVolumen" hidden>
+      <div class="tab-panel" id="panelVolumen" role="tabpanel" aria-labelledby="tabVolumen">
         <div class="volumen-layout">
           <section class="volumen-tabla-panel">
             <div class="volumen-panel-titulo">
@@ -1773,6 +1844,34 @@ hr {
               <strong id="resultSubtotal">5.670 m</strong>
             </div>
           </section>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="panelAreas" role="tabpanel" aria-labelledby="tabAreas" hidden>
+        <div class="preview-pdf-card">
+          <div class="preview-pdf-info">
+            <h3>Referencia de áreas funcionales</h3>
+            <p>
+              Consultá la tabla de áreas funcionales, sus características y referencias de trabajo.
+              Tocá la miniatura para abrir el documento completo sin salir de la calculadora.
+            </p>
+            <span class="badge training">Documento de referencia · PDF</span>
+            <p class="hint" style="margin:12px 0 0;">
+              El archivo debe estar guardado en la misma carpeta que calculadora.html con el nombre <strong>Areas.pdf</strong>.
+            </p>
+          </div>
+          <div class="preview-pdf-column">
+            <div class="preview-pdf-trigger" id="previewAreasBtn" role="button" tabindex="0"
+              aria-label="Ampliar vista previa del documento de áreas funcionales">
+              <iframe id="areasPreviewFrame" title="Vista previa del PDF Areas.pdf"
+                src="Areas.pdf#page=1&amp;toolbar=0&amp;navpanes=0&amp;scrollbar=0&amp;view=FitH"
+                loading="lazy"></iframe>
+              <span>VER VISTA GENERAL ↗</span>
+            </div>
+            <a class="pdf-open-link" href="Areas.pdf" target="_blank" rel="noopener">
+              Abrir PDF en otra pestaña ↗
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -1938,9 +2037,12 @@ hr {
       <h3 id="areasModalTitle">Áreas funcionales · vista general</h3>
       <button class="close" id="closeAreasModal" type="button" aria-label="Cerrar">×</button>
     </div>
-    <img class="vista-pdf-imagen" id="areasModalImage"
-      alt="Documento completo de referencia de áreas funcionales">
-    <p class="hint" style="margin:10px 0 0;">Vista en imagen de la página completa del documento de referencia.</p>
+    <iframe class="vista-pdf-documento" id="areasModalFrame"
+      title="Documento completo de referencia de áreas funcionales"
+      src="Areas.pdf#page=1&amp;toolbar=1&amp;navpanes=0&amp;view=Fit"></iframe>
+    <p class="hint" style="margin:10px 0 0;">
+      Estás viendo el archivo Areas.pdf. También podés <a href="Areas.pdf" target="_blank" rel="noopener" style="color:var(--naranja-oscuro);font-weight:800;">abrirlo en otra pestaña</a>.
+    </p>
   </div>
 </div>
 
@@ -3021,7 +3123,6 @@ function mostrarNotificacion(texto) {
    CALCULADORA INTERACTIVA DE DISTRIBUCIÓN DE VOLUMEN
 ===================================================== */
 
-const AREAS_PREVIEW_IMAGE = "areas_funcionales_preview.webp";
 const VOLUME_STORAGE_KEY = "calculadoraADIURVolumenDeseadoV1";
 
 const DISTRIBUCION_VOLUMEN = [
@@ -3130,11 +3231,9 @@ function cerrarVistaAreas() {
 }
 
 function inicializarHerramientasVolumen() {
-  $("areasPreviewImage").src = AREAS_PREVIEW_IMAGE;
-  $("areasModalImage").src = AREAS_PREVIEW_IMAGE;
   $("volumeDesired").value = cargarVolumenDeseado();
   actualizarCalculadoraVolumen();
-  activarPestanaCalculadora("panelAreas");
+  activarPestanaCalculadora("panelVolumen");
 }
 
 /* =====================================================
@@ -3149,13 +3248,17 @@ document.querySelectorAll(".tab-calculadora").forEach(tab => {
 
 $("volumeDesired").addEventListener("input", actualizarCalculadoraVolumen);
 $("previewAreasBtn").addEventListener("click", abrirVistaAreas);
+$("previewAreasBtn").addEventListener("keydown", event => {
+  if (event.key === "Enter" || event.key === " ") {
+    event.preventDefault();
+    abrirVistaAreas();
+  }
+});
 $("closeAreasModal").addEventListener("click", cerrarVistaAreas);
 
 $("areasModal").addEventListener("click", event => {
   if (event.target === $("areasModal")) cerrarVistaAreas();
 });
-
-
 
 $("division").addEventListener("change", renderDays);
 
