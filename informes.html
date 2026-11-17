@@ -4051,7 +4051,6 @@ function crearIdLegadoFixture(partido, indice, division, competicion, rival, fec
 }
 
 function cargarFixture() {
-    // Intentar leer de múltiples claves posibles en localStorage para evitar desacoples
     let datos = null;
     const posiblesClaves = [
         typeof CLAVE_FIXTURE !== 'undefined' ? CLAVE_FIXTURE : null,
@@ -4069,9 +4068,7 @@ function cargarFixture() {
                     datos = parsed;
                     break;
                 }
-            } catch (e) {
-                // Si falla el parseo de una clave, continúa probando con la siguiente
-            }
+            } catch (e) {}
         }
     }
 
@@ -4127,105 +4124,87 @@ function cargarFixture() {
 }
 
 function actualizarSelectorFixture() {
-  const selector = $("seleccionFixture");
-  const divisionSeleccionada = normalizarDivision($("division").value);
-  const valorAnterior = selector.value || $("fixtureIdVinculado").value || "";
-  const informeEnEdicion = partidos.find(p => String(p.id) === String($("partidoId").value || ""));
+    // Forzar la recarga inmediata del fixture desde localStorage para evitar arrays vacíos
+    window.partidosFixture = cargarFixture();
 
-  selector.replaceChildren();
-
-  if (!divisionSeleccionada) {
-    const opcion = document.createElement("option");
-    opcion.value = "";
-    opcion.textContent = "Primero seleccioná una categoría...";
-    selector.appendChild(opcion);
-    selector.disabled = true;
-    $("fixtureIdVinculado").value = "";
-    actualizarBloqueoInforme();
-    return;
-  }
-
-  const opcionInicial = document.createElement("option");
-  opcionInicial.value = "";
-  opcionInicial.textContent = "Seleccionar un partido cargado (opcional)...";
-  selector.appendChild(opcionInicial);
-
-  const coincidencias = partidosFixture.filter(partido => {
-    const divPartido = normalizarDivision(partido.division || partido.categoria);
-    return divPartido === divisionSeleccionada;
-  });
-
-  coincidencias.forEach(partido => {
-    const opcion = document.createElement("option");
-    opcion.value = String(partido.id);
-
-    const resultado = partido.golesAdiur !== "" && partido.golesRival !== "" && partido.golesAdiur !== null && partido.golesRival !== null
-      ? `ADIUR ${partido.golesAdiur}-${partido.golesRival}`
-      : "Resultado pendiente";
-
-    opcion.textContent = [
-      partido.competicion,
-      partido.jornada ? "Fecha " + partido.jornada : "",
-      partido.rival,
-      partido.fechaReal ? formatearFecha(partido.fechaReal) : "Fecha pendiente",
-      partido.lugar || "",
-      resultado
-    ].filter(Boolean).join(" · ");
-
-    selector.appendChild(opcion);
-  });
-
-  if (!coincidencias.length) {
-    opcionInicial.textContent = "No hay partidos cargados en el fixture para " + divisionSeleccionada;
-    selector.disabled = true;
-    selector.value = "";
-  } else {
-    selector.disabled = false;
-    const anteriorCoincide = valorAnterior !== "" && coincidencias.some(partido =>
-      String(partido.id) === String(valorAnterior)
-    );
-    selector.value = anteriorCoincide ? String(valorAnterior) : "";
-    if (anteriorCoincide) {
-      $("fixtureIdVinculado").value = String(valorAnterior);
-    }
-  }
-
-  actualizarBloqueoInforme();
+    const selector = $("seleccionFixture");
+    const divisionSeleccionada = normalizarDivision($("division").value);
+    const valorAnterior = selector.value || $("fixtureIdVinculado").value || "";
+    const informeEnEdicion = partidos.find(p => String(p.id) === String($("partidoId").value || ""));  
+  
+    if (!selector) return;
+    selector.replaceChildren();  
+  
+    if (!divisionSeleccionada) {  
+        const opcion = document.createElement("option");  
+        opcion.value = "";  
+        opcion.textContent = "Primero seleccioná una categoría...";  
+        selector.appendChild(opcion);  
+        selector.value = "";  
+        selector.disabled = true;  
+        $("fixtureIdVinculado").value = "";  
+        actualizarBloqueoInforme();  
+        return;  
+    }  
+  
+    const opcionInicial = document.createElement("option");  
+    opcionInicial.value = "";  
+    opcionInicial.textContent = "Seleccionar un partido cargado (opcional)...";  
+    selector.appendChild(opcionInicial);  
+  
+    const coincidencias = window.partidosFixture.filter(partido =>  
+        normalizarDivision(partido.division || partido.categoria) === divisionSeleccionada  
+    );  
+  
+    coincidencias.forEach(partido => {  
+        const opcion = document.createElement("option");  
+        opcion.value = String(partido.id);  
+  
+        const resultado = partido.golesAdiur !== "" && partido.golesRival !== ""  
+            ? `ADIUR ${partido.golesAdiur}-${partido.golesRival}`  
+            : "Resultado pendiente";  
+  
+        opcion.textContent = [  
+            partido.competicion,  
+            partido.jornada ? "Fecha " + partido.jornada : "",  
+            partido.rival,  
+            partido.fechaReal ? formatearFecha(partido.fechaReal) : "Fecha pendiente",  
+            partido.lugar || "",  
+            resultado  
+        ].filter(Boolean).join(" · ");  
+  
+        selector.appendChild(opcion);  
+    });  
+  
+    if (!coincidencias.length) {  
+        const conservarReferenciaHistorica = Boolean(  
+            informeEnEdicion &&  
+            informeEnEdicion.fixtureId &&  
+            String(informeEnEdicion.fixtureId) === String(valorAnterior) &&  
+            normalizarDivision(informeEnEdicion.division) === divisionSeleccionada  
+        );  
+  
+        opcionInicial.textContent = conservarReferenciaHistorica  
+            ? "Partido asociado no disponible · se conserva la referencia histórica"  
+            : "No hay partidos cargados para " + divisionSeleccionada;  
+  
+        selector.disabled = true;  
+        selector.value = "";  
+        $("fixtureIdVinculado").value = conservarReferenciaHistorica  
+            ? String(informeEnEdicion.fixtureId)  
+            : "";  
+    } else {  
+        selector.disabled = false;  
+        const anteriorCoincide = valorAnterior !== "" && coincidencias.some(partido =>  
+            String(partido.id) === String(valorAnterior)  
+        );  
+  
+        selector.value = anteriorCoincide ? String(valorAnterior) : "";  
+        $("fixtureIdVinculado").value = anteriorCoincide ? String(valorAnterior) : "";  
+    }  
+  
+    actualizarBloqueoInforme();  
 }
-function actualizarBloqueoInforme() {
-  const formulario = $("formularioPartido");
-  if (!formulario) return;
-  formulario.classList.remove("informe-bloqueado");
-  const aviso = document.getElementById("avisoSinPartido");
-  if (aviso) aviso.remove();
-}
-
-function actualizarCompeticiones(preferida="") {
-  const division = $("division").value;
-  const opciones = COMPETICIONES_POR_DIVISION[division] || ["Rosarina"];
-  const selector = $("competicion");
-  selector.replaceChildren();
-
-  opciones.forEach(nombre=>{
-    const opcion = document.createElement("option");
-    opcion.value = nombre;
-    opcion.textContent = nombre;
-    selector.appendChild(opcion);
-  });
-
-  if (preferida && !opciones.includes(preferida)) {
-    const opcion = document.createElement("option");
-    opcion.value = preferida;
-    opcion.textContent = preferida+" (registro anterior)";
-    selector.appendChild(opcion);
-    selector.value = preferida;
-  } else {
-    selector.value = opciones.includes(preferida) ? preferida : opciones[0];
-  }
-
-  actualizarMarcadorVisual();
-}
-
 function cargarDesdeFixture() {
   const valor = $("seleccionFixture").value;
   const p = valor === ""
