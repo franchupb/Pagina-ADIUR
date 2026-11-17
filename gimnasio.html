@@ -960,10 +960,18 @@ a:focus-visible,
 .grupo-editor-cabecera {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
   gap: 12px;
   padding: 0 0 14px;
   margin-bottom: 15px;
   border-bottom: 1px solid #e9ebef;
+}
+
+.grupo-editor-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .numero-grupo-editor {
@@ -994,6 +1002,12 @@ a:focus-visible,
   color: var(--gris-texto);
   font-size: 11px;
   line-height: 1.6;
+}
+
+.acciones-grupo-editor {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .lista-ejercicios-editor {
@@ -1943,8 +1957,16 @@ a:focus-visible,
 }
 
 .tabla-planilla .celda-repeticiones {
-  min-width: 40px;
+  min-width: 45px;
   padding: 4px 3px 5px;
+}
+
+.tabla-planilla .valor-porcentaje {
+  display: block;
+  font-size: 9px;
+  font-weight: 800;
+  color: var(--naranja-oscuro);
+  line-height: 1.2;
 }
 
 .tabla-planilla .valor-repeticiones {
@@ -3119,10 +3141,9 @@ a:focus-visible,
         </div>
 
         <div class="texto-cabecera-configuracion">
-          <h3>Configuración de la rutina</h3>
+          <h3>Configuración de la rutina y 100% de 1RM</h3>
           <p>
-            Definí el tipo de rutina, la jugadora y una duración de 4 o 5 semanas.
-            Las repeticiones principales y los tiempos complementarios se periodizan automáticamente.
+            Definí el tipo de rutina, la duración de 2 a 7 semanas y el valor equivalente al 100% (1RM) para los ejercicios de potencia y principales.
           </p>
         </div>
 
@@ -3153,18 +3174,38 @@ a:focus-visible,
               id="tituloRutina"
               type="text"
               maxlength="90"
-              placeholder="Ej. Fuerza general · Octubre"
+              placeholder="Ej. Potencia y Fuerza · Octubre"
             >
           </div>
 
           <div class="campo campo-semanas">
-            <label for="semanas"><span class="punto-label"></span>DURACIÓN DEL PLAN</label>
+            <label for="semanas"><span class="punto-label"></span>DURACIÓN DEL BLOQUE (2 A 7 SEMANAS)</label>
             <select id="semanas">
-              <option value="4">4 semanas</option>
-              <option value="5" selected>5 semanas</option>
+              <option value="2">2 Semanas</option>
+              <option value="3">3 Semanas</option>
+              <option value="4" selected>4 Semanas</option>
+              <option value="5">5 Semanas</option>
+              <option value="6">6 Semanas</option>
+              <option value="7">7 Semanas</option>
             </select>
           </div>
 
+        </div>
+
+        <div class="separador-configuracion"></div>
+
+        <div style="margin-bottom: 15px;">
+          <label style="display:block; margin-bottom:8px; color: #59606b; font-size: 10px; font-weight: 900; letter-spacing: .6px;">
+            <span class="punto-label" style="display:inline-block; vertical-align:middle; margin-right:6px;"></span>VALOR 100% 1RM (KG) PARA CÁLCULO DE PESOS EN POTENCIA
+          </label>
+          <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 200px;">
+              <input type="number" id="rmPotencia1" placeholder="100% 1RM Ej. Potencia 1 (Kg)" min="0" step="0.5" class="campo input" style="width:100%; min-height:40px; padding:8px 10px; font-size:12px;">
+            </div>
+            <div style="flex: 1; min-width: 200px;">
+              <input type="number" id="rmPotencia2" placeholder="100% 1RM Ej. Potencia 2 (Kg)" min="0" step="0.5" class="campo input" style="width:100%; min-height:40px; padding:8px 10px; font-size:12px;">
+            </div>
+          </div>
         </div>
 
         <div class="separador-configuracion"></div>
@@ -3174,8 +3215,7 @@ a:focus-visible,
           <div class="nota-configuracion">
             <span class="icono-nota-configuracion">i</span>
             <span>
-              Principales: solo repeticiones. Complementarios: tiempo semanal con progresión automática.
-              La periodización se consulta en la biblioteca.
+              Potencia: 3 días semanales (Día 1: Velocidad/70-78%, Día 2: Técnica/60-70%, Día 3: Pesado/80-92% según bloque).
             </span>
           </div>
 
@@ -3204,21 +3244,15 @@ a:focus-visible,
       <h3 id="tituloEditor">Nueva rutina</h3>
 
       <p class="descripcion" id="descripcionEditor">
-        Los ejercicios se cargan uno debajo del otro. Los principales se programan por repeticiones,
-        sin peso, y los complementarios por tiempo semanal con progresión automática.
+        Potencia configurada con ondulación semanal específica (2 a 7 semanas) y 3 días de estímulo neural diferenciado.
       </p>
 
       <div class="aviso oculto" id="avisoJugador">
-        Estás viendo tu rutina individual. La estructura y las repeticiones
-        se establecen desde la rutina general. Los valores personales se guardan
-        para tu jugadora.
+        Estás viendo tu rutina individual. Los pesos y registros se guardan para tu perfil.
       </div>
 
       <div class="aviso oculto" id="avisoGeneral">
-        La rutina general establece los ejercicios, las repeticiones iniciales,
-        el orden y la duración. Los tiempos complementarios se calculan por semana:
-        base, +5″, base, +10″ y mantenimiento en la semana 5. La estructura se sincroniza
-        con las rutinas individuales de la división.
+        La rutina general establece la estructura de potencia, fuerza y complementarios para la división.
       </div>
 
       <div class="info-rutina">
@@ -3400,7 +3434,6 @@ const DIVISIONES = [
 ];
 
 const DIAS_POR_SEMANA = 3;
-const CANTIDAD_EJERCICIOS = 8;
 const CANTIDAD_RUTINAS_INICIALES = 10;
 
 const divisionSelect = $("division");
@@ -3408,6 +3441,8 @@ const modoSelect = $("modo");
 const jugadoraSelect = $("jugadora");
 const semanasSelect = $("semanas");
 const tituloInput = $("tituloRutina");
+const rmPotencia1Input = $("rmPotencia1");
+const rmPotencia2Input = $("rmPotencia2");
 
 let usuario = leerUsuario();
 let esJugadora = detectarRol(usuario) === "jugadora";
@@ -3422,12 +3457,63 @@ let cantidadPersonasVista = 1;
 const MAX_PERSONAS_RUTINA = 5;
 
 /* =====================================================
-   PERIODIZACIÓN
+   ONDULACIÓN SEMANAL Y DIARIA PARA POTENCIA (2 A 7 SEMANAS)
 ===================================================== */
 
-function obtenerPlantillaPeriodizacion(cantidadSemanas) {
-  const cantidad = Number(cantidadSemanas) === 4 ? 4 : 5;
+function obtenerEstructuraPotenciaPorSemanas(totalSemanas) {
+  const num = Number(totalSemanas);
+  switch (num) {
+    case 2:
+      return [
+        { numero: 1, nombre: "ACUMULACIÓN", d1: 72, d2: 65, d3: 82 },
+        { numero: 2, nombre: "PICO", d1: 75, d2: 60, d3: 90 }
+      ];
+    case 3:
+      return [
+        { numero: 1, nombre: "CARGA 1", d1: 70, d2: 62, d3: 80 },
+        { numero: 2, nombre: "CARGA 2", d1: 75, d2: 65, d3: 88 },
+        { numero: 3, nombre: "DESCARGA", d1: 65, d2: 55, d3: 70 }
+      ];
+    case 4:
+      return [
+        { numero: 1, nombre: "BASE 1", d1: 70, d2: 60, d3: 78 },
+        { numero: 2, nombre: "BASE 2", d1: 72, d2: 62, d3: 85 },
+        { numero: 3, nombre: "INTENSIDAD", d1: 75, d2: 65, d3: 90 },
+        { numero: 4, nombre: "DESCARGA", d1: 65, d2: 55, d3: 68 }
+      ];
+    case 5:
+      return [
+        { numero: 1, nombre: "SEMANA 1", d1: 70, d2: 60, d3: 78 },
+        { numero: 2, nombre: "SEMANA 2", d1: 72, d2: 62, d3: 82 },
+        { numero: 3, nombre: "SEMANA 3", d1: 75, d2: 65, d3: 88 },
+        { numero: 4, nombre: "SEMANA 4", d1: 78, d2: 65, d3: 92 },
+        { numero: 5, nombre: "DESCARGA", d1: 65, d2: 55, d3: 68 }
+      ];
+    case 6:
+      return [
+        { numero: 1, nombre: "BLOQUE 1 - SEM 1", d1: 70, d2: 60, d3: 78 },
+        { numero: 2, nombre: "BLOQUE 1 - SEM 2", d1: 74, d2: 63, d3: 85 },
+        { numero: 3, nombre: "DESCARGA 1", d1: 62, d2: 55, d3: 70 },
+        { numero: 4, nombre: "BLOQUE 2 - SEM 1", d1: 72, d2: 62, d3: 82 },
+        { numero: 5, nombre: "BLOQUE 2 - SEM 2", d1: 76, d2: 65, d3: 91 },
+        { numero: 6, nombre: "DESCARGA 2", d1: 60, d2: 50, d3: 68 }
+      ];
+    case 7:
+    default:
+      return [
+        { numero: 1, nombre: "SEM 1", d1: 70, d2: 60, d3: 75 },
+        { numero: 2, nombre: "SEM 2", d1: 72, d2: 62, d3: 80 },
+        { numero: 3, nombre: "SEM 3", d1: 75, d2: 65, d3: 85 },
+        { numero: 4, nombre: "DESCARGA 1", d1: 62, d2: 55, d3: 68 },
+        { numero: 5, nombre: "SEM 5", d1: 74, d2: 63, d3: 83 },
+        { numero: 6, nombre: "PICO / MÁX", d1: 78, d2: 60, d3: 92 },
+        { numero: 7, nombre: "DESCARGA FINAL", d1: 60, d2: 50, d3: 65 }
+      ];
+  }
+}
 
+function obtenerPlantillaPeriodizacion(cantidadSemanas) {
+  const cantidad = Number(cantidadSemanas) >= 2 && Number(cantidadSemanas) <= 7 ? Number(cantidadSemanas) : 4;
   if (cantidad === 4) {
     return [
       { numero: 1, nombre: "ADAPTABILIDAD", repeticiones: [10, 8, 9] },
@@ -3436,7 +3522,6 @@ function obtenerPlantillaPeriodizacion(cantidadSemanas) {
       { numero: 4, nombre: "PICO", repeticiones: [5, 3] }
     ];
   }
-
   return [
     { numero: 1, nombre: "ADAPTABILIDAD", repeticiones: [10, 8, 9] },
     { numero: 2, nombre: "CARGA", repeticiones: [7, 8, 6] },
@@ -3449,15 +3534,8 @@ function obtenerPlantillaPeriodizacion(cantidadSemanas) {
 function calcularRepeticiones(referencia, repeticionesIniciales) {
   const valorBase = Number(referencia);
   const iniciales = Number(repeticionesIniciales);
-
-  const baseValida = Number.isFinite(valorBase) && valorBase > 0
-    ? valorBase
-    : 1;
-
-  const inicialesValidas = Number.isFinite(iniciales) && iniciales > 0
-    ? iniciales
-    : 10;
-
+  const baseValida = Number.isFinite(valorBase) && valorBase > 0 ? valorBase : 1;
+  const inicialesValidas = Number.isFinite(iniciales) && iniciales > 0 ? iniciales : 10;
   return Math.max(1, Math.round(baseValida + inicialesValidas - 10));
 }
 
@@ -3469,92 +3547,35 @@ function leerSegundosTiempo(valor) {
   if (valor === null || valor === undefined || String(valor).trim() === "") {
     return null;
   }
-
   const texto = String(valor).trim().replace(",", ".");
   const numeroDirecto = Number(texto);
-
   if (Number.isFinite(numeroDirecto) && numeroDirecto >= 0) {
     return Math.round(numeroDirecto);
   }
-
   const coincidencia = texto.match(/\d+(?:\.\d+)?/);
-
   if (!coincidencia) return null;
-
   const numero = Number(coincidencia[0]);
   return Number.isFinite(numero) && numero >= 0 ? Math.round(numero) : null;
 }
 
 function obtenerTiempoBaseEjercicio(ejercicio, diasAntiguos = null) {
   const guardado = leerSegundosTiempo(ejercicio?.tiempoBase);
-
   if (guardado !== null) return guardado;
-
-  const dias = Array.isArray(diasAntiguos)
-    ? diasAntiguos
-    : (Array.isArray(ejercicio?.dias) ? ejercicio.dias : []);
-
-  const valorAnterior = dias
-    .map(dia => leerSegundosTiempo(dia?.tiempo))
-    .find(valor => valor !== null);
-
+  const dias = Array.isArray(diasAntiguos) ? diasAntiguos : (Array.isArray(ejercicio?.dias) ? ejercicio.dias : []);
+  const valorAnterior = dias.map(dia => leerSegundosTiempo(dia?.tiempo)).find(valor => valor !== null);
   return valorAnterior ?? null;
 }
 
 function calcularTiempoSemana(tiempoBase, numeroSemana) {
   const base = leerSegundosTiempo(tiempoBase);
-
   if (base === null) return null;
-
-  const progresion = {
-    1: base,
-    2: base + 5,
-    3: base,
-    4: base + 10,
-    5: base + 10
-  };
-
+  const progresion = { 1: base, 2: base + 5, 3: base, 4: base + 10, 5: base + 10, 6: base + 10, 7: base + 10 };
   return progresion[numeroSemana] ?? null;
 }
 
 function formatearTiempo(valor) {
   const segundos = leerSegundosTiempo(valor);
   return segundos === null ? "" : `${segundos}″`;
-}
-
-function generarPeriodizacionEjercicio(rutina, ejercicio, indiceEjercicio = 0) {
-  const plantilla = obtenerPlantillaPeriodizacion(rutina.semanas);
-  const esPrincipal = indiceEjercicio < 4;
-  const baseRepeticiones = Number(ejercicio.repeticionesBase) || 10;
-  const baseTiempo = obtenerTiempoBaseEjercicio(ejercicio);
-
-  return plantilla.map(semana => {
-    if (esPrincipal) {
-      return {
-        numero: semana.numero,
-        nombre: semana.nombre,
-        repeticionesReferencia: semana.repeticiones,
-        dias: semana.repeticiones.map(referencia => ({
-          peso: "",
-          tiempo: "",
-          repeticiones: calcularRepeticiones(referencia, baseRepeticiones)
-        }))
-      };
-    }
-
-    const tiempo = calcularTiempoSemana(baseTiempo, semana.numero);
-
-    return {
-      numero: semana.numero,
-      nombre: semana.nombre,
-      repeticionesReferencia: semana.repeticiones,
-      dias: [{
-        peso: "",
-        tiempo: tiempo === null ? "" : formatearTiempo(tiempo),
-        repeticiones: ""
-      }]
-    };
-  });
 }
 
 /* =====================================================
@@ -3564,83 +3585,41 @@ function generarPeriodizacionEjercicio(rutina, ejercicio, indiceEjercicio = 0) {
 function leerUsuario() {
   try {
     const valor = localStorage.getItem(SESSION_KEY);
-
     if (!valor) return {};
-
     const parseado = JSON.parse(valor);
-
     if (typeof parseado === "string") {
-      return {
-        usuario: parseado,
-        nombre: parseado
-      };
+      return { usuario: parseado, nombre: parseado };
     }
-
     return parseado || {};
   } catch {
-    return {
-      usuario: localStorage.getItem(SESSION_KEY) || ""
-    };
+    return { usuario: localStorage.getItem(SESSION_KEY) || "" };
   }
 }
 
 function nombreSesion(obj) {
   if (!obj || typeof obj !== "object") return "Usuario";
-
-  return String(
-    obj.nombreCompleto ||
-    obj.nombre ||
-    obj.usuario ||
-    obj.username ||
-    "Usuario"
-  );
+  return String(obj.nombreCompleto || obj.nombre || obj.usuario || obj.username || "Usuario");
 }
 
 function esBianca(obj) {
-  const valores = [
-    obj?.usuario,
-    obj?.username,
-    obj?.nombreUsuario,
-    obj?.login,
-    obj?.nombre,
-    obj?.nombreCompleto
-  ].map(normalizar);
-
-  return valores.some(valor =>
-    valor === "bianca" ||
-    valor === "biancadominguez" ||
-    valor === "bianca dominguez"
-  );
+  const valores = [obj?.usuario, obj?.username, obj?.nombreUsuario, obj?.login, obj?.nombre, obj?.nombreCompleto].map(normalizar);
+  return valores.some(valor => valor === "bianca" || valor === "biancadominguez" || valor === "bianca dominguez");
 }
 
 function detectarRol(obj) {
   if (esBianca(obj)) return "jugadora";
-
-  const valor = normalizar(
-    obj?.rol || obj?.perfil || obj?.tipo || obj?.role || ""
-  );
-
-  if (
-    valor.includes("jugadora") ||
-    valor.includes("deportista") ||
-    valor.includes("player")
-  ) {
+  const valor = normalizar(obj?.rol || obj?.perfil || obj?.tipo || obj?.role || "");
+  if (valor.includes("jugadora") || valor.includes("deportista") || valor.includes("player")) {
     return "jugadora";
   }
-
   return "staff";
 }
 
 function leerJugadoras() {
   try {
     const datos = JSON.parse(localStorage.getItem(PLAYERS_KEY) || "[]");
-
     if (Array.isArray(datos)) return datos;
-
-    if (datos && Array.isArray(datos.jugadoras)) {
-      return datos.jugadoras;
-    }
-
+    if (datos && Array.isArray(datos.jugadoras)) return datos.jugadoras;
     return [];
   } catch {
     return [];
@@ -3649,37 +3628,16 @@ function leerJugadoras() {
 
 function nombreJugadora(jugadora) {
   if (!jugadora) return "Jugadora";
-
-  return String(
-    jugadora.nombreCompleto ||
-    jugadora.nombreYApellido ||
-    jugadora.nombre ||
-    [jugadora.nombres, jugadora.apellido].filter(Boolean).join(" ") ||
-    "Jugadora"
-  );
+  return String(jugadora.nombreCompleto || jugadora.nombreYApellido || jugadora.nombre || [jugadora.nombres, jugadora.apellido].filter(Boolean).join(" ") || "Jugadora");
 }
 
 function divisionJugadora(jugadora) {
-  const valor =
-    jugadora?.division ||
-    jugadora?.categoria ||
-    jugadora?.división ||
-    "Sub 14";
-
-  return DIVISIONES.find(
-    division => normalizar(division) === normalizar(valor)
-  ) || "Sub 14";
+  const valor = jugadora?.division || jugadora?.categoria || jugadora?.división || "Sub 14";
+  return DIVISIONES.find(division => normalizar(division) === normalizar(valor)) || "Sub 14";
 }
 
 function idJugadora(jugadora) {
-  return String(
-    jugadora?.id ||
-    jugadora?.usuario ||
-    jugadora?.username ||
-    jugadora?.nombreUsuario ||
-    jugadora?.login ||
-    nombreJugadora(jugadora)
-  );
+  return String(jugadora?.id || jugadora?.usuario || jugadora?.username || jugadora?.nombreUsuario || jugadora?.login || nombreJugadora(jugadora));
 }
 
 function registroEsBianca(jugadora) {
@@ -3688,23 +3646,13 @@ function registroEsBianca(jugadora) {
 
 function obtenerTodasLasJugadoras() {
   const resultado = [...leerJugadoras()];
-
   if (!resultado.some(registroEsBianca)) {
-    resultado.push({
-      id: "bianca",
-      usuario: "bianca",
-      nombreCompleto: "Bianca Dominguez",
-      division: "Sub 14"
-    });
+    resultado.push({ id: "bianca", usuario: "bianca", nombreCompleto: "Bianca Dominguez", division: "Sub 14" });
   }
-
   const vistos = new Set();
-
   return resultado.filter(jugadora => {
     const id = idJugadora(jugadora);
-
     if (!id || vistos.has(id)) return false;
-
     vistos.add(id);
     return true;
   });
@@ -3712,29 +3660,12 @@ function obtenerTodasLasJugadoras() {
 
 function buscarJugadoraSesion() {
   const jugadoras = obtenerTodasLasJugadoras();
-
   if (esBianca(usuario)) {
     return jugadoras.find(registroEsBianca) || jugadoras[0] || null;
   }
-
-  const clavesSesion = [
-    usuario?.id,
-    usuario?.jugadoraId,
-    usuario?.nombreCompleto,
-    usuario?.nombre,
-    usuario?.usuario,
-    usuario?.username,
-    usuario?.login
-  ].map(normalizar).filter(Boolean);
-
+  const clavesSesion = [usuario?.id, usuario?.jugadoraId, usuario?.nombreCompleto, usuario?.nombre, usuario?.usuario, usuario?.username, usuario?.login].map(normalizar).filter(Boolean);
   return jugadoras.find(jugadora => {
-    const claves = [
-      idJugadora(jugadora),
-      jugadora.usuario,
-      jugadora.username,
-      nombreJugadora(jugadora)
-    ].map(normalizar);
-
+    const claves = [idJugadora(jugadora), jugadora.usuario, jugadora.username, nombreJugadora(jugadora)].map(normalizar);
     return claves.some(clave => clavesSesion.includes(clave));
   }) || null;
 }
@@ -3752,11 +3683,7 @@ function claveIndividual(division, id) {
 }
 
 function crearDiaVacio() {
-  return {
-    repeticiones: "",
-    peso: "",
-    tiempo: ""
-  };
+  return { repeticiones: "", peso: "", tiempo: "" };
 }
 
 function crearEjercicio(nombre = "") {
@@ -3764,10 +3691,7 @@ function crearEjercicio(nombre = "") {
     nombre,
     repeticionesBase: 10,
     tiempoBase: "",
-    dias: Array.from(
-      { length: 6 * DIAS_POR_SEMANA },
-      crearDiaVacio
-    )
+    dias: Array.from({ length: 6 * DIAS_POR_SEMANA }, crearDiaVacio)
   };
 }
 
@@ -3775,100 +3699,68 @@ function crearRutina() {
   return {
     nombre: "",
     guardada: false,
-    semanas: 5,
-    ejercicios: Array.from(
-      { length: CANTIDAD_EJERCICIOS },
-      () => crearEjercicio("")
-    ),
+    semanas: 4,
+    rmPotencia1: "",
+    rmPotencia2: "",
+    potencia: [crearEjercicio(""), crearEjercicio("")],
+    principales: [crearEjercicio(""), crearEjercicio(""), crearEjercicio(""), crearEjercicio("")],
+    complementarios: [crearEjercicio(""), crearEjercicio(""), crearEjercicio(""), crearEjercicio("")],
     actualizada: new Date().toISOString()
   };
 }
 
 function rutinaTieneDatos(rutina) {
   if (!rutina || typeof rutina !== "object") return false;
-
   const nombre = String(rutina.nombre || "").trim();
+  if (nombre && !/^(rutina|espacio)\s+\d+$/i.test(nombre)) return true;
+  const secciones = [...(rutina.potencia || []), ...(rutina.principales || []), ...(rutina.complementarios || [])];
+  return secciones.some(ejercicio => String(ejercicio.nombre || "").trim() !== "");
+}
 
-  if (
-    nombre &&
-    !/^(rutina|espacio)\s+\d+$/i.test(nombre)
-  ) {
-    return true;
+function normalizarSeccion(lista, cantidadPorDefecto) {
+  const arr = Array.isArray(lista) ? lista : [];
+  const resultado = [];
+  for (let i = 0; i < Math.max(arr.length, cantidadPorDefecto); i++) {
+    const original = arr[i] || {};
+    const valorBase = original.repeticionesBase ?? 10;
+    const numeroBase = Number(valorBase);
+    const repeticionesBase = Number.isFinite(numeroBase) && numeroBase >= 1 ? Math.min(30, Math.round(numeroBase)) : 10;
+    const tiempoBase = String(original.tiempoBase || "");
+
+    resultado.push({
+      nombre: String(original.nombre || ""),
+      repeticionesBase,
+      tiempoBase,
+      dias: Array.from({ length: 6 * DIAS_POR_SEMANA }, () => ({ peso: "", tiempo: "", repeticiones: "" }))
+    });
   }
-
-  return (rutina.ejercicios || []).some((ejercicio, indice) => {
-    if (String(ejercicio.nombre || "").trim()) return true;
-    if (indice >= 4 && String(ejercicio.tiempoBase ?? "").trim()) return true;
-
-    return indice >= 4 && (ejercicio.dias || []).some(dia =>
-      String(dia.tiempo ?? "").trim()
-    );
-  });
+  return resultado;
 }
 
 function normalizarRutina(rutina) {
-  const base = rutina && typeof rutina === "object"
-    ? rutina
-    : crearRutina();
-
+  const base = rutina && typeof rutina === "object" ? rutina : crearRutina();
   if (typeof base.guardada !== "boolean") {
     base.guardada = rutinaTieneDatos(base);
   }
-
   base.nombre = String(base.nombre || "");
-  base.semanas = Number(base.semanas) === 4 ? 4 : 5;
+  const semNum = Number(base.semanas);
+  base.semanas = (semNum >= 2 && semNum <= 7) ? semNum : 4;
+  base.rmPotencia1 = String(base.rmPotencia1 || "");
+  base.rmPotencia2 = String(base.rmPotencia2 || "");
 
-  const originales = Array.isArray(base.ejercicios)
-    ? base.ejercicios
-    : [];
+  if (Array.isArray(base.ejercicios) && !base.potencia) {
+    base.potencia = [crearEjercicio(""), crearEjercicio("")];
+    base.principales = base.ejercicios.slice(0, 4);
+    base.complementarios = base.ejercicios.slice(4, 8);
+    while (base.principales.length < 4) base.principales.push(crearEjercicio(""));
+    while (base.complementarios.length < 4) base.complementarios.push(crearEjercicio(""));
+    delete base.ejercicios;
+  }
 
-  base.ejercicios = Array.from(
-    { length: CANTIDAD_EJERCICIOS },
-    (_, indice) => {
-      const original = originales[indice] || {};
-      const esPrincipal = indice < 4;
-      const diasOriginales = Array.isArray(original.dias)
-        ? original.dias
-        : [];
-
-      const valorBase =
-        original.repeticionesBase ??
-        diasOriginales[0]?.repeticiones;
-
-      const numeroBase = Number(valorBase);
-
-      const repeticionesBase =
-        valorBase !== "" &&
-        valorBase !== null &&
-        valorBase !== undefined &&
-        Number.isFinite(numeroBase) &&
-        numeroBase >= 1
-          ? Math.min(30, Math.round(numeroBase))
-          : 10;
-
-      const tiempoBase = esPrincipal
-        ? ""
-        : (obtenerTiempoBaseEjercicio(original, diasOriginales) ?? "");
-
-      return {
-        nombre: String(original.nombre || ""),
-        repeticionesBase,
-        tiempoBase,
-        dias: Array.from(
-          { length: 6 * DIAS_POR_SEMANA },
-          (_, diaIndice) => {
-            const dia = diasOriginales[diaIndice] || {};
-
-            return {
-              peso: "",
-              tiempo: "",
-              repeticiones: esPrincipal ? (dia.repeticiones ?? "") : ""
-            };
-          }
-        )
-      };
-    }
-  );
+  const cantidadPotencia = Math.max(1, base.potencia ? base.potencia.length : 2);
+  base.potencia = normalizarSeccion(base.potencia, cantidadPotencia);
+  base.principales = normalizarSeccion(base.principales, 4);
+  base.complementarios = normalizarSeccion(base.complementarios, 4);
 
   return base;
 }
@@ -3885,35 +3777,26 @@ function cargarDB() {
 function guardarDB() {
   try {
     localStorage.setItem(KEY, JSON.stringify(db));
-    
-    // Sincronización automática con Firebase Cloud Firestore
     if (window.guardarGimnasioEnNube) {
       window.guardarGimnasioEnNube(db).catch(error => {
         console.warn("No se pudo sincronizar automáticamente con la nube:", error);
       });
     }
-
     return true;
   } catch (error) {
-    mostrarEstado(
-      "No se pudieron guardar los cambios. Revisá el almacenamiento del navegador."
-    );
-
+    mostrarEstado("No se pudieron guardar los cambios.");
     return false;
   }
 }
 
 function asegurarRutinasGenerales(division) {
   const clave = claveGeneral(division);
-
   if (!Array.isArray(db[clave])) {
     db[clave] = [];
   }
-
   while (db[clave].length < CANTIDAD_RUTINAS_INICIALES) {
     db[clave].push(crearRutina());
   }
-
   db[clave] = db[clave].map(normalizarRutina);
   guardarDB();
 }
@@ -3926,34 +3809,17 @@ function combinarRutinaGeneralEIndividual(general, individual) {
   const resultado = copiarObjeto(normalizarRutina(general));
   const anterior = normalizarRutina(individual || crearRutina());
 
-  resultado.ejercicios = resultado.ejercicios.map((ejercicio, indice) => {
-    const ejercicioPersonal = anterior.ejercicios[indice];
-    const esPrincipal = indice < 4;
+  resultado.rmPotencia1 = anterior.rmPotencia1 || general.rmPotencia1;
+  resultado.rmPotencia2 = anterior.rmPotencia2 || general.rmPotencia2;
 
-    if (esPrincipal) {
-      ejercicio.tiempoBase = "";
-      ejercicio.dias = ejercicio.dias.map(dia => ({
-        peso: "",
-        tiempo: "",
-        repeticiones: dia.repeticiones ?? ""
-      }));
-    } else {
-      ejercicio.tiempoBase =
-        obtenerTiempoBaseEjercicio(ejercicioPersonal) ??
-        obtenerTiempoBaseEjercicio(ejercicio) ??
-        "";
-      ejercicio.dias = ejercicio.dias.map(() => ({
-        peso: "",
-        tiempo: "",
-        repeticiones: ""
-      }));
-    }
-
+  resultado.complementarios = resultado.complementarios.map((ejercicio, i) => {
+    const ejercicioPersonal = anterior.complementarios?.[i];
+    ejercicio.tiempoBase = obtenerTiempoBaseEjercicio(ejercicioPersonal) ?? obtenerTiempoBaseEjercicio(ejercicio) ?? "";
     return ejercicio;
   });
 
   resultado.nombre = general.nombre;
-  resultado.semanas = Number(general.semanas) === 4 ? 4 : 5;
+  resultado.semanas = Number(general.semanas) || 4;
   resultado.guardada = Boolean(general.guardada);
 
   return resultado;
@@ -3961,19 +3827,13 @@ function combinarRutinaGeneralEIndividual(general, individual) {
 
 function asegurarRutinasIndividuales(jugadora) {
   if (!jugadora) return;
-
   const division = divisionJugadora(jugadora);
-
   asegurarRutinasGenerales(division);
-
   const clave = claveIndividual(division, idJugadora(jugadora));
-
   if (!Array.isArray(db[clave])) {
     db[clave] = [];
   }
-
   const generales = db[claveGeneral(division)];
-
   generales.forEach((general, indice) => {
     if (!db[clave][indice]) {
       db[clave][indice] = copiarObjeto(general);
@@ -3981,30 +3841,19 @@ function asegurarRutinasIndividuales(jugadora) {
       db[clave][indice] = normalizarRutina(db[clave][indice]);
     }
   });
-
   guardarDB();
 }
 
 function sincronizarRutinaGeneral(division, indice) {
   asegurarRutinasGenerales(division);
-
   const general = db[claveGeneral(division)][indice];
-
   obtenerTodasLasJugadoras()
-    .filter(jugadora =>
-      normalizar(divisionJugadora(jugadora)) === normalizar(division)
-    )
+    .filter(jugadora => normalizar(divisionJugadora(jugadora)) === normalizar(division))
     .forEach(jugadora => {
       asegurarRutinasIndividuales(jugadora);
-
       const clave = claveIndividual(division, idJugadora(jugadora));
-
-      db[clave][indice] = combinarRutinaGeneralEIndividual(
-        general,
-        db[clave][indice]
-      );
+      db[clave][indice] = combinarRutinaGeneralEIndividual(general, db[clave][indice]);
     });
-
   guardarDB();
 }
 
@@ -4014,36 +3863,20 @@ function sincronizarRutinaGeneral(division, indice) {
 
 function obtenerJugadoraSeleccionada() {
   if (esJugadora) return jugadoraSesion;
-
-  if (
-    !jugadoraSelect.value ||
-    jugadoraSelect.value === "__TODAS__"
-  ) {
-    return null;
-  }
-
-  return obtenerTodasLasJugadoras().find(jugadora =>
-    idJugadora(jugadora) === jugadoraSelect.value
-  ) || null;
+  if (!jugadoraSelect.value || jugadoraSelect.value === "__TODAS__") return null;
+  return obtenerTodasLasJugadoras().find(jugadora => idJugadora(jugadora) === jugadoraSelect.value) || null;
 }
 
 function obtenerRutinaActual() {
   const division = divisionSelect.value;
-
   asegurarRutinasGenerales(division);
-
   if (modoSelect.value === "general") {
     return db[claveGeneral(division)][indiceActual];
   }
-
   const jugadora = obtenerJugadoraSeleccionada();
-
   if (!jugadora) return null;
-
   asegurarRutinasIndividuales(jugadora);
-
   const clave = claveIndividual(division, idJugadora(jugadora));
-
   return db[clave][indiceActual] || null;
 }
 
@@ -4052,10 +3885,7 @@ function puedeEditarEstructura() {
 }
 
 function puedeEditarValores() {
-  return esStaff || (
-    esJugadora &&
-    modoSelect.value === "individual"
-  );
+  return esStaff || (esJugadora && modoSelect.value === "individual");
 }
 
 function mostrarEstado(mensaje) {
@@ -4068,31 +3898,23 @@ function mostrarEstado(mensaje) {
 
 function poblarJugadoras() {
   const division = divisionSelect.value;
-
-  const jugadoras = obtenerTodasLasJugadoras().filter(jugadora =>
-    normalizar(divisionJugadora(jugadora)) === normalizar(division)
-  );
-
+  const jugadoras = obtenerTodasLasJugadoras().filter(jugadora => normalizar(divisionJugadora(jugadora)) === normalizar(division));
   const valorAnterior = jugadoraSelect.value;
 
   jugadoraSelect.innerHTML = "";
-
   if (esJugadora) {
     const jugadora = jugadoraSesion;
-
     if (jugadora) {
       const opcion = document.createElement("option");
       opcion.value = idJugadora(jugadora);
       opcion.textContent = nombreJugadora(jugadora);
       jugadoraSelect.appendChild(opcion);
     }
-
     jugadoraSelect.disabled = true;
     return;
   }
 
   jugadoraSelect.disabled = false;
-
   const opcionTodas = document.createElement("option");
   opcionTodas.value = "__TODAS__";
   opcionTodas.textContent = "Todas las jugadoras";
@@ -4123,42 +3945,21 @@ function renderizarEditor() {
 
   contenedor.innerHTML = "";
 
-  const todasSeleccionadas =
-    modoSelect.value === "individual" &&
-    !esJugadora &&
-    jugadoraSelect.value === "__TODAS__";
+  const todasSeleccionadas = modoSelect.value === "individual" && !esJugadora && jugadoraSelect.value === "__TODAS__";
 
   if (todasSeleccionadas) {
     titulo.textContent = "Seleccioná una jugadora";
-
-    descripcion.textContent =
-      "Elegí una jugadora en el selector superior para consultar su rutina individual.";
-
-    $("nombreSeleccionado").textContent =
-      "División: " + divisionSelect.value + " · Todas las jugadoras";
-
+    descripcion.textContent = "Elegí una jugadora en el selector superior para consultar su rutina individual.";
+    $("nombreSeleccionado").textContent = "División: " + divisionSelect.value + " · Todas las jugadoras";
     $("estadoRutina").textContent = "Vista de consulta";
-
-    contenedor.innerHTML = `
-      <div class="sin-ejercicios">
-        Seleccioná una jugadora en la parte superior para abrir su rutina.
-      </div>
-    `;
-
+    contenedor.innerHTML = `<div class="sin-ejercicios">Seleccioná una jugadora en la parte superior para abrir su rutina.</div>`;
     return;
   }
 
   rutinaActual = obtenerRutinaActual();
-
   if (!rutinaActual) {
     titulo.textContent = "No hay una rutina disponible";
-
-    contenedor.innerHTML = `
-      <div class="sin-ejercicios">
-        No hay una rutina disponible para la selección actual.
-      </div>
-    `;
-
+    contenedor.innerHTML = `<div class="sin-ejercicios">No hay una rutina disponible para la selección actual.</div>`;
     return;
   }
 
@@ -4166,291 +3967,293 @@ function renderizarEditor() {
 
   semanasSelect.value = String(rutinaActual.semanas);
   tituloInput.value = rutinaActual.nombre || "";
+  rmPotencia1Input.value = rutinaActual.rmPotencia1 || "";
+  rmPotencia2Input.value = rutinaActual.rmPotencia2 || "";
+
   tituloInput.disabled = !puedeEditarEstructura();
   semanasSelect.disabled = !puedeEditarEstructura();
+  rmPotencia1Input.disabled = !puedeEditarValores();
+  rmPotencia2Input.disabled = !puedeEditarValores();
 
   titulo.textContent = rutinaActual.nombre || "Nueva rutina";
+  descripcion.textContent = "Potencia con ondulación por 3 días (Velocidad, Técnica, Pesado) y bloques de 2 a 7 semanas.";
 
-  descripcion.textContent =
-    "Los ejercicios se muestran uno debajo del otro. Principales: solo repeticiones. Complementarios: tiempo semanal con progresión automática.";
+  $("nombreSeleccionado").textContent = "División: " + divisionSelect.value + (modoSelect.value === "individual" ? " · " + nombreJugadora(obtenerJugadoraSeleccionada()) : "");
+  $("estadoRutina").textContent = rutinaActual.guardada ? "Rutina guardada" : "Borrador sin guardar";
 
-  $("nombreSeleccionado").textContent =
-    "División: " + divisionSelect.value +
-    (
-      modoSelect.value === "individual"
-        ? " · " + nombreJugadora(obtenerJugadoraSeleccionada())
-        : ""
-    );
-
-  $("estadoRutina").textContent =
-    rutinaActual.guardada
-      ? "Rutina guardada"
-      : "Borrador sin guardar";
-
-  $("avisoGeneral").classList.toggle(
-    "oculto",
-    !(esStaff && modoSelect.value === "general")
-  );
-
+  $("avisoGeneral").classList.toggle("oculto", !(esStaff && modoSelect.value === "general"));
   $("avisoJugador").classList.toggle("oculto", !esJugadora);
 
-  const principales = document.createElement("section");
-  principales.className = "grupo-editor";
-
-  principales.innerHTML = `
+  // GRUPO 1: POTENCIA
+  const grupoPotencia = document.createElement("section");
+  grupoPotencia.className = "grupo-editor";
+  grupoPotencia.innerHTML = `
     <div class="grupo-editor-cabecera">
-      <div class="numero-grupo-editor">01</div>
-      <div>
-        <h4>Ejercicios principales</h4>
-        <p>Los primeros cuatro ejercicios se programan por repeticiones, sin carga de peso.</p>
+      <div class="grupo-editor-info">
+        <div class="numero-grupo-editor">01</div>
+        <div>
+          <h4>Ejercicios de potencia (Ondulación 3 días / Bloque ${rutinaActual.semanas} semanas)</h4>
+          <p>Día 1: Velocidad (70-78%), Día 2: Técnica (60-70%), Día 3: Fuerza-Velocidad (80-92%).</p>
+        </div>
+      </div>
+      ${puedeEditarEstructura() ? `
+        <div class="acciones-grupo-editor">
+          <button type="button" class="boton boton-secundario" id="btnAgregarPotencia" style="padding: 6px 10px; font-size:10px;">+ Agregar ejercicio</button>
+          <button type="button" class="boton boton-peligro" id="btnQuitarPotencia" style="padding: 6px 10px; font-size:10px;" ${rutinaActual.potencia.length <= 1 ? 'disabled' : ''}>− Quitar</button>
+        </div>
+      ` : ''}
+    </div>
+    <div class="lista-ejercicios-editor" id="listaPotencia"></div>
+  `;
+
+  // GRUPO 2: PRINCIPALES
+  const grupoPrincipales = document.createElement("section");
+  grupoPrincipales.className = "grupo-editor";
+  grupoPrincipales.innerHTML = `
+    <div class="grupo-editor-cabecera">
+      <div class="grupo-editor-info">
+        <div class="numero-grupo-editor">02</div>
+        <div>
+          <h4>Ejercicios principales</h4>
+          <p>Fuerza principal programada por repeticiones con ondulación automática.</p>
+        </div>
       </div>
     </div>
     <div class="lista-ejercicios-editor" id="listaPrincipales"></div>
   `;
 
-  const complementarios = document.createElement("section");
-  complementarios.className = "grupo-editor";
-
-  complementarios.innerHTML = `
+  // GRUPO 3: COMPLEMENTARIOS
+  const grupoComplementarios = document.createElement("section");
+  grupoComplementarios.className = "grupo-editor";
+  grupoComplementarios.innerHTML = `
     <div class="grupo-editor-cabecera">
-      <div class="numero-grupo-editor">02</div>
-      <div>
-        <h4>Ejercicios complementarios</h4>
-        <p>Un tiempo base semanal genera automáticamente la progresión de 4 o 5 semanas.</p>
+      <div class="grupo-editor-info">
+        <div class="numero-grupo-editor">03</div>
+        <div>
+          <h4>Ejercicios complementarios</h4>
+          <p>Tiempo base semanal con progresión automática.</p>
+        </div>
       </div>
     </div>
     <div class="lista-ejercicios-editor" id="listaComplementarios"></div>
   `;
 
-  contenedor.append(principales, complementarios);
+  contenedor.append(grupoPotencia, grupoPrincipales, grupoComplementarios);
 
-  const listaPrincipales = $("listaPrincipales");
-  const listaComplementarios = $("listaComplementarios");
+  if (puedeEditarEstructura()) {
+    $("btnAgregarPotencia").addEventListener("click", () => {
+      if (rutinaActual.potencia.length >= 5) return;
+      rutinaActual.potencia.push(crearEjercicio(""));
+      guardarBorradorActual();
+      renderizarEditor();
+    });
+    $("btnQuitarPotencia").addEventListener("click", () => {
+      if (rutinaActual.potencia.length <= 1) return;
+      rutinaActual.potencia.pop();
+      guardarBorradorActual();
+      renderizarEditor();
+    });
+  }
 
-  rutinaActual.ejercicios.forEach((ejercicio, indice) => {
-    const esPrincipal = indice < 4;
-    const tarjeta = document.createElement("article");
-    tarjeta.className = "ejercicio-card";
-    tarjeta.id = "ejercicio-card-" + indice;
+  const renderizarCardsSeccion = (seccionNombre, listaDOM) => {
+    const lista = rutinaActual[seccionNombre];
+    const esPotencia = seccionNombre === "potencia";
+    const esPorRepeticiones = esPotencia || seccionNombre === "principales";
 
-    const baseTiempo = obtenerTiempoBaseEjercicio(ejercicio);
-    const camposSemana = esPrincipal ? "" : Array.from(
-      { length: rutinaActual.semanas },
-      (_, indiceSemana) => {
-        const numeroSemana = indiceSemana + 1;
-        const tiempo = calcularTiempoSemana(baseTiempo, numeroSemana);
-        const esBase = indiceSemana === 0;
+    lista.forEach((ejercicio, indice) => {
+      const tarjeta = document.createElement("article");
+      tarjeta.className = "ejercicio-card";
 
-        return `
-          <div class="dia-editor ${esBase ? "semana-tiempo-base" : "semana-tiempo-auto"}">
-            <div class="dia-editor-titulo">
-              <span>SEMANA ${numeroSemana}</span>
-              <span class="dia-editor-etiqueta">${esBase ? "BASE" : "AUTO"}</span>
+      const baseTiempo = obtenerTiempoBaseEjercicio(ejercicio);
+
+      let cuerpoHTML = "";
+      if (esPotencia) {
+        const estructuraSemanal = obtenerEstructuraPotenciaPorSemanas(rutinaActual.semanas);
+        const rmVal = Number(indice === 0 ? rutinaActual.rmPotencia1 : rutinaActual.rmPotencia2) || 0;
+
+        cuerpoHTML = `<div class="dias-editor" style="grid-template-columns: repeat(${Math.min(rutinaActual.semanas, 4)}, minmax(0, 1fr)); gap: 8px;">`;
+        estructuraSemanal.forEach((sem, sIdx) => {
+          const p1 = sem.d1;
+          const p2 = sem.d2;
+          const p3 = sem.d3;
+          const peso1 = rmVal > 0 ? `(${Math.round(rmVal * p1 / 100)} kg)` : "";
+          const peso2 = rmVal > 0 ? `(${Math.round(rmVal * p2 / 100)} kg)` : "";
+          const peso3 = rmVal > 0 ? `(${Math.round(rmVal * p3 / 100)} kg)` : "";
+
+          cuerpoHTML += `
+            <div class="dia-editor" style="padding: 8px;">
+              <div class="dia-editor-titulo" style="margin-bottom:6px; font-size:9px;">
+                <span>SEM ${sem.numero} (${sem.nombre})</span>
+              </div>
+              <div style="font-size:9px; color:#555; line-height:1.4;">
+                <div><strong>D1:</strong> ${p1}% ${peso1}</div>
+                <div><strong>D2:</strong> ${p2}% ${peso2}</div>
+                <div><strong>D3:</strong> ${p3}% ${peso3}</div>
+              </div>
             </div>
-
-            <div class="dato-editor">
-              <label for="${esBase ? `tiempo-base-${indice}` : `tiempo-semana-${indice}-${numeroSemana}`}" >
-                ${esBase ? "TIEMPO BASE · SEGUNDOS" : "TIEMPO CALCULADO"}
-              </label>
-              ${esBase ? `
-                <div class="entrada-tiempo-unidad">
-                  <input
-                    id="tiempo-base-${indice}"
-                    type="number"
-                    min="0"
-                    max="3600"
-                    step="1"
-                    inputmode="numeric"
-                    placeholder="Ej. 15"
-                    value="${baseTiempo === null ? "" : escaparHTML(String(baseTiempo))}"
-                    data-tiempo-base="${indice}"
-                    ${puedeEditarValores() ? "" : "disabled"}
-                  >
-                  <span>″</span>
-                </div>
-              ` : `
-                <input
-                  id="tiempo-semana-${indice}-${numeroSemana}"
-                  type="text"
-                  value="${escaparHTML(formatearTiempo(tiempo))}"
-                  data-progresion-tiempo="${indice}"
-                  data-semana="${numeroSemana}"
-                  aria-label="Tiempo calculado para semana ${numeroSemana}"
-                  readonly
-                >
-              `}
-            </div>
-          </div>
-        `;
-      }
-    ).join("");
-
-    tarjeta.innerHTML = `
-      <div class="ejercicio-card-cabecera">
-        <div class="ejercicio-numero">${String(indice + 1).padStart(2,"0")}</div>
-
-        <div class="ejercicio-identidad">
-          <label for="nombre-ejercicio-${indice}">
-            ${esPrincipal ? "EJERCICIO PRINCIPAL" : "EJERCICIO COMPLEMENTARIO"}
-          </label>
-
-          <input
-            id="nombre-ejercicio-${indice}"
-            type="text"
-            maxlength="120"
-            placeholder="Escribí el nombre del ejercicio..."
-            value="${escaparHTML(ejercicio.nombre)}"
-            data-ejercicio-nombre="${indice}"
-            ${puedeEditarEstructura() ? "" : "disabled"}
-          >
-        </div>
-      </div>
-
-      <div class="ejercicio-cuerpo">
-        ${esPrincipal ? `
+          `;
+        });
+        cuerpoHTML += `</div>`;
+      } else if (seccionNombre === "principales") {
+        cuerpoHTML = `
           <div class="referencia-repeticiones">
             <div class="referencia-repeticiones-info">
-              <label for="repeticiones-base-${indice}">REPETICIONES INICIALES</label>
-              <small>
-                La cantidad de repeticiones de cada semana se calcula automáticamente desde este valor.
-                No se prescribe peso en esta rutina.
-              </small>
+              <label for="rep-base-${seccionNombre}-${indice}">REPETICIONES INICIALES</label>
+              <small>La ondulación semanal de repeticiones se calcula automáticamente desde este valor.</small>
             </div>
-
             <input
-              id="repeticiones-base-${indice}"
+              id="rep-base-${seccionNombre}-${indice}"
               type="number"
               min="1"
               max="30"
               step="1"
-              aria-label="Repeticiones iniciales del ejercicio ${indice + 1}"
               value="${escaparHTML(ejercicio.repeticionesBase)}"
-              data-repeticiones-base="${indice}"
+              data-rep-base-seccion="${seccionNombre}"
+              data-rep-base-indice="${indice}"
               ${puedeEditarEstructura() ? "" : "disabled"}
-            />
+            >
           </div>
-        ` : `
-          <div class="aviso aviso-progresion-tiempo">
-            Cargá el tiempo de la semana 1. La progresión se calcula así: semana 2 +5″, semana 3 vuelve al valor base, semana 4 +10″ y semana 5 mantiene el valor de la semana 4.
-          </div>
-          <div class="dias-editor tiempo-semanal-grid">
-            ${camposSemana}
-          </div>
-        `}
-      </div>
-    `;
+        `;
+      } else {
+        const camposSemana = Array.from({ length: rutinaActual.semanas }, (_, sIdx) => {
+          const numSem = sIdx + 1;
+          const tiempo = calcularTiempoSemana(baseTiempo, numSem);
+          const esBase = sIdx === 0;
+          return `
+            <div class="dia-editor ${esBase ? "semana-tiempo-base" : "semana-tiempo-auto"}">
+              <div class="dia-editor-titulo">
+                <span>SEMANA ${numSem}</span>
+                <span class="dia-editor-etiqueta">${esBase ? "BASE" : "AUTO"}</span>
+              </div>
+              <div class="dato-editor">
+                <label>${esBase ? "TIEMPO BASE · SEG" : "TIEMPO CALC"}</label>
+                ${esBase ? `
+                  <div class="entrada-tiempo-unidad">
+                    <input
+                      type="number"
+                      min="0"
+                      max="3600"
+                      step="1"
+                      value="${baseTiempo === null ? "" : escaparHTML(String(baseTiempo))}"
+                      data-tiempo-base-seccion="${seccionNombre}"
+                      data-tiempo-base-indice="${indice}"
+                      ${puedeEditarValores() ? "" : "disabled"}
+                    >
+                    <span>″</span>
+                  </div>
+                ` : `
+                  <input
+                    type="text"
+                    value="${escaparHTML(formatearTiempo(tiempo))}"
+                    readonly
+                  >
+                `}
+              </div>
+            </div>
+          `;
+        }).join("");
 
-    if (esPrincipal) {
-      listaPrincipales.appendChild(tarjeta);
-    } else {
-      listaComplementarios.appendChild(tarjeta);
-    }
-  });
+        cuerpoHTML = `
+          <div class="aviso aviso-progresion-tiempo">Progreso automático de tiempo semanal.</div>
+          <div class="dias-editor tiempo-semanal-grid">${camposSemana}</div>
+        `;
+      }
 
-  contenedor.querySelectorAll("[data-ejercicio-nombre]").forEach(input => {
+      tarjeta.innerHTML = `
+        <div class="ejercicio-card-cabecera">
+          <div class="ejercicio-numero">${String(indice + 1).padStart(2,"0")}</div>
+          <div class="ejercicio-identidad">
+            <label for="nombre-${seccionNombre}-${indice}">
+              ${esPotencia ? "EJERCICIO DE POTENCIA" : seccionNombre === "principales" ? "EJERCICIO PRINCIPAL" : "EJERCICIO COMPLEMENTARIO"}
+            </label>
+            <input
+              id="nombre-${seccionNombre}-${indice}"
+              type="text"
+              maxlength="120"
+              placeholder="Nombre del ejercicio..."
+              value="${escaparHTML(ejercicio.nombre)}"
+              data-nombre-seccion="${seccionNombre}"
+              data-nombre-indice="${indice}"
+              ${puedeEditarEstructura() ? "" : "disabled"}
+            >
+          </div>
+        </div>
+        <div class="ejercicio-cuerpo">
+          ${cuerpoHTML}
+        </div>
+      `;
+      listaDOM.appendChild(tarjeta);
+    });
+  };
+
+  renderizarCardsSeccion("potencia", $("listaPotencia"));
+  renderizarCardsSeccion("principales", $("listaPrincipales"));
+  renderizarCardsSeccion("complementarios", $("listaComplementarios"));
+
+  contenedor.querySelectorAll("[data-nombre-seccion]").forEach(input => {
     input.addEventListener("change", () => {
-      const indice = Number(input.dataset.ejercicioNombre);
-
-      if (!rutinaActual || !rutinaActual.ejercicios[indice]) return;
-
-      rutinaActual.ejercicios[indice].nombre = input.value.trim();
+      const seccion = input.dataset.nombreSeccion;
+      const indice = Number(input.dataset.nombreIndice);
+      if (!rutinaActual || !rutinaActual[seccion][indice]) return;
+      rutinaActual[seccion][indice].nombre = input.value.trim();
       guardarBorradorActual();
     });
   });
 
-  contenedor.querySelectorAll("[data-repeticiones-base]").forEach(input => {
+  contenedor.querySelectorAll("[data-rep-base-seccion]").forEach(input => {
     input.addEventListener("change", () => {
-      const indice = Number(input.dataset.repeticionesBase);
-
-      if (!rutinaActual || !rutinaActual.ejercicios[indice]) return;
-
+      const seccion = input.dataset.repBaseSeccion;
+      const indice = Number(input.dataset.repBaseIndice);
+      if (!rutinaActual || !rutinaActual[seccion][indice]) return;
       let valor = Number(input.value);
-
       if (!Number.isFinite(valor) || valor < 1) valor = 1;
       if (valor > 30) valor = 30;
-
-      valor = Math.round(valor);
-
-      rutinaActual.ejercicios[indice].repeticionesBase = valor;
-      input.value = String(valor);
-
+      rutinaActual[seccion][indice].repeticionesBase = Math.round(valor);
+      input.value = String(rutinaActual[seccion][indice].repeticionesBase);
       guardarBorradorActual();
-
-      mostrarEstado(
-        "Repeticiones iniciales actualizadas. La periodización se recalculará al guardar."
-      );
     });
   });
 
-  contenedor.querySelectorAll("[data-tiempo-base]").forEach(input => {
-    const indiceEjercicio = Number(input.dataset.tiempoBase);
-
-    input.addEventListener("input", () => {
-      if (!rutinaActual || !rutinaActual.ejercicios[indiceEjercicio]) return;
-
-      const ejercicio = rutinaActual.ejercicios[indiceEjercicio];
-      const valor = input.value === ""
-        ? null
-        : leerSegundosTiempo(input.value);
-
-      ejercicio.tiempoBase = valor === null ? "" : String(valor);
-
-      contenedor.querySelectorAll(`[data-progresion-tiempo="${indiceEjercicio}"]`).forEach(campo => {
-        const semana = Number(campo.dataset.semana);
-        const tiempo = calcularTiempoSemana(ejercicio.tiempoBase, semana);
-        campo.value = formatearTiempo(tiempo);
-      });
-    });
-
+  contenedor.querySelectorAll("[data-tiempo-base-seccion]").forEach(input => {
+    const seccion = input.dataset.tiempoBaseSeccion;
+    const indice = Number(input.dataset.tiempoBaseIndice);
     input.addEventListener("change", () => {
-      if (!rutinaActual || !rutinaActual.ejercicios[indiceEjercicio]) return;
-
-      const valor = input.value === ""
-        ? ""
-        : String(Math.min(3600, Math.max(0, leerSegundosTiempo(input.value) ?? 0)));
-
-      rutinaActual.ejercicios[indiceEjercicio].tiempoBase = valor;
+      if (!rutinaActual || !rutinaActual[seccion][indice]) return;
+      const valor = input.value === "" ? "" : String(Math.min(3600, Math.max(0, leerSegundosTiempo(input.value) ?? 0)));
+      rutinaActual[seccion][indice].tiempoBase = valor;
       input.value = valor;
-
       guardarBorradorActual();
-      mostrarEstado("Tiempo base actualizado. La progresión semanal se recalculó automáticamente.");
+      renderizarEditor();
     });
   });
 }
 
 /* =====================================================
-   GUARDAR BORRADOR
+   GUARDAR BORRADOR Y CONFIG
 ===================================================== */
 
 function guardarBorradorActual() {
   if (!rutinaActual) return;
-
-  rutinaActual.semanas = Number(semanasSelect.value) === 4 ? 4 : 5;
+  rutinaActual.semanas = Number(semanasSelect.value) || 4;
+  rutinaActual.rmPotencia1 = rmPotencia1Input.value.trim();
+  rutinaActual.rmPotencia2 = rmPotencia2Input.value.trim();
   rutinaActual.actualizada = new Date().toISOString();
 
   const division = divisionSelect.value;
-
   if (modoSelect.value === "general" && esStaff) {
     const clave = claveGeneral(division);
-
     asegurarRutinasGenerales(division);
-
     db[clave][indiceActual] = copiarObjeto(rutinaActual);
     guardarDB();
-
     if (rutinaActual.guardada) {
       sincronizarRutinaGeneral(division, indiceActual);
       renderizarBiblioteca();
     }
   } else if (modoSelect.value === "individual" && puedeEditarValores()) {
     const jugadora = obtenerJugadoraSeleccionada();
-
     if (!jugadora) return;
-
     asegurarRutinasIndividuales(jugadora);
-
     const clave = claveIndividual(division, idJugadora(jugadora));
-
     db[clave][indiceActual] = copiarObjeto(rutinaActual);
     guardarDB();
   }
@@ -4458,24 +4261,19 @@ function guardarBorradorActual() {
 
 function cambiarDuracion() {
   if (!puedeEditarEstructura() || !rutinaActual) return;
-
-  rutinaActual.semanas = Number(semanasSelect.value) === 4 ? 4 : 5;
-
+  rutinaActual.semanas = Number(semanasSelect.value) || 4;
   guardarBorradorActual();
   renderizarEditor();
-
-  mostrarEstado("Duración actualizada. La periodización se ajustará al guardar.");
+  mostrarEstado("Duración del bloque actualizada.");
 }
 
 /* =====================================================
-   GUARDAR RUTINA DEFINITIVAMENTE
+   GUARDAR RUTINA DEFINITIVA
 ===================================================== */
 
 function guardarRutinaDefinitiva() {
   if (!esStaff || modoSelect.value !== "general") return;
-
   const titulo = tituloInput.value.trim();
-
   if (!titulo) {
     alert("Escribí un título para identificar la rutina.");
     tituloInput.focus();
@@ -4483,86 +4281,39 @@ function guardarRutinaDefinitiva() {
   }
 
   const rutina = obtenerRutinaActual();
-
   if (!rutina) return;
 
   rutina.nombre = titulo;
-  rutina.semanas = Number(semanasSelect.value) === 4 ? 4 : 5;
-
-  rutina.ejercicios.forEach((ejercicio, indice) => {
-    if (indice < 4) {
-      const base = Number(ejercicio.repeticionesBase);
-
-      ejercicio.repeticionesBase =
-        Number.isFinite(base) && base >= 1
-          ? Math.min(30, Math.round(base))
-          : 10;
-      ejercicio.tiempoBase = "";
-
-      ejercicio.dias.forEach(dia => {
-        dia.peso = "";
-        dia.tiempo = "";
-      });
-    } else {
-      ejercicio.repeticionesBase = 10;
-      const tiempo = obtenerTiempoBaseEjercicio(ejercicio);
-      ejercicio.tiempoBase = tiempo === null ? "" : String(tiempo);
-
-      ejercicio.dias.forEach(dia => {
-        dia.peso = "";
-        dia.tiempo = "";
-        dia.repeticiones = "";
-      });
-    }
-  });
+  rutina.semanas = Number(semanasSelect.value) || 4;
+  rutina.rmPotencia1 = rmPotencia1Input.value.trim();
+  rutina.rmPotencia2 = rmPotencia2Input.value.trim();
 
   rutina.guardada = true;
   rutina.actualizada = new Date().toISOString();
 
   const division = divisionSelect.value;
   const clave = claveGeneral(division);
-
   asegurarRutinasGenerales(division);
-
   db[clave][indiceActual] = normalizarRutina(copiarObjeto(rutina));
 
   if (!guardarDB()) return;
-
   sincronizarRutinaGeneral(division, indiceActual);
-
   rutinaActual = db[clave][indiceActual];
 
   renderizarEditor();
   renderizarBiblioteca();
-
-  mostrarEstado(
-    "Rutina “" + titulo + "” guardada. La periodización se generó correctamente."
-  );
-
-  $("panelBiblioteca").scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-  });
+  mostrarEstado("Rutina “" + titulo + "” guardada con éxito.");
+  $("panelBiblioteca").scrollIntoView({ behavior: "smooth", block: "start" });
 }
-
-/* =====================================================
-   CREAR NUEVA RUTINA
-===================================================== */
 
 function crearNuevaRutina() {
   if (!esStaff || modoSelect.value !== "general") return;
-
   const division = divisionSelect.value;
-
   asegurarRutinasGenerales(division);
-
   const clave = claveGeneral(division);
   const rutinas = db[clave];
 
-  let indiceLibre = rutinas.findIndex(rutina =>
-    !rutina.guardada && !rutinaTieneDatos(rutina)
-  );
-
+  let indiceLibre = rutinas.findIndex(r => !r.guardada && !rutinaTieneDatos(r));
   if (indiceLibre < 0) {
     indiceLibre = rutinas.length;
     rutinas.push(crearRutina());
@@ -4570,118 +4321,103 @@ function crearNuevaRutina() {
 
   indiceActual = indiceLibre;
   rutinaActual = crearRutina();
-
   db[clave][indiceActual] = copiarObjeto(rutinaActual);
   guardarDB();
 
   tituloInput.value = "";
-  semanasSelect.value = "5";
+  semanasSelect.value = "4";
+  rmPotencia1Input.value = "";
+  rmPotencia2Input.value = "";
 
   renderizarEditor();
   renderizarBiblioteca();
-
-  mostrarEstado(
-    "Nueva rutina creada. Completá los nombres y los datos de los ejercicios."
-  );
-
+  mostrarEstado("Nueva rutina creada.");
   tituloInput.focus();
-
-  $("panelEditorRutina").scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-  });
+  $("panelEditorRutina").scrollIntoView({ behavior: "smooth", block: "start" });
 }
-
-/* =====================================================
-   APLICAR RUTINA A JUGADORAS
-===================================================== */
 
 function aplicarRutinaAJugadoras() {
   if (!esStaff || modoSelect.value !== "general") return;
-
   const rutina = obtenerRutinaActual();
-
   if (!rutina || !rutina.guardada) {
     alert("Primero guardá la rutina general.");
     return;
   }
-
   const division = divisionSelect.value;
-
-  if (!confirm(
-    "¿Aplicar la estructura periodizada de “" +
-    rutina.nombre +
-    "” a las jugadoras de " + division +
-    "? Se intentarán conservar sus tiempos semanales personales."
-  )) {
-    return;
-  }
+  if (!confirm("¿Aplicar la estructura de “" + rutina.nombre + "” a las jugadoras de " + division + "?")) return;
 
   sincronizarRutinaGeneral(division, indiceActual);
   renderizarEditor();
   renderizarBiblioteca();
-
-  mostrarEstado(
-    "Rutina sincronizada con las jugadoras de " + division + "."
-  );
+  mostrarEstado("Rutina sincronizada con las jugadoras.");
 }
 
 /* =====================================================
-   PLANILLA COMPLETA DE PERIODIZACIÓN
+   PLANILLA COMPLETA DE PERIODIZACIÓN / PDF
 ===================================================== */
 
 function construirPlanillaHTML(rutina, division, cantidadPersonas = 1) {
   const normalizada = normalizarRutina(copiarObjeto(rutina));
-  const plantilla = obtenerPlantillaPeriodizacion(normalizada.semanas);
-  const cantidadCopias = Math.min(
-    MAX_PERSONAS_RUTINA,
-    Math.max(1, Number.parseInt(cantidadPersonas, 10) || 1)
-  );
+  const totalSemanas = normalizada.semanas;
+  const cantidadCopias = Math.min(MAX_PERSONAS_RUTINA, Math.max(1, Number.parseInt(cantidadPersonas, 10) || 1));
 
   const nombreSeguro = valor => {
     const nombre = String(valor || "").trim();
-    return nombre
-      ? escaparHTML(nombre)
-      : '<span class="ejercicio-sin-nombre">Ejercicio pendiente</span>';
+    return nombre ? escaparHTML(nombre) : '<span class="ejercicio-sin-nombre">Ejercicio pendiente</span>';
   };
 
-  const encabezadosSemanasPrincipales = plantilla.map(semana => {
-    const cantidadDias = semana.repeticiones.length;
-    return `<th class="semana-planilla" colspan="${cantidadDias}">SEMANA ${semana.numero}</th>`;
-  }).join("");
+  // Planilla Potencia: 3 días por cada semana
+  const estructuraPotencia = obtenerEstructuraPotenciaPorSemanas(totalSemanas);
+  const encSemPotencia = estructuraPotencia.map(sem => `<th class="semana-planilla" colspan="3">SEM ${sem.numero} (${sem.nombre})</th>`).join("");
+  const encDiasPotencia = estructuraPotencia.map(() => `<th>D1</th><th>D2</th><th>D3</th>`).join("");
 
-  const encabezadosDiasPrincipales = plantilla.map(semana =>
-    semana.repeticiones.map((_, indiceDia) => `<th>D${indiceDia + 1}</th>`).join("")
-  ).join("");
-
-  let filasPrincipales = "";
-  normalizada.ejercicios.slice(0, 4).forEach((ejercicio, indiceLocal) => {
-    const periodizacion = generarPeriodizacionEjercicio(
-      normalizada,
-      ejercicio,
-      indiceLocal
-    );
-
+  let filasPotencia = "";
+  normalizada.potencia.forEach((ejercicio, idxLocal) => {
+    const rmVal = Number(idxLocal === 0 ? normalizada.rmPotencia1 : normalizada.rmPotencia2) || 0;
     let celdas = "";
-    periodizacion.forEach(semana => {
-      semana.dias.forEach(dia => {
-        const valor = dia && dia.repeticiones !== undefined && dia.repeticiones !== null
-          ? String(dia.repeticiones).trim()
-          : "";
-
-        if (valor) {
-          celdas += `
-            <td class="celda-repeticiones">
-              <span class="valor-repeticiones">${escaparHTML(valor)}</span>
-              <span class="casillero-peso" aria-label="Casillero para anotar el peso usado" title="Peso utilizado"></span>
-            </td>
-          `;
-        } else {
-          celdas += '<td class="celda-repeticiones"></td>';
-        }
+    estructuraPotencia.forEach(sem => {
+      [sem.d1, sem.d2, sem.d3].forEach(pct => {
+        const pesoKg = rmVal > 0 ? Math.round(rmVal * pct / 100) : "";
+        celdas += `
+          <td class="celda-repeticiones">
+            <span class="valor-porcentaje">${pct}%</span>
+            ${pesoKg !== "" ? `<span class="valor-repeticiones" style="font-size:9px;">${pesoKg}kg</span>` : ""}
+            <span class="casillero-peso" title="Peso realizado"></span>
+          </td>
+        `;
       });
     });
+    filasPotencia += `
+      <tr class="fila-metrica">
+        <th class="ejercicio-planilla">${nombreSeguro(ejercicio.nombre)}</th>
+        ${celdas}
+      </tr>
+    `;
+  });
 
+  // Planilla Principales
+  const plantillaPrin = obtenerPlantillaPeriodizacion(totalSemanas);
+  const encSemPrin = plantillaPrin.map(sem => `<th class="semana-planilla" colspan="${sem.repeticiones.length}">SEM ${sem.numero}</th>`).join("");
+  const encDiasPrin = plantillaPrin.map(sem => sem.repeticiones.map((_, i) => `<th>D${i + 1}</th>`).join("")).join("");
+
+  let filasPrincipales = "";
+  normalizada.principales.forEach((ejercicio, idxLocal) => {
+    const periodizacion = plantillaPrin.map(semana => ({
+      dias: semana.repeticiones.map(ref => ({
+        repeticiones: calcularRepeticiones(ref, ejercicio.repeticionesBase)
+      }))
+    }));
+    let celdas = "";
+    periodizacion.forEach(sem => {
+      sem.dias.forEach(dia => {
+        celdas += `
+          <td class="celda-repeticiones">
+            <span class="valor-repeticiones">${escaparHTML(dia.repeticiones)}</span>
+            <span class="casillero-peso" title="Peso utilizado"></span>
+          </td>
+        `;
+      });
+    });
     filasPrincipales += `
       <tr class="fila-metrica">
         <th class="ejercicio-planilla">${nombreSeguro(ejercicio.nombre)}</th>
@@ -4690,24 +4426,15 @@ function construirPlanillaHTML(rutina, division, cantidadPersonas = 1) {
     `;
   });
 
-  const encabezadosSemanasComplementarios = plantilla.map(semana => `
-    <th class="semana-planilla">SEMANA ${semana.numero}</th>
-  `).join("");
-
+  // Planilla Complementarios
+  const encSemComp = estructuraPotencia.map(sem => `<th class="semana-planilla">SEM ${sem.numero}</th>`).join("");
   let filasComplementarias = "";
-  normalizada.ejercicios.slice(4, 8).forEach((ejercicio, indiceLocal) => {
-    const indiceEjercicio = indiceLocal + 4;
-    const periodizacion = generarPeriodizacionEjercicio(
-      normalizada,
-      ejercicio,
-      indiceEjercicio
-    );
-
-    const celdas = periodizacion.map(semana => {
-      const valor = String(semana.dias[0]?.tiempo ?? "").trim();
-      return `
-        <td class="${valor ? "" : "valor-vacio"}">${valor ? escaparHTML(valor) : "—"}</td>
-      `;
+  normalizada.complementarios.forEach((ejercicio, idxLocal) => {
+    const baseTiempo = obtenerTiempoBaseEjercicio(ejercicio);
+    const celdas = estructuraPotencia.map(sem => {
+      const tiempo = calcularTiempoSemana(baseTiempo, sem.numero);
+      const valor = tiempo !== null ? `${tiempo}″` : "—";
+      return `<td>${escaparHTML(valor)}</td>`;
     }).join("");
 
     filasComplementarias += `
@@ -4721,15 +4448,31 @@ function construirPlanillaHTML(rutina, division, cantidadPersonas = 1) {
   const cuerpoPersonaHTML = `
     <div class="planilla-persona">
       <section class="planilla-bloque">
+        <div class="planilla-bloque-titulo">EJERCICIOS DE POTENCIA (ONDULACIÓN 3 DÍAS)</div>
+        <div class="planilla-scroll">
+          <table class="tabla-planilla">
+            <thead>
+              <tr>
+                <th rowspan="2" class="ejercicio-planilla">EJERCICIO</th>
+                ${encSemPotencia}
+              </tr>
+              <tr>${encDiasPotencia}</tr>
+            </thead>
+            <tbody>${filasPotencia}</tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="planilla-bloque">
         <div class="planilla-bloque-titulo">EJERCICIOS PRINCIPALES</div>
         <div class="planilla-scroll">
           <table class="tabla-planilla tabla-principales">
             <thead>
               <tr>
                 <th rowspan="2" class="ejercicio-planilla">EJERCICIO</th>
-                ${encabezadosSemanasPrincipales}
+                ${encSemPrin}
               </tr>
-              <tr>${encabezadosDiasPrincipales}</tr>
+              <tr>${encDiasPrin}</tr>
             </thead>
             <tbody>${filasPrincipales}</tbody>
           </table>
@@ -4743,7 +4486,7 @@ function construirPlanillaHTML(rutina, division, cantidadPersonas = 1) {
             <thead>
               <tr>
                 <th class="ejercicio-planilla">EJERCICIO</th>
-                ${encabezadosSemanasComplementarios}
+                ${encSemComp}
               </tr>
             </thead>
             <tbody>${filasComplementarias}</tbody>
@@ -4769,7 +4512,7 @@ function construirPlanillaHTML(rutina, division, cantidadPersonas = 1) {
         <div class="planilla-cabecera-texto">
           <strong>ADIUR FEMENINO</strong>
           <span>${escaparHTML(normalizada.nombre || "Rutina sin título")}</span>
-          <small>${escaparHTML(division.toUpperCase())}</small>
+          <small>${escaparHTML(division.toUpperCase())} · Bloque ${totalSemanas} Semanas</small>
         </div>
       </div>
 
@@ -4786,69 +4529,25 @@ function construirPlanillaHTML(rutina, division, cantidadPersonas = 1) {
 
 function construirMiniatura(rutina) {
   const normalizada = normalizarRutina(copiarObjeto(rutina));
-  const plantilla = obtenerPlantillaPeriodizacion(normalizada.semanas);
+  const estructuraPotencia = obtenerEstructuraPotenciaPorSemanas(normalizada.semanas);
+  const encabezados = estructuraPotencia.map(sem => `<th title="Semana ${sem.numero}">S${sem.numero}</th>`).join("");
 
-  const encabezados = plantilla.map(semana => `
-    <th title="SEMANA ${semana.numero}">
-      S${semana.numero}
-    </th>
-  `).join("");
-
-  function crearFilas(indices, titulo) {
-    let filas = `
-      <tr class="mini-bloque">
-        <td colspan="${plantilla.length + 1}">${titulo}</td>
-      </tr>
-    `;
-
-    indices.forEach(indice => {
-      const ejercicio = normalizada.ejercicios[indice];
-
-      if (!ejercicio) return;
-
-      const esPrincipal = indice < 4;
+  function crearFilasSimples(seccionLista, titulo) {
+    let filas = `<tr class="mini-bloque"><td colspan="${estructuraPotencia.length + 1}">${titulo}</td></tr>`;
+    seccionLista.forEach(ejercicio => {
       const nombre = String(ejercicio.nombre || "").trim();
-
-      const periodizacion = generarPeriodizacionEjercicio(
-        normalizada,
-        ejercicio,
-        indice
-      );
-
-      const celdas = periodizacion.map(semana => {
-        const contenido = esPrincipal
-          ? semana.dias.map(dia => dia.repeticiones).join("·")
-          : semana.dias.map(dia => dia.tiempo || "—").join("·");
-
-        return `
-          <td title="Semana ${semana.numero}: ${escaparHTML(contenido)}">
-            ${escaparHTML(contenido || "—")}
-          </td>
-        `;
-      }).join("");
-
-      filas += `
-        <tr>
-          <td
-            class="mini-ejercicio"
-            title="${escaparHTML(nombre || "Ejercicio pendiente")}"
-          >
-            ${escaparHTML(nombre || "Pendiente")}
-          </td>
-          ${celdas}
-        </tr>
-      `;
+      filas += `<tr><td class="mini-ejercicio">${escaparHTML(nombre || "Pendiente")}</td>`;
+      estructuraPotencia.forEach(() => {
+        filas += `<td class="mini-vacio">—</td>`;
+      });
+      filas += `</tr>`;
     });
-
     return filas;
   }
 
   return `
     <div class="miniatura-vista">
-      <div class="miniatura-vista-titulo">
-        ${"PERIODIZACIÓN · REPETICIONES Y TIEMPOS"}
-      </div>
-
+      <div class="miniatura-vista-titulo">BLOQUE ${normalizada.semanas} SEMANAS</div>
       <table class="mini-tabla">
         <thead>
           <tr>
@@ -4856,10 +4555,10 @@ function construirMiniatura(rutina) {
             ${encabezados}
           </tr>
         </thead>
-
         <tbody>
-          ${crearFilas([0,1,2,3], "PRINCIPALES · REPETICIONES")}
-          ${crearFilas([4,5,6,7], "COMPLEMENTARIOS · TIEMPO")}
+          ${crearFilasSimples(normalizada.potencia, "POTENCIA")}
+          ${crearFilasSimples(normalizada.principales, "PRINCIPALES")}
+          ${crearFilasSimples(normalizada.complementarios, "COMPLEMENTARIOS")}
         </tbody>
       </table>
     </div>
@@ -4869,44 +4568,25 @@ function construirMiniatura(rutina) {
 function renderizarBiblioteca() {
   const contenedor = $("listaRutinasGuardadas");
   const division = divisionSelect.value;
-
   asegurarRutinasGenerales(division);
 
   const rutinas = db[claveGeneral(division)] || [];
-
   const guardadas = rutinas
-    .map((rutina, indice) => ({
-      rutina: normalizarRutina(rutina),
-      indice
-    }))
-    .filter(elemento => elemento.rutina.guardada)
-    .sort((a,b) => a.indice - b.indice);
+    .map((rutina, indice) => ({ rutina: normalizarRutina(rutina), indice }))
+    .filter(el => el.rutina.guardada)
+    .sort((a, b) => a.indice - b.indice);
 
-  $("contadorBiblioteca").textContent =
-    guardadas.length + (
-      guardadas.length === 1
-        ? " rutina guardada"
-        : " rutinas guardadas"
-    );
+  $("contadorBiblioteca").textContent = guardadas.length + (guardadas.length === 1 ? " rutina guardada" : " rutinas guardadas");
 
   const busqueda = normalizar($("buscarRutina").value);
-
-  const filtradas = guardadas.filter(elemento =>
-    normalizar(elemento.rutina.nombre).includes(busqueda)
-  );
+  const filtradas = guardadas.filter(el => normalizar(el.rutina.nombre).includes(busqueda));
 
   if (!filtradas.length) {
     contenedor.innerHTML = `
       <div class="sin-rutinas">
-        ${guardadas.length
-          ? "No se encontraron rutinas con ese título."
-          : "Todavía no hay rutinas guardadas para esta división."}
-        <br>
-        Para comenzar, presioná <strong>+ Nueva rutina</strong>,
-        completá los ejercicios y elegí <strong>Guardar rutina</strong>.
+        ${guardadas.length ? "No se encontraron rutinas con ese título." : "Todavía no hay rutinas guardadas para esta división."}
       </div>
     `;
-
     return;
   }
 
@@ -4918,198 +4598,121 @@ function renderizarBiblioteca() {
       role="button"
       aria-label="Abrir rutina ${escaparHTML(rutina.nombre)}"
     >
-
       <div class="acciones-miniatura">
         ${esStaff ? `
-          <button
-            type="button"
-            class="accion-mini"
-            data-editar-rutina="${indice}"
-            title="Editar rutina"
-            aria-label="Editar rutina"
-          >✎</button>
-
-          <button
-            type="button"
-            class="accion-mini eliminar"
-            data-eliminar-rutina="${indice}"
-            title="Eliminar rutina"
-            aria-label="Eliminar rutina"
-          >×</button>
+          <button type="button" class="accion-mini" data-editar-rutina="${indice}" title="Editar rutina">✎</button>
+          <button type="button" class="accion-mini eliminar" data-eliminar-rutina="${indice}" title="Eliminar rutina">×</button>
         ` : ""}
       </div>
-
       <div class="miniatura-cabecera">
         <div class="miniatura-club">ADIUR FEMENINO</div>
-
         <h4>${escaparHTML(rutina.nombre || "Rutina sin título")}</h4>
-
         <div class="miniatura-detalle">
           <span>${escaparHTML(division)}</span>
           <span>${rutina.semanas} semanas</span>
-          <span>8 ejercicios</span>
         </div>
       </div>
-
       ${construirMiniatura(rutina)}
-
       <div class="miniatura-pie">
         <span>Rutina guardada</span>
         <span>Ver planilla ↗</span>
       </div>
-
     </article>
   `).join("");
 
   contenedor.querySelectorAll("[data-ver-rutina]").forEach(tarjeta => {
-    tarjeta.addEventListener("click", evento => {
-      if (evento.target.closest("button")) return;
+    tarjeta.addEventListener("click", e => {
+      if (e.target.closest("button")) return;
       abrirVistaAmpliada(Number(tarjeta.dataset.verRutina));
-    });
-
-    tarjeta.addEventListener("keydown", evento => {
-      if (
-        evento.target === tarjeta &&
-        (evento.key === "Enter" || evento.key === " ")
-      ) {
-        evento.preventDefault();
-        abrirVistaAmpliada(Number(tarjeta.dataset.verRutina));
-      }
     });
   });
 
   contenedor.querySelectorAll("[data-editar-rutina]").forEach(boton => {
-    boton.addEventListener("click", evento => {
-      evento.stopPropagation();
+    boton.addEventListener("click", e => {
+      e.stopPropagation();
       editarRutinaGuardada(Number(boton.dataset.editarRutina));
     });
   });
 
   contenedor.querySelectorAll("[data-eliminar-rutina]").forEach(boton => {
-    boton.addEventListener("click", evento => {
-      evento.stopPropagation();
+    boton.addEventListener("click", e => {
+      e.stopPropagation();
       eliminarRutinaGuardada(Number(boton.dataset.eliminarRutina));
     });
   });
 }
 
 /* =====================================================
-   EDITAR RUTINA GUARDADA
+   EDITAR / ELIMINAR / VISTA AMPLIADA
 ===================================================== */
 
 function editarRutinaGuardada(indice) {
   if (!esStaff) return;
-
   const division = divisionSelect.value;
-
   asegurarRutinasGenerales(division);
 
   const rutina = db[claveGeneral(division)][indice];
-
-  if (!rutina || !rutina.guardada) {
-    alert("Esta rutina ya no está guardada.");
-    renderizarBiblioteca();
-    return;
-  }
+  if (!rutina || !rutina.guardada) return;
 
   indiceActual = indice;
   modoSelect.value = "general";
-
   rutinaActual = db[claveGeneral(division)][indice];
 
   tituloInput.value = rutinaActual.nombre || "";
-  semanasSelect.value = String(rutinaActual.semanas || 5);
+  semanasSelect.value = String(rutinaActual.semanas || 4);
+  rmPotencia1Input.value = rutinaActual.rmPotencia1 || "";
+  rmPotencia2Input.value = rutinaActual.rmPotencia2 || "";
 
   actualizarModoVisual();
   cerrarVistaAmpliada();
   renderizarEditor();
 
-  $("panelEditorRutina").scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-  });
-
-  mostrarEstado(
-    "Editando “" + rutinaActual.nombre + "”. Guardá los cambios para actualizar la biblioteca."
-  );
+  $("panelEditorRutina").scrollIntoView({ behavior: "smooth", block: "start" });
+  mostrarEstado("Editando “" + rutinaActual.nombre + "”.");
 }
-
-/* =====================================================
-   ELIMINAR RUTINA GUARDADA
-===================================================== */
 
 function eliminarRutinaGuardada(indice) {
   if (!esStaff) return;
-
   const division = divisionSelect.value;
-
   asegurarRutinasGenerales(division);
 
   const clave = claveGeneral(division);
   const rutina = db[clave][indice];
+  if (!rutina || !rutina.guardada) return;
 
-  if (!rutina || !rutina.guardada) {
-    alert("Esta rutina ya no está guardada.");
-    renderizarBiblioteca();
-    return;
-  }
-
-  if (!confirm(
-    "¿Querés eliminar la rutina “" + rutina.nombre + "” de la biblioteca?\n\n" +
-    "La planilla general guardada se eliminará y el espacio quedará libre para una nueva rutina."
-  )) {
-    return;
-  }
+  if (!confirm("¿Querés eliminar la rutina “" + rutina.nombre + "”?")) return;
 
   db[clave][indice] = crearRutina();
-
   obtenerTodasLasJugadoras()
-    .filter(jugadora =>
-      normalizar(divisionJugadora(jugadora)) === normalizar(division)
-    )
-    .forEach(jugadora => {
-      asegurarRutinasIndividuales(jugadora);
-
-      const claveIndividualRutina = claveIndividual(
-        division,
-        idJugadora(jugadora)
-      );
-
-      db[claveIndividualRutina][indice] = crearRutina();
+    .filter(j => normalizar(divisionJugadora(j)) === normalizar(division))
+    .forEach(j => {
+      asegurarRutinasIndividuales(j);
+      db[claveIndividual(division, idJugadora(j))][indice] = crearRutina();
     });
 
   guardarDB();
-
   if (indiceActual === indice) {
     rutinaActual = db[clave][indice];
     tituloInput.value = "";
-    semanasSelect.value = "5";
+    semanasSelect.value = "4";
+    rmPotencia1Input.value = "";
+    rmPotencia2Input.value = "";
     renderizarEditor();
   }
 
   cerrarVistaAmpliada();
   renderizarBiblioteca();
-
-  mostrarEstado("Rutina eliminada de la biblioteca.");
+  mostrarEstado("Rutina eliminada.");
 }
-
-/* =====================================================
-   VISTA AMPLIADA Y PDF
-===================================================== */
 
 function renderizarPlanillaVistaActual() {
   if (indiceVistaModal === null) return;
-
   const division = divisionSelect.value;
   asegurarRutinasGenerales(division);
   const rutina = db[claveGeneral(division)]?.[indiceVistaModal];
-
   if (!rutina || !rutina.guardada) return;
 
-  const cantidad = Math.min(
-    MAX_PERSONAS_RUTINA,
-    Math.max(1, Number.parseInt(cantidadPersonasVista, 10) || 1)
-  );
+  const cantidad = Math.min(MAX_PERSONAS_RUTINA, Math.max(1, Number.parseInt(cantidadPersonasVista, 10) || 1));
   cantidadPersonasVista = cantidad;
 
   $("modalCuerpo").innerHTML = `
@@ -5118,45 +4721,28 @@ function renderizarPlanillaVistaActual() {
     </div>
   `;
 
-  $("modalCantidadPersonas").textContent =
-    cantidadPersonasVista + (cantidadPersonasVista === 1 ? " persona" : " personas");
+  $("modalCantidadPersonas").textContent = cantidadPersonasVista + (cantidadPersonasVista === 1 ? " persona" : " personas");
   $("modalQuitarPersona").disabled = cantidadPersonasVista <= 1;
   $("modalAgregarPersona").disabled = cantidadPersonasVista >= MAX_PERSONAS_RUTINA;
-  $("modalAgregarPersona").textContent = cantidadPersonasVista >= MAX_PERSONAS_RUTINA
-    ? "Límite de 5 personas"
-    : "+ Agregar persona";
 }
 
 function cambiarCantidadPersonas(delta) {
   if (indiceVistaModal === null) return;
-  cantidadPersonasVista = Math.min(
-    MAX_PERSONAS_RUTINA,
-    Math.max(1, cantidadPersonasVista + delta)
-  );
+  cantidadPersonasVista = Math.min(MAX_PERSONAS_RUTINA, Math.max(1, cantidadPersonasVista + delta));
   renderizarPlanillaVistaActual();
 }
 
 function abrirVistaAmpliada(indice) {
   const division = divisionSelect.value;
-
   asegurarRutinasGenerales(division);
-
   const rutina = db[claveGeneral(division)][indice];
-
-  if (!rutina || !rutina.guardada) {
-    alert("Solo se pueden abrir rutinas que estén guardadas.");
-    renderizarBiblioteca();
-    return;
-  }
+  if (!rutina || !rutina.guardada) return;
 
   indiceVistaModal = indice;
   cantidadPersonasVista = 1;
 
-  $("modalTitulo").textContent =
-    rutina.nombre || "Rutina sin título";
-
-  $("modalSubtitulo").textContent =
-    division + " · " + rutina.semanas + " semanas · Periodización automática";
+  $("modalTitulo").textContent = rutina.nombre || "Rutina sin título";
+  $("modalSubtitulo").textContent = division + " · Bloque " + rutina.semanas + " Semanas";
 
   $("controlPersonasRutina").classList.toggle("oculto", !esStaff);
   renderizarPlanillaVistaActual();
@@ -5166,8 +4752,6 @@ function abrirVistaAmpliada(indice) {
 
   $("modalRutina").classList.add("visible");
   document.body.style.overflow = "hidden";
-
-  $("cerrarModal").focus();
 }
 
 function cerrarVistaAmpliada() {
@@ -5179,61 +4763,41 @@ function cerrarVistaAmpliada() {
 
 function descargarRutinaPDF(indice, cantidadPersonas = 1) {
   const division = divisionSelect.value;
-
   asegurarRutinasGenerales(division);
-
   const rutina = db[claveGeneral(division)][indice];
-
-  if (!rutina || !rutina.guardada) {
-    alert("Solo se pueden descargar rutinas que estén guardadas.");
-    return;
-  }
+  if (!rutina || !rutina.guardada) return;
 
   const destino = $("printRoutine");
   const tituloOriginal = document.title;
 
   destino.innerHTML = construirPlanillaHTML(rutina, division, cantidadPersonas);
-
-  document.title =
-    "ADIUR FEMENINO - " +
-    rutina.nombre +
-    " - " +
-    division;
-
+  document.title = "ADIUR FEMENINO - " + rutina.nombre + " - " + division;
   document.body.classList.add("imprimir-solo-rutina");
 
   let limpiezaRealizada = false;
-
   function limpiarImpresion() {
     if (limpiezaRealizada) return;
-
     limpiezaRealizada = true;
-
     document.body.classList.remove("imprimir-solo-rutina");
     destino.innerHTML = "";
     document.title = tituloOriginal;
-
     window.removeEventListener("afterprint", limpiarImpresion);
   }
 
   window.addEventListener("afterprint", limpiarImpresion, { once: true });
-
   window.print();
 
   setTimeout(() => {
-    if (document.body.classList.contains("imprimir-solo-rutina")) {
-      limpiarImpresion();
-    }
+    if (document.body.classList.contains("imprimir-solo-rutina")) limpiarImpresion();
   }, 1500);
 }
 
 /* =====================================================
-   CAMBIAR MODO Y DIVISIÓN
+   CAMBIO DE MODO Y DIVISIÓN
 ===================================================== */
 
 function actualizarModoVisual() {
   const esGeneral = modoSelect.value === "general";
-
   $("botonesGestion").classList.toggle("oculto", !esGeneral);
   $("avisoGeneral").classList.toggle("oculto", !esGeneral);
   $("avisoJugador").classList.toggle("oculto", !esJugadora);
@@ -5241,51 +4805,41 @@ function actualizarModoVisual() {
 
   tituloInput.disabled = !esGeneral || esJugadora;
   semanasSelect.disabled = !esGeneral || esJugadora;
-
   $("aplicarRutina").classList.toggle("oculto", !esGeneral);
 }
 
 function cambiarModo() {
-  if (esJugadora) {
-    modoSelect.value = "individual";
-  }
-
+  if (esJugadora) modoSelect.value = "individual";
   actualizarModoVisual();
   poblarJugadoras();
 
-  rutinaActual = obtenerRutinaActual();
-
-  if (!rutinaActual) {
-    rutinaActual = crearRutina();
-  }
-
+  rutinaActual = obtenerRutinaActual() || crearRutina();
   tituloInput.value = rutinaActual.nombre || "";
-  semanasSelect.value = String(rutinaActual.semanas || 5);
-
+  semanasSelect.value = String(rutinaActual.semanas || 4);
+  rmPotencia1Input.value = rutinaActual.rmPotencia1 || "";
+  rmPotencia2Input.value = rutinaActual.rmPotencia2 || "";
   renderizarEditor();
 }
 
 function cambiarDivision() {
   if (esJugadora) return;
-
   indiceActual = 0;
-
   poblarJugadoras();
   asegurarRutinasGenerales(divisionSelect.value);
 
   rutinaActual = obtenerRutinaActual() || crearRutina();
-
   tituloInput.value = rutinaActual.nombre || "";
-  semanasSelect.value = String(rutinaActual.semanas || 5);
+  semanasSelect.value = String(rutinaActual.semanas || 4);
+  rmPotencia1Input.value = rutinaActual.rmPotencia1 || "";
+  rmPotencia2Input.value = rutinaActual.rmPotencia2 || "";
 
   renderizarEditor();
   renderizarBiblioteca();
-
   mostrarEstado("Categoría seleccionada: " + divisionSelect.value + ".");
 }
 
 /* =====================================================
-   MENÚ LATERAL
+   MENÚ LATERAL Y EVENTOS
 ===================================================== */
 
 function alternarSidebar() {
@@ -5295,7 +4849,6 @@ function alternarSidebar() {
 
   if (window.innerWidth <= 760) {
     const visible = sidebar.classList.toggle("visible");
-
     sidebar.classList.toggle("oculto", !visible);
     capa.classList.toggle("visible", visible);
     boton.setAttribute("aria-expanded", String(visible));
@@ -5307,30 +4860,18 @@ function alternarSidebar() {
 
 function toggleGrupo(id) {
   const grupo = $(id);
-
   if (!grupo) return;
-
   grupo.classList.toggle("cerrado");
-
   const titulo = grupo.querySelector(".titulo-grupo");
-
-  if (titulo) {
-    titulo.setAttribute(
-      "aria-expanded",
-      String(!grupo.classList.contains("cerrado"))
-    );
-  }
+  if (titulo) titulo.setAttribute("aria-expanded", String(!grupo.classList.contains("cerrado")));
 }
 
 function configurarMenu() {
   document.querySelectorAll(".titulo-grupo").forEach(titulo => {
-    titulo.addEventListener("click", () => {
-      toggleGrupo(titulo.dataset.grupo);
-    });
+    titulo.addEventListener("click", () => toggleGrupo(titulo.dataset.grupo));
   });
 
   $("botonMenu").addEventListener("click", alternarSidebar);
-
   $("capaSidebar").addEventListener("click", () => {
     $("sidebar").classList.remove("visible");
     $("sidebar").classList.add("oculto");
@@ -5338,66 +4879,28 @@ function configurarMenu() {
     $("botonMenu").setAttribute("aria-expanded", "false");
   });
 
-  window.addEventListener("resize", () => {
-    if (window.innerWidth > 760) {
-      $("sidebar").classList.remove("visible");
-      $("capaSidebar").classList.remove("visible");
-    } else {
-      $("sidebar").classList.add("oculto");
-    }
-  });
-
-  $("cerrarSesion").addEventListener("click", evento => {
-    evento.preventDefault();
-
+  $("cerrarSesion").addEventListener("click", e => {
+    e.preventDefault();
     if (!confirm("¿Querés cerrar la sesión?")) return;
-
     localStorage.removeItem(SESSION_KEY);
     window.location.href = "Loing.html";
   });
 }
 
-/* =====================================================
-   EVENTOS DE LOS MODALES
-===================================================== */
-
 $("cerrarModal").addEventListener("click", cerrarVistaAmpliada);
 $("modalCerrarInferior").addEventListener("click", cerrarVistaAmpliada);
+$("modalRutina").addEventListener("click", e => { if (e.target === $("modalRutina")) cerrarVistaAmpliada(); });
 
-$("modalRutina").addEventListener("click", evento => {
-  if (evento.target === $("modalRutina")) {
-    cerrarVistaAmpliada();
-  }
-});
+$("modalEditar").addEventListener("click", () => { if (indiceVistaModal !== null) editarRutinaGuardada(indiceVistaModal); });
+$("modalEliminar").addEventListener("click", () => { if (indiceVistaModal !== null) eliminarRutinaGuardada(indiceVistaModal); });
+$("modalPDF").addEventListener("click", () => { if (indiceVistaModal !== null) descargarRutinaPDF(indiceVistaModal, cantidadPersonasVista); });
+$("modalAgregarPersona").addEventListener("click", () => cambiarCantidadPersonas(1));
+$("modalQuitarPersona").addEventListener("click", () => cambiarCantidadPersonas(-1));
 
-$("modalEditar").addEventListener("click", () => {
-  if (indiceVistaModal === null) return;
-  editarRutinaGuardada(indiceVistaModal);
-});
+rmPotencia1Input.addEventListener("input", guardarBorradorActual);
+rmPotencia2Input.addEventListener("input", guardarBorradorActual);
 
-$("modalEliminar").addEventListener("click", () => {
-  if (indiceVistaModal === null) return;
-  eliminarRutinaGuardada(indiceVistaModal);
-});
-
-$("modalPDF").addEventListener("click", () => {
-  if (indiceVistaModal === null) return;
-  descargarRutinaPDF(indiceVistaModal, cantidadPersonasVista);
-});
-
-$("modalAgregarPersona").addEventListener("click", () => {
-  cambiarCantidadPersonas(1);
-});
-
-$("modalQuitarPersona").addEventListener("click", () => {
-  cambiarCantidadPersonas(-1);
-});
-
-document.addEventListener("keydown", evento => {
-  if (evento.key === "Escape") {
-    cerrarVistaAmpliada();
-  }
-});
+document.addEventListener("keydown", e => { if (e.key === "Escape") cerrarVistaAmpliada(); });
 
 /* =====================================================
    INICIALIZACIÓN
@@ -5406,7 +4909,6 @@ document.addEventListener("keydown", evento => {
 async function inicializar() {
   configurarMenu();
 
-  // Sincronización inicial desde la nube
   try {
     await window.firebaseGimnasioReady;
     const datosNube = await window.cargarGimnasioNube();
@@ -5418,26 +4920,18 @@ async function inicializar() {
       await window.guardarGimnasioEnNube(db);
     }
   } catch (error) {
-    console.warn("No se pudo cargar la base de datos de gimnasio desde la nube, utilizando almacenamiento local:", error);
+    console.warn("No se pudo cargar la base de datos desde la nube:", error);
   }
 
   $("nombrePerfil").textContent = nombreSesion(usuario);
-
-  $("avatarPerfil").textContent =
-    nombreSesion(usuario).trim().charAt(0).toUpperCase() || "U";
+  $("avatarPerfil").textContent = nombreSesion(usuario).trim().charAt(0).toUpperCase() || "U";
 
   jugadoraSesion = buscarJugadoraSesion();
 
   if (esJugadora) {
     if (!jugadoraSesion) {
-      jugadoraSesion = {
-        id: "bianca",
-        usuario: "bianca",
-        nombreCompleto: nombreSesion(usuario),
-        division: "Sub 14"
-      };
+      jugadoraSesion = { id: "bianca", usuario: "bianca", nombreCompleto: nombreSesion(usuario), division: "Sub 14" };
     }
-
     divisionSelect.value = divisionJugadora(jugadoraSesion);
     divisionSelect.disabled = true;
     modoSelect.value = "individual";
@@ -5445,27 +4939,18 @@ async function inicializar() {
 
   poblarJugadoras();
 
-  DIVISIONES.forEach(division => {
-    asegurarRutinasGenerales(division);
-  });
-
-  obtenerTodasLasJugadoras().forEach(jugadora => {
-    asegurarRutinasIndividuales(jugadora);
-  });
+  DIVISIONES.forEach(division => asegurarRutinasGenerales(division));
+  obtenerTodasLasJugadoras().forEach(j => asegurarRutinasIndividuales(j));
 
   divisionSelect.addEventListener("change", cambiarDivision);
   modoSelect.addEventListener("change", cambiarModo);
 
   jugadoraSelect.addEventListener("change", () => {
-    rutinaActual = obtenerRutinaActual();
-
-    if (!rutinaActual) {
-      rutinaActual = crearRutina();
-    }
-
+    rutinaActual = obtenerRutinaActual() || crearRutina();
     tituloInput.value = rutinaActual.nombre || "";
-    semanasSelect.value = String(rutinaActual.semanas || 5);
-
+    semanasSelect.value = String(rutinaActual.semanas || 4);
+    rmPotencia1Input.value = rutinaActual.rmPotencia1 || "";
+    rmPotencia2Input.value = rutinaActual.rmPotencia2 || "";
     renderizarEditor();
   });
 
@@ -5474,9 +4959,7 @@ async function inicializar() {
   tituloInput.addEventListener("input", () => {
     if (rutinaActual && puedeEditarEstructura()) {
       rutinaActual.nombre = tituloInput.value;
-
-      $("tituloEditor").textContent =
-        tituloInput.value.trim() || "Nueva rutina";
+      $("tituloEditor").textContent = tituloInput.value.trim() || "Nueva rutina";
     }
   });
 
@@ -5488,10 +4971,8 @@ async function inicializar() {
   if (esJugadora) {
     $("campoModo").classList.add("oculto");
     $("botonesGestion").classList.add("oculto");
-
     modoSelect.value = "individual";
     divisionSelect.value = divisionJugadora(jugadoraSesion);
-
     poblarJugadoras();
   }
 
