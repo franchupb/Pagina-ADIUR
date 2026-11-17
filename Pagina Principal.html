@@ -168,8 +168,6 @@ a {
   margin-left: -258px;
 }
 
-/* Inicio seleccionado */
-
 .menu-inicio {
   display: flex;
   align-items: center;
@@ -195,8 +193,6 @@ a {
   font-size: 17px;
   line-height: 1;
 }
-
-/* Categorías */
 
 .grupo-menu {
   margin-bottom: 8px;
@@ -236,8 +232,6 @@ a {
 .grupo-menu:not(.cerrado) .flecha {
   transform: rotate(90deg);
 }
-
-/* Opciones desplegables */
 
 .submenu {
   display: flex;
@@ -283,8 +277,6 @@ a {
 .submenu a.activo .nav-punto {
   background: var(--naranja);
 }
-
-/* Cerrar sesión */
 
 .separador-sesion {
   border-top: 1px solid #e8e8e8;
@@ -378,84 +370,8 @@ a {
 }
 
 /* =====================================================
-   ACCESOS RÁPIDOS
-===================================================== */
-
-.accesos-rapidos {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 15px;
-  margin-bottom: 27px;
-}
-
-.acceso {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 17px;
-  border: 1px solid var(--borde);
-  border-radius: 12px;
-  background: white;
-  transition: transform .15s, box-shadow .15s;
-}
-
-.acceso:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 18px #0000000c;
-}
-
-.icono-acceso {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 43px;
-  height: 43px;
-  flex-shrink: 0;
-  background: var(--naranja-claro);
-  color: var(--naranja-oscuro);
-  border-radius: 10px;
-  font-size: 21px;
-}
-
-.acceso strong {
-  display: block;
-  margin-bottom: 5px;
-  font-size: 13px;
-}
-
-.acceso small {
-  display: block;
-  color: var(--gris-texto);
-  font-size: 11px;
-  line-height: 1.4;
-}
-
-/* =====================================================
    SECCIONES Y PANELES
 ===================================================== */
-
-.seccion-titulo {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-.seccion-titulo h3 {
-  margin: 0;
-  font-size: 18px;
-}
-
-.seccion-titulo a {
-  color: var(--naranja-oscuro);
-  font-size: 12px;
-  font-weight: bold;
-}
-
-.seccion-titulo a:hover {
-  text-decoration: underline;
-}
 
 .columna-izquierda {
   display: flex;
@@ -472,20 +388,6 @@ a {
   color: var(--naranja-oscuro);
   font-size: 10px;
   font-weight: bold;
-}
-
-.fixture-enfrentamiento {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-  align-items: center;
-  gap: 10px;
-  text-align: center;
-  font-size: 13px;
-}
-
-.fixture-enfrentamiento strong:last-child {
-  text-align: center;
-  overflow-wrap: anywhere;
 }
 
 .paneles {
@@ -524,7 +426,7 @@ a {
 }
 
 .selector-division {
-  max-width: 150px;
+  max-width: 165px;
   padding: 9px 10px;
   border: 1px solid var(--borde);
   border-radius: 8px;
@@ -617,6 +519,83 @@ a {
   border-top: 1px solid #f0f0f0;
   color: var(--gris-texto);
   font-size: 11px;
+}
+
+/* =====================================================
+   LISTA DE PRÓXIMOS CUMPLEAÑOS
+===================================================== */
+
+.lista-cumpleanos {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.item-cumple {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid #eee;
+  border-left: 3px solid var(--naranja);
+  border-radius: 10px;
+  background: #fafafa;
+}
+
+.item-cumple.hoy {
+  background: var(--naranja-claro);
+  border-color: #ffd3b6;
+  border-left-color: var(--naranja-oscuro);
+}
+
+.cumple-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.cumple-nombre {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--negro);
+  margin-bottom: 4px;
+}
+
+.cumple-sub {
+  font-size: 11.5px;
+  color: var(--gris-texto);
+}
+
+.cumple-badges {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.badge-falta {
+  display: inline-block;
+  padding: 4px 9px;
+  border-radius: 20px;
+  background: var(--naranja-claro);
+  color: var(--naranja-oscuro);
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.item-cumple.hoy .badge-falta {
+  background: var(--naranja);
+  color: #fff;
+}
+
+.badge-edad {
+  font-size: 11.5px;
+  font-weight: bold;
+  color: #333;
 }
 
 .sin-datos {
@@ -831,10 +810,6 @@ a {
   .paneles {
     grid-template-columns: 1fr;
   }
-
-  .accesos-rapidos {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 }
 
 @media (max-width: 760px) {
@@ -927,21 +902,6 @@ a {
     padding: 23px 19px;
   }
 
-  .accesos-rapidos {
-    gap: 9px;
-  }
-
-  .acceso {
-    padding: 12px 10px;
-    gap: 9px;
-  }
-
-  .icono-acceso {
-    width: 36px;
-    height: 36px;
-    font-size: 17px;
-  }
-
   .panel {
     padding: 14px;
   }
@@ -969,10 +929,6 @@ a {
 }
 
 @media (max-width: 380px) {
-  .accesos-rapidos {
-    grid-template-columns: 1fr;
-  }
-
   .titulo-superior h1 {
     font-size: 14px;
   }
@@ -1193,13 +1149,13 @@ a {
 
       <div class="columna-izquierda">
 
-        <!-- VISTA PREVIA DE PARTIDOS -->
+        <!-- ÚLTIMOS 2 PARTIDOS JUGADOS (DESDE Partidos.html) -->
         <article class="panel">
 
           <div class="panel-cabecera">
             <div>
-              <h3>PARTIDOS</h3>
-              <p>Partidos cargados en la sección Competencia.</p>
+              <h3>ÚLTIMOS PARTIDOS JUGADOS</h3>
+              <p>Últimos 2 encuentros disputados en Partidos.html.</p>
             </div>
 
             <select
@@ -1221,6 +1177,38 @@ a {
 
           <a class="boton-secundario" href="Partidos.html">
             Ver todos los partidos →
+          </a>
+
+        </article>
+
+        <!-- PRÓXIMOS CUMPLEAÑOS DE LAS JUGADORAS -->
+        <article class="panel">
+
+          <div class="panel-cabecera">
+            <div>
+              <h3>🎂 PRÓXIMOS CUMPLEAÑOS</h3>
+              <p>Cumpleaños del plantel ordenados por cercanía.</p>
+            </div>
+
+            <select
+              class="selector-division"
+              id="filtroCumpleanos"
+              aria-label="Filtrar cumpleaños por división"
+              onchange="renderizarCumpleanos()"
+            >
+              <option value="Todas">Todas las divisiones</option>
+              <option value="Sub 10">Sub 10</option>
+              <option value="Sub 12">Sub 12</option>
+              <option value="Sub 14">Sub 14</option>
+              <option value="Sub 16">Sub 16</option>
+              <option value="Primera">Primera</option>
+            </select>
+          </div>
+
+          <div class="lista-cumpleanos" id="listaCumpleanos"></div>
+
+          <a class="boton-secundario" href="jugadoras.html">
+            Ver plantel completo →
           </a>
 
         </article>
@@ -1326,7 +1314,33 @@ a {
   </main>
 </div>
 
-<script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/* =====================================================
+   CONEXIÓN A FIRESTORE (adiur-b1913)
+===================================================== */
+const firebaseConfig = {
+  projectId: "adiur-b1913",
+  appId: "1:1032379124859:web:adiur-fem-web",
+  authDomain: "adiur-b1913.firebaseapp.com",
+  storageBucket: "adiur-b1913.appspot.com"
+};
+
+let db = null;
+let nubeActiva = false;
+try {
+  const app = initializeApp(firebaseConfig);
+  db = getFirestore(app);
+  nubeActiva = true;
+} catch (e) {
+  console.warn("Modo local activo:", e);
+}
+
+let cachePartidosNube = [];
+let cacheJugadorasNube = [];
+
 /* =====================================================
    USUARIO Y PERMISOS
 ===================================================== */
@@ -1339,7 +1353,7 @@ if (!usuarioGuardado) {
 
 const usuarioNormalizado = (usuarioGuardado || "").trim().toLowerCase();
 
-const esFran = ["fran", "francisco"].includes(usuarioNormalizado);
+const esFran = ["fran", "francisco", "francisco perez basla"].includes(usuarioNormalizado);
 const esToto = usuarioNormalizado === "toto";
 
 const esBianca = [
@@ -1367,7 +1381,7 @@ document.getElementById("fechaHoy").textContent =
     month: "long",
     year: "numeric"
   }).format(new Date());
-  
+
 /* Preferencias de división */
 
 const clavePreferencia =
@@ -1411,6 +1425,7 @@ function inicializarPreferencias() {
 
   document.getElementById("filtroCalendario").value = preferida;
   document.getElementById("filtroFixture").value = "Todas";
+  document.getElementById("filtroCumpleanos").value = "Todas";
 }
 
 /* Permisos de visualización del menú */
@@ -1424,18 +1439,18 @@ if (esBianca) {
   });
 }
 
-function cerrarSesion(event) {
+window.cerrarSesion = function(event) {
   event.preventDefault();
 
   localStorage.removeItem("usuarioADIUR");
   window.location.href = "Loing.html";
-}
+};
 
 /* =====================================================
    MENÚ LATERAL
 ===================================================== */
 
-function alternarSidebar() {
+window.alternarSidebar = function() {
   const sidebar = document.getElementById("sidebar");
   const capa = document.getElementById("capaSidebar");
   const boton = document.getElementById("botonMenu");
@@ -1449,9 +1464,9 @@ function alternarSidebar() {
   if (window.innerWidth <= 760) {
     capa.classList.toggle("visible", abierto);
   }
-}
+};
 
-function toggleGrupo(id) {
+window.toggleGrupo = function(id) {
   const grupo = document.getElementById(id);
   if (!grupo) return;
 
@@ -1465,9 +1480,7 @@ function toggleGrupo(id) {
       String(!grupo.classList.contains("cerrado"))
     );
   }
-}
-
-/* Navegación por teclado */
+};
 
 document.querySelectorAll(".titulo-grupo[role='button']").forEach(titulo => {
   titulo.addEventListener("keydown", event => {
@@ -1482,8 +1495,6 @@ document.querySelectorAll(".titulo-grupo[role='button']").forEach(titulo => {
     }
   });
 });
-
-/* Adaptar la barra lateral según el tamaño de pantalla */
 
 function ajustarSidebarPorPantalla() {
   const sidebar = document.getElementById("sidebar");
@@ -1505,7 +1516,7 @@ ajustarSidebarPorPantalla();
 window.addEventListener("resize", ajustarSidebarPorPantalla);
 
 /* =====================================================
-   FUNCIONES COMPARTIDAS PARA PARTIDOS
+   FUNCIONES COMPARTIDAS PARA PARTIDOS Y FECHAS
 ===================================================== */
 
 function normalizarTexto(valor) {
@@ -1515,17 +1526,29 @@ function normalizarTexto(valor) {
 function fechaISOValida(fecha) {
   if (!fecha) return null;
 
-  const texto = String(fecha).slice(0, 10);
+  const texto = String(fecha).trim();
 
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(texto)) return null;
+  // Formato ISO YYYY-MM-DD
+  if (/^\d{4}-\d{2}-\d{2}/.test(texto)) {
+    const fechaObjeto = new Date(texto.slice(0, 10) + "T12:00:00");
+    return Number.isNaN(fechaObjeto.getTime()) ? null : fechaObjeto;
+  }
 
-  const fechaObjeto = new Date(texto + "T12:00:00");
+  // Formato latino DD/MM/YYYY o DD-MM-YYYY
+  const matchLat = texto.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+  if (matchLat) {
+    const d = matchLat[1].padStart(2, "0");
+    const m = matchLat[2].padStart(2, "0");
+    const y = matchLat[3];
+    const fechaObjeto = new Date(`${y}-${m}-${d}T12:00:00`);
+    return Number.isNaN(fechaObjeto.getTime()) ? null : fechaObjeto;
+  }
 
-  return Number.isNaN(fechaObjeto.getTime()) ? null : fechaObjeto;
+  return null;
 }
 
 function fechaLegible(fecha) {
-  const fechaObjeto = fechaISOValida(fecha);
+  const fechaObjeto = fecha instanceof Date ? fecha : fechaISOValida(fecha);
 
   if (!fechaObjeto) {
     return normalizarTexto(fecha) || "Fecha no indicada";
@@ -1559,8 +1582,20 @@ function construirEscudo(url, nombre) {
 }
 
 /* =====================================================
-   LECTURA DEL FIXTURE DE PARTIDOS.HTML
+   LECTURA DE PARTIDOS DE PARTIDOS.HTML (NUBE + LOCAL)
 ===================================================== */
+
+async function sincronizarPartidosDesdeNube() {
+  if (!nubeActiva || !db) return;
+  try {
+    const snap = await getDocs(collection(db, "partidos"));
+    const lista = [];
+    snap.forEach(d => lista.push({ id: d.id, ...d.data() }));
+    cachePartidosNube = lista;
+  } catch (e) {
+    console.warn("No se pudieron cargar partidos desde Firestore:", e);
+  }
+}
 
 function listaDesdeDatosFixture(datos, divisionPadre = "") {
   if (Array.isArray(datos)) {
@@ -1582,7 +1617,9 @@ function listaDesdeDatosFixture(datos, divisionPadre = "") {
     "fixtures",
     "encuentros",
     "partidosFixture",
-    "fixtureADIUR"
+    "fixtureADIUR",
+    "resultados",
+    "resultadosADIUR"
   ]) {
     if (Array.isArray(datos[clave])) {
       return listaDesdeDatosFixture(datos[clave], divisionPadre);
@@ -1617,7 +1654,9 @@ function listaDesdeDatosFixture(datos, divisionPadre = "") {
       "lugar",
       "division",
       "competicion",
-      "jornada"
+      "jornada",
+      "golesAdiur",
+      "resultado"
     ].some(campo =>
       Object.prototype.hasOwnProperty.call(valor, campo)
     );
@@ -1643,26 +1682,25 @@ function listaDesdeDatosFixture(datos, divisionPadre = "") {
   return encontrados;
 }
 
-function leerFixture() {
+function leerTodosLosPartidos() {
+  const combinados = [...cachePartidosNube];
+
   const clavesPosibles = [
+    "partidosADIUR",
+    "resultadosADIUR",
+    "partidosJugadosADIUR",
     "fixtureADIUR",
     "partidosFixtureADIUR",
     "partidosFixture",
     "fixturePartidos",
-    "fixture",
-    "partidosADIUR"
+    "fixture"
   ];
 
   const clavesDinamicas = [];
 
   for (let i = 0; i < localStorage.length; i++) {
     const clave = localStorage.key(i);
-
-    if (
-      clave &&
-      /(fixture|partidos|encuentros)/i.test(clave) &&
-      !/resultados/i.test(clave)
-    ) {
+    if (clave && /(fixture|partidos|encuentros|resultados)/i.test(clave)) {
       clavesDinamicas.push(clave);
     }
   }
@@ -1674,14 +1712,23 @@ function leerFixture() {
 
       const datos = JSON.parse(texto);
       const partidos = listaDesdeDatosFixture(datos);
-
-      if (partidos.length) return partidos;
+      if (partidos.length) combinados.push(...partidos);
     } catch (error) {
-      console.warn("No se pudo leer el fixture guardado en", clave, error);
+      console.warn("No se pudo leer el registro guardado en", clave, error);
     }
   }
 
-  return [];
+  // Deduplicar por id o por combinación fecha + división + rival
+  const vistos = new Set();
+  return combinados.filter(p => {
+    if (!p || typeof p !== "object") return false;
+    const firma = p.id
+      ? String(p.id)
+      : `${normalizarTexto(p.fecha)}_${normalizarTexto(p.categoria || p.division)}_${normalizarTexto(p.rival || p.equipoRival || p.visitante)}`;
+    if (vistos.has(firma)) return false;
+    vistos.add(firma);
+    return true;
+  });
 }
 
 function fechaFixture(partido) {
@@ -1693,37 +1740,56 @@ function fechaFixture(partido) {
   );
 
   if (!valor) return null;
-
-  if (/^\d{2}\/\d{2}\/\d{4}$/.test(valor)) {
-    const [dia, mes, anio] = valor.split("/");
-    return fechaISOValida(`${anio}-${mes}-${dia}`);
-  }
-
   return fechaISOValida(valor);
 }
 
-function estadoFixtureFinalizado(partido) {
+function partidoTieneMarcador(partido) {
+  const tieneGolesSeparados =
+    partido.golesAdiur !== undefined &&
+    partido.golesAdiur !== null &&
+    String(partido.golesAdiur).trim() !== "" &&
+    partido.golesRival !== undefined &&
+    partido.golesRival !== null &&
+    String(partido.golesRival).trim() !== "";
+
+  const tieneResultadoTexto =
+    partido.resultado !== undefined &&
+    partido.resultado !== null &&
+    /\d+\s*[-:]\s*\d+/.test(String(partido.resultado));
+
+  return tieneGolesSeparados || tieneResultadoTexto;
+}
+
+function esPartidoJugado(partido, hoyISO) {
   const estado = normalizarTexto(
     partido.estado || partido.estatus || partido.situacion
   ).toLowerCase();
 
-  return [
-    "jugado",
-    "jugada",
-    "finalizado",
-    "finalizada",
-    "terminado",
-    "terminada",
-    "cancelado",
-    "cancelada"
-  ].includes(estado);
+  if (["cancelado", "cancelada", "suspendido", "suspendida", "postergado", "postergada"].includes(estado)) {
+    return false;
+  }
+
+  if (["jugado", "jugada", "finalizado", "finalizada", "terminado", "terminada"].includes(estado)) {
+    return true;
+  }
+
+  if (partidoTieneMarcador(partido)) {
+    return true;
+  }
+
+  const fecha = fechaFixture(partido);
+  if (fecha && fechaISODesdeFecha(fecha) < hoyISO) {
+    return true;
+  }
+
+  return false;
 }
 
 /* =====================================================
-   CREAR TARJETA DE PARTIDO CON ESCUDOS
+   CREAR TARJETA DE ÚLTIMO PARTIDO JUGADO
 ===================================================== */
 
-function crearPartidoFixture(partido) {
+function crearPartidoJugadoCard(partido) {
   const tarjeta = document.createElement("div");
   tarjeta.className = "partido";
 
@@ -1731,14 +1797,15 @@ function crearPartidoFixture(partido) {
   arriba.className = "partido-arriba";
 
   const categoria = document.createElement("span");
+  categoria.style.fontWeight = "bold";
   categoria.textContent =
     normalizarTexto(partido.categoria || partido.division) ||
     "División no indicada";
 
   const etiqueta = document.createElement("span");
-  etiqueta.className = "etiqueta-fixture";
+  etiqueta.className = "etiqueta-estado";
   etiqueta.textContent =
-    normalizarTexto(partido.competicion) || "Partido programado";
+    normalizarTexto(partido.competicion || partido.torneo) || "Finalizado";
 
   arriba.append(categoria, etiqueta);
 
@@ -1766,7 +1833,7 @@ function crearPartidoFixture(partido) {
 
   local.append(textoLocal);
 
-  /* Marcador o VS */
+  /* Marcador */
 
   const marcador = document.createElement("div");
   marcador.className = "marcador";
@@ -1774,14 +1841,18 @@ function crearPartidoFixture(partido) {
   const tieneGoles =
     partido.golesAdiur !== undefined &&
     partido.golesAdiur !== null &&
-    partido.golesAdiur !== "" &&
+    String(partido.golesAdiur).trim() !== "" &&
     partido.golesRival !== undefined &&
     partido.golesRival !== null &&
-    partido.golesRival !== "";
+    String(partido.golesRival).trim() !== "";
 
-  marcador.textContent = tieneGoles
-    ? String(partido.golesAdiur) + " - " + String(partido.golesRival)
-    : "VS";
+  if (tieneGoles) {
+    marcador.textContent = `${partido.golesAdiur} - ${partido.golesRival}`;
+  } else if (partido.resultado) {
+    marcador.textContent = String(partido.resultado).trim();
+  } else {
+    marcador.textContent = "Jugado";
+  }
 
   /* Rival y su escudo */
 
@@ -1795,7 +1866,7 @@ function crearPartidoFixture(partido) {
     partido.equipoVisitante ||
     partido.visitante ||
     partido.adversario
-  ) || "Rival por confirmar";
+  ) || "Rival";
 
   let rutaEscudoRival = normalizarTexto(
     partido.escudoRival || partido.escudo || ""
@@ -1803,7 +1874,6 @@ function crearPartidoFixture(partido) {
 
   if (!rutaEscudoRival) {
     const club = obtenerClubPorNombre(rival);
-
     if (club) {
       rutaEscudoRival = club.ruta;
     }
@@ -1840,16 +1910,8 @@ function crearPartidoFixture(partido) {
     detalles.append(detalleFecha);
   }
 
-  const hora = normalizarTexto(partido.hora || partido.horario);
-
-  if (hora) {
-    const detalleHora = document.createElement("span");
-    detalleHora.textContent = "🕒 " + hora;
-    detalles.append(detalleHora);
-  }
-
   const lugar = normalizarTexto(
-    partido.lugar || partido.cancha || partido.sede
+    partido.lugar || partido.cancha || partido.sede || partido.condicion
   );
 
   if (lugar) {
@@ -1864,7 +1926,7 @@ function crearPartidoFixture(partido) {
 }
 
 /* =====================================================
-   MOSTRAR PARTIDOS EN LA PÁGINA PRINCIPAL
+   MOSTRAR ÚLTIMOS 2 PARTIDOS JUGADOS
 ===================================================== */
 
 function fechaISODeHoy() {
@@ -1885,24 +1947,21 @@ function fechaISODesdeFecha(fecha) {
   ].join("-");
 }
 
-function renderizarFixture() {
+window.renderizarFixture = function() {
   const contenedor = document.getElementById("listaFixture");
   if (!contenedor) return;
 
   const selector = document.getElementById("filtroFixture");
   const filtro = selector ? selector.value : "Todas";
+  const filtroNorm = filtro.toLowerCase().replace(/\s+/g, "");
   const hoy = fechaISODeHoy();
 
-  const partidos = leerFixture()
-    .filter(partido => !estadoFixtureFinalizado(partido))
-    .filter(partido =>
-      filtro === "Todas" ||
-      normalizarTexto(partido.categoria || partido.division).toLowerCase() ===
-        filtro.toLowerCase()
-    )
+  const partidos = leerTodosLosPartidos()
+    .filter(partido => esPartidoJugado(partido, hoy))
     .filter(partido => {
-      const fecha = fechaFixture(partido);
-      return !fecha || fechaISODesdeFecha(fecha) >= hoy;
+      if (filtro === "Todas") return true;
+      const cat = normalizarTexto(partido.categoria || partido.division).toLowerCase().replace(/\s+/g, "");
+      return cat === filtroNorm;
     })
     .sort((a, b) => {
       const fechaA = fechaFixture(a);
@@ -1912,9 +1971,10 @@ function renderizarFixture() {
       if (!fechaA) return 1;
       if (!fechaB) return -1;
 
-      return fechaA.getTime() - fechaB.getTime();
+      // Orden descendente: los más recientes primero
+      return fechaB.getTime() - fechaA.getTime();
     })
-    .slice(0, 3);
+    .slice(0, 2);
 
   contenedor.replaceChildren();
 
@@ -1927,11 +1987,13 @@ function renderizarFixture() {
     simbolo.textContent = "⚽";
 
     const titulo = document.createElement("strong");
-    titulo.textContent = "Todavía no hay próximos partidos";
+    titulo.textContent = filtro === "Todas"
+      ? "Todavía no hay partidos jugados registrados"
+      : `Sin partidos jugados registrados en ${filtro}`;
 
     const mensaje = document.createElement("p");
     mensaje.textContent =
-      "Cuando se carguen partidos en Partidos.html, aparecerán acá automáticamente.";
+      "Cuando se carguen resultados o partidos jugados en Partidos.html, aparecerán los últimos 2 acá.";
 
     vacio.append(simbolo, titulo, mensaje);
     contenedor.append(vacio);
@@ -1939,9 +2001,206 @@ function renderizarFixture() {
   }
 
   partidos.forEach(partido => {
-    contenedor.append(crearPartidoFixture(partido));
+    contenedor.append(crearPartidoJugadoCard(partido));
   });
+};
+
+/* =====================================================
+   PRÓXIMOS CUMPLEAÑOS DE LAS JUGADORAS
+===================================================== */
+
+async function sincronizarJugadorasDesdeNube() {
+  let lista = [];
+  if (nubeActiva && db) {
+    try {
+      const snap = await getDocs(collection(db, "jugadoras"));
+      snap.forEach(d => lista.push({ id: d.id, ...d.data() }));
+
+      if (lista.length === 0) {
+        const docPlantel = await getDoc(doc(db, "plantel", "jugadoras"));
+        if (docPlantel.exists() && Array.isArray(docPlantel.data().lista)) {
+          lista = docPlantel.data().lista;
+        }
+      }
+    } catch (e) {
+      console.warn("Leyendo jugadoras desde almacenamiento local:", e);
+    }
+  }
+
+  if (lista.length === 0) {
+    const raw = localStorage.getItem("jugadorasADIUR") || localStorage.getItem("plantelADIUR");
+    if (raw) {
+      try { lista = JSON.parse(raw); } catch (e) {}
+    }
+  }
+
+  cacheJugadorasNube = lista;
 }
+
+function obtenerTodasJugadoras() {
+  if (cacheJugadorasNube.length > 0) return cacheJugadorasNube;
+  const raw = localStorage.getItem("jugadorasADIUR") || localStorage.getItem("plantelADIUR");
+  if (raw) {
+    try { return JSON.parse(raw); } catch (e) {}
+  }
+  return [];
+}
+
+function parsearFechaNacimiento(valor) {
+  if (!valor) return null;
+  const txt = String(valor).trim();
+
+  // YYYY-MM-DD
+  const matchIso = txt.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})/);
+  if (matchIso) {
+    const anio = Number(matchIso[1]);
+    const mes = Number(matchIso[2]);
+    const dia = Number(matchIso[3]);
+    if (anio > 1900 && mes >= 1 && mes <= 12 && dia >= 1 && dia <= 31) {
+      return { anio, mes, dia };
+    }
+  }
+
+  // DD/MM/YYYY o DD-MM-YYYY
+  const matchLat = txt.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+  if (matchLat) {
+    const dia = Number(matchLat[1]);
+    const mes = Number(matchLat[2]);
+    const anio = Number(matchLat[3]);
+    if (anio > 1900 && mes >= 1 && mes <= 12 && dia >= 1 && dia <= 31) {
+      return { anio, mes, dia };
+    }
+  }
+
+  return null;
+}
+
+function calcularProximoCumple(partesNac, hoySinHora) {
+  const anioActual = hoySinHora.getFullYear();
+  let proximo = new Date(anioActual, partesNac.mes - 1, partesNac.dia);
+
+  // Ajuste por 29 de febrero en años no bisiestos
+  if (partesNac.mes === 2 && partesNac.dia === 29 && proximo.getMonth() !== 1) {
+    proximo = new Date(anioActual, 1, 28);
+  }
+
+  if (proximo.getTime() < hoySinHora.getTime()) {
+    const siguienteAnio = anioActual + 1;
+    proximo = new Date(siguienteAnio, partesNac.mes - 1, partesNac.dia);
+    if (partesNac.mes === 2 && partesNac.dia === 29 && proximo.getMonth() !== 1) {
+      proximo = new Date(siguienteAnio, 1, 28);
+    }
+  }
+
+  const msPorDia = 1000 * 60 * 60 * 24;
+  const diasFaltantes = Math.round((proximo.getTime() - hoySinHora.getTime()) / msPorDia);
+  const edadQueCumple = proximo.getFullYear() - partesNac.anio;
+
+  return {
+    diasFaltantes,
+    edadQueCumple,
+    fechaNacFormateada: `${String(partesNac.dia).padStart(2, "0")}/${String(partesNac.mes).padStart(2, "0")}/${partesNac.anio}`
+  };
+}
+
+window.renderizarCumpleanos = function() {
+  const contenedor = document.getElementById("listaCumpleanos");
+  if (!contenedor) return;
+
+  const selector = document.getElementById("filtroCumpleanos");
+  const filtro = selector ? selector.value : "Todas";
+  const filtroNorm = filtro.toLowerCase().replace(/\s+/g, "");
+
+  const ahora = new Date();
+  const hoySinHora = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate());
+
+  const jugadorasConCumple = obtenerTodasJugadoras()
+    .map((j, idx) => {
+      const nombreCompleto = (j.nombre && j.apellido)
+        ? `${j.nombre.trim()} ${j.apellido.trim()}`
+        : (j.nombre || j.nombreCompleto || `Jugadora ${idx + 1}`).trim();
+      const division = normalizarTexto(j.categoria || j.division || "Sin división");
+      const rawNac = j.fechaNacimiento || j.nacimiento || j.fechaNac || j.cumpleanos || "";
+      const partesNac = parsearFechaNacimiento(rawNac);
+      if (!partesNac) return null;
+
+      const calc = calcularProximoCumple(partesNac, hoySinHora);
+      return {
+        nombreCompleto,
+        division,
+        ...calc
+      };
+    })
+    .filter(Boolean)
+    .filter(item => {
+      if (filtro === "Todas") return true;
+      return item.division.toLowerCase().replace(/\s+/g, "") === filtroNorm;
+    })
+    .sort((a, b) => a.diasFaltantes - b.diasFaltantes);
+
+  contenedor.replaceChildren();
+
+  if (!jugadorasConCumple.length) {
+    const vacio = document.createElement("div");
+    vacio.className = "sin-datos";
+
+    const simbolo = document.createElement("div");
+    simbolo.className = "simbolo";
+    simbolo.textContent = "🎂";
+
+    const titulo = document.createElement("strong");
+    titulo.textContent = filtro === "Todas"
+      ? "Sin fechas de nacimiento cargadas"
+      : `Sin cumpleaños registrados en ${filtro}`;
+
+    const mensaje = document.createElement("p");
+    mensaje.textContent =
+      "Cargá la fecha de nacimiento de las jugadoras en jugadoras.html para ver los próximos cumpleaños.";
+
+    vacio.append(simbolo, titulo, mensaje);
+    contenedor.append(vacio);
+    return;
+  }
+
+  jugadorasConCumple.forEach(item => {
+    const fila = document.createElement("div");
+    fila.className = "item-cumple" + (item.diasFaltantes === 0 ? " hoy" : "");
+
+    const info = document.createElement("div");
+    info.className = "cumple-info";
+
+    const nombre = document.createElement("div");
+    nombre.className = "cumple-nombre";
+    nombre.textContent = item.nombreCompleto;
+
+    const sub = document.createElement("div");
+    sub.className = "cumple-sub";
+    sub.textContent = `${item.division} · Nacimiento: ${item.fechaNacFormateada}`;
+
+    info.append(nombre, sub);
+
+    const badges = document.createElement("div");
+    badges.className = "cumple-badges";
+
+    const badgeFalta = document.createElement("span");
+    badgeFalta.className = "badge-falta";
+    if (item.diasFaltantes === 0) {
+      badgeFalta.textContent = "🎉 ¡Hoy cumple años!";
+    } else if (item.diasFaltantes === 1) {
+      badgeFalta.textContent = "Falta 1 día (Mañana)";
+    } else {
+      badgeFalta.textContent = `Faltan ${item.diasFaltantes} días`;
+    }
+
+    const badgeEdad = document.createElement("span");
+    badgeEdad.className = "badge-edad";
+    badgeEdad.textContent = `Cumple ${item.edadQueCumple} años`;
+
+    badges.append(badgeFalta, badgeEdad);
+    fila.append(info, badges);
+    contenedor.append(fila);
+  });
+};
 
 /* =====================================================
    FUNCIONES DEL CALENDARIO
@@ -2102,7 +2361,7 @@ function obtenerImagenActividad(actividad) {
   ).trim();
 }
 
-function renderizarCalendario() {
+window.renderizarCalendario = function() {
   const division = document.getElementById("filtroCalendario").value;
   const cuerpo = document.getElementById("cuerpoCalendario");
 
@@ -2182,7 +2441,7 @@ function renderizarCalendario() {
   }
 
   renderizarDetalleDia(fechaSeleccionada, division);
-}
+};
 
 function renderizarDetalleDia(fecha, division) {
   const contenedor = document.getElementById("detalleDia");
@@ -2255,7 +2514,7 @@ function renderizarDetalleDia(fecha, division) {
   contenedor.append(detalle);
 }
 
-function cambiarMes(cantidad) {
+window.cambiarMes = function(cantidad) {
   fechaVista = new Date(
     fechaVista.getFullYear(),
     fechaVista.getMonth() + cantidad,
@@ -2263,19 +2522,21 @@ function cambiarMes(cantidad) {
   );
 
   renderizarCalendario();
-}
+};
 
-function cambiarDivisionCalendario() {
+window.cambiarDivisionCalendario = function() {
   guardarPreferenciaDesdeSelector("filtroCalendario");
   renderizarCalendario();
-}
+};
 
 /* =====================================================
    ACTUALIZACIÓN AUTOMÁTICA
 ===================================================== */
 
-window.addEventListener("focus", () => {
+window.addEventListener("focus", async () => {
+  await Promise.all([sincronizarPartidosDesdeNube(), sincronizarJugadorasDesdeNube()]);
   renderizarFixture();
+  renderizarCumpleanos();
   renderizarCalendario();
 });
 
@@ -2286,10 +2547,13 @@ window.addEventListener("storage", evento => {
 
   if (
     evento.key &&
-    /(fixture|partidos|encuentros)/i.test(evento.key) &&
-    !/resultados/i.test(evento.key)
+    /(fixture|partidos|encuentros|resultados)/i.test(evento.key)
   ) {
     renderizarFixture();
+  }
+
+  if (evento.key && /(jugadoras|plantel)/i.test(evento.key)) {
+    renderizarCumpleanos();
   }
 });
 
@@ -2347,9 +2611,20 @@ function obtenerClubPorNombre(nombre) {
 
 /* Inicializar la página */
 
-inicializarPreferencias();
-renderizarFixture();
-renderizarCalendario();
+(async function iniciarPaginaPrincipal() {
+  inicializarPreferencias();
+  renderizarFixture();
+  renderizarCumpleanos();
+  renderizarCalendario();
+
+  await Promise.all([
+    sincronizarPartidosDesdeNube(),
+    sincronizarJugadorasDesdeNube()
+  ]);
+
+  renderizarFixture();
+  renderizarCumpleanos();
+})();
 </script>
 
 </body>
