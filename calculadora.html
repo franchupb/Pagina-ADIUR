@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -732,6 +733,369 @@ hr {
 }
 
 /* =====================================================
+   PESTAÑAS: ÁREAS FUNCIONALES Y VOLUMEN
+===================================================== */
+
+.panel-herramientas {
+  padding: 0;
+  overflow: hidden;
+}
+
+.tabs-calculadora {
+  display: flex;
+  gap: 5px;
+  padding: 10px 12px 0;
+  background: #fafafa;
+  border-bottom: 1px solid var(--borde);
+}
+
+.tab-calculadora {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 46px;
+  padding: 11px 17px;
+  border: 1px solid transparent;
+  border-bottom: 0;
+  border-radius: 10px 10px 0 0;
+  background: transparent;
+  color: #666;
+  font-size: 12px;
+  font-weight: 900;
+  transition: background .15s, color .15s, border-color .15s;
+}
+
+.tab-calculadora:hover {
+  background: #f1f1f1;
+  color: var(--negro);
+}
+
+.tab-calculadora.activa {
+  background: #fff;
+  border-color: var(--borde);
+  color: var(--naranja-oscuro);
+}
+
+.tab-calculadora.activa::after {
+  content: "";
+  position: absolute;
+  height: 3px;
+  left: 12px;
+  right: 12px;
+  bottom: -1px;
+  border-radius: 4px 4px 0 0;
+  background: var(--naranja);
+}
+
+.tab-panel {
+  padding: 20px;
+}
+
+.tab-panel[hidden] {
+  display: none !important;
+}
+
+.preview-pdf-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(180px, 260px);
+  align-items: center;
+  gap: 22px;
+  border: 1px solid var(--borde);
+  border-radius: 13px;
+  padding: 18px;
+  background: #fff;
+}
+
+.preview-pdf-info h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.preview-pdf-info p {
+  margin: 0 0 13px;
+  color: var(--gris-texto);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.preview-pdf-trigger {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #dedede;
+  border-radius: 10px;
+  background: #f7f7f7;
+  transition: border-color .15s, transform .15s, box-shadow .15s;
+}
+
+.preview-pdf-trigger:hover {
+  border-color: var(--naranja);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 16px #00000010;
+}
+
+.preview-pdf-trigger img {
+  display: block;
+  width: 100%;
+  height: 150px;
+  object-fit: contain;
+  object-position: center;
+  border-radius: 5px;
+  background: #fff;
+}
+
+.preview-pdf-trigger span {
+  display: block;
+  margin-top: 7px;
+  color: var(--naranja-oscuro);
+  font-size: 11px;
+  font-weight: 900;
+  text-align: center;
+}
+
+.volumen-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(260px, .8fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.volumen-tabla-panel,
+.volumen-resultados-panel {
+  min-width: 0;
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.volumen-panel-titulo {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--borde);
+  background: #fafafa;
+}
+
+.volumen-panel-titulo h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.volumen-panel-titulo p {
+  margin: 5px 0 0;
+  color: var(--gris-texto);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.tabla-volumen-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.tabla-volumen {
+  width: 100%;
+  min-width: 390px;
+  border-collapse: collapse;
+  font-size: 12px;
+  text-align: center;
+}
+
+.tabla-volumen th {
+  padding: 11px 9px;
+  background: #4385ee;
+  color: #fff;
+  font-weight: 900;
+  border: 1px solid #2e6fda;
+}
+
+.tabla-volumen td {
+  padding: 9px;
+  border: 1px solid #dedede;
+  color: #333;
+}
+
+.tabla-volumen tbody tr:nth-child(even) {
+  background: #fafafa;
+}
+
+.tabla-volumen td:last-child {
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.tabla-volumen tfoot td {
+  background: #f0f0f0;
+  font-weight: 900;
+}
+
+.volumen-control {
+  padding: 16px;
+  border-bottom: 1px solid var(--borde);
+  background: #fff;
+}
+
+.volumen-control label {
+  display: block;
+  margin-bottom: 7px;
+  color: #555;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .3px;
+}
+
+.volumen-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.volumen-input-wrap input {
+  max-width: 230px;
+  font-size: 18px;
+  font-weight: 900;
+  border-color: #efb58f;
+}
+
+.volumen-input-wrap span {
+  color: var(--gris-texto);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.volumen-resultados {
+  display: grid;
+  gap: 10px;
+  padding: 15px;
+}
+
+.volumen-resultado-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 9px;
+  background: #f7f7f7;
+}
+
+.volumen-resultado-item span {
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.volumen-resultado-item strong {
+  font-size: 16px;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.volumen-resultado-item small {
+  display: block;
+  margin-top: 3px;
+  color: var(--gris-texto);
+  font-size: 10px;
+  font-weight: 400;
+}
+
+.volumen-resultado-item.aerobico {
+  background: #fff4e9;
+  color: #a84e0b;
+}
+
+.volumen-resultado-item.anaerobico {
+  background: #fffbdc;
+  color: #786000;
+}
+
+.volumen-resultado-item.velocidad {
+  background: #eef4ff;
+  color: #285ba8;
+}
+
+.volumen-subtotal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: 0 15px 15px;
+  padding: 13px;
+  border: 1px solid #d8d8d8;
+  border-radius: 9px;
+  background: #ececec;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.volumen-subtotal strong {
+  font-size: 17px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.modal-pdf-content {
+  width: min(1180px, 100%);
+}
+
+.vista-pdf-imagen {
+  display: block;
+  width: 100%;
+  max-height: 76vh;
+  object-fit: contain;
+  border: 1px solid var(--borde);
+  border-radius: 9px;
+  background: #f4f4f4;
+}
+
+@media (max-width: 950px) {
+  .volumen-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .tabs-calculadora {
+    gap: 3px;
+    padding: 8px 8px 0;
+  }
+
+  .tab-calculadora {
+    flex: 1;
+    min-height: 44px;
+    padding: 10px 7px;
+    font-size: 10px;
+  }
+
+  .tab-panel {
+    padding: 12px;
+  }
+
+  .preview-pdf-card {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 13px;
+  }
+
+  .preview-pdf-trigger {
+    max-width: 360px;
+  }
+
+  .preview-pdf-trigger img {
+    height: 130px;
+  }
+}
+
+@media print {
+  .panel-herramientas {
+    display: none !important;
+  }
+}
+
+/* =====================================================
    MODALES
 ===================================================== */
 
@@ -1316,6 +1680,103 @@ hr {
       </p>
     </section>
 
+    <section class="panel panel-herramientas" aria-label="Herramientas complementarias de la calculadora">
+      <div class="tabs-calculadora" role="tablist" aria-label="Herramientas de entrenamiento">
+        <button class="tab-calculadora activa" id="tabAreas" type="button" role="tab"
+          aria-selected="true" aria-controls="panelAreas" data-tab-target="panelAreas">
+          Áreas funcionales
+        </button>
+        <button class="tab-calculadora" id="tabVolumen" type="button" role="tab"
+          aria-selected="false" aria-controls="panelVolumen" data-tab-target="panelVolumen" tabindex="-1">
+          Calculadora de volúmenes
+        </button>
+      </div>
+
+      <div class="tab-panel" id="panelAreas" role="tabpanel" aria-labelledby="tabAreas">
+        <div class="preview-pdf-card">
+          <div class="preview-pdf-info">
+            <h3>Referencia de áreas funcionales</h3>
+            <p>
+              Consultá la tabla de áreas funcionales, sus características y referencias de trabajo.
+              Tocá la miniatura para abrir una vista general ampliada sin salir de la calculadora.
+            </p>
+            <span class="badge training">Documento de referencia · 1 página</span>
+          </div>
+          <button class="preview-pdf-trigger" id="previewAreasBtn" type="button"
+            aria-label="Ampliar vista previa del documento de áreas funcionales">
+            <img id="areasPreviewImage" alt="Miniatura del documento PDF Pasadas Áreas Funcionales">
+            <span>VER VISTA GENERAL ↗</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="panelVolumen" role="tabpanel" aria-labelledby="tabVolumen" hidden>
+        <div class="volumen-layout">
+          <section class="volumen-tabla-panel">
+            <div class="volumen-panel-titulo">
+              <h3>Distribución porcentual del volumen</h3>
+              <p>Las distancias se calculan automáticamente a partir del volumen total deseado.</p>
+            </div>
+            <div class="tabla-volumen-wrapper">
+              <table class="tabla-volumen">
+                <thead>
+                  <tr><th scope="col">Intensidad</th><th scope="col">Porcentajes</th><th scope="col">Distancia</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Con Pelota</td><td>14%</td><td id="distancePelota">1.260 m</td></tr>
+                  <tr><td>Caminando</td><td>23%</td><td id="distanceCaminando">2.070 m</td></tr>
+                  <tr><td>Trotando</td><td>27%</td><td id="distanceTrotando">2.430 m</td></tr>
+                  <tr><td>Trote Acel</td><td>12%</td><td id="distanceTroteAcel">1.080 m</td></tr>
+                  <tr><td>Alargue</td><td>10%</td><td id="distanceAlargue">900 m</td></tr>
+                  <tr><td title="Trabajo al 100% de intensidad">100%</td><td>7%</td><td id="distanceVelocidad">630 m</td></tr>
+                  <tr><td>Reposición</td><td>7%</td><td id="distanceReposicion">630 m</td></tr>
+                </tbody>
+                <tfoot>
+                  <tr><td colspan="2">Total distribuido</td><td id="distanceTotal">9.000 m</td></tr>
+                </tfoot>
+              </table>
+            </div>
+          </section>
+
+          <section class="volumen-resultados-panel">
+            <div class="volumen-panel-titulo">
+              <h3>Volumen deseado y áreas resultantes</h3>
+              <p>Modificá solamente el volumen total para actualizar todos los resultados.</p>
+            </div>
+            <div class="volumen-control">
+              <label for="volumeDesired">VOLUMEN TOTAL DESEADO</label>
+              <div class="volumen-input-wrap">
+                <input id="volumeDesired" type="number" min="0" step="any" value="9000"
+                  inputmode="decimal" aria-describedby="volumeDesiredHint">
+                <span>metros</span>
+              </div>
+              <p class="hint" id="volumeDesiredHint" style="margin:8px 0 0;">
+                Base de cálculo: 100% del volumen ingresado.
+              </p>
+            </div>
+            <div class="volumen-resultados">
+              <div class="volumen-resultado-item aerobico">
+                <div><span>AERÓBICO</span><small>Trotando + trote acel. + reposición (46%)</small></div>
+                <strong id="resultAerobico">4.140 m</strong>
+              </div>
+              <div class="volumen-resultado-item anaerobico">
+                <div><span>ANAERÓBICO</span><small>Alargue (10%)</small></div>
+                <strong id="resultAnaerobico">900 m</strong>
+              </div>
+              <div class="volumen-resultado-item velocidad">
+                <div><span>VELOCIDAD</span><small>Trabajo al 100% (7%)</small></div>
+                <strong id="resultVelocidad">630 m</strong>
+              </div>
+            </div>
+            <div class="volumen-subtotal">
+              <span>Subtotal de las tres áreas</span>
+              <strong id="resultSubtotal">5.670 m</strong>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+
     <div id="daysGrid" class="days-grid"></div>
 
   </main>
@@ -1467,6 +1928,19 @@ hr {
       <button class="btn btn-primary" id="saveDays" type="button">Guardar días</button>
     </div>
 
+  </div>
+</div>
+
+<!-- MODAL: VISTA GENERAL DE ÁREAS FUNCIONALES -->
+<div class="modal" id="areasModal" role="dialog" aria-modal="true" aria-labelledby="areasModalTitle">
+  <div class="modal-content modal-pdf-content">
+    <div class="modal-head">
+      <h3 id="areasModalTitle">Áreas funcionales · vista general</h3>
+      <button class="close" id="closeAreasModal" type="button" aria-label="Cerrar">×</button>
+    </div>
+    <img class="vista-pdf-imagen" id="areasModalImage"
+      alt="Documento completo de referencia de áreas funcionales">
+    <p class="hint" style="margin:10px 0 0;">Vista en imagen de la página completa del documento de referencia.</p>
   </div>
 </div>
 
@@ -2544,8 +3018,144 @@ function mostrarNotificacion(texto) {
 }
 
 /* =====================================================
+   CALCULADORA INTERACTIVA DE DISTRIBUCIÓN DE VOLUMEN
+===================================================== */
+
+const AREAS_PREVIEW_IMAGE = "areas_funcionales_preview.webp";
+const VOLUME_STORAGE_KEY = "calculadoraADIURVolumenDeseadoV1";
+
+const DISTRIBUCION_VOLUMEN = [
+  { id: "pelota", porcentaje: 14 },
+  { id: "caminando", porcentaje: 23 },
+  { id: "trotando", porcentaje: 27 },
+  { id: "troteAcel", porcentaje: 12 },
+  { id: "alargue", porcentaje: 10 },
+  { id: "velocidad", porcentaje: 7 },
+  { id: "reposicion", porcentaje: 7 }
+];
+
+function cargarVolumenDeseado() {
+  try {
+    const guardado = localStorage.getItem(VOLUME_STORAGE_KEY);
+    if (guardado !== null) {
+      const numero = Number(guardado);
+      if (Number.isFinite(numero) && numero >= 0) return numero;
+    }
+  } catch (error) {
+    console.warn("No se pudo recuperar el volumen deseado.", error);
+  }
+  return 9000;
+}
+
+function formatearVolumen(valor) {
+  return Number(valor).toLocaleString("es-AR", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2
+  });
+}
+
+function actualizarCalculadoraVolumen() {
+  const valorIngresado = $("volumeDesired").value.trim();
+
+  if (
+    valorIngresado === "" ||
+    !Number.isFinite(Number(valorIngresado)) ||
+    Number(valorIngresado) < 0
+  ) {
+    DISTRIBUCION_VOLUMEN.forEach(item => {
+      const id = "distance" + item.id.charAt(0).toUpperCase() + item.id.slice(1);
+      const celda = $(id);
+      if (celda) celda.textContent = "—";
+    });
+    $("distanceTotal").textContent = "—";
+    $("resultAerobico").textContent = "—";
+    $("resultAnaerobico").textContent = "—";
+    $("resultVelocidad").textContent = "—";
+    $("resultSubtotal").textContent = "—";
+    return;
+  }
+
+  const volumen = Number(valorIngresado);
+
+  DISTRIBUCION_VOLUMEN.forEach(item => {
+    const distancia = volumen * item.porcentaje / 100;
+    const id = "distance" + item.id.charAt(0).toUpperCase() + item.id.slice(1);
+    const celda = $(id);
+    if (celda) celda.textContent = formatearVolumen(distancia) + " m";
+  });
+
+  const aerobico = volumen * 0.46;
+  const anaerobico = volumen * 0.10;
+  const velocidad = volumen * 0.07;
+  const subtotal = aerobico + anaerobico + velocidad;
+
+  $("distanceTotal").textContent = formatearVolumen(volumen) + " m";
+  $("resultAerobico").textContent = formatearVolumen(aerobico) + " m";
+  $("resultAnaerobico").textContent = formatearVolumen(anaerobico) + " m";
+  $("resultVelocidad").textContent = formatearVolumen(velocidad) + " m";
+  $("resultSubtotal").textContent = formatearVolumen(subtotal) + " m";
+
+  try {
+    localStorage.setItem(VOLUME_STORAGE_KEY, String(volumen));
+  } catch (error) {
+    console.warn("No se pudo guardar el volumen deseado.", error);
+  }
+}
+
+/* =====================================================
+   PESTAÑAS Y VISTA AMPLIADA DEL PDF
+===================================================== */
+
+function activarPestanaCalculadora(panelId) {
+  document.querySelectorAll(".tab-calculadora").forEach(tab => {
+    const activa = tab.dataset.tabTarget === panelId;
+    tab.classList.toggle("activa", activa);
+    tab.setAttribute("aria-selected", String(activa));
+    tab.tabIndex = activa ? 0 : -1;
+  });
+
+  document.querySelectorAll(".tab-panel").forEach(panel => {
+    panel.hidden = panel.id !== panelId;
+  });
+}
+
+function abrirVistaAreas() {
+  $("areasModal").classList.add("open");
+  $("closeAreasModal").focus();
+}
+
+function cerrarVistaAreas() {
+  $("areasModal").classList.remove("open");
+  $("previewAreasBtn").focus();
+}
+
+function inicializarHerramientasVolumen() {
+  $("areasPreviewImage").src = AREAS_PREVIEW_IMAGE;
+  $("areasModalImage").src = AREAS_PREVIEW_IMAGE;
+  $("volumeDesired").value = cargarVolumenDeseado();
+  actualizarCalculadoraVolumen();
+  activarPestanaCalculadora("panelAreas");
+}
+
+/* =====================================================
    EVENTOS
 ===================================================== */
+
+document.querySelectorAll(".tab-calculadora").forEach(tab => {
+  tab.addEventListener("click", () => {
+    activarPestanaCalculadora(tab.dataset.tabTarget);
+  });
+});
+
+$("volumeDesired").addEventListener("input", actualizarCalculadoraVolumen);
+$("previewAreasBtn").addEventListener("click", abrirVistaAreas);
+$("closeAreasModal").addEventListener("click", cerrarVistaAreas);
+
+$("areasModal").addEventListener("click", event => {
+  if (event.target === $("areasModal")) cerrarVistaAreas();
+});
+
+
 
 $("division").addEventListener("change", renderDays);
 
@@ -2627,6 +3237,7 @@ document.addEventListener("keydown", event => {
   if (event.key === "Escape") {
     closeEntryModal();
     closeDaysModal();
+    if ($("areasModal").classList.contains("open")) cerrarVistaAreas();
 
     if (window.matchMedia("(max-width: 760px)").matches) {
       $("sidebar").classList.remove("visible");
@@ -2650,6 +3261,7 @@ window.addEventListener("resize", () => {
 
 function inicializarCalculadora() {
   inicializarPerfil();
+  inicializarHerramientasVolumen();
 
   $("division").value = "Sub 16";
 
