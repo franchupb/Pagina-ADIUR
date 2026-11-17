@@ -4504,11 +4504,28 @@ function extraerJugadores(valor,salida,divisionPadre="",profundidad=0) {
   });
 }
 
-function cargarJugadorasExternas() {
+async function cargarJugadorasExternasDesdeNube() {
   const salida = [];
-  // Agregamos también la clave habitual por si jugadoras.html guarda ahí
-  const clavesPosibles = [CLAVE_PLANTEL, "adiurJugadorasV1", "adiurJugadoras", "plantelADIUR"];
   
+  // 1. Consultar la nube de Firebase si está disponible
+  if (db) {
+    try {
+      const colecciones = ["jugadoras", "plantel", "jugadorasADIUR", "adiur_jugadoras"];
+      for (const col of colecciones) {
+        const snap = await db.collection(col).get();
+        snap.forEach(doc => {
+          const data = doc.data();
+          const normalizado = normalizarJugador({ id: doc.id, ...data }, "nube", salida.length);
+          if (normalizado) salida.push(normalizado);
+        });
+      }
+    } catch (e) {
+      console.warn("No se pudieron cargar las jugadoras desde Firebase:", e);
+    }
+  }
+
+  // 2. Respaldo local por si hay algo guardado en localStorage
+  const clavesPosibles = [CLAVE_PLANTEL, "adiurJugadorasV1", "adiurJugadoras", "plantelADIUR"];
   clavesPosibles.forEach(clave => {
     const datos = leerJSON(clave, []);
     if (Array.isArray(datos)) {
@@ -4518,6 +4535,15 @@ function cargarJugadorasExternas() {
       });
     }
   });
+
+  const vistos = new Set();
+  return salida.filter(j => {
+    const key = claveJugador(j.nombre, j.division);
+    if (vistos.has(key)) return false;
+    vistos.add(key);
+    return true;
+  });
+}
 
   const vistos = new Set();
   return salida.filter(j => {
@@ -4554,7 +4580,7 @@ function obtenerPlantelCompleto() {
 function jugadoresParaDivision(division) {
   if (!DIVISIONES.includes(division)) return [];
 
-  // Obtenemos todo el plantel unificado y fresco
+  // Obtenemos todo el plantel unificado
   const plantelTotal = obtenerPlantelCompleto();
 
   return plantelTotal.filter(j => {
@@ -6138,10 +6164,13 @@ function inicializarEventos() {
 async function iniciar() {
   cargarPerfil();
   configurarMenuLateral();
-  plantelPropio=cargarPlantelPropio();
-  jugadoresExternos=cargarJugadorasExternas();
+  plantelPropio = cargarPlantelPropio();
+  
+  // AQUÍ ESTÁ EL CAMBIO CLAVE: Esperamos a que cargue la nube y la local
+  jugadoresExternos = await cargarJugadorasExternasDesdeNube();
+  
   await cargarJugadorasDesdeJugadorasHtml();
-  partidosFixture=cargarFixture();
+  partidosFixture = cargarFixture();
   cargarPartidos();
   actualizarSelectorFixture();
   inicializarEventos();
