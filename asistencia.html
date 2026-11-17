@@ -1232,6 +1232,82 @@ a {
   border-radius: 11px;
   background: #fff;
 }
+  
+/* =====================================================
+   RESUMEN DE PROMEDIOS MENSUALES Y ANUALES
+===================================================== */
+
+.metrica-periodo-titulo {
+  padding: 17px 23px 5px;
+  color: var(--naranja-oscuro);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .8px;
+}
+
+.resumen-periodos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 14px 23px 20px;
+}
+
+.resumen-periodo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  background: #fffaf6;
+}
+
+.resumen-periodo-etiqueta {
+  color: #777;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .6px;
+  line-height: 1.5;
+}
+
+.resumen-periodo strong {
+  color: var(--naranja-oscuro);
+  font-size: 34px;
+  font-weight: 900;
+}
+
+.resumen-periodo p {
+  margin: 0;
+  color: #777;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.resumen-division {
+  background: #fff;
+  border-color: #f2d5c2;
+}
+
+@media (max-width: 760px) {
+  .metrica-periodo-titulo {
+    padding: 15px 14px 5px;
+  }
+
+  .resumen-periodos {
+    grid-template-columns: 1fr;
+    padding: 12px 14px 16px;
+    gap: 9px;
+  }
+
+  .resumen-periodo {
+    padding: 16px;
+  }
+
+  .resumen-periodo strong {
+    font-size: 29px;
+  }
+}
+
 
 .metrica-superior {
   display: flex;
@@ -3192,6 +3268,125 @@ function obtenerFechasDelMes() {
 }
 
 /* =====================================================
+   ESTADÍSTICAS MENSUALES Y ANUALES
+===================================================== */
+
+// Obtiene todas las fechas con sesiones registradas
+// de una categoría durante un año.
+
+function obtenerFechasDelAnio(anio) {
+  const fechas = new Set();
+
+  Object.keys(sesiones).forEach(clave => {
+    const sesion = sesiones[clave];
+
+    if (!sesion || typeof sesion !== "object") return;
+
+    const categoria = obtenerCategoriaDeSesion(clave, sesion);
+
+    if (
+      normalizarCategoria(categoria) !==
+      normalizarCategoria(categoriaSeleccionada)
+    ) return;
+
+    const fecha = obtenerFechaDeSesion(clave, sesion);
+
+    if (
+      fecha &&
+      fechaDesdeISO(fecha) &&
+      fechaDesdeISO(fecha).getFullYear() === anio
+    ) {
+      fechas.add(fecha);
+    }
+  });
+
+  return [...fechas].sort();
+}
+
+
+// Calcula las estadísticas de una jugadora
+// en un conjunto de fechas.
+
+function calcularEstadisticasJugadora(jugadora, fechas) {
+  let presentes = 0;
+  let ausentes = 0;
+  let tardes = 0;
+  let justificadas = 0;
+
+  fechas.forEach(fecha => {
+    if (esDiaSinEntrenamiento(fecha)) return;
+
+    const estado = obtenerEstadoJugadora(jugadora, fecha);
+
+    if (estado === "presente") presentes++;
+    else if (estado === "ausente") ausentes++;
+    else if (estado === "tarde") tardes++;
+    else if (estado === "justificada") justificadas++;
+  });
+
+  const asistencias = presentes + tardes;
+  const diasComputables = presentes + ausentes + tardes;
+
+  const porcentaje = diasComputables > 0
+    ? Math.round((asistencias / diasComputables) * 100)
+    : 0;
+
+  return {
+    presentes,
+    ausentes,
+    tardes,
+    justificadas,
+    asistencias,
+    diasComputables,
+    porcentaje
+  };
+}
+
+
+// Calcula el promedio de toda la división.
+// Se suman los registros de todas las jugadoras,
+// no se promedian porcentajes individuales.
+
+function calcularEstadisticasDivision(fechas) {
+  let presentes = 0;
+  let ausentes = 0;
+  let tardes = 0;
+  let justificadas = 0;
+
+  const lista = jugadorasCategoriaActual();
+
+  lista.forEach(jugadora => {
+    const datos = calcularEstadisticasJugadora(
+      jugadora,
+      fechas
+    );
+
+    presentes += datos.presentes;
+    ausentes += datos.ausentes;
+    tardes += datos.tardes;
+    justificadas += datos.justificadas;
+  });
+
+  const asistencias = presentes + tardes;
+  const diasComputables = presentes + ausentes + tardes;
+
+  const porcentaje = diasComputables > 0
+    ? Math.round((asistencias / diasComputables) * 100)
+    : 0;
+
+  return {
+    cantidadJugadoras: lista.length,
+    presentes,
+    ausentes,
+    tardes,
+    justificadas,
+    asistencias,
+    diasComputables,
+    porcentaje
+  };
+}
+
+/* =====================================================
    ESTADOS DE ASISTENCIA
 ===================================================== */
 
@@ -3571,6 +3766,7 @@ function renderizarSelectorJugadoras() {
   );
 }
 
+
 function renderizarSeguimientoIndividual() {
   const contenido = document.getElementById("contenidoSeguimiento");
 
@@ -3583,45 +3779,35 @@ function renderizarSeguimientoIndividual() {
       <div class="sin-jugadora">
         No hay jugadoras disponibles para
         ${escaparHTML(categoriaSeleccionada || "esta categoría")}.
-        <br>
-        Revisá la categoría asignada a las jugadoras en la sección Plantel.
       </div>
     `;
     return;
   }
 
-  const fechas = obtenerFechasDelMes();
+  const anio = mesActual.getFullYear();
 
-  let presentes = 0;
-  let ausentes = 0;
-  let tardes = 0;
-  let justificadas = 0;
-  let diasMarcados = 0;
+  // Estadísticas individuales
+  const fechasMes = obtenerFechasDelMes();
+  const fechasAnio = obtenerFechasDelAnio(anio);
 
-  fechas.forEach(fecha => {
-    if (esDiaSinEntrenamiento(fecha)) return;
+  const mensual = calcularEstadisticasJugadora(
+    jugadora,
+    fechasMes
+  );
 
-    const estado = obtenerEstadoJugadora(jugadora, fecha);
+  const anual = calcularEstadisticasJugadora(
+    jugadora,
+    fechasAnio
+  );
 
-    if (estado === "presente") {
-      presentes++;
-      diasMarcados++;
-    } else if (estado === "ausente") {
-      ausentes++;
-      diasMarcados++;
-    } else if (estado === "tarde") {
-      tardes++;
-      diasMarcados++;
-    } else if (estado === "justificada") {
-      justificadas++;
-    }
-  });
+  // Estadísticas de toda la división
+  const divisionMensual = calcularEstadisticasDivision(
+    fechasMes
+  );
 
-  const asistencias = presentes + tardes;
-
-  const porcentaje = diasMarcados > 0
-    ? Math.round((asistencias / diasMarcados) * 100)
-    : 0;
+  const divisionAnual = calcularEstadisticasDivision(
+    fechasAnio
+  );
 
   const iniciales = escaparHTML(
     inicialesJugadora(jugadora.nombre)
@@ -3647,15 +3833,19 @@ function renderizarSeguimientoIndividual() {
 
     </div>
 
+    <!-- ESTADÍSTICAS INDIVIDUALES DEL MES -->
+
+    <div class="metrica-periodo-titulo">
+      ASISTENCIA INDIVIDUAL · ${mes.toUpperCase()}
+    </div>
+
     <div class="metricas-individuales">
 
       <div class="metrica metrica-presente">
         <div class="metrica-superior">
           <span class="metrica-icono">✓</span>
         </div>
-
-        <p class="metrica-numero">${asistencias}</p>
-
+        <p class="metrica-numero">${mensual.asistencias}</p>
         <span class="metrica-etiqueta">Asistencias</span>
       </div>
 
@@ -3663,9 +3853,7 @@ function renderizarSeguimientoIndividual() {
         <div class="metrica-superior">
           <span class="metrica-icono">×</span>
         </div>
-
-        <p class="metrica-numero">${ausentes}</p>
-
+        <p class="metrica-numero">${mensual.ausentes}</p>
         <span class="metrica-etiqueta">Inasistencias</span>
       </div>
 
@@ -3673,9 +3861,7 @@ function renderizarSeguimientoIndividual() {
         <div class="metrica-superior">
           <span class="metrica-icono">T</span>
         </div>
-
-        <p class="metrica-numero">${tardes}</p>
-
+        <p class="metrica-numero">${mensual.tardes}</p>
         <span class="metrica-etiqueta">Llegadas tarde</span>
       </div>
 
@@ -3683,37 +3869,114 @@ function renderizarSeguimientoIndividual() {
         <div class="metrica-superior">
           <span class="metrica-icono">%</span>
         </div>
+        <p class="metrica-numero">${mensual.porcentaje}%</p>
+        <span class="metrica-etiqueta">Promedio mensual</span>
+      </div>
 
-        <p class="metrica-numero">${porcentaje}%</p>
+    </div>
 
-        <span class="metrica-etiqueta">Porcentaje de asistencia</span>
+    <!-- ESTADÍSTICAS INDIVIDUALES DEL AÑO -->
+
+    <div class="resumen-periodos">
+
+      <div class="resumen-periodo">
+
+        <span class="resumen-periodo-etiqueta">
+          PROMEDIO ANUAL INDIVIDUAL
+        </span>
+
+        <strong>${anual.porcentaje}%</strong>
+
+        <p>
+          ${anual.asistencias} asistencias de
+          ${anual.diasComputables} entrenamientos registrados.
+        </p>
+
+      </div>
+
+      <div class="resumen-periodo">
+
+        <span class="resumen-periodo-etiqueta">
+          PROMEDIO MENSUAL INDIVIDUAL
+        </span>
+
+        <strong>${mensual.porcentaje}%</strong>
+
+        <p>
+          ${mensual.asistencias} asistencias de
+          ${mensual.diasComputables} entrenamientos registrados.
+        </p>
+
+      </div>
+
+    </div>
+
+    <!-- PROMEDIO DE TODA LA DIVISIÓN -->
+
+    <div class="metrica-periodo-titulo">
+      RENDIMIENTO GENERAL · ${escaparHTML(categoriaSeleccionada)}
+    </div>
+
+    <div class="resumen-periodos">
+
+      <div class="resumen-periodo resumen-division">
+
+        <span class="resumen-periodo-etiqueta">
+          PROMEDIO MENSUAL DE LA DIVISIÓN
+        </span>
+
+        <strong>${divisionMensual.porcentaje}%</strong>
+
+        <p>
+          ${divisionMensual.cantidadJugadoras} jugadoras.
+          ${divisionMensual.asistencias} asistencias sobre
+          ${divisionMensual.diasComputables} registros computables.
+        </p>
+
+      </div>
+
+      <div class="resumen-periodo resumen-division">
+
+        <span class="resumen-periodo-etiqueta">
+          PROMEDIO ANUAL DE LA DIVISIÓN · ${anio}
+        </span>
+
+        <strong>${divisionAnual.porcentaje}%</strong>
+
+        <p>
+          ${divisionAnual.cantidadJugadoras} jugadoras.
+          ${divisionAnual.asistencias} asistencias sobre
+          ${divisionAnual.diasComputables} registros computables.
+        </p>
+
       </div>
 
     </div>
 
     <div class="individual-aclaracion">
-      <strong>Seguimiento del mes:</strong>
-      las llegadas tarde se consideran asistencias.
-      El porcentaje se calcula sobre los días con asistencia,
-      inasistencia o llegada tarde registrada. Las fechas sin
-      entrenamiento y los días sin marcar no se incluyen
-      en el cálculo.
-      ${justificadas > 0
-        ? `<br><strong>Justificaciones registradas:</strong> ${justificadas}.`
-        : ""}
+
+      <strong>Criterio de evaluación:</strong>
+      las presentes y las llegadas tarde cuentan como asistencia.
+      Las ausencias cuentan como inasistencia.
+      Las justificadas, los días sin entrenamiento y los días
+      sin marcar no se incluyen en el porcentaje.
+
     </div>
 
     <div class="pie-seguimiento">
+
       <span>
         <strong>${nombre}</strong> · ${categoria}
       </span>
 
       <span>
-        Seguimiento: ${mes}
+        Seguimiento mensual y anual · ${anio}
       </span>
+
     </div>
   `;
 }
+
 
 /* =====================================================
    ACTUALIZAR MATRIZ
