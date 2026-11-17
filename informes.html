@@ -46,7 +46,7 @@ html {
 
 body {
   margin: 0;
-  background: #fafafa;
+  background: #f5f5f5;
   color: var(--texto);
   font-size: 14px;
 }
@@ -72,8 +72,9 @@ a:focus-visible {
 .oculto { display: none !important; }
 
 /* =====================================================
-   BARRA SUPERIOR Y LATERAL — ADIUR FEMENINO
+   BARRA SUPERIOR — MODELO DE ADIUR FEMENINO
 ===================================================== */
+
 .barra-superior {
   position: sticky;
   top: 0;
@@ -100,7 +101,10 @@ a:focus-visible {
   font-size: 27px;
 }
 
-.menu-boton:hover { background: var(--gris); }
+.menu-boton:hover {
+  background: var(--gris);
+  color: var(--negro);
+}
 
 .logo-superior {
   width: 55px;
@@ -139,9 +143,6 @@ a:focus-visible {
   gap: 10px;
   min-width: 0;
   margin-left: auto;
-  border: 0;
-  background: transparent;
-  cursor: pointer;
 }
 
 .avatar {
@@ -157,9 +158,26 @@ a:focus-visible {
   font-weight: bold;
 }
 
-.informacion-perfil { display: flex; flex-direction: column; text-align: left; }
-.nombre-perfil { font-size: 13px; font-weight: 800; color: var(--negro); }
-.rol-perfil { font-size: 11px; color: var(--gris-texto); }
+.perfil-superior strong {
+  display: block;
+  max-width: 155px;
+  overflow: hidden;
+  color: var(--negro);
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.perfil-superior small {
+  display: block;
+  margin-top: 4px;
+  color: var(--gris-texto);
+  font-size: 11px;
+}
+
+/* =====================================================
+   BARRA LATERAL — MODELO DE ADIUR FEMENINO
+===================================================== */
 
 .contenedor {
   display: flex;
@@ -171,12 +189,15 @@ a:focus-visible {
   flex: 0 0 258px;
   padding: 20px 13px;
   overflow-y: auto;
+  overflow-x: hidden;
   background: white;
   border-right: 1px solid var(--borde);
   transition: margin-left .25s, transform .25s;
 }
 
-.barra-lateral.oculta { margin-left: -258px; }
+.barra-lateral.oculta {
+  margin-left: -258px;
+}
 
 .etiqueta-menu {
   margin: 3px 12px 12px;
@@ -197,37 +218,2232 @@ a:focus-visible {
   background: var(--naranja-claro);
   color: var(--naranja-oscuro);
   font-size: 13px;
-  font-weight: 850;
+  font-weight: 700;
 }
 
-.icono-menu { width: 15px; text-align: center; font-size: 17px; }
-.grupo-menu { margin-bottom: 8px; }
+.menu-inicio:hover { background: #ffe4d1; }
+
+.icono-menu {
+  width: 20px;
+  min-width: 20px;
+  text-align: center;
+  font-size: 17px;
+}
+
+.grupo-menu { margin-bottom: 11px; }
 
 .titulo-grupo {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 10px;
   width: 100%;
+  padding: 12px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #777;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.1px;
+  text-align: left;
+}
+
+.titulo-grupo:hover {
+  background: #f8f8f8;
+  color: var(--negro);
+}
+
+.grupo-izquierdo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.flecha {
+  font-size: 13px;
+  transition: transform .2s;
+}
+
+.grupo-menu.cerrado .flecha { transform: rotate(-90deg); }
+.grupo-menu.cerrado .submenu { display: none; }
+
+.submenu {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 0 0 5px;
+}
+
+.submenu a {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: #414141;
+  font-size: 12px;
+  line-height: 1.35;
+  transition: background .15s, color .15s;
+}
+
+.submenu a:hover {
+  background: #fff3eb;
+  color: var(--naranja-oscuro);
+}
+
+.submenu a.activo {
+  background: var(--naranja);
+  color: white;
+  font-weight: 700;
+}
+
+.nav-punto {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 7px;
+  border-radius: 50%;
+  background: #c9c9c9;
+}
+
+.submenu a.activo .nav-punto { background: white; }
+.submenu a:hover .nav-punto { background: var(--naranja); }
+.submenu a.activo:hover .nav-punto { background: white; }
+
+.separador-menu {
+  border: 0;
+  border-top: 1px solid var(--borde);
+  margin: 14px 4px;
+}
+
+.enlace-cerrar {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 12px;
+  border-radius: 8px;
+  color: #c0392b;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.enlace-cerrar:hover { background: #fff0f0; }
+
+.capa-sidebar { display: none; }
+
+/* =====================================================
+   CONTENIDO
+===================================================== */
+
+.contenido {
+  flex: 1;
+  min-width: 0;
+  padding: 26px;
+}
+
+.page-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+.eyebrow {
+  display: inline-block;
+  margin-bottom: 9px;
+  color: var(--naranja-oscuro);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+}
+
+.page-heading h2 {
+  margin: 0;
+  color: var(--negro);
+  font-size: clamp(24px,3vw,31px);
+  letter-spacing: -.7px;
+}
+
+.page-heading p {
+  max-width: 720px;
+  margin: 9px 0 0;
+  color: var(--gris-texto);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.botonera-heading,
+.grupo-botones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.metricas {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 13px;
+  margin-bottom: 20px;
+}
+
+.metrica {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  background: white;
+  box-shadow: 0 4px 18px rgba(0,0,0,.045);
+}
+
+.metrica-icono {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: var(--naranja-claro);
+  color: var(--naranja-oscuro);
+  font-size: 18px;
+}
+
+.metrica:nth-child(2) .metrica-icono {
+  background: var(--verde-fondo);
+  color: var(--verde);
+}
+
+.metrica:nth-child(3) .metrica-icono {
+  background: #f0ecff;
+  color: #6447bd;
+}
+
+.metrica:nth-child(4) .metrica-icono {
+  background: var(--amarillo-fondo);
+  color: var(--amarillo);
+}
+
+.metrica-texto { min-width: 0; }
+
+.metrica-etiqueta {
+  color: var(--gris-texto);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.metrica-valor {
+  margin-top: 5px;
+  color: var(--negro);
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.metrica-detalle {
+  margin-top: 4px;
+  color: #999;
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.lista-goleadoras { display: grid; gap: 5px; margin-top: 9px; }
+.lista-goleadoras span { color: #929292; font-size: 10px; line-height: 1.35; }
+.goleadora-mini { display: flex; align-items: center; justify-content: space-between; gap: 8px; color: #454545; font-size: 10px; line-height: 1.35; }
+.goleadora-mini .goleadora-nombre { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.goleadora-mini strong { flex: 0 0 auto; color: var(--verde); font-size: 11px; }
+.detalle-tarjetas { display: flex; flex-wrap: wrap; gap: 8px 12px; margin-top: 9px; }
+.detalle-tarjetas > span { display: inline-flex; align-items: center; gap: 5px; color: #777; font-size: 10px; }
+.detalle-tarjetas i { display: inline-block; width: 8px; height: 11px; border-radius: 2px; }
+.detalle-amarillas i { background: #f2c94c; border: 1px solid #d7ae26; }
+.detalle-rojas i { background: #d93636; border: 1px solid #b92b2b; }
+.detalle-tarjetas strong { color: var(--negro); font-size: 11px; }
+
+/* =====================================================
+   PESTAÑAS
+===================================================== */
+
+.pestanas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 18px;
+  padding: 5px;
+  border: 1px solid var(--borde);
+  border-radius: 11px;
+  background: white;
+}
+
+.pestana {
+  min-height: 40px;
+  padding: 0 15px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #686868;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.pestana:hover { background: #f7f7f7; }
+
+.pestana.activa {
+  background: var(--naranja-claro);
+  color: var(--naranja-oscuro);
+}
+
+.vista { display: none; }
+.vista.activa { display: block; }
+
+/* =====================================================
+   PANELES Y SECCIONES DE CARGA
+===================================================== */
+
+.panel {
+  margin-bottom: 17px;
+  padding: 20px;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  background: white;
+  box-shadow: 0 4px 18px rgba(0,0,0,.045);
+}
+
+.panel-cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 17px;
+}
+
+.panel-titulo-izquierda {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+}
+
+.numero-paso {
+  width: 31px;
+  height: 31px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  background: var(--naranja-claro);
+  color: var(--naranja-oscuro);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.panel-cabecera h3 {
+  margin: 0;
+  color: var(--negro);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.panel-cabecera p {
+  margin: 5px 0 0;
+  color: var(--gris-texto);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.rejilla {
+  display: grid;
+  grid-template-columns: repeat(12,minmax(0,1fr));
+  gap: 13px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.campo label {
+  color: #454545;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.campo input,
+.campo select,
+.campo textarea,
+.filtro input,
+.filtro select {
+  width: 100%;
+  min-width: 0;
+  min-height: 40px;
+  padding: 9px 11px;
+  border: 1px solid #dedede;
+  border-radius: 8px;
+  background: white;
+  color: var(--texto);
+  font-size: 12px;
+  transition: border-color .15s, box-shadow .15s;
+}
+
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus,
+.filtro input:focus,
+.filtro select:focus {
+  border-color: var(--naranja);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(244,119,33,.10);
+}
+
+.campo textarea {
+  min-height: 82px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.campo small {
+  color: #888;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.col-12 { grid-column: span 12; }
+.col-9 { grid-column: span 9; }
+.col-8 { grid-column: span 8; }
+.col-6 { grid-column: span 6; }
+.col-4 { grid-column: span 4; }
+.col-3 { grid-column: span 3; }
+
+.divisor {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 22px 0 13px;
+  color: var(--negro);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.divisor::before {
+  content: "";
+  width: 4px;
+  height: 17px;
+  border-radius: 4px;
+  background: var(--naranja);
+}
+
+.aviso {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin: 13px 0;
+  padding: 11px 13px;
+  border: 1px solid #f0d7c5;
+  border-radius: 9px;
+  background: #fffaf6;
+  color: #76543e;
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.aviso strong { color: #6b4022; }
+
+.aviso.neutro {
+  border-color: #e5e5e5;
+  background: #fafafa;
+  color: #646464;
+}
+
+.aviso.exito {
+  border-color: #c9ead7;
+  background: var(--verde-fondo);
+  color: #216741;
+}
+
+.aviso.error {
+  border-color: #f0c8c8;
+  background: var(--rojo-fondo);
+  color: var(--rojo);
+}
+
+/* =====================================================
+   MARCADOR Y ESCUDOS
+===================================================== */
+
+.escudos-form {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.escudo-bloque {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+  padding: 11px;
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  background: #fcfcfc;
+}
+
+.escudo-preview,
+.escudo-placeholder {
+  width: 49px;
+  height: 49px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  object-fit: contain;
+  background: white;
+}
+
+.escudo-placeholder {
+  border: 1px dashed #ddd;
+  color: #aaa;
+  font-size: 22px;
+}
+
+.escudo-info {
+  min-width: 0;
+}
+
+.escudo-info strong {
+  display: block;
+  color: var(--negro);
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+
+.escudo-info small {
+  display: block;
+  margin-top: 4px;
+  color: var(--gris-texto);
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.marcador-partido {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) auto minmax(0,1fr);
+  gap: 12px;
+  align-items: center;
+  padding: 13px 15px;
+  border: 1px solid #f0dfd1;
+  border-radius: 11px;
+  background: #fffaf6;
+}
+
+.equipo-marcador {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.equipo-marcador:last-child { text-align: right; }
+
+.equipo-marcador strong {
+  color: var(--negro);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.equipo-marcador small {
+  color: var(--gris-texto);
+  font-size: 10px;
+}
+
+.numeros-goles {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.numeros-goles input {
+  width: 53px;
+  height: 46px;
+  padding: 0 4px;
+  border: 1px solid #e3c4ac;
+  border-radius: 8px;
+  background: white;
+  color: var(--negro);
+  font-size: 22px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.numeros-goles span {
+  color: #999;
+  font-weight: 800;
+}
+
+/* =====================================================
+   LAYOUT PRINCIPAL DE LA PLANILLA
+===================================================== */
+
+.informe-layout {
+  display: grid;
+  grid-template-columns: minmax(0,1.1fr) minmax(0,.9fr);
+  gap: 0;
+  align-items: stretch;
+  margin-bottom: 17px;
+  overflow: hidden;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  background: #fff;
+  box-shadow: 0 4px 18px rgba(0,0,0,.045);
+}
+
+.panel-cancha,
+.panel-eventos {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.panel-cancha { border-left: 1px solid var(--borde); }
+
+@media (max-width: 900px) {
+  .informe-layout { grid-template-columns: minmax(0,1fr); }
+  .panel-cancha { border-left: 0; border-top: 1px solid var(--borde); }
+}
+
+.subpanel-cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 15px 16px;
+  border-bottom: 1px solid var(--borde);
+  background: white;
+}
+
+.subpanel-cabecera h3 {
+  margin: 0;
+  color: var(--negro);
+  font-size: 14px;
+}
+
+.subpanel-cabecera p {
+  margin: 4px 0 0;
+  color: var(--gris-texto);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.selector-formacion {
+  max-width: 130px;
+  min-height: 34px;
+  padding: 6px 8px;
+  border: 1px solid var(--borde);
+  border-radius: 7px;
+  background: white;
+  color: #444;
+  font-size: 10px;
+}
+
+.contenido-subpanel { padding: 15px; }
+
+/* =====================================================
+   CANCHA
+===================================================== */
+
+.cancha-wrap {
+  padding: 16px 14px;
+  background: linear-gradient(145deg,#f7f1e4,#ece2cf);
+}
+
+.rival-cancha {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 10px;
+  color: #394658;
+  font-size: 15px;
+  font-weight: 900;
+  text-align: center;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+
+.cancha {
+  position: relative;
+  width: 100%;
+  height: 420px;
+  overflow: hidden;
+  clip-path: polygon(18% 0,82% 0,100% 100%,0 100%);
+  background: repeating-linear-gradient(
+    180deg,
+    #317c5c 0,
+    #317c5c 32px,
+    #398967 32px,
+    #398967 64px
+  );
+}
+
+.cancha::before {
+  content: "";
+  position: absolute;
+  inset: 3%;
+  border: 2px solid rgba(255,255,255,.5);
+  pointer-events: none;
+}
+
+.linea-medio {
+  position: absolute;
+  top: 50%;
+  left: 10%;
+  right: 10%;
+  border-top: 2px solid rgba(255,255,255,.48);
+}
+
+.circulo-medio {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 95px;
+  height: 95px;
+  border: 2px solid rgba(255,255,255,.45);
+  border-radius: 50%;
+  transform: translate(-50%,-50%);
+}
+
+.area-rival,
+.area-adiur {
+  position: absolute;
+  left: 32%;
+  width: 36%;
+  height: 62px;
+  border: 2px solid rgba(255,255,255,.5);
+}
+
+.area-rival {
+  top: 3%;
+  border-top: 0;
+}
+
+.area-adiur {
+  bottom: 3%;
+  border-bottom: 0;
+}
+
+.jugador-cancha {
+  position: absolute;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 57px;
+  transform: translate(-50%,-50%);
+  text-align: center;
+}
+
+.camiseta {
+  position: relative;
+  width: 27px;
+  height: 31px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(0,0,0,.15);
+  border-radius: 6px 6px 4px 4px;
+  background: #fb633e;
+  color: white;
+  font-size: 10px;
+  font-weight: 900;
+  box-shadow: 0 2px 4px rgba(0,0,0,.15);
+}
+
+.camiseta::before,
+.camiseta::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  width: 7px;
+  height: 10px;
+  border-radius: 3px;
+  background: inherit;
+}
+
+.camiseta::before {
+  left: -5px;
+  transform: rotate(25deg);
+}
+
+.camiseta::after {
+  right: -5px;
+  transform: rotate(-25deg);
+}
+
+.jugador-cancha.portera .camiseta {
+  background: #00bb67;
+  color: #063d28;
+}
+
+.nombre-cancha {
+  max-width: 67px;
+  margin-top: 4px;
+  color: white;
+  font-size: 8px;
+  font-weight: 900;
+  text-shadow: 0 1px 3px rgba(0,0,0,.5);
+  overflow-wrap: anywhere;
+  text-transform: uppercase;
+}
+
+.cancha-vacia {
+  position: absolute;
+  inset: 43% 10px auto;
+  color: #e5f4eb;
+  font-size: 11px;
+  text-align: center;
+  text-shadow: 0 1px 2px rgba(0,0,0,.3);
+}
+
+.pie-cancha {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 12px;
+  color: #7a715f;
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.leyenda-camiseta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.leyenda-camiseta span {
+  width: 10px;
+  height: 12px;
+  border-radius: 3px;
+  background: #fb633e;
+}
+
+.leyenda-camiseta.portera span { background: #00bb67; }
+
+/* =====================================================
+   TABLAS DE PARTICIPACIÓN
+===================================================== */
+
+.tabla-contenedor {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--borde);
+  border-radius: 9px;
+}
+
+.tabla-jugadoras {
+  width: 100%;
+  min-width: 0;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.tabla-jugadoras th {
+  padding: 9px 7px;
+  border-bottom: 1px solid var(--borde);
+  background: #fafafa;
+  color: #656565;
+  font-size: 9px;
+  font-weight: 800;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.tabla-jugadoras td {
+  padding: 7px;
+  border-bottom: 1px solid #f0f0f0;
+  color: #3c3c3c;
+  font-size: 10px;
+  vertical-align: middle;
+}
+
+.tabla-jugadoras tr:last-child td { border-bottom: 0; }
+.tabla-jugadoras th:nth-child(1), .tabla-jugadoras td:nth-child(1) { width: 48px; }
+.tabla-jugadoras th:nth-child(3), .tabla-jugadoras td:nth-child(3) { width: 58px; }
+.tabla-jugadoras th:nth-child(4), .tabla-jugadoras td:nth-child(4),
+.tabla-jugadoras th:nth-child(5), .tabla-jugadoras td:nth-child(5) { width: 58px; }
+.tabla-jugadoras th:nth-child(6), .tabla-jugadoras td:nth-child(6) { width: 48px; }
+.jugadora-nombre { min-width: 0; }
+.jugadora-nombre strong { overflow-wrap: anywhere; }
+.tabla-jugadoras select, .tabla-jugadoras input[type="number"] { max-width: 100%; min-width: 0; }
+
+.jugadora-nombre {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 140px;
+}
+
+.jugadora-avatar {
+  width: 29px;
+  height: 29px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--naranja-claro);
+  color: var(--naranja-oscuro);
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.jugadora-nombre strong {
+  display: block;
+  color: var(--negro);
+  font-size: 10px;
+}
+
+.jugadora-nombre small {
+  display: block;
+  margin-top: 3px;
+  color: #999;
+  font-size: 9px;
+}
+
+.tabla-jugadoras select,
+.tabla-jugadoras input[type="number"] {
+  width: 58px;
+  min-height: 29px;
+  padding: 4px;
+  border: 1px solid #dedede;
+  border-radius: 6px;
+  background: white;
+  font-size: 10px;
+  text-align: center;
+}
+
+.tabla-jugadoras select { width: 62px; }
+
+.tabla-jugadoras input:disabled,
+.tabla-jugadoras select:disabled {
+  background: #f2f2f2;
+  color: #aaa;
+}
+
+.check-celda {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--naranja);
+  cursor: pointer;
+}
+
+.minutos-calculados {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 38px;
+  min-height: 25px;
+  padding: 3px 6px;
+  border-radius: 6px;
+  background: var(--verde-fondo);
+  color: var(--verde);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.minutos-calculados.cero {
+  background: #f1f1f1;
+  color: #888;
+}
+
+.pie-participacion {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 10px;
+  color: var(--gris-texto);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+/* =====================================================
+   ALTA RÁPIDA DE JUGADORA
+===================================================== */
+
+details.agregar-jugadora {
+  margin-top: 12px;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  background: #fcfcfc;
+}
+
+details.agregar-jugadora summary {
+  padding: 11px 12px;
+  color: var(--naranja-oscuro);
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.alta-jugadora-contenido {
+  padding: 12px;
+  border-top: 1px solid var(--borde);
+}
+
+/* =====================================================
+   PLANILLA DERECHA: GOLES / CAMBIOS / TARJETAS
+===================================================== */
+
+.planilla-titulo {
+  padding: 11px 12px;
+  background: var(--naranja);
+  color: white;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: .4px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.marcador-compacto {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) 32px 25px 32px minmax(0,1fr);
+  align-items: center;
+  gap: 3px;
+  padding: 9px 6px;
+  border-bottom: 1px solid #222;
+  background: white;
+  text-align: center;
+}
+
+.equipo-compacto {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-width: 0;
+  font-size: 10px;
+  font-weight: 900;
+  overflow-wrap: anywhere;
+}
+
+.equipo-compacto img {
+  width: 23px;
+  height: 23px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.numero-marcador {
+  color: var(--negro);
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.vs-marcador {
+  color: #555;
+  font-size: 9px;
+  font-weight: 900;
+}
+
+.planilla-subtitulo {
+  padding: 8px 10px;
+  border-top: 1px solid #222;
+  background: var(--naranja);
+  color: white;
+  font-size: 11px;
+  font-weight: 900;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.tabla-planilla {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.tabla-planilla th {
+  padding: 7px 4px;
+  border: 1px solid #222;
+  background: var(--naranja);
+  color: white;
+  font-size: 9px;
+  font-weight: 900;
+  text-align: center;
+  white-space: normal;
+}
+
+.tabla-planilla td {
+  padding: 4px;
+  border: 1px solid #dedede;
+  color: var(--negro);
+  font-size: 10px;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.tabla-planilla tbody tr:nth-child(even) td { background: #f7f7f7; }
+
+.tabla-planilla td input,
+.tabla-planilla td select {
+  width: 100%;
+  min-width: 0;
+  min-height: 29px;
+  padding: 3px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  background: white;
+  color: #222;
+  font-size: 9px;
+  text-align: center;
+}
+
+.tabla-planilla .col-nro { width: 28px; }
+.tabla-planilla .col-tiempo { width: 40px; }
+.tabla-planilla .col-minuto { width: 48px; }
+.tabla-planilla .col-accion { width: 28px; }
+
+.btn-agregar-evento {
+  width: 100%;
+  padding: 9px;
+  border: 0;
+  border-top: 1px solid var(--borde);
+  background: #fffaf6;
+  color: var(--naranja-oscuro);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.btn-agregar-evento:hover { background: var(--naranja-claro); }
+
+.texto-aclaracion {
+  padding: 8px 10px 11px;
+  color: #777;
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.evento-cambio td:nth-child(1) { background: #dcebd6; }
+.evento-cambio td:nth-child(2) { background: #e1e1e1; }
+.evento-cambio td:nth-child(3) { background: #ececec; }
+.evento-cambio td:nth-child(4) { background: #f0cfcf; }
+
+.evento-tarjeta .tipo-amarilla {
+  color: #9b7000;
+  font-weight: 900;
+}
+
+.evento-tarjeta .tipo-roja {
+  color: var(--rojo);
+  font-weight: 900;
+}
+
+/* =====================================================
+   BOTONES
+===================================================== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 38px;
+  padding: 0 13px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 800;
+  transition: background .15s, transform .15s;
+}
+
+.btn:active { transform: translateY(1px); }
+
+.btn-primary {
+  background: var(--naranja);
+  color: white;
+}
+
+.btn-primary:hover { background: var(--naranja-oscuro); }
+
+.btn-secondary {
+  border-color: #e1e1e1;
+  background: white;
+  color: #484848;
+}
+
+.btn-secondary:hover { background: #f7f7f7; }
+
+.btn-danger {
+  border-color: #f0caca;
+  background: white;
+  color: var(--rojo);
+}
+
+.btn-danger:hover { background: var(--rojo-fondo); }
+
+.btn-small {
+  min-height: 29px;
+  padding: 0 8px;
+  font-size: 10px;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: .55;
+}
+
+.acciones-formulario {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--borde);
+}
+
+.acciones-formulario small {
+  max-width: 500px;
+  color: var(--gris-texto);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+/* =====================================================
+   HISTORIAL
+===================================================== */
+
+.filtros {
+  display: grid;
+  grid-template-columns: minmax(170px,1.4fr) repeat(3,minmax(125px,1fr));
+  gap: 11px;
+  margin-bottom: 17px;
+}
+
+.filtro {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.filtro label {
+  color: #6b6b6b;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.filtro input,
+.filtro select {
+  min-height: 39px;
+  padding: 8px 10px;
+  font-size: 11px;
+}
+
+.resultados-cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.contador-resultados {
+  color: var(--gris-texto);
+  font-size: 11px;
+}
+
+.lista-partidos {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.partido-card {
+  padding: 16px;
+  border: 1px solid var(--borde);
+  border-radius: 11px;
+  background: white;
+}
+
+.partido-superior {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.partido-identidad {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.escudo-partido {
+  width: 47px;
+  height: 47px;
+  flex-shrink: 0;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--borde);
+  border-radius: 9px;
+  background: #fafafa;
+  color: #aaa;
+  font-size: 20px;
+}
+
+.escudo-partido img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.partido-identidad h4 {
+  margin: 0;
+  color: var(--negro);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.partido-identidad p {
+  margin: 5px 0 0;
+  color: var(--gris-texto);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.resultado-partido {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-shrink: 0;
+  padding: 8px 11px;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  background: #fafafa;
+  color: var(--negro);
+  font-size: 19px;
+  font-weight: 800;
+}
+
+.resultado-partido small {
+  color: #999;
+  font-size: 11px;
+}
+
+.partido-detalles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 13px;
+}
+
+.etiqueta {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: #f4f4f4;
+  color: #666;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.etiqueta-naranja {
+  background: var(--naranja-claro);
+  color: var(--naranja-oscuro);
+}
+
+.etiqueta-verde {
+  background: var(--verde-fondo);
+  color: var(--verde);
+}
+
+.etiqueta-amarilla {
+  background: var(--amarillo-fondo);
+  color: var(--amarillo);
+}
+
+.partido-observaciones {
+  margin-top: 11px;
+  padding: 10px 12px;
+  border-left: 3px solid #efd1bb;
+  background: #fffaf6;
+  color: #6b625d;
+  font-size: 11px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.partido-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 13px;
+}
+
+/* =====================================================
+   ESTADÍSTICAS
+===================================================== */
+
+.tabla-contenedor-estadisticas {
+  width: 100%;
+  overflow: auto;
+  border: 1px solid var(--borde);
+  border-radius: 9px;
+}
+
+.tabla-estadisticas {
+  width: 100%;
+  min-width: 750px;
+  border-collapse: collapse;
+}
+
+.tabla-estadisticas th {
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--borde);
+  background: #fafafa;
+  color: #656565;
+  font-size: 9px;
+  font-weight: 800;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.tabla-estadisticas td {
+  padding: 10px 8px;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 11px;
+}
+
+.tabla-estadisticas td:not(:first-child),
+.tabla-estadisticas th:not(:first-child) { text-align: center; }
+
+.numero-destacado {
+  color: var(--negro);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.numero-tarjeta {
+  color: var(--amarillo);
+  font-weight: 800;
+}
+
+.numero-rojo {
+  color: var(--rojo);
+  font-weight: 800;
+}
+
+.estadisticas-grid {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 16px;
+}
+
+.ranking {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.ranking-fila {
+  display: grid;
+  grid-template-columns: 32px minmax(0,1fr) auto;
+  align-items: center;
+  gap: 9px;
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+}
+
+.ranking-posicion {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  background: var(--naranja-claro);
+  color: var(--naranja-oscuro);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.ranking-nombre strong {
+  display: block;
+  color: var(--negro);
+  font-size: 11px;
+}
+
+.ranking-nombre small {
+  display: block;
+  margin-top: 3px;
+  color: var(--gris-texto);
+  font-size: 9px;
+}
+
+.ranking-valor {
+  color: var(--negro);
+  font-size: 15px;
+  font-weight: 800;
+  text-align: right;
+}
+
+.ranking-valor small {
+  display: block;
+  margin-top: 3px;
+  color: var(--gris-texto);
+  font-size: 9px;
+  font-weight: 400;
+}
+
+/* =====================================================
+   ESTADOS Y MENSAJES
+===================================================== */
+
+.vacío {
+  padding: 30px 16px;
+  border: 1px dashed #ddd;
+  border-radius: 10px;
+  background: #fcfcfc;
+  text-align: center;
+}
+
+.vacio-icono {
+  margin-bottom: 9px;
+  color: var(--naranja);
+  font-size: 27px;
+}
+
+.vacío h4 {
+  margin: 0;
+  color: var(--negro);
+  font-size: 13px;
+}
+
+.vacío p {
+  max-width: 400px;
+  margin: 8px auto 0;
+  color: var(--gris-texto);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.mensaje-flotante {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 2000;
+  max-width: min(420px,calc(100vw - 30px));
+  padding: 14px 17px;
+  border: 1px solid #dedede;
+  border-radius: 10px;
+  background: white;
+  color: var(--negro);
+  box-shadow: 0 8px 30px rgba(0,0,0,.13);
+  font-size: 12px;
+  line-height: 1.5;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: opacity .2s, transform .2s;
+}
+
+.mensaje-flotante.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.mensaje-flotante.error {
+  border-color: #efc5c5;
+  color: var(--rojo);
+}
+
+.mensaje-flotante.exito {
+  border-color: #c7e8d3;
+  color: var(--verde);
+}
+
+.pie-pagina {
+  padding: 15px 0 4px;
+  color: #999;
+  font-size: 10px;
+  line-height: 1.7;
+  text-align: center;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1250px) {
+  .informe-layout {
+    grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+  }
+
+  .cancha {
+    max-width: 570px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 1100px) {
+  .metricas { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .metrica:last-child { grid-column: 1 / -1; }
+  .filtros { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .estadisticas-grid { grid-template-columns: minmax(0,1fr); }
+}
+
+@media (max-width: 900px) {
+  .barra-lateral {
+    position: fixed;
+    top: var(--alto-topbar);
+    bottom: 0;
+    left: 0;
+    z-index: 450;
+    width: min(280px,86vw);
+    max-width: 86vw;
+    overflow-y: auto;
+    box-shadow: 8px 0 24px rgba(0,0,0,.08);
+    transform: translateX(-110%);
+    margin-left: 0 !important;
+  }
+
+  .barra-lateral.visible { transform: translateX(0); }
+
+  .capa-sidebar.visible {
+    display: block;
+    position: fixed;
+    inset: var(--alto-topbar) 0 0;
+    z-index: 440;
+    background: rgba(0,0,0,.32);
+  }
+
+  .barra-lateral.oculta { margin-left: 0; }
+  .contenido { padding: 20px 16px; }
+}
+
+@media (max-width: 620px) {
+  :root { --alto-topbar: 72px; }
+
+  .barra-superior { gap: 9px; padding: 9px 12px; }
+  .menu-boton { width: 38px; height: 38px; }
+  .logo-superior { width: 43px; height: 43px; }
+  .marca h1 { font-size: 14px; }
+  .marca p { font-size: 10px; }
+  .avatar { width: 35px; height: 35px; font-size: 11px; }
+  .perfil-superior strong { max-width: 78px; font-size: 11px; }
+  .perfil-superior small { display: none; }
+  .contenido { padding: 17px 12px; }
+
+  .page-heading {
+    flex-direction: column;
+    margin-bottom: 17px;
+  }
+
+  .page-heading h2 { font-size: 25px; }
+  .metricas { grid-template-columns: minmax(0,1fr); gap: 8px; }
+  .metrica:last-child { grid-column: auto; }
+  .metrica { gap: 8px; padding: 11px; }
+  .metrica-icono { width: 32px; height: 32px; font-size: 15px; }
+  .metrica-valor { font-size: 20px; }
+  .metrica-etiqueta { font-size: 10px; }
+  .panel { padding: 13px; margin-bottom: 12px; }
+
+  .pestanas {
+    display: grid;
+    grid-template-columns: repeat(3,minmax(0,1fr));
+    gap: 4px;
+  }
+
+  .pestana { padding: 0 4px; font-size: 10px; }
+  .rejilla { gap: 12px; }
+
+  .col-9,.col-8,.col-6,.col-4,.col-3 {
+    grid-column: span 12;
+  }
+
+  .escudos-form { gap: 7px; }
+  .escudo-bloque { gap: 7px; padding: 8px; }
+  .escudo-preview,.escudo-placeholder { width: 39px; height: 39px; }
+
+  .marcador-partido { gap: 6px; padding: 11px 7px; }
+  .equipo-marcador strong { font-size: 10px; }
+  .equipo-marcador small { font-size: 9px; }
+  .numeros-goles { gap: 4px; }
+  .numeros-goles input { width: 38px; height: 39px; font-size: 18px; }
+
+  .cancha { height: 370px; }
+  .jugador-cancha { width: 51px; }
+  .camiseta { width: 24px; height: 28px; font-size: 9px; }
+  .nombre-cancha { max-width: 54px; font-size: 7px; }
+
+  .acciones-formulario {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .acciones-formulario .grupo-botones {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .acciones-formulario .btn { width: 100%; }
+  .filtros { grid-template-columns: 1fr; }
+
+  .partido-superior {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .resultado-partido { margin-left: 59px; }
+  .panel-cabecera { align-items: flex-start; }
+}
+
+@media print {
+  body { background: white !important; }
+
+  .barra-superior,
+  .barra-lateral,
+  .capa-sidebar,
+  .pestanas,
+  .botonera-heading,
+  .btn,
+  .acciones-formulario,
+  .filtros,
+  .mensaje-flotante,
+  .pie-pagina,
+  .aviso,
+  details.agregar-jugadora,
+  .btn-agregar-evento {
+    display: none !important;
+  }
+
+  .contenedor { display: block; }
+  .contenido { padding: 0; }
+  .vista { display: none !important; }
+  .vista.activa { display: block !important; }
+
+  .panel,.metrica,.partido-card {
+    border: 1px solid #ddd;
+    box-shadow: none;
+    break-inside: avoid;
+  }
+
+  .metricas { grid-template-columns: repeat(4,1fr); }
+  .informe-layout { grid-template-columns: 1fr 1fr; }
+  .tabla-contenedor { overflow: visible; }
+  table { min-width: 0 !important; }
+  th,td { padding: 5px; font-size: 8px; }
+}
+
+
+/* =====================================================
+   AJUSTE FINAL: MISMA IDENTIDAD VISUAL QUE PARTIDOS.HTML
+   Se conservan las funciones y los componentes de Informes.
+===================================================== */
+body { background: #fafafa; color: #242424; }
+.barra-superior { z-index: 100; min-height: 84px; padding: 12px 25px; gap: 15px; }
+.menu-boton { border: 0; border-radius: 9px; background: #fff; color: var(--negro); }
+.menu-boton:hover { background: var(--gris); color: var(--negro); }
+.logo-superior { width: 55px; height: 55px; border-radius: 50%; object-fit: contain; padding: 2px; background: #fff; margin-right: 0; }
+.marca { flex: 1; min-width: 0; line-height: 1.25; }
+.marca h1 { margin: 0 0 5px; font-size: 23px; font-weight: 900; letter-spacing: .5px; }
+.marca p { margin: 0; font-size: 13px; color: var(--gris-texto); }
+.avatar { width: 42px; height: 42px; font-size: 16px; background: var(--negro); }
+.perfil-superior strong { max-width: 155px; font-size: 13px; }
+.perfil-superior small { margin-top: 4px; font-size: 11px; }
+.contenedor { min-height: calc(100vh - var(--alto-topbar)); }
+.barra-lateral { width: 258px; flex: 0 0 258px; padding: 20px 13px; background: #fff; border-right: 1px solid var(--borde); }
+.barra-lateral.oculta { margin-left: -258px; }
+.etiqueta-menu { display: none; }
+.menu-inicio { gap: 12px; margin-bottom: 16px; padding: 13px 14px; border-radius: 11px; background: var(--naranja-claro); color: var(--naranja-oscuro); font-size: 13px; font-weight: 850; }
+.menu-inicio:hover { background: #ffe4d1; color: var(--naranja-oscuro); }
+.menu-inicio .icono-menu { width: 15px; min-width: 15px; font-size: 17px; }
+.grupo-menu { margin-bottom: 8px; }
+.titulo-grupo { min-height: 46px; padding: 12px 13px; border-radius: 8px; color: var(--negro); font-size: 11px; font-weight: 850; letter-spacing: .8px; }
+.titulo-grupo:hover { background: #f8f8f8; color: var(--negro); }
+.grupo-izquierdo { gap: 0; }
+.grupo-izquierdo .icono-menu { display: none; }
+.flecha { font-size: 16px; font-weight: 700; line-height: 1; }
+.grupo-menu.cerrado .flecha { transform: rotate(0deg); }
+.grupo-menu:not(.cerrado) .flecha { transform: rotate(90deg); }
+.submenu { gap: 3px; padding: 0 0 5px; }
+.submenu a { gap: 10px; padding: 10px 12px; border-radius: 8px; color: #414141; font-size: 12px; line-height: 1.35; }
+.submenu a:hover { background: #fff3eb; color: var(--naranja-oscuro); }
+.submenu a.activo { background: var(--naranja-claro); color: var(--naranja-oscuro); font-weight: 700; }
+.nav-punto { width: 6px; height: 6px; flex: 0 0 6px; background: #c9c9c9; }
+.submenu a.activo .nav-punto { background: var(--naranja); }
+.separador-menu { border: 0; border-top: 1px solid var(--borde); margin: 14px 4px; }
+.enlace-cerrar { gap: 11px; padding: 12px; border-radius: 8px; color: #c0392b; font-size: 12px; font-weight: 700; }
+.enlace-cerrar:hover { background: #fff0f0; }
+.contenido { background: #fafafa; }
+.panel, .metrica, .filtros, .page-heading, .tarjeta, .card { box-shadow: 0 4px 18px rgba(0,0,0,.045); }
+@media (max-width: 900px) {
+  .barra-lateral { width: min(280px,86vw); flex-basis: min(280px,86vw); padding: 20px 13px; }
+  .barra-lateral.oculta { margin-left: 0; }
+  .capa-sidebar.visible { background: rgba(0,0,0,.32); }
+}
+@media (max-width: 620px) {
+  .barra-superior { gap: 9px; padding: 9px 12px; }
+  .menu-boton { width: 38px; height: 38px; }
+  .logo-superior { width: 44px; height: 44px; margin-right: 0; }
+  .marca h1 { font-size: 14px; }
+  .marca p { font-size: 10px; }
+  .avatar { width: 35px; height: 35px; font-size: 11px; }
+  .perfil-superior strong { max-width: 80px; font-size: 11px; }
+  .perfil-superior small { display: none; }
+}
+
+
+/* Ajustes de carga vinculada a partidos existentes */
+.division-principal {
+  display: grid; grid-template-columns: 1fr; gap: 9px;
+  margin: 2px 0 18px; padding: 17px 18px;
+  border: 1px solid var(--borde); border-left: 3px solid var(--naranja);
+  border-radius: var(--radio); background: #fff;
+  max-width: none; box-shadow: 0 4px 18px rgba(0,0,0,.045);
+}
+.division-principal-etiqueta { font-size: 10px; font-weight: 800; letter-spacing: 1.1px; color: var(--naranja-oscuro); }
+.division-principal label { font-size: 13px; font-weight: 800; color: var(--negro); }
+.division-principal select { min-height: 44px; font-size: 14px; font-weight: 600; border: 1px solid var(--borde); border-radius: 8px; background: #fff; padding: 10px 12px; }
+.aviso-seleccion-partido { margin: 12px 0 18px; border-color: #f4c49f; background: #fff7f1; color: #653718; }
+.informe-bloqueado .panel:not(:first-child), .informe-bloqueado .acciones-formulario { opacity: .55; }
+.informe-bloqueado .panel:first-child > :not(.panel-cabecera):not(.campo):not(#avisoSinPartido) { opacity: .58; }
+.panel-eventos { min-width: 0; }
+.panel-eventos .planilla-subtitulo { margin-top: 22px; padding: 10px 12px; border-left: 4px solid var(--naranja); border-radius: 7px; background: #fff4eb; font-weight: 800; color: #252525; }
+.panel-eventos .tabla-planilla { width: 100%; border-collapse: separate; border-spacing: 0 7px; }
+.panel-eventos .tabla-planilla thead th { padding: 7px 8px; font-size: 10px; letter-spacing: .35px; color: #777; background: transparent; border: 0; }
+.panel-eventos .tabla-planilla tbody tr { background: #f8f9fb; }
+.panel-eventos .tabla-planilla tbody td { padding: 7px 6px; border-top: 1px solid #eceef1; border-bottom: 1px solid #eceef1; }
+.panel-eventos .tabla-planilla tbody td:first-child { border-left: 1px solid #eceef1; border-radius: 8px 0 0 8px; }
+.panel-eventos .tabla-planilla tbody td:last-child { border-right: 1px solid #eceef1; border-radius: 0 8px 8px 0; }
+.panel-eventos .tabla-planilla input, .panel-eventos .tabla-planilla select { min-width: 0; width: 100%; padding: 8px 6px; border-radius: 7px; }
+.panel-eventos .btn-agregar-evento { margin-top: 7px; padding: 10px 13px; border: 1px dashed #f0a16c; border-radius: 8px; color: var(--naranja-oscuro); background: #fff8f3; font-weight: 800; cursor: pointer; }
+.panel-eventos .btn-agregar-evento:hover { background: #fff0e6; }
+@media (max-width: 700px) { .division-principal { max-width: none; } .panel-eventos .tabla-planilla { font-size: 11px; } .panel-eventos .tabla-planilla th, .panel-eventos .tabla-planilla td { padding-left: 3px; padding-right: 3px; } }
+
+@media (max-width: 900px) {
+  .informe-layout { grid-template-columns: minmax(0,1fr); }
+  .panel-cancha { border-left: 0; border-top: 1px solid var(--borde); }
+}
+
+.panel-cancha .tabla-jugadoras select,
+.panel-cancha .tabla-jugadoras input[type="number"] {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+
+
+/* =====================================================
+   PULIDO DE INTERFAZ Y ACCESIBILIDAD
+   Inspirado en los componentes compartidos de ADIUR FEM.
+   No reemplaza ni modifica la barra lateral original.
+===================================================== */
+button:disabled { opacity: .5; cursor: not-allowed; }
+.pestana, .btn, .menu-boton, .titulo-grupo, .submenu a { -webkit-tap-highlight-color: transparent; }
+.panel, .metrica, .partido-card { transition: box-shadow .18s ease, border-color .18s ease; }
+.panel:hover, .metrica:hover, .partido-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,.055); }
+.campo input[readonly] { background: #f7f8fa; color: #575757; }
+.submenu a[aria-current="page"] { background: var(--naranja-claro); color: var(--naranja-oscuro); font-weight: 800; }
+.submenu a[aria-current="page"] .nav-punto { background: var(--naranja); }
+@media (max-width: 760px) {
+  :root { --alto-topbar: 72px; }
+  .barra-superior { min-height: 72px; }
+  .barra-lateral { top: var(--alto-topbar); }
+  .capa-sidebar.visible { inset: var(--alto-topbar) 0 0; }
+}
+
+
+
+/* Categoría general persistente durante los cuatro pasos */
+.selector-categoria-general {
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 360px);
+  align-items: center;
+  gap: 9px 18px;
+  max-width: none;
+  margin: 0 0 16px;
+  padding: 17px 18px;
+}
+.selector-categoria-general .division-principal-etiqueta { grid-column: 1 / -1; }
+.selector-categoria-general label { align-self: center; }
+.selector-categoria-general select { width: 100%; }
+.ayuda-categoria-general { grid-column: 1 / -1; color: var(--gris-texto); font-size: 11px; line-height: 1.5; }
+.tabla-jugadoras { min-width: 650px; }
+.tabla-jugadoras th:nth-child(1), .tabla-jugadoras td:nth-child(1) { width: 62px; }
+.tabla-jugadoras th:nth-child(3), .tabla-jugadoras td:nth-child(3) { width: 105px; }
+.tabla-jugadoras th:nth-child(4), .tabla-jugadoras td:nth-child(4),
+.tabla-jugadoras th:nth-child(5), .tabla-jugadoras td:nth-child(5) { width: 82px; }
+.tabla-jugadoras .jugadora-condicion { width: 100%; min-width: 88px; padding: 6px; border: 1px solid #dedede; border-radius: 7px; background: #fff; font-size: 10px; }
+.tabla-jugadoras .jugadora-condicion:disabled { background: #f2f2f2; color: #aaa; }
+.tabla-jugadoras .jugadora-citada { accent-color: var(--naranja); width: 16px; height: 16px; }
+@media (max-width: 620px) {
+  .selector-categoria-general { grid-template-columns: minmax(0,1fr); gap: 8px; padding: 13px; }
+  .selector-categoria-general .division-principal-etiqueta, .ayuda-categoria-general { grid-column: auto; }
+}
+
+/* =====================================================
+   NUEVO FORMATO DE CARGA: ASISTENTE GUIADO EN 4 PASOS
+===================================================== */
+.asistente-carga {
+  margin: 0 0 17px;
+  padding: 16px;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  background: #fff;
+  box-shadow: 0 4px 18px rgba(0,0,0,.045);
+}
+.pasos-carga {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+.paso-carga-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: #f8f8f8;
+  color: #8b8b8b;
+  transition: background .18s, border-color .18s, color .18s;
+}
+.paso-carga-item.activo {
+  border-color: #f3c5a7;
+  background: var(--naranja-claro);
+  color: var(--naranja-oscuro);
+}
+.paso-carga-item.completado {
+  background: #f0faf4;
+  color: var(--verde);
+}
+.numero-paso-visual {
+  display: grid;
+  place-items: center;
+  width: 31px;
+  height: 31px;
+  flex: 0 0 31px;
+  border: 1px solid #e2e2e2;
+  border-radius: 9px;
+  background: #fff;
+  color: #777;
+  font-size: 12px;
+  font-weight: 900;
+}
+.paso-carga-item.activo .numero-paso-visual {
+  border-color: var(--naranja);
+  background: var(--naranja);
+  color: #fff;
+}
+.paso-carga-item.completado .numero-paso-visual {
+  border-color: #cce9d7;
+  background: var(--verde-fondo);
+  color: var(--verde);
+}
+.texto-paso-visual { display: block; min-width: 0; }
+.texto-paso-visual strong {
+  display: block;
+  overflow: hidden;
+  font-size: 11px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.texto-paso-visual small {
+  display: block;
+  margin-top: 4px;
+  color: #888;
+  font-size: 9px;
+  line-height: 1.35;
+}
+.progreso-carga {
+  height: 4px;
+  margin-top: 13px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: #eee;
+}
+.progreso-carga span {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--naranja);
+  transition: width .25s ease;
+}
+.estado-asistente-carga {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+}
+.estado-asistente-carga strong { color: var(--negro); font-size: 11px; }
+.estado-asistente-carga span { color: var(--gris-texto); font-size: 10px; text-align: right; }
+.paso-carga-panel { display: none !important; }
+.paso-carga-panel.paso-carga-visible { display: block !important; }
+.paso-carga-panel.panel-eventos,
+.paso-carga-panel.panel-cancha {
+  min-width: 0;
+  margin: 0 0 17px;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  background: #fff;
+  box-shadow: 0 4px 18px rgba(0,0,0,.045);
+}
+.paso-carga-panel.panel-cancha { border-top: 1px solid var(--borde); border-left: 1px solid var(--borde); }
+.paso-carga-panel.panel-cancha .contenido-subpanel { padding: 16px; }
+.paso-carga-panel.panel-eventos .planilla-titulo { border-radius: 0; }
+.cabecera-revision {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 17px;
+}
+.icono-revision {
+  display: grid;
+  place-items: center;
+  width: 37px;
+  height: 37px;
+  flex: 0 0 37px;
+  border-radius: 11px;
+  background: var(--verde-fondo);
+  color: var(--verde);
+  font-size: 17px;
+  font-weight: 900;
+}
+.cabecera-revision h3 { margin: 1px 0 5px; color: var(--negro); font-size: 16px; }
+.cabecera-revision p { margin: 0; color: var(--gris-texto); font-size: 11px; line-height: 1.5; }
+.resumen-revision {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 10px;
+  margin-bottom: 17px;
+}
+.resumen-revision-card {
+  min-width: 0;
+  padding: 13px;
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  background: #fcfcfc;
+}
+.resumen-revision-card.principal {
+  border-color: #f3d0b8;
+  background: #fff8f3;
+}
+.resumen-revision-card small {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--gris-texto);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+}
+.resumen-revision-card strong {
+  display: block;
+  color: var(--negro);
+  font-size: 14px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.resumen-revision-card p { margin: 5px 0 0; color: #777; font-size: 10px; line-height: 1.5; overflow-wrap: anywhere; }
+.campo-observaciones-revision { margin: 0 0 17px; }
+.navegacion-pasos-carga {
+  position: sticky;
+  bottom: 10px;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 17px;
+  padding: 12px;
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  background: rgba(255,255,255,.96);
+  box-shadow: 0 6px 24px rgba(0,0,0,.08);
+  backdrop-filter: blur(10px);
+}
+.navegacion-pasos-carga #mensajeNavegacionPasos { color: #777; font-size: 10px; text-align: center; }
+.navegacion-pasos-carga #btnPasoAnterior[hidden],
+.navegacion-pasos-carga #btnPasoSiguiente[hidden] { display: none !important; }
+@media (max-width: 800px) {
+  .pasos-carga { grid-template-columns: repeat(4, minmax(0,1fr)); gap: 5px; }
+  .paso-carga-item { justify-content: center; padding: 8px 4px; }
+  .texto-paso-visual strong { font-size: 9px; text-align: center; }
+  .texto-paso-visual small { display: none; }
+  .numero-paso-visual { width: 27px; height: 27px; flex-basis: 27px; }
+  .resumen-revision { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .estado-asistente-carga { align-items: flex-start; flex-direction: column; gap: 4px; }
+  .estado-asistente-carga span { text-align: left; }
+  .navegacion-pasos-carga { bottom: 6px; gap: 8px; padding: 9px; }
+  .navegacion-pasos-carga .btn { min-height: 36px; padding: 0 10px; font-size: 10px; }
+  .navegacion-pasos-carga #mensajeNavegacionPasos { display: none; }
+}
+@media (max-width: 440px) {
+  .asistente-carga { padding: 10px; }
+  .pasos-carga { gap: 4px; }
+  .paso-carga-item { flex-direction: column; gap: 5px; }
+  .texto-paso-visual strong { font-size: 8px; }
+  .resumen-revision { grid-template-columns: minmax(0,1fr); }
+  .paso-carga-panel.panel-cancha .contenido-subpanel { padding: 11px; }
+}
+@media print {
+  .asistente-carga, .navegacion-pasos-carga { display: none !important; }
+  .paso-carga-panel { display: none !important; }
+  .paso-carga-panel.paso-carga-visible { display: block !important; }
+  .paso-carga-panel.panel-eventos, .paso-carga-panel.panel-cancha { box-shadow: none; border: 1px solid #ddd; }
+}
+
+
+
+/* =====================================================
+   BARRAS SUPERIOR Y LATERAL — IDENTIDAD DE PARTIDOS.HTML
+   Se conservan los identificadores y la navegación de Informes.
+===================================================== */
+.barra-superior {
+  z-index: 100;
+  min-height: 84px;
+  padding: 12px 25px;
+  gap: 15px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.barra-superior * { font-family: Arial, Helvetica, sans-serif; }
+.menu-boton {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border: 0;
+  border-radius: 9px;
+  background: #fff;
+  color: var(--negro);
+  font-size: 27px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.menu-boton:hover { background: var(--gris); }
+.logo-superior {
+  width: 55px;
+  height: 55px;
+  flex-shrink: 0;
+  object-fit: contain;
+  border-radius: 50%;
+  padding: 2px;
+  background: #fff;
+  margin-right: 15px;
+}
+.marca { flex: 1; min-width: 0; line-height: 1.25; }
+.marca h1 { margin: 0 0 5px; font-size: 23px; font-weight: 900; letter-spacing: .5px; }
+.marca p { margin: 0; color: var(--gris-texto); font-size: 13px; }
+.perfil-superior {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  min-width: 0;
+  margin-left: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.perfil-superior:hover .avatar { background: #303030; }
+.avatar { width: 42px; height: 42px; font-size: 16px; }
+.informacion-perfil { display: flex; flex-direction: column; min-width: 0; }
+.nombre-perfil {
+  display: block;
+  max-width: 150px;
+  overflow: hidden;
+  color: var(--negro);
+  font-size: 13px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.rol-perfil { display: block; margin-top: 4px; color: var(--gris-texto); font-size: 11px; }
+
+.barra-lateral {
+  width: 258px;
+  flex: 0 0 258px;
+  padding: 20px 13px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: #fff;
+  border-right: 1px solid var(--borde);
+  transition: margin-left .25s ease, transform .25s ease;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.barra-lateral * { font-family: Arial, Helvetica, sans-serif; }
+.barra-lateral.oculta { margin-left: -258px; }
+.etiqueta-menu { margin: 3px 12px 12px; color: #999; font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; }
+.menu-inicio {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 14px;
+  margin-bottom: 16px;
+  border-radius: 11px;
+  background: #fff;
+  color: var(--negro);
+  font-size: 13px;
+  font-weight: 850;
+  transition: background .2s, color .2s;
+}
+.menu-inicio:hover { background: #f8f8f8; color: var(--negro); }
+.menu-inicio .icono-menu { width: 15px; min-width: 15px; flex-shrink: 0; text-align: center; font-size: 17px; line-height: 1; }
+.grupo-menu { margin-bottom: 8px; }
+.titulo-grupo {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 46px;
   padding: 12px 13px;
   border: 0;
   border-radius: 8px;
   background: transparent;
   color: var(--negro);
+  text-align: left;
+  cursor: pointer;
   font-size: 11px;
   font-weight: 850;
   letter-spacing: .8px;
-  text-align: left;
-  cursor: pointer;
+  user-select: none;
 }
-
-.titulo-grupo:hover { background: #f8f8f8; }
+.titulo-grupo:hover { background: #f8f8f8; color: var(--negro); }
 .grupo-izquierdo { display: flex; align-items: center; gap: 10px; }
-.flecha { font-size: 16px; font-weight: 700; transition: transform .2s; }
+.flecha { display: inline-block; flex-shrink: 0; font-size: 16px; font-weight: 700; line-height: 1; transition: transform .2s; }
 .grupo-menu.cerrado .flecha { transform: rotate(0deg); }
 .grupo-menu:not(.cerrado) .flecha { transform: rotate(90deg); }
-.grupo-menu.cerrado .submenu { display: none; }
-
 .submenu { display: flex; flex-direction: column; gap: 3px; padding: 0 0 5px; }
+.grupo-menu.cerrado .submenu { display: none; }
 .submenu a {
   display: flex;
   align-items: center;
@@ -236,189 +2452,355 @@ a:focus-visible {
   border-radius: 9px;
   color: #656872;
   font-size: 13px;
+  line-height: 1.4;
+  transition: background .15s, color .15s;
 }
 .submenu a:hover { background: #f6f6f6; color: #181818; }
 .submenu a.activo { background: var(--naranja-claro); color: var(--naranja-oscuro); font-weight: 800; }
-.nav-punto { width: 6px; height: 6px; border-radius: 50%; background: #d7d9de; }
+.submenu a.activo:hover { background: #ffe7d6; color: var(--naranja-oscuro); }
+.nav-punto { width: 6px; height: 6px; flex: 0 0 6px; background: #d7d9de; border-radius: 50%; }
 .submenu a.activo .nav-punto { background: var(--naranja); }
 .separador-menu { border: 0; border-top: 1px solid var(--borde); margin: 19px 0 0; padding-top: 12px; }
 .enlace-cerrar { display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 9px; color: #c0392b; font-size: 13px; font-weight: 700; }
-.enlace-cerrar:hover { background: #fff2f1; }
+.enlace-cerrar:hover { background: #fff2f1; color: #a93226; }
 .capa-sidebar { display: none; }
 
-/* =====================================================
-   CONTENIDO GENERAL Y PANELES
-===================================================== */
-.contenido { flex: 1; min-width: 0; padding: 26px; background: #fafafa; }
-.page-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; margin-bottom: 22px; }
-.eyebrow { display: inline-block; margin-bottom: 9px; color: var(--naranja-oscuro); font-size: 10px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase; }
-.page-heading h2 { margin: 0; color: var(--negro); font-size: clamp(24px,3vw,31px); letter-spacing: -.7px; }
-.page-heading p { max-width: 720px; margin: 9px 0 0; color: var(--gris-texto); font-size: 13px; line-height: 1.6; }
-
-.metricas { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 13px; margin-bottom: 20px; }
-.metrica { display: flex; align-items: flex-start; gap: 12px; padding: 16px; border: 1px solid var(--borde); border-radius: var(--radio); background: white; box-shadow: 0 4px 18px rgba(0,0,0,.045); }
-.metrica-icono { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 11px; background: var(--naranja-claro); color: var(--naranja-oscuro); font-size: 18px; }
-.metrica:nth-child(2) .metrica-icono { background: var(--verde-fondo); color: var(--verde); }
-.metrica:nth-child(3) .metrica-icono { background: var(--amarillo-fondo); color: var(--amarillo); }
-.metrica-etiqueta { color: var(--gris-texto); font-size: 11px; }
-.metrica-valor { margin-top: 5px; color: var(--negro); font-size: 24px; font-weight: 800; }
-.metrica-detalle { margin-top: 4px; color: #999; font-size: 10px; }
-
-.lista-goleadoras { display: grid; gap: 5px; margin-top: 9px; }
-.detalle-tarjetas { display: flex; flex-wrap: wrap; gap: 8px 12px; margin-top: 9px; }
-.detalle-tarjetas i { display: inline-block; width: 8px; height: 11px; border-radius: 2px; }
-.detalle-amarillas i { background: #f2c94c; }
-.detalle-rojas i { background: #d93636; }
-
-.pestanas { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; padding: 5px; border: 1px solid var(--borde); border-radius: 11px; background: white; }
-.pestana { min-height: 40px; padding: 0 15px; border: 0; border-radius: 8px; background: transparent; color: #686868; font-size: 12px; font-weight: 700; cursor: pointer; }
-.pestana:hover { background: #f7f7f7; }
-.pestana.activa { background: var(--naranja-claro); color: var(--naranja-oscuro); }
-
-.vista { display: none; }
-.vista.activa { display: block; }
-
-.panel { margin-bottom: 17px; padding: 20px; border: 1px solid var(--borde); border-radius: var(--radio); background: white; box-shadow: 0 4px 18px rgba(0,0,0,.045); }
-.panel-cabecera { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 17px; }
-.panel-cabecera h3 { margin: 0; color: var(--negro); font-size: 15px; font-weight: 800; }
-.panel-cabecera p { margin: 5px 0 0; color: var(--gris-texto); font-size: 11px; line-height: 1.5; }
-
-.rejilla { display: grid; grid-template-columns: repeat(12, minmax(0,1fr)); gap: 13px; }
-.campo { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
-.campo label { color: #454545; font-size: 11px; font-weight: 700; }
-.campo input, .campo select, .campo textarea, .filtro input, .filtro select {
-  width: 100%; min-height: 40px; padding: 9px 11px; border: 1px solid #dedede; border-radius: 8px; background: white; color: var(--texto); font-size: 12px;
-}
-.campo input:focus, .campo select:focus, .campo textarea:focus { border-color: var(--naranja); outline: none; box-shadow: 0 0 0 3px rgba(244,119,33,.10); }
-.col-12 { grid-column: span 12; }
-.col-6 { grid-column: span 6; }
-.col-4 { grid-column: span 4; }
-.col-3 { grid-column: span 3; }
-
-.divisor { display: flex; align-items: center; gap: 9px; margin: 22px 0 13px; color: var(--negro); font-size: 12px; font-weight: 800; }
-.divisor::before { content: ""; width: 4px; height: 17px; border-radius: 4px; background: var(--naranja); }
-
-.aviso { display: flex; align-items: flex-start; gap: 9px; margin: 13px 0; padding: 11px 13px; border: 1px solid #f0d7c5; border-radius: 9px; background: #fffaf6; color: #76543e; font-size: 11px; line-height: 1.55; }
-.aviso.neutro { border-color: #e5e5e5; background: #fafafa; color: #646464; }
-.aviso.exito { border-color: #c9ead7; background: var(--verde-fondo); color: #216741; }
-
-/* Selector Categoría General */
-.selector-categoria-general {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(240px, 360px);
+/* Perfil desplegable igual al de Partidos.html. */
+.fondo-perfil {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  padding: 18px;
+  background: #00000070;
   align-items: center;
-  gap: 9px 18px;
-  margin: 0 0 16px;
-  padding: 17px 18px;
-  border: 1px solid var(--borde);
-  border-left: 3px solid var(--naranja);
-  border-radius: var(--radio);
-  background: #fff;
-  box-shadow: 0 4px 18px rgba(0,0,0,.045);
+  justify-content: center;
 }
-.division-principal-etiqueta { grid-column: 1 / -1; font-size: 10px; font-weight: 800; letter-spacing: 1.1px; color: var(--naranja-oscuro); }
-.selector-categoria-general label { align-self: center; font-size: 13px; font-weight: 800; color: var(--negro); }
-.selector-categoria-general select { width: 100%; min-height: 44px; font-size: 14px; font-weight: 600; }
-.ayuda-categoria-general { grid-column: 1 / -1; color: var(--gris-texto); font-size: 11px; line-height: 1.5; }
+.fondo-perfil.visible { display: flex; }
+.tarjeta-perfil { width: 100%; max-width: 350px; padding: 25px; background: #fff; border-radius: 17px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,.25); }
+.avatar-perfil { width: 65px; height: 65px; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; border-radius: 50%; background: var(--negro); color: #fff; font-size: 30px; font-weight: bold; }
+.tarjeta-perfil h2 { margin: 0 0 8px; color: var(--negro); font-size: 21px; }
+.tarjeta-perfil p { margin: 0 0 20px; color: var(--gris-texto); font-size: 13px; }
+.boton-cerrar-perfil { width: 100%; padding: 12px; border: 0; border-radius: 9px; background: var(--naranja-oscuro); color: #fff; font-weight: bold; cursor: pointer; }
+.boton-cerrar-perfil:hover { background: var(--naranja); }
 
-/* Asistente Guiado en 4 Pasos */
-.asistente-carga { margin: 0 0 17px; padding: 16px; border: 1px solid var(--borde); border-radius: var(--radio); background: #fff; box-shadow: 0 4px 18px rgba(0,0,0,.045); }
-.pasos-carga { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
-.paso-carga-item { display: flex; align-items: center; gap: 9px; padding: 10px; border: 1px solid transparent; border-radius: 10px; background: #f8f8f8; color: #8b8b8b; }
-.paso-carga-item.activo { border-color: #f3c5a7; background: var(--naranja-claro); color: var(--naranja-oscuro); }
-.paso-carga-item.completado { background: #f0faf4; color: var(--verde); }
-.numero-paso-visual { display: grid; place-items: center; width: 31px; height: 31px; border: 1px solid #e2e2e2; border-radius: 9px; background: #fff; color: #777; font-size: 12px; font-weight: 900; }
-.paso-carga-item.activo .numero-paso-visual { border-color: var(--naranja); background: var(--naranja); color: #fff; }
-.texto-paso-visual strong { display: block; font-size: 11px; font-weight: 800; }
-.texto-paso-visual small { display: block; color: #888; font-size: 9px; }
-.progreso-carga { height: 4px; margin-top: 13px; border-radius: 99px; background: #eee; overflow: hidden; }
-.progreso-carga span { display: block; width: 0; height: 100%; background: var(--naranja); transition: width .25s ease; }
-.estado-asistente-carga { display: flex; justify-content: space-between; margin-top: 10px; font-size: 11px; }
+@media (max-width: 760px) {
+  :root { --alto-topbar: 72px; }
+  .barra-superior { min-height: 72px; padding: 10px 13px; gap: 9px; }
+  .menu-boton { width: 38px; height: 38px; font-size: 24px; }
+  .logo-superior { width: 44px; height: 44px; margin-right: 9px; }
+  .marca h1 { font-size: 16px; }
+  .marca p { font-size: 11px; }
+  .avatar { width: 36px; height: 36px; font-size: 14px; }
+  .nombre-perfil { max-width: 80px; font-size: 12px; }
+  .rol-perfil { display: none; }
+}
+@media (max-width: 560px) {
+  .barra-superior { padding: 8px; gap: 6px; }
+  .menu-boton { width: 32px; height: 36px; font-size: 23px; }
+  .logo-superior { width: 34px; height: 34px; margin-right: 6px; }
+  .marca h1 { font-size: 12px; }
+  .marca p { font-size: 9px; }
+  .perfil-superior { gap: 5px; }
+  .avatar { width: 32px; height: 32px; font-size: 12px; }
+  .nombre-perfil { max-width: 60px; font-size: 10px; }
+}
+@media print {
+  .perfil-superior, .fondo-perfil { display: none !important; }
+}
 
-.paso-carga-panel { display: none !important; }
-.paso-carga-panel.paso-carga-visible { display: block !important; }
 
-/* Escudos y Marcador */
-.escudos-form { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; margin-top: 15px; }
-.escudo-bloque { display: flex; align-items: center; gap: 11px; padding: 11px; border: 1px solid var(--borde); border-radius: 10px; background: #fcfcfc; }
-.escudo-preview, .escudo-placeholder { width: 49px; height: 49px; display: grid; place-items: center; border-radius: 9px; object-fit: contain; background: white; }
-.escudo-placeholder { border: 1px dashed #ddd; color: #aaa; font-size: 22px; }
-.marcador-partido { display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); gap: 12px; align-items: center; padding: 13px 15px; border: 1px solid #f0dfd1; border-radius: 11px; background: #fffaf6; text-align: center; }
-.numeros-goles { display: flex; align-items: center; gap: 6px; justify-content: center; }
-.numeros-goles input { width: 53px; height: 46px; border: 1px solid #e3c4ac; border-radius: 8px; font-size: 22px; font-weight: 800; text-align: center; }
-
-/* Tablas y Convocatoria */
-.tabla-contenedor { width: 100%; overflow-x: auto; border: 1px solid var(--borde); border-radius: 9px; }
-.tabla-jugadoras { width: 100%; border-collapse: collapse; }
-.tabla-jugadoras th { padding: 9px 7px; border-bottom: 1px solid var(--borde); background: #fafafa; color: #656565; font-size: 9px; font-weight: 800; text-align: left; text-transform: uppercase; }
-.tabla-jugadoras td { padding: 8px 7px; border-bottom: 1px solid #f0f0f0; font-size: 11px; vertical-align: middle; }
-.jugadora-nombre { display: flex; align-items: center; gap: 7px; }
-
-/* Planilla de Eventos */
-.planilla-titulo { padding: 11px 12px; background: var(--naranja); color: white; font-size: 13px; font-weight: 900; text-align: center; text-transform: uppercase; }
-.marcador-compacto { display: grid; grid-template-columns: minmax(0,1fr) 32px 25px 32px minmax(0,1fr); align-items: center; padding: 9px; border-bottom: 1px solid #222; background: white; text-align: center; font-weight: bold; }
-.eventos-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; padding: 14px; }
+/* =====================================================
+   AJUSTES DE FORMACIÓN Y EVENTOS
+===================================================== */
+/* Los minutos de participación se mantienen como controles internos para los cálculos,
+   pero no deben aparecer como dos campos vacíos y un contador debajo de cada jugadora. */
+.controles-minutos-ocultos { display: none !important; }
+#duracionPartido[readonly] { background: #f7f8fa; color: #4b5563; cursor: default; }
+.selector-categoria-superior { margin-top: 0; margin-bottom: 22px; }
+.selector-categoria-superior label { font-size: 14px; }
+.metricas { grid-template-columns: repeat(3,minmax(0,1fr)); }
+.lista-goleadoras { display: grid; gap: 6px; margin-top: 10px; }
+.goleadora-mini { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 8px; border-radius: 8px; background: #f7f8fa; font-size: 11px; }
+.goleadora-nombre { display: flex; align-items: center; gap: 7px; min-width: 0; }
+.goleadora-orden { display: grid; place-items: center; width: 20px; height: 20px; flex: 0 0 20px; border-radius: 50%; background: var(--naranja-claro); color: var(--naranja-oscuro); font-weight: 800; }
+.goleadora-mini strong { white-space: nowrap; color: var(--verde); }
+.tabla-jugadoras { min-width: 680px; }
+.tabla-jugadoras th:first-child, .tabla-jugadoras td:first-child { width: 150px; }
+.tabla-jugadoras th:nth-child(2), .tabla-jugadoras td:nth-child(2) { min-width: 220px; }
+.tabla-jugadoras th:nth-child(3), .tabla-jugadoras td:nth-child(3),
+.tabla-jugadoras th:nth-child(4), .tabla-jugadoras td:nth-child(4) { width: 82px; }
+.fila-grupo-posicion td { padding: 12px 14px !important; border: 0 !important; background: #f4f5f7; color: #555; font-size: 10px; font-weight: 800; letter-spacing: 1px; }
+.punto-posicion { display: inline-block; width: 7px; height: 7px; margin-right: 8px; border-radius: 50%; background: var(--naranja); }
+.celda-condicion { vertical-align: middle; }
+.opciones-condicion { display: grid; gap: 5px; }
+.opcion-condicion { display: flex; align-items: center; gap: 6px; padding: 6px 7px; border: 1px solid #e5e7eb; border-radius: 7px; background: #fff; color: #626262; cursor: pointer; font-size: 10px; font-weight: 700; transition: .15s ease; }
+.opcion-condicion input { margin: 0; accent-color: var(--naranja); }
+.opcion-condicion.seleccionada.titular { border-color: #b7e2c7; background: #effaf3; color: #187744; }
+.opcion-condicion.seleccionada.suplente { border-color: #f2c7a8; background: #fff5ed; color: var(--naranja-oscuro); }
+.control-interno { position: absolute !important; width: 1px !important; height: 1px !important; opacity: 0 !important; pointer-events: none !important; }
+.panel-eventos { padding: 0 0 18px; overflow: hidden; }
+.panel-eventos .planilla-titulo { margin: 0; padding: 17px 20px; border-bottom: 1px solid var(--borde); background: #fff; color: var(--negro); font-size: 13px; font-weight: 800; letter-spacing: .6px; }
+.panel-eventos .marcador-compacto { margin: 16px 18px 20px; padding: 13px; border: 1px solid var(--borde); border-radius: 12px; background: #fafafa; }
+.eventos-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; padding: 0 18px; align-items: start; }
 .evento-cambios { grid-column: 1 / -1; }
-.evento-card { padding: 16px; border: 1px solid var(--borde); border-radius: 12px; background: #fff; box-shadow: 0 3px 12px rgba(0,0,0,.035); }
+.evento-goles, .evento-tarjetas { grid-column: auto; }
+.evento-card { min-width: 0; padding: 16px; border: 1px solid var(--borde); border-radius: 12px; background: #fff; box-shadow: 0 3px 12px rgba(0,0,0,.035); }
 .evento-card-cabecera { display: flex; align-items: center; gap: 11px; margin-bottom: 10px; }
-.evento-icono { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 10px; background: var(--naranja-claro); color: var(--naranja-oscuro); font-size: 18px; font-weight: 800; }
-.lista-eventos { display: grid; gap: 12px; margin-top: 12px; }
-.evento-registro { padding: 14px; border: 1px solid #e6e9ef; border-radius: 14px; background: #fff; }
-.evento-registro-cabecera { display: grid; grid-template-columns: 34px minmax(0, 1fr) 38px; gap: 10px; align-items: end; }
-.evento-numero { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 10px; background: #e8f7ee; color: #187747; font-size: 11px; font-weight: 850; }
-.evento-campo { display: flex; flex-direction: column; gap: 6px; }
-.evento-registro input, .evento-registro select { width: 100%; min-height: 40px; padding: 8px; border: 1px solid #dce1e8; border-radius: 8px; font-size: 12px; }
-.evento-registro-detalles { display: grid; grid-template-columns: minmax(0, 1fr) minmax(100px, .55fr); gap: 12px; margin-top: 10px; }
-.evento-eliminar { width: 38px; height: 40px; border: 1px solid #f2d4d4; border-radius: 8px; background: #fff7f7; color: #c62828; cursor: pointer; }
+.evento-icono { display: grid; place-items: center; width: 38px; height: 38px; flex: 0 0 38px; border-radius: 10px; background: var(--naranja-claro); color: var(--naranja-oscuro); font-size: 18px; font-weight: 800; }
+.evento-goles .evento-icono { background: var(--verde-fondo); color: var(--verde); }
+.evento-tarjetas .evento-icono { background: #fff5d7; color: #986600; }
+.evento-card-cabecera h4 { margin: 0 0 3px; color: var(--negro); font-size: 14px; }
+.evento-card-cabecera p { margin: 0; color: var(--gris-texto); font-size: 11px; line-height: 1.45; }
+.panel-eventos .planilla-subtitulo { display: none; }
+.panel-eventos .tabla-planilla { margin-top: 8px; }
+.panel-eventos .tabla-planilla thead th { padding: 9px 8px; background: #f7f8fa; color: #666; font-size: 10px; }
+.panel-eventos .tabla-planilla tbody tr { background: #fafbfc; }
+.panel-eventos .tabla-planilla input, .panel-eventos .tabla-planilla select { min-height: 36px; font-size: 11px; }
+.panel-eventos .titular-sale-selector { min-width: 150px; }
+.panel-eventos .evento-cambios .tabla-planilla { table-layout: fixed; }
+.panel-eventos .evento-cambios .tabla-planilla th:nth-child(1) { width: 28%; }
+.panel-eventos .evento-cambios .tabla-planilla th:nth-child(2) { width: 15%; }
+.panel-eventos .evento-cambios .tabla-planilla th:nth-child(3) { width: 12%; }
+.panel-eventos .evento-cambios .tabla-planilla th:nth-child(4) { width: 45%; }
+.panel-eventos .texto-aclaracion { margin: 10px 0 0; padding: 9px 11px; border-radius: 8px; background: #f7f8fa; color: #737373; font-size: 10px; line-height: 1.5; }
+.panel-eventos .btn-agregar-evento { display: inline-flex; align-items: center; justify-content: center; gap: 6px; margin-top: 10px; border: 1px solid #f0c3a4; border-style: solid; background: #fff8f3; }
+.panel-eventos .btn-agregar-evento:hover { border-color: var(--naranja); }
+@media (max-width: 900px) { .metricas { grid-template-columns: 1fr; } .selector-categoria-superior { grid-template-columns: 1fr; } }
+@media (max-width: 760px) { .eventos-grid { grid-template-columns: minmax(0,1fr); } .evento-cambios, .evento-goles, .evento-tarjetas { grid-column: 1; } }
+@media (max-width: 620px) { .eventos-grid { padding: 0 10px; } .evento-card { padding: 11px; } .panel-eventos .marcador-compacto { margin-left: 10px; margin-right: 10px; } .opcion-condicion { padding: 6px 4px; font-size: 9px; } .tabla-jugadoras { min-width: 420px; } }
 
-/* Botones y Navegación */
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 38px; padding: 0 13px; border: 1px solid transparent; border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer; }
-.btn-primary { background: var(--naranja); color: white; }
-.btn-primary:hover { background: var(--naranja-oscuro); }
-.btn-secondary { border-color: #e1e1e1; background: white; color: #484848; }
-.btn-danger { border-color: #f0caca; background: white; color: var(--rojo); }
-.btn-small { min-height: 29px; padding: 0 8px; font-size: 10px; }
-
-.acciones-formulario { display: flex; justify-content: space-between; align-items: center; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--borde); }
-.navegacion-pasos-carga { position: sticky; bottom: 10px; z-index: 40; display: flex; justify-content: space-between; align-items: center; padding: 12px; border: 1px solid var(--borde); border-radius: 12px; background: rgba(255,255,255,.96); box-shadow: 0 6px 24px rgba(0,0,0,.08); }
-
-/* Historial y Estadísticas */
-.filtros { display: grid; grid-template-columns: minmax(170px,1.4fr) repeat(3,minmax(125px,1fr)); gap: 11px; margin-bottom: 17px; }
-.lista-partidos { display: flex; flex-direction: column; gap: 12px; }
-.partido-card { padding: 16px; border: 1px solid var(--borde); border-radius: 11px; background: white; }
-.partido-superior { display: flex; justify-content: space-between; align-items: flex-start; }
-.resultado-partido { padding: 8px 11px; border: 1px solid var(--borde); border-radius: 8px; background: #fafafa; font-size: 19px; font-weight: 800; }
-.tabla-contenedor-estadisticas { width: 100%; overflow: auto; border: 1px solid var(--borde); border-radius: 9px; }
-.tabla-estadisticas { width: 100%; min-width: 750px; border-collapse: collapse; }
-.tabla-estadisticas th, .tabla-estadisticas td { padding: 10px; border-bottom: 1px solid #f0f0f0; font-size: 11px; text-align: center; }
-.tabla-estadisticas th:first-child, .tabla-estadisticas td:first-child { text-align: left; }
-
-.mensaje-flotante { position: fixed; right: 22px; bottom: 22px; z-index: 2000; padding: 14px 17px; border-radius: 10px; background: white; box-shadow: 0 8px 30px rgba(0,0,0,.13); font-size: 12px; opacity: 0; pointer-events: none; transition: opacity .2s; }
-.mensaje-flotante.visible { opacity: 1; }
-.mensaje-flotante.error { color: var(--rojo); border: 1px solid #efc5c5; }
-.mensaje-flotante.exito { color: var(--verde); border: 1px solid #c7e8d3; }
-.vacío { padding: 30px; text-align: center; color: var(--gris-texto); }
-.pie-pagina { padding: 15px 0; color: #999; font-size: 10px; text-align: center; }
-
-@media (max-width: 900px) {
-  .barra-lateral { position: fixed; top: var(--alto-topbar); bottom: 0; left: 0; z-index: 450; width: 280px; transform: translateX(-110%); }
-  .barra-lateral.visible { transform: translateX(0); }
-  .capa-sidebar.visible { display: block; position: fixed; inset: var(--alto-topbar) 0 0; background: rgba(0,0,0,.32); z-index: 440; }
-  .eventos-grid { grid-template-columns: 1fr; }
+/* Los controles de cambios, goles y tarjetas comparten una única estética. */
+.panel-eventos .tabla-planilla input,
+.panel-eventos .tabla-planilla select {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 38px;
+  padding: 8px 9px;
+  border: 1px solid #dfe3e8;
+  border-radius: 8px;
+  background-color: #fff;
+  color: #292929;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.25;
+  box-shadow: 0 1px 2px rgba(0,0,0,.025);
+  transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease;
 }
+.panel-eventos .tabla-planilla select { cursor: pointer; padding-right: 24px; }
+.panel-eventos .tabla-planilla input::placeholder { color: #9ca3af; font-weight: 500; }
+.panel-eventos .tabla-planilla input:focus,
+.panel-eventos .tabla-planilla select:focus {
+  outline: none;
+  border-color: var(--naranja);
+  box-shadow: 0 0 0 3px rgba(244,119,33,.12);
+}
+.panel-eventos .tabla-planilla option { background: #fff; color: #292929; font-family: inherit; font-size: 12px; }
+.panel-eventos .tiempo-cambio-editor,
+.panel-eventos .gol-tiempo,
+.panel-eventos .tarjeta-tiempo,
+.panel-eventos .tarjeta-tipo { text-align: center; }
+@media (max-width: 620px) {
+  .panel-eventos .tabla-planilla input,
+  .panel-eventos .tabla-planilla select { min-height: 35px; padding: 7px 5px; font-size: 11px; }
+  .panel-eventos .titular-sale-selector { min-width: 0; }
+}
+
+/* =====================================================
+   GOLES Y TARJETAS: REGISTROS VISUALES, CLAROS Y RESPONSIVOS
+   Se usan tarjetas individuales, no filas comprimidas de planilla.
+===================================================== */
+.panel-eventos .lista-eventos {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+  min-width: 0;
+}
+.panel-eventos .evento-registro {
+  display: block;
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid #e6e9ef;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #ffffff 0%, #fcfcfd 100%);
+  box-shadow: 0 2px 8px rgba(20, 30, 48, .035);
+  transition: border-color .16s ease, box-shadow .16s ease, transform .16s ease;
+}
+.panel-eventos .evento-registro:hover {
+  border-color: #d9dfe8;
+  box-shadow: 0 4px 12px rgba(20, 30, 48, .055);
+}
+.panel-eventos .evento-registro:focus-within {
+  border-color: #f2b487;
+  box-shadow: 0 0 0 3px rgba(244,119,33,.09);
+}
+.panel-eventos .evento-registro-cabecera {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 38px;
+  gap: 10px;
+  align-items: end;
+  min-width: 0;
+}
+.panel-eventos .evento-numero {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: #e8f7ee;
+  color: #187747;
+  font-size: 11px;
+  font-weight: 850;
+  font-variant-numeric: tabular-nums;
+}
+.panel-eventos .evento-tarjeta-registro .evento-numero {
+  background: #fff3d8;
+  color: #916100;
+}
+.panel-eventos .evento-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  margin: 0;
+}
+.panel-eventos .evento-campo > span {
+  color: #606977;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .25px;
+  line-height: 1.2;
+}
+.panel-eventos .evento-registro input,
+.panel-eventos .evento-registro select {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+  margin: 0;
+  padding: 10px 11px;
+  border: 1px solid #dce1e8;
+  border-radius: 10px;
+  background-color: #fff;
+  color: #252a32;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.2;
+  box-shadow: 0 1px 2px rgba(18,30,48,.025);
+  transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease;
+}
+.panel-eventos .evento-registro select { cursor: pointer; padding-right: 28px; }
+.panel-eventos .evento-registro input::placeholder { color: #9aa1ad; font-weight: 500; }
+.panel-eventos .evento-registro input:focus,
+.panel-eventos .evento-registro select:focus {
+  outline: none;
+  border-color: var(--naranja);
+  box-shadow: 0 0 0 3px rgba(244,119,33,.12);
+}
+.panel-eventos .evento-registro-detalles {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(100px, .55fr);
+  gap: 12px;
+  margin: 13px 0 0 44px;
+  min-width: 0;
+}
+/* En tarjetas, el tipo queda destacado en su propia línea; tiempo y minuto van juntos debajo. */
+.panel-eventos .evento-tarjeta-registro .evento-registro-detalles {
+  grid-template-columns: minmax(0, 1fr) minmax(100px, .65fr);
+}
+.panel-eventos .evento-tarjeta-registro .evento-campo-tipo { grid-column: 1 / -1; }
+.panel-eventos .evento-eliminar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 42px;
+  padding: 0;
+  border: 1px solid #f2d4d4;
+  border-radius: 10px;
+  background: #fff7f7;
+  color: #c62828;
+  font-family: inherit;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, transform .15s ease;
+}
+.panel-eventos .evento-eliminar:hover {
+  border-color: #e9aaaa;
+  background: #ffeded;
+  transform: translateY(-1px);
+}
+.panel-eventos .eventos-vacio {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 15px 13px;
+  border: 1px dashed #dfe4eb;
+  border-radius: 12px;
+  background: #fafbfc;
+  color: #6f7783;
+}
+.panel-eventos .eventos-vacio-icono {
+  display: grid;
+  place-items: center;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  background: #eef1f5;
+  font-size: 16px;
+}
+.panel-eventos .eventos-vacio strong {
+  display: block;
+  color: #4c535e;
+  font-size: 11px;
+  font-weight: 800;
+}
+.panel-eventos .eventos-vacio small {
+  display: block;
+  margin-top: 4px;
+  color: #8b929e;
+  font-size: 10px;
+  line-height: 1.4;
+}
+.panel-eventos .evento-gol-registro .evento-campo-jugadora select { min-height: 44px; }
+.panel-eventos .evento-tarjeta-registro .tarjeta-tipo { font-weight: 750; }
+@media (max-width: 480px) {
+  .panel-eventos .evento-registro { padding: 11px; border-radius: 12px; }
+  .panel-eventos .evento-registro-cabecera { grid-template-columns: 30px minmax(0, 1fr) 34px; gap: 8px; }
+  .panel-eventos .evento-registro-detalles { margin-left: 0; gap: 9px; }
+  .panel-eventos .evento-registro input,
+  .panel-eventos .evento-registro select { min-height: 40px; padding: 9px; font-size: 12px; }
+  .panel-eventos .evento-eliminar { width: 34px; height: 40px; }
+}
+
 </style>
 </head>
 
 <body>
 
 <header class="barra-superior">
-  <button class="menu-boton" id="botonMenu" type="button" aria-label="Menú">☰</button>
-  <img class="logo-superior" src="logo adiur.jpg" alt="Logo ADIUR" onerror="this.onerror=null;this.src='Logo ADIUR.jpg';">
+  <button class="menu-boton" id="botonMenu" type="button"
+    aria-label="Abrir o cerrar menú" aria-expanded="true">☰</button>
+
+  <img class="logo-superior" src="logo adiur.jpg" alt="Logo ADIUR"
+    onerror="this.onerror=null;this.src='Logo ADIUR.jpg';">
+
   <div class="marca">
     <h1>ADIUR FEMENINO</h1>
     <p>Informes y seguimiento competitivo</p>
   </div>
-  <button class="perfil-superior" id="botonPerfil" type="button">
+
+  <button class="perfil-superior" id="botonPerfil" type="button"
+    aria-label="Ver perfil de usuario" aria-haspopup="dialog" aria-controls="fondoPerfil">
     <span class="avatar" id="avatarPerfil">DT</span>
     <span class="informacion-perfil">
       <span class="nombre-perfil" id="nombrePerfil">Cuerpo técnico</span>
@@ -432,10 +2814,20 @@ a:focus-visible {
 <div class="contenedor">
   <aside class="barra-lateral" id="sidebar">
     <div class="etiqueta-menu">Menú principal</div>
-    <a class="menu-inicio" href="Pagina Principal.html"><span class="icono-menu">⌂</span><span>Inicio</span></a>
-    
+
+    <a class="menu-inicio" href="Pagina Principal.html">
+      <span class="icono-menu">⌂</span>
+      <span>Inicio</span>
+    </a>
+
     <div class="grupo-menu cerrado">
-      <button class="titulo-grupo" type="button"><span class="grupo-izquierdo"><span class="icono-menu">♙</span><span>PLANTEL</span></span><span class="flecha">›</span></button>
+      <button class="titulo-grupo" type="button" aria-expanded="false">
+        <span class="grupo-izquierdo">
+          <span class="icono-menu">♙</span>
+          <span>PLANTEL</span>
+        </span>
+        <span class="flecha">›</span>
+      </button>
       <div class="submenu">
         <a href="jugadoras.html"><span class="nav-punto"></span>Jugadoras</a>
         <a href="asistencia.html"><span class="nav-punto"></span>Asistencia</a>
@@ -443,18 +2835,30 @@ a:focus-visible {
     </div>
 
     <div class="grupo-menu cerrado">
-      <button class="titulo-grupo" type="button"><span class="grupo-izquierdo"><span class="icono-menu">⚽</span><span>ENTRENAMIENTO</span></span><span class="flecha">›</span></button>
+      <button class="titulo-grupo" type="button" aria-expanded="false">
+        <span class="grupo-izquierdo">
+          <span class="icono-menu">⚽</span>
+          <span>ENTRENAMIENTO</span>
+        </span>
+        <span class="flecha">›</span>
+      </button>
       <div class="submenu">
         <a href="calendario.html"><span class="nav-punto"></span>Calendario</a>
         <a href="planificacion.html"><span class="nav-punto"></span>Planificación</a>
-        <a href="biblioteca.html"><span class="nav-punto"></span>Biblioteca</a>
+        <a href="biblioteca.html"><span class="nav-punto"></span>Biblioteca de ejercicios</a>
         <a href="gimnasio.html"><span class="nav-punto"></span>Gimnasio</a>
         <a href="calculadora.html"><span class="nav-punto"></span>Calculadora</a>
       </div>
     </div>
 
     <div class="grupo-menu">
-      <button class="titulo-grupo" type="button"><span class="grupo-izquierdo"><span class="icono-menu">▤</span><span>COMPETENCIA</span></span><span class="flecha">›</span></button>
+      <button class="titulo-grupo" type="button" aria-expanded="true">
+        <span class="grupo-izquierdo">
+          <span class="icono-menu">▤</span>
+          <span>COMPETENCIA</span>
+        </span>
+        <span class="flecha">›</span>
+      </button>
       <div class="submenu">
         <a href="Partidos.html"><span class="nav-punto"></span>Partidos</a>
         <a href="informes.html" class="activo" aria-current="page"><span class="nav-punto"></span>Informes</a>
@@ -464,9 +2868,15 @@ a:focus-visible {
     </div>
 
     <div class="grupo-menu cerrado">
-      <button class="titulo-grupo" type="button"><span class="grupo-izquierdo"><span class="icono-menu">◷</span><span>RENDIMIENTOS</span></span><span class="flecha">›</span></button>
+      <button class="titulo-grupo" type="button" aria-expanded="false">
+        <span class="grupo-izquierdo">
+          <span class="icono-menu">◷</span>
+          <span>RENDIMIENTOS</span>
+        </span>
+        <span class="flecha">›</span>
+      </button>
       <div class="submenu">
-        <a href="testeos.html"><span class="nav-punto"></span>Testeos</a>
+        <a href="testeos.html"><span class="nav-punto"></span>Planilla de testeos</a>
         <a href="tiempos.html"><span class="nav-punto"></span>Tiempos</a>
         <a href="multimedia.html"><span class="nav-punto"></span>Multimedia</a>
         <a href="encuestas.html"><span class="nav-punto"></span>Encuestas</a>
@@ -475,7 +2885,11 @@ a:focus-visible {
     </div>
 
     <hr class="separador-menu">
-    <a class="enlace-cerrar" href="Loing.html" id="cerrarSesion"><span class="icono-menu">↪</span><span>Cerrar sesión</span></a>
+
+    <a class="enlace-cerrar" href="Loing.html" id="cerrarSesion">
+      <span class="icono-menu">↪</span>
+      <span>Cerrar sesión</span>
+    </a>
   </aside>
 
   <main class="contenido">
@@ -483,14 +2897,20 @@ a:focus-visible {
       <div>
         <span class="eyebrow">COMPETENCIA · INFORMES</span>
         <h2>Informes de partidos</h2>
-        <p>Registro competitivo sincronizado en la nube con lectura automática de planteles.</p>
+        <p>
+          Una planilla más simple para registrar cada encuentro, organizar la formación
+          y mantener el seguimiento de minutos, goles y tarjetas de cada jugadora.
+        </p>
       </div>
+
       <div class="botonera-heading">
-        <button class="btn btn-primary" type="button" onclick="nuevoPartido();cambiarVista('cargar')">＋ Nuevo informe</button>
+        <button class="btn btn-primary" type="button" onclick="nuevoPartido();cambiarVista('cargar')">
+          ＋ Nuevo informe
+        </button>
       </div>
     </section>
 
-    <section class="selector-categoria-general" aria-label="Selección general de categoría">
+    <section class="division-principal selector-categoria-general selector-categoria-superior" aria-label="Selección general de categoría">
       <div class="division-principal-etiqueta">CONFIGURACIÓN GENERAL</div>
       <label for="division">Seleccioná la categoría para comenzar *</label>
       <select id="division" required>
@@ -501,9 +2921,8 @@ a:focus-visible {
         <option value="Sub 16">Sub 16</option>
         <option value="Primera">Primera</option>
       </select>
-      <small class="ayuda-categoria-general">Los datos se vinculan automáticamente con <strong>jugadoras.html</strong>[cite: 7] y la base de datos en la nube.</small>
+      <small class="ayuda-categoria-general">Los recuentos de partidos, goles y tarjetas, junto con la convocatoria, corresponden a la categoría seleccionada.</small>
     </section>
-
     <section class="metricas" aria-label="Resumen de informes">
       <article class="metrica">
         <div class="metrica-icono">⚽</div>
@@ -513,22 +2932,23 @@ a:focus-visible {
           <div class="metrica-detalle">Encuentros registrados</div>
         </div>
       </article>
-      <article class="metrica">
+      <article class="metrica metrica-goleadoras">
         <div class="metrica-icono">🥅</div>
         <div class="metrica-texto">
           <div class="metrica-etiqueta">Goles registrados</div>
           <div class="metrica-valor" id="totalGolesEquipo">0</div>
-          <div class="metrica-detalle">Goles a favor de ADIUR</div>
+          <div class="metrica-detalle">Goles convertidos por ADIUR</div>
+          <div class="lista-goleadoras" id="listaGoleadoras"><span>Sin goleadoras registradas</span></div>
         </div>
       </article>
-      <article class="metrica">
+      <article class="metrica metrica-tarjetas">
         <div class="metrica-icono">▣</div>
         <div class="metrica-texto">
-          <div class="metrica-etiqueta">Tarjetas</div>
+          <div class="metrica-etiqueta">Tarjetas registradas</div>
           <div class="metrica-valor" id="totalTarjetas">0</div>
           <div class="detalle-tarjetas">
-            <span><i class="detalle-amarillas"></i> Amarillas: <strong id="totalAmarillas">0</strong></span>
-            <span><i class="detalle-rojas"></i> Rojas: <strong id="totalRojas">0</strong></span>
+            <span class="detalle-amarillas"><i></i> Amarillas <strong id="totalAmarillas">0</strong></span>
+            <span class="detalle-rojas"><i></i> Rojas <strong id="totalRojas">0</strong></span>
           </div>
         </div>
       </article>
@@ -536,24 +2956,858 @@ a:focus-visible {
 
     <nav class="pestanas" aria-label="Secciones">
       <button class="pestana activa" data-vista="cargar" type="button">＋ Cargar partido</button>
-      <button class="pestana" data-vista="partidos" type="button">▤ Historial (Nube)</button>
+      <button class="pestana" data-vista="partidos" type="button">▤ Historial</button>
       <button class="pestana" data-vista="estadisticas" type="button">◷ Estadísticas</button>
     </nav>
 
-    <!-- CARGA DE PARTIDO -->
+    <!-- =====================================================
+         CARGA DE PARTIDO
+    ====================================================== -->
+
     <section class="vista activa" id="vista-cargar">
       <form id="formularioPartido" novalidate>
         <input type="hidden" id="partidoId">
         <input type="hidden" id="fixtureIdVinculado">
 
-        <section class="asistente-carga" aria-label="Progreso">
+
+
+
+        <section class="asistente-carga" aria-label="Progreso de carga del informe">
           <div class="pasos-carga">
-            <div class="paso-carga-item activo" data-indicador-paso="1"><span class="numero-paso-visual">1</span><span class="texto-paso-visual"><strong>Encuentro</strong><small>Datos</small></span></div>
-            <div class="paso-carga-item" data-indicador-paso="2"><span class="numero-paso-visual">2</span><span class="texto-paso-visual"><strong>Formación</strong><small>Plantel</small></span></div>
-            <div class="paso-carga-item" data-indicador-paso="3"><span class="numero-paso-visual">3</span><span class="texto-paso-visual"><strong>Eventos</strong><small>Goles/Tarjetas</small></span></div>
-            <div class="paso-carga-item" data-indicador-paso="4"><span class="numero-paso-visual">4</span><span class="texto-paso-visual"><strong>Revisión</strong><small>Guardar</small></span></div>
+            <div class="paso-carga-item activo" data-indicador-paso="1" aria-current="step">
+              <span class="numero-paso-visual">1</span>
+              <span class="texto-paso-visual"><strong>Encuentro</strong><small>Datos y resultado</small></span>
+            </div>
+            <div class="paso-carga-item" data-indicador-paso="2">
+              <span class="numero-paso-visual">2</span>
+              <span class="texto-paso-visual"><strong>Formación</strong><small>Jugadoras y minutos</small></span>
+            </div>
+            <div class="paso-carga-item" data-indicador-paso="3">
+              <span class="numero-paso-visual">3</span>
+              <span class="texto-paso-visual"><strong>Eventos</strong><small>Goles y tarjetas</small></span>
+            </div>
+            <div class="paso-carga-item" data-indicador-paso="4">
+              <span class="numero-paso-visual">4</span>
+              <span class="texto-paso-visual"><strong>Revisión</strong><small>Confirmar informe</small></span>
+            </div>
           </div>
-          <div class="progreso-carga"><span id="barraProgresoCarga" style="width: 25%;"></span></div>
+          <div class="progreso-carga"><span id="barraProgresoCarga"></span></div>
           <div class="estado-asistente-carga">
             <strong id="tituloPasoCarga">Paso 1 de 4 · Datos del encuentro</strong>
-            <span id="detalleP
+            <span id="detallePasoCarga">Completá los datos principales del partido para continuar.</span>
+          </div>
+        </section>
+
+        <!-- PASO 1: PARTIDO -->
+        <section class="panel paso-carga-panel paso-carga-visible" data-paso-carga="1">
+          <div class="panel-cabecera">
+            <div class="panel-titulo-izquierda">
+              <div class="numero-paso">1</div>
+              <div>
+                <h3 id="tituloFormulario">Datos del encuentro</h3>
+                <p>Elegí primero la categoría. Después podés vincular un partido cargado o completar los datos manualmente.</p>
+              </div>
+            </div>
+            <span class="etiqueta etiqueta-naranja" id="estadoFormulario">Nuevo informe</span>
+          </div>
+
+
+
+          <div class="campo" style="margin-bottom:16px;">
+            <label for="seleccionFixture">Partidos cargados para esta categoría</label>
+            <select id="seleccionFixture">
+              <option value="">Primero seleccioná una categoría...</option>
+            </select>
+            <small>Los partidos se leen desde Partidos.html y se filtran según la categoría. Vincular uno es opcional: también podés completar el informe manualmente.</small>
+          </div>
+
+          <div class="rejilla">
+            <div class="campo col-4">
+              <label for="competicion">Competición *</label>
+              <select id="competicion" required></select>
+            </div>
+
+            <div class="campo col-3">
+              <label for="jornada">Jornada</label>
+              <input type="number" id="jornada" min="1" max="99" placeholder="Ej.: 14">
+            </div>
+
+            <div class="campo col-3">
+              <label for="fechaReal">Fecha del partido *</label>
+              <input type="date" id="fechaReal" required>
+            </div>
+
+            <div class="campo col-3">
+              <label for="localia">Condición</label>
+              <select id="localia">
+                <option value="Local">Local</option>
+                <option value="Visitante">Visitante</option>
+                <option value="Neutral">Cancha neutral</option>
+              </select>
+            </div>
+
+            <div class="campo col-6">
+              <label for="lugar">Cancha / lugar</label>
+              <input type="text" id="lugar" maxlength="150" placeholder="Ej.: Predio ADIUR">
+            </div>
+
+            <div class="campo col-6">
+              <label for="rival">Club rival *</label>
+              <select id="rival" required>
+                <option value="">Seleccionar club...</option>
+              </select>
+            </div>
+
+            <div class="campo col-6 oculto" id="campoRivalOtro">
+              <label for="rivalOtro">Nombre del otro club *</label>
+              <input type="text" id="rivalOtro" maxlength="100" placeholder="Nombre del club">
+            </div>
+          </div>
+
+          <div class="escudos-form">
+            <div class="escudo-bloque">
+              <img class="escudo-preview" id="previewAdiur" src="Logo ADIUR.jpg" alt="ADIUR"
+                onerror="this.onerror=null;this.src='logo adiur.jpg';">
+              <div class="escudo-info">
+                <strong>ADIUR FEMENINO</strong>
+                <small>Escudo del club</small>
+              </div>
+            </div>
+
+            <div class="escudo-bloque">
+              <img class="escudo-preview oculto" id="previewRival" alt="Escudo rival">
+              <div class="escudo-placeholder" id="placeholderRival">⚽</div>
+              <div class="escudo-info">
+                <strong id="nombreEscudoRival">Club rival</strong>
+                <small id="ayudaEscudoRival">Seleccioná un rival para ver su escudo.</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="divisor">Resultado final</div>
+
+          <div class="marcador-partido">
+            <div class="equipo-marcador">
+              <strong>ADIUR FEMENINO</strong>
+              <small>Goles a favor</small>
+            </div>
+
+            <div class="numeros-goles">
+              <input type="number" id="golesAdiur" min="0" max="99" placeholder="–"
+                aria-label="Goles de ADIUR" required>
+              <span>–</span>
+              <input type="number" id="golesRival" min="0" max="99" placeholder="–"
+                aria-label="Goles del rival" required>
+            </div>
+
+            <div class="equipo-marcador">
+              <strong id="nombreRivalMarcador">RIVAL</strong>
+              <small>Goles en contra</small>
+            </div>
+          </div>
+
+          <div class="rejilla" style="margin-top:15px;">
+            <div class="campo col-3">
+              <label for="duracionPartido">Duración total (min.) *</label>
+              <input type="number" id="duracionPartido" min="1" max="80" value="" readonly aria-readonly="true" required>
+              <small>Se asigna automáticamente según la categoría seleccionada.</small>
+            </div>
+
+          </div>
+
+          <div id="avisoDatosFixture" class="aviso neutro">
+            <span>ⓘ</span>
+            <div>
+              Podés seleccionar un partido de Partidos.html para recuperar datos, o completar el informe manualmente.
+            </div>
+          </div>
+        </section>
+
+        <!-- PASO 2: FORMACIÓN Y PARTICIPACIÓN -->
+
+          <!-- GOLES / CAMBIOS / TARJETAS -->
+          <section class="panel panel-eventos paso-carga-panel" data-paso-carga="3">
+            <div class="planilla-titulo" id="tituloPlanilla">ADIUR FEMENINO · INFORME</div>
+
+            <div class="marcador-compacto">
+              <div class="equipo-compacto">
+                <img src="Logo ADIUR.jpg" alt="ADIUR"
+                  onerror="this.onerror=null;this.src='logo adiur.jpg';">
+                <span>ADIUR</span>
+              </div>
+              <span class="numero-marcador" id="marcadorMiniAdiur">–</span>
+              <span class="vs-marcador">VS</span>
+              <span class="numero-marcador" id="marcadorMiniRival">–</span>
+              <div class="equipo-compacto">
+                <span id="rivalMiniTexto">RIVAL</span>
+                <img class="oculto" id="rivalMiniEscudo" alt="Escudo rival">
+              </div>
+            </div>
+
+            <div class="eventos-grid">
+              <section class="evento-card evento-cambios">
+                <div class="evento-card-cabecera"><span class="evento-icono">⇄</span><div><h4>Cambios</h4><p>Elegí una suplente, indicá cuándo entra y seleccioná qué titular sale. Los minutos jugados se calculan automáticamente.</p></div></div>
+                <table class="tabla-planilla">
+              <thead>
+                <tr>
+                  <th>Suplente que ingresa</th>
+                  <th class="col-minuto">Minuto</th>
+                  <th class="col-tiempo">Tiempo</th>
+                  <th>Titular que sale</th>
+                </tr>
+              </thead>
+              <tbody id="tablaCambios"></tbody>
+            </table>
+                <div class="texto-aclaracion">Los minutos se reflejan en el cálculo de participación de cada jugadora.</div>
+              </section>
+
+              <section class="evento-card evento-goles">
+                <div class="evento-card-cabecera"><span class="evento-icono">⚽</span><div><h4>Goles</h4><p>Elegí la goleadora y ubicá el gol en el tiempo y minuto correspondiente.</p></div></div>
+                <div id="tablaGoles" class="lista-eventos lista-eventos-goles" aria-live="polite" aria-label="Goles cargados"></div>
+                <button class="btn-agregar-evento" type="button" onclick="agregarEventoGol()">＋ Agregar gol</button>
+                <div class="texto-aclaracion">Cada registro corresponde a un gol. El marcador se carga en el bloque superior.</div>
+              </section>
+
+              <section class="evento-card evento-tarjetas">
+                <div class="evento-card-cabecera"><span class="evento-icono">▣</span><div><h4>Tarjetas</h4><p>Elegí la jugadora, el tipo de tarjeta y cuándo ocurrió.</p></div></div>
+                <div id="tablaTarjetas" class="lista-eventos lista-eventos-tarjetas" aria-live="polite" aria-label="Tarjetas cargadas"></div>
+            <button class="btn-agregar-evento" type="button" onclick="agregarEventoTarjeta()">＋ Agregar tarjeta</button>
+                <div class="texto-aclaracion">Las amarillas y rojas se contabilizan automáticamente en las estadísticas individuales.</div>
+              </section>
+            </div>
+          </section>
+
+          <!-- FORMACIÓN Y MINUTOS -->
+          <section class="panel panel-cancha paso-carga-panel" data-paso-carga="2">
+            <div class="subpanel-cabecera">
+              <div>
+                <h3>2. Formación y participación</h3>
+                <p>Solo se muestran jugadoras activas de la categoría seleccionada, organizadas por posición. Elegí Titular o Suplente a la izquierda.</p>
+              </div>
+            </div>
+
+            <div class="contenido-subpanel">
+              <div class="panel-cabecera">
+                <div>
+                  <h3>Lista de citadas</h3>
+                  <p>Seleccioná quiénes fueron citadas y definí quiénes jugaron como titulares o suplentes.</p>
+                </div>
+                <span class="etiqueta" id="cantidadJugadoras">0 jugadoras</span>
+              </div>
+
+              <div class="aviso neutro">
+                <span>ⓘ</span>
+                <div>Elegí <strong>Titular</strong> o <strong>Suplente</strong>. Los cambios y minutos se registran únicamente en la pestaña Eventos.</div>
+              </div>
+
+              <div id="avisoPlantel" class="aviso neutro oculto">
+                No se encontraron jugadoras para esta categoría en los datos disponibles de Jugadoras.html. Revisá que el plantel esté guardado y que cada jugadora tenga asignada su división.
+              </div>
+
+              <div class="tabla-contenedor">
+                <table class="tabla-jugadoras">
+                  <thead>
+                    <tr>
+                      <th>Titular / Suplente</th>
+                      <th>Jugadora · Posición</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cuerpoTablaJugadoras"></tbody>
+                </table>
+              </div>
+
+              <div class="pie-participacion">
+                <span>La participación y los cambios se administran en Eventos.</span>
+                <span id="resumenTitulares">0 titulares</span>
+              </div>
+
+
+            </div>
+          </section>
+
+        <div class="panel paso-carga-panel" data-paso-carga="4">
+          <div class="cabecera-revision">
+            <span class="icono-revision">✓</span>
+            <div>
+              <h3>Revisá el informe antes de guardarlo</h3>
+              <p>Confirmá los datos del encuentro, la participación y los eventos registrados.</p>
+            </div>
+          </div>
+          <div id="resumenRevision" class="resumen-revision" aria-live="polite"></div>
+          <div class="campo campo-observaciones-revision">
+            <label for="observaciones">Observaciones del cuerpo técnico</label>
+            <textarea id="observaciones" maxlength="3000" rows="4"
+              placeholder="Análisis del partido, aspectos tácticos, puntos fuertes, aspectos a mejorar y observaciones..."></textarea>
+          </div>
+          <div id="avisoGolesIndividuales" class="aviso neutro oculto">
+            <span>ⓘ</span>
+            <div id="textoAvisoGoles"></div>
+          </div>
+
+          <div class="acciones-formulario">
+            <small>
+              Revisá el marcador, los minutos, las goleadoras y las tarjetas antes de guardar.
+              Podés corregir el informe después desde el historial.
+            </small>
+            <div class="grupo-botones">
+              <button class="btn btn-secondary" type="button" onclick="nuevoPartido()">Limpiar</button>
+              <button class="btn btn-primary" type="submit" id="botonGuardar">Guardar informe</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="navegacion-pasos-carga">
+          <button class="btn btn-secondary" id="btnPasoAnterior" type="button" onclick="anteriorPasoCarga()">← Anterior</button>
+          <span id="mensajeNavegacionPasos">Tus datos se conservan mientras avanzás entre los pasos.</span>
+          <button class="btn btn-primary" id="btnPasoSiguiente" type="button" onclick="siguientePasoCarga()">Continuar a formación →</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- HISTORIAL -->
+    <section class="vista" id="vista-partidos">
+      <div class="panel">
+        <div class="panel-cabecera">
+          <div>
+            <h3>Historial de partidos</h3>
+            <p>Consultá, editá o eliminá informes existentes.</p>
+          </div>
+          <button class="btn btn-secondary" type="button" onclick="exportarPartidosCSV()">↓ Exportar CSV</button>
+        </div>
+
+        <div class="filtros">
+          <div class="filtro">
+            <label for="buscarPartido">Buscar rival o lugar</label>
+            <input type="search" id="buscarPartido" placeholder="Escribí para buscar...">
+          </div>
+          <div class="filtro">
+            <label for="filtroDivisionPartidos">División</label>
+            <select id="filtroDivisionPartidos">
+              <option value="">Todas</option>
+              <option>Sub 10</option><option>Sub 12</option><option>Sub 14</option>
+              <option>Sub 16</option><option>Primera</option>
+            </select>
+          </div>
+          <div class="filtro">
+            <label for="filtroTorneoPartidos">Competición</label>
+            <select id="filtroTorneoPartidos">
+              <option value="">Todas</option>
+              <option>Rosarina</option>
+              <option>Copa Oro - ARF</option>
+              <option>Copa Plata - ARF</option>
+              <option>Fase Regular - ARF</option>
+              <option>Copa Santa Fe</option>
+              <option>Torneo Regional AFA</option>
+            </select>
+          </div>
+          <div class="filtro">
+            <label for="ordenPartidos">Orden</label>
+            <select id="ordenPartidos">
+              <option value="desc">Más recientes primero</option>
+              <option value="asc">Más antiguos primero</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="resultados-cabecera">
+          <span class="contador-resultados" id="contadorPartidos">0 partidos</span>
+          <button class="btn btn-secondary btn-small" type="button" onclick="limpiarFiltrosPartidos()">Limpiar filtros</button>
+        </div>
+
+        <div id="listaPartidos" class="lista-partidos"></div>
+      </div>
+    </section>
+
+    <!-- ESTADÍSTICAS -->
+    <section class="vista" id="vista-estadisticas">
+      <div class="panel">
+        <div class="panel-cabecera">
+          <div>
+            <h3>Estadísticas acumuladas</h3>
+            <p>Minutos, partidos, goles y tarjetas de cada jugadora.</p>
+          </div>
+          <div class="grupo-botones">
+            <button class="btn btn-secondary" type="button" onclick="exportarEstadisticasCSV()">↓ CSV</button>
+            <button class="btn btn-secondary" type="button" onclick="window.print()">Imprimir / PDF</button>
+          </div>
+        </div>
+
+        <div class="filtros">
+          <div class="filtro">
+            <label for="buscarEstadistica">Buscar jugadora</label>
+            <input type="search" id="buscarEstadistica" placeholder="Nombre y apellido">
+          </div>
+          <div class="filtro">
+            <label for="filtroDivisionEstadisticas">División</label>
+            <select id="filtroDivisionEstadisticas">
+              <option value="">Todas</option>
+              <option>Sub 10</option><option>Sub 12</option><option>Sub 14</option>
+              <option>Sub 16</option><option>Primera</option>
+            </select>
+          </div>
+          <div class="filtro">
+            <label for="filtroTorneoEstadisticas">Competición</label>
+            <select id="filtroTorneoEstadisticas">
+              <option value="">Todas</option>
+              <option>Rosarina</option>
+              <option>Copa Oro - ARF</option>
+              <option>Copa Plata - ARF</option>
+              <option>Fase Regular - ARF</option>
+              <option>Copa Santa Fe</option>
+              <option>Torneo Regional AFA</option>
+            </select>
+          </div>
+          <div class="filtro">
+            <label for="ordenEstadisticas">Ordenar por</label>
+            <select id="ordenEstadisticas">
+              <option value="minutos">Más minutos</option>
+              <option value="goles">Más goles</option>
+              <option value="partidos">Más partidos</option>
+              <option value="amarillas">Más amarillas</option>
+              <option value="rojas">Más rojas</option>
+              <option value="nombre">Nombre A-Z</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="tabla-contenedor-estadisticas">
+          <table class="tabla-estadisticas">
+            <thead>
+              <tr>
+                <th>Jugadora</th>
+                <th>Partidos</th>
+                <th>Minutos</th>
+                <th>Promedio</th>
+                <th>Goles</th>
+                <th>Amarillas</th>
+                <th>Rojas</th>
+              </tr>
+            </thead>
+            <tbody id="cuerpoEstadisticas"></tbody>
+          </table>
+        </div>
+
+        <div class="vacío oculto" id="estadisticasVacias" style="margin-top:12px;">
+          <div class="vacio-icono">◷</div>
+          <h4>No hay estadísticas para mostrar</h4>
+          <p>Registrá un informe o modificá los filtros para consultar los datos.</p>
+        </div>
+      </div>
+
+      <div class="estadisticas-grid">
+        <div class="panel">
+          <div class="panel-cabecera">
+            <div>
+              <h3>Goleadoras</h3>
+              <p>Ranking de goles individuales.</p>
+            </div>
+          </div>
+          <div class="ranking" id="rankingGoleadoras"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-cabecera">
+            <div>
+              <h3>Más minutos</h3>
+              <p>Jugadoras con más participación acumulada.</p>
+            </div>
+          </div>
+          <div class="ranking" id="rankingMinutos"></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="pie-pagina">
+      ADIUR FEMENINO · Informes de competencia · Datos guardados en este navegador.
+    </div>
+  </main>
+</div>
+
+<div class="fondo-perfil" id="fondoPerfil" aria-hidden="true">
+  <section class="tarjeta-perfil" role="dialog" aria-modal="true" aria-labelledby="tituloPerfil">
+    <div class="avatar-perfil" id="avatarPerfilModal">DT</div>
+    <h2 id="tituloPerfil">Cuerpo técnico</h2>
+    <p id="rolPerfilModal">Club ADIUR</p>
+    <button class="boton-cerrar-perfil" id="cerrarPerfil" type="button">Cerrar</button>
+  </section>
+</div>
+
+<div class="mensaje-flotante" id="mensajeFlotante" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+
+/* =====================================================
+   CONFIGURACIÓN DE FIREBASE CLOUD FIRESTORE
+===================================================== */
+const firebaseConfig = {
+  projectId: "adiur-b1913"
+};
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+const db = firebase.firestore();
+
+/* =====================================================
+   CONFIGURACIÓN
+===================================================== */
+
+const CLAVE_PARTIDOS = "informesADIURPartidosV2";
+const CLAVE_PLANTEL = "adiurJugadorasInformesV1";
+const CLAVE_SESION = "usuarioADIUR";
+const CLAVE_FIXTURE = "fixtureADIUR";
+const CLAVE_INFORMES_ANTERIORES = "informesADIURJornadasV1";
+
+const DIVISIONES = ["Sub 10","Sub 12","Sub 14","Sub 16","Primera"];
+
+const COMPETICIONES_POR_DIVISION = {
+  "Sub 10": ["Rosarina","Copa Oro - ARF","Copa Plata - ARF"],
+  "Sub 12": ["Rosarina","Copa Oro - ARF","Copa Plata - ARF"],
+  "Sub 14": ["Rosarina","Copa Oro - ARF","Copa Plata - ARF"],
+  "Sub 16": ["Rosarina","Copa Oro - ARF","Copa Plata - ARF"],
+  "Primera": ["Fase Regular - ARF","Copa Oro - ARF","Copa Santa Fe","Torneo Regional AFA"]
+};
+
+const ESCUDOS_CLUBES = [
+  { nombre: "14 de Junio", ruta: "CLUBES/14 JUNIO.jpg" },
+  { nombre: "Alianza", ruta: "CLUBES/ALIANZA.png" },
+  { nombre: "Argentino", ruta: "CLUBES/ARGENTINO.png" },
+  { nombre: "Banco", ruta: "CLUBES/BANCO.jpg" },
+  { nombre: "Botafogo", ruta: "CLUBES/BOTAFOGO.jpg" },
+  { nombre: "Central", ruta: "CLUBES/CENTRAL.png" },
+  { nombre: "CGR", ruta: "CLUBES/CGR.png" },
+  { nombre: "Coronel Aguirre", ruta: "CLUBES/CORONEL AGUIRRE.png" },
+  { nombre: "General Paz", ruta: "CLUBES/GRAL PAZ.jpg" },
+  { nombre: "Lamadrid", ruta: "CLUBES/LAMADRID.jpg" },
+  { nombre: "Leones", ruta: "CLUBES/LEONES.jpg" },
+  { nombre: "Mitre", ruta: "CLUBES/MITRE.png" },
+  { nombre: "Morning", ruta: "CLUBES/MORNING.jpg" },
+  { nombre: "Newell's Old Boys", ruta: "CLUBES/NEWELLS.png" },
+  { nombre: "Oriental", ruta: "CLUBES/ORIENTAL.png" },
+  { nombre: "Pablo VI", ruta: "CLUBES/PABLO VI.jpg" },
+  { nombre: "Provincial", ruta: "CLUBES/PROVINCIAL.png" },
+  { nombre: "Renato", ruta: "CLUBES/RENATO.jpg" },
+  { nombre: "San José", ruta: "CLUBES/SAN JOSE.jpg" },
+  { nombre: "San Roque", ruta: "CLUBES/SAN ROQUE.jpg" },
+  { nombre: "San Telmo", ruta: "CLUBES/SAN TELMO.png" },
+  { nombre: "Social Lux", ruta: "CLUBES/SOCIAL LUX.jpg" },
+  { nombre: "Sparta", ruta: "CLUBES/SPARTA.jpg" },
+  { nombre: "Tiro Federal", ruta: "CLUBES/TIRO FEDERAL.jpg" },
+  { nombre: "Tiro Suizo", ruta: "CLUBES/TIRO SUIZO.jpg" },
+  { nombre: "Torito", ruta: "CLUBES/TORITO.png" },
+  { nombre: "Unión Americana", ruta: "CLUBES/UNION AMERICANA.png" },
+  { nombre: "Villa Gobernador Gálvez", ruta: "CLUBES/VG GALVEZ.png" }
+];
+
+let partidos = [];
+let plantelPropio = [];
+let jugadoresExternos = [];
+let partidosFixture = [];
+let gruposAbiertos = new Set(["COMPETENCIA"]);
+let mensajeTimer = null;
+let guardando = false;
+
+const $ = id => document.getElementById(id);
+
+/* =====================================================
+   ASISTENTE DE CARGA DEL INFORME
+===================================================== */
+const TOTAL_PASOS_CARGA = 4;
+let pasoCargaActual = 1;
+const ETAPAS_CARGA = [
+  { titulo: "Datos del encuentro", detalle: "Completá la categoría, los datos del partido y el resultado.", boton: "Continuar a formación →" },
+  { titulo: "Formación y convocatoria", detalle: "Marcá quién fue citada, definí titulares y suplentes, y cargá los minutos cuando corresponda.", boton: "Continuar a eventos →" },
+  { titulo: "Cambios, goles y tarjetas", detalle: "Los cambios se obtienen de la convocatoria; después registrá goleadoras y tarjetas.", boton: "Revisar informe →" },
+  { titulo: "Revisión y guardado", detalle: "Revisá el resumen, añadí observaciones y guardá el informe.", boton: "Guardar informe" }
+];
+
+function mostrarPasoCarga(paso, desplazar = false) {
+  const nuevoPaso = Math.max(1, Math.min(TOTAL_PASOS_CARGA, Number(paso) || 1));
+  pasoCargaActual = nuevoPaso;
+
+  document.querySelectorAll("[data-paso-carga]").forEach(panel => {
+    const activo = Number(panel.dataset.pasoCarga) === nuevoPaso;
+    panel.classList.toggle("paso-carga-visible", activo);
+    panel.setAttribute("aria-hidden", String(!activo));
+  });
+
+  document.querySelectorAll("[data-indicador-paso]").forEach(indicador => {
+    const numero = Number(indicador.dataset.indicadorPaso);
+    const activo = numero === nuevoPaso;
+    const completado = numero < nuevoPaso;
+    indicador.classList.toggle("activo", activo);
+    indicador.classList.toggle("completado", completado);
+    indicador.removeAttribute("aria-current");
+    if (activo) indicador.setAttribute("aria-current", "step");
+    const numeroVisual = indicador.querySelector(".numero-paso-visual");
+    if (numeroVisual) numeroVisual.textContent = completado ? "✓" : String(numero);
+  });
+
+  const etapa = ETAPAS_CARGA[nuevoPaso - 1];
+  const titulo = $("tituloPasoCarga");
+  const detalle = $("detallePasoCarga");
+  const progreso = $("barraProgresoCarga");
+  const anterior = $("btnPasoAnterior");
+  const siguiente = $("btnPasoSiguiente");
+
+  if (titulo) titulo.textContent = `Paso ${nuevoPaso} de ${TOTAL_PASOS_CARGA} · ${etapa.titulo}`;
+  if (detalle) detalle.textContent = etapa.detalle;
+  if (progreso) progreso.style.width = `${((nuevoPaso - 1) / (TOTAL_PASOS_CARGA - 1)) * 100}%`;
+  if (anterior) anterior.hidden = nuevoPaso === 1;
+  if (siguiente) {
+    siguiente.hidden = nuevoPaso === TOTAL_PASOS_CARGA;
+    siguiente.textContent = etapa.boton;
+  }
+
+  const mensaje = $("mensajeNavegacionPasos");
+  if (mensaje) mensaje.textContent = nuevoPaso === TOTAL_PASOS_CARGA
+    ? "Todo listo: guardá para incorporar el informe al historial."
+    : "Tus datos se conservan mientras avanzás entre los pasos.";
+
+  if (nuevoPaso === TOTAL_PASOS_CARGA) actualizarResumenRevision();
+
+  if (desplazar) {
+    const ancla = $("tituloFormulario")?.closest(".vista") || $("formularioPartido");
+    const top = ancla ? ancla.getBoundingClientRect().top + window.scrollY - 12 : 0;
+    window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+  }
+}
+
+function validarPasoCarga(paso) {
+  if (paso === 1) {
+    const ids = ["division", "competicion", "fechaReal", "rival", "golesAdiur", "golesRival", "duracionPartido"];
+    for (const id of ids) {
+      const campo = $(id);
+      if (!campo || !campo.checkValidity()) {
+        campo?.reportValidity();
+        mostrarMensaje("Completá los datos obligatorios del encuentro antes de continuar.", "error");
+        campo?.focus();
+        return false;
+      }
+    }
+
+    if ($("rival").value === "__otro__" && !$ ("rivalOtro").value.trim()) {
+      mostrarMensaje("Ingresá el nombre del club rival.", "error");
+      mostrarPasoCarga(1);
+      $("rivalOtro").focus();
+      return false;
+    }
+
+    const jornada = $("jornada").value.trim();
+    if (jornada && (!Number.isInteger(Number(jornada)) || Number(jornada) < 1 || Number(jornada) > 99)) {
+      mostrarMensaje("La jornada debe ser un número entero entre 1 y 99.", "error");
+      $("jornada").focus();
+      return false;
+    }
+    return true;
+  }
+
+  if (paso === 2) {
+    const duracion = numeroSeguro($("duracionPartido").value) || 90;
+    const participaciones = leerParticipacionesFormulario().filter(j => j.citada);
+    const error = validarParticipaciones(participaciones, duracion);
+    if (error) {
+      mostrarMensaje(error, "error");
+      return false;
+    }
+    return true;
+  }
+
+  if (paso === 3) {
+    const duracion = numeroSeguro($("duracionPartido").value) || 90;
+    const mitad = mediaDuracionPartido(duracion);
+    const goles = leerEventosGoles();
+    const tarjetas = leerEventosTarjetas();
+
+    if (goles.some(g => !g.jugadora && (g.tiempo || g.minuto !== null))) {
+      mostrarMensaje("Completá la goleadora o eliminá la fila incompleta de goles.", "error");
+      return false;
+    }
+    if (tarjetas.some(t => !t.jugadora && (t.tiempo || t.minuto !== null))) {
+      mostrarMensaje("Completá la jugadora o eliminá la fila incompleta de tarjetas.", "error");
+      return false;
+    }
+    const golFueraDeRango = goles.find(g => g.jugadora && g.minuto !== null && g.minuto > mitad);
+    if (golFueraDeRango) {
+      mostrarMensaje(`El minuto del gol debe estar entre 0 y ${mitad} dentro del tiempo seleccionado.`, "error");
+      return false;
+    }
+    const tarjetaFueraDeRango = tarjetas.find(t => t.jugadora && t.minuto !== null && t.minuto > mitad);
+    if (tarjetaFueraDeRango) {
+      mostrarMensaje(`El minuto de la tarjeta debe estar entre 0 y ${mitad} dentro del tiempo seleccionado.`, "error");
+      return false;
+    }
+    return true;
+  }
+
+  return true;
+}
+
+function siguientePasoCarga() {
+  if (pasoCargaActual >= TOTAL_PASOS_CARGA) return;
+  if (!validarPasoCarga(pasoCargaActual)) return;
+  mostrarPasoCarga(pasoCargaActual + 1, true);
+}
+
+function anteriorPasoCarga() {
+  if (pasoCargaActual <= 1) return;
+  mostrarPasoCarga(pasoCargaActual - 1, true);
+}
+
+function actualizarResumenRevision() {
+  const contenedor = $("resumenRevision");
+  if (!contenedor) return;
+
+  const division = $("division").value || "Categoría pendiente";
+  const torneo = $("competicion").value || "Competición pendiente";
+  const rival = nombreRivalActual() || "Rival pendiente";
+  const fecha = $("fechaReal").value ? formatearFecha($("fechaReal").value) : "Sin fecha";
+  const jornada = $("jornada").value ? `Fecha ${escaparHTML($("jornada").value)}` : "Jornada sin indicar";
+  const golesAdiur = $("golesAdiur").value === "" ? "–" : escaparHTML($("golesAdiur").value);
+  const golesRival = $("golesRival").value === "" ? "–" : escaparHTML($("golesRival").value);
+  const participaciones = leerParticipacionesFormulario();
+  const jugadorasCitadas = participaciones.filter(j => j.citada);
+  const jugadorasActivas = participaciones.filter(j => j.jugo || j.minutos > 0);
+  const titulares = participaciones.filter(j => j.citada && j.titular).length;
+  const minutos = jugadorasActivas.reduce((total, j) => total + numeroSeguro(j.minutos), 0);
+  const goles = leerEventosGoles().filter(g => g.jugadora).length;
+  const tarjetas = leerEventosTarjetas().filter(t => t.jugadora).length;
+  const cambios = [...$("tablaCambios").querySelectorAll("tr")].filter(fila =>
+    fila.querySelector("td") &&
+    !fila.textContent.includes("Sin cambios registrados") &&
+    !fila.textContent.includes("Completá las citaciones")
+  ).length;
+  const localia = $("localia").value || "Condición sin indicar";
+  const lugar = $("lugar").value.trim() || "Lugar sin indicar";
+
+  contenedor.innerHTML = `
+    <div class="resumen-revision-card principal">
+      <small>Encuentro</small>
+      <strong>${escaparHTML(division)} · ${escaparHTML(torneo)}</strong>
+      <p>${escaparHTML(fecha)} · ${jornada}</p>
+      <p>${escaparHTML(localia)} · ${escaparHTML(lugar)}</p>
+    </div>
+    <div class="resumen-revision-card principal">
+      <small>Resultado final</small>
+      <strong>ADIUR ${golesAdiur} – ${golesRival} ${escaparHTML(rival)}</strong>
+      <p>Duración: ${numeroSeguro($("duracionPartido").value) || 90} minutos</p>
+    </div>
+    <div class="resumen-revision-card">
+      <small>Participación</small>
+      <strong>${jugadorasCitadas.length} citadas</strong>
+      <p>${titulares} titulares · ${jugadorasActivas.length} participaron · ${minutos} minutos acumulados</p>
+    </div>
+    <div class="resumen-revision-card">
+      <small>Eventos individuales</small>
+      <strong>${goles} goles registrados</strong>
+      <p>${tarjetas} tarjetas · ${cambios} filas de cambios</p>
+    </div>
+    <div class="resumen-revision-card">
+      <small>Vinculación con el fixture</small>
+      <strong>${$("fixtureIdVinculado").value ? "Partido vinculado" : "Carga manual"}</strong>
+      <p>${$("fixtureIdVinculado").value ? "El informe conserva el identificador del partido guardado en Partidos.html." : "Este informe no está vinculado a un partido del fixture."}</p>
+    </div>
+    <div class="resumen-revision-card">
+      <small>Observaciones</small>
+      <strong>${$("observaciones").value.trim() ? "Incluidas" : "Sin observaciones"}</strong>
+      <p>${$("observaciones").value.trim() ? escaparHTML($("observaciones").value.trim().slice(0,150)) + ($("observaciones").value.trim().length > 150 ? "…" : "") : "Podés añadir una nota para el cuerpo técnico abajo."}</p>
+    </div>
+  `;
+}
+
+/* =====================================================
+   UTILIDADES
+===================================================== */
+
+function leerJSON(clave, defecto) {
+  try {
+    const texto = localStorage.getItem(clave);
+    return texto ? JSON.parse(texto) : defecto;
+  } catch (error) {
+    console.warn("No se pudo leer",clave,error);
+    return defecto;
+  }
+}
+
+function guardarJSON(clave, valor) {
+  try {
+    localStorage.setItem(clave,JSON.stringify(valor));
+    return true;
+  } catch (error) {
+    console.error(error);
+    mostrarMensaje("No se pudieron guardar los datos. El almacenamiento del navegador puede estar lleno. Descargá un respaldo.", "error");
+    return false;
+  }
+}
+
+function idUnico() {
+  if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+  return "adiur-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,9);
+}
+
+function normalizarTexto(valor) {
+  return String(valor ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g,"")
+    .toLowerCase()
+    .replace(/\s+/g," ")
+    .trim();
+}
+
+function normalizarDivision(valor) {
+  const texto = normalizarTexto(valor).replace(/[-_]/g," ");
+  if (texto.includes("primera") || texto==="1ra") return "Primera";
+  const coincidencia = texto.match(/sub\s*([0-9]+)/);
+  if (coincidencia && ["10","12","14","16"].includes(coincidencia[1])) {
+    return "Sub "+coincidencia[1];
+  }
+  return DIVISIONES.includes(valor) ? valor : "";
+}
+
+function duracionPorDivision(valor = $("division")?.value) {
+  const division = normalizarDivision(valor);
+  const duraciones = {
+    "Sub 10": 40,
+    "Sub 12": 40,
+    "Sub 14": 50,
+    "Sub 16": 60,
+    "Primera": 80
+  };
+  return duraciones[division] || 0;
+}
+
+function mediaDuracionPartido(duracion = duracionPorDivision() || numeroSeguro($("duracionPartido")?.value)) {
+  return duracion ? Math.ceil(duracion / 2) : 0;
+}
+
+function actualizarTopesEventos(duracion = duracionPorDivision()) {
+  if (!duracion) return;
+  const mitad = mediaDuracionPartido(duracion);
+  [
+    ...document.querySelectorAll(".gol-minuto, .tarjeta-minuto, .minuto-cambio-editor")
+  ].forEach(input => {
+    input.max = String(mitad);
+    if (input.value !== "" && Number(input.value) > mitad) input.value = String(mitad);
+  });
+}
+
+function aplicarDuracionCategoria() {
+  const duracion = duracionPorDivision($("division").value);
+  const campo = $("duracionPartido");
+  campo.value = duracion ? String(duracion) : "";
+  campo.readOnly = true;
+  campo.setAttribute("aria-readonly", "true");
+  if (duracion) actualizarTopesEventos(duracion);
+  return duracion;
+}
+
+function numeroSeguro(valor) {
+  if (valor==="" || valor===null || valor===undefined) return 0;
+  const n = Number(valor);
+  return Number.isFinite(n) && n>0 ? Math.floor(n) : 0;
+}
+
+function numeroOpcional(valor) {
+  if (valor==="" || valor===null || valor===undefined) return null;
+  const n = Number(valor);
+  return Number.isFinite(n) && n>=0 ? Math
