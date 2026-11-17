@@ -3429,7 +3429,20 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 
 <div class="mensaje-flotante" id="mensajeFlotante" role="status" aria-live="polite"></div>
 
-<script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  projectId: "adiur-b1913"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Hacemos que 'db' sea accesible de forma global por si tus otras funciones lo necesitan fuera del módulo
+window.db = db;
+
 "use strict";
 
 /* =====================================================
@@ -3442,7 +3455,7 @@ const CLAVE_SESION = "usuarioADIUR";
 const CLAVE_FIXTURE = "fixtureADIUR";
 const CLAVE_INFORMES_ANTERIORES = "informesADIURJornadasV1";
 
-const DIVISIONES = ["Sub 10","Sub 12","Sub 14","Sub 16","Primera"];
+const DIVISIONES = ["Sub 10", "Sub 12", "Sub 14", "Sub 16", "Primera"];
 
 const COMPETICIONES_POR_DIVISION = {
   "Sub 10": ["Rosarina","Copa Oro - ARF","Copa Plata - ARF"],
