@@ -2562,28 +2562,33 @@ const COMPETICIONES_POR_DIVISION = {
     "Sub 10": [
         "Rosarina",
         "Copa Oro - ARF",
-        "Copa Plata - ARF"
+        "Copa Plata - ARF",
+        "Amistoso"
     ],
     "Sub 12": [
         "Rosarina",
         "Copa Oro - ARF",
-        "Copa Plata - ARF"
+        "Copa Plata - ARF",
+        "Amistoso"
     ],
     "Sub 14": [
         "Rosarina",
         "Copa Oro - ARF",
-        "Copa Plata - ARF"
+        "Copa Plata - ARF",
+        "Amistoso"
     ],
     "Sub 16": [
         "Rosarina",
         "Copa Oro - ARF",
-        "Copa Plata - ARF"
+        "Copa Plata - ARF",
+        "Amistoso"
     ],
     "Primera": [
         "Fase Regular - ARF",
         "Copa Oro - ARF",
         "Copa Santa Fe",
-        "Torneo Regional AFA"
+        "Torneo Regional AFA",
+        "Amistoso"
     ]
 };
 
@@ -2593,7 +2598,8 @@ const ORDEN_COMPETICIONES = [
     "Copa Plata - ARF",
     "Fase Regular - ARF",
     "Copa Santa Fe",
-    "Torneo Regional AFA"
+    "Torneo Regional AFA",
+    "Amistoso"
 ];
 
 const CLAVE_FIXTURE = "fixtureADIUR";
@@ -2922,7 +2928,6 @@ function iniciarSincronizacionNube() {
                 listaNube.push(normalizarObjetoPartido({ id: docSnap.id, ...docSnap.data() }));
             });
 
-            // Si la nube aún está vacía pero había partidos locales previos, migrarlos automáticamente
             if (listaNube.length === 0 && partidos.length > 0 && !migracionInicialRealizada) {
                 migracionInicialRealizada = true;
                 for (const pLocal of partidos) {
