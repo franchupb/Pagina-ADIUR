@@ -2865,16 +2865,101 @@ function cargarDiasEntrenamiento(categoria) {
 
 let diasEntrenamiento = cargarDiasEntrenamiento(categoriaSeleccionada);
 
-function guardarDiasEntrenamiento() {
+
+async function guardarDiasEntrenamiento() {
+  const categoria = categoriaSeleccionada;
+  const dias = [...diasEntrenamiento];
+
+  // Guardado local
   try {
     localStorage.setItem(
-      claveDiasEntrenamiento(categoriaSeleccionada),
-      JSON.stringify(diasEntrenamiento)
+      claveDiasEntrenamiento(categoria),
+      JSON.stringify(dias)
     );
   } catch (error) {
-    console.error("No se pudieron guardar los días de entrenamiento.", error);
+    console.error("Error al guardar localmente:", error);
+  }
+
+  // Guardado en Firestore
+  try {
+    await setDoc(
+      doc(
+        db,
+        "configuracionAsistenciaADIUR",
+        claveDiasEntrenamiento(categoria)
+      ),
+      {
+        categoria: categoria,
+        dias: dias,
+        actualizadoEn: new Date().toISOString()
+      }
+    );
+
+    console.log("Días de entrenamiento guardados en la nube.");
+  } catch (error) {
+    console.error("Error al guardar los días en Firestore:", error);
+    alert("No se pudieron guardar los días de entrenamiento en la nube.");
   }
 }
+
+let cancelarEscuchaDiasNube = null;
+let categoriaEscuchadaDiasNube = null;
+
+function escucharDiasEntrenamientoNube(categoria) {
+  // Evita crear varias escuchas para la misma categoría.
+  if (
+    normalizarCategoria(categoria) ===
+    normalizarCategoria(categoriaEscuchadaDiasNube)
+  ) {
+    return;
+  }
+
+  if (cancelarEscuchaDiasNube) {
+    cancelarEscuchaDiasNube();
+  }
+
+  categoriaEscuchadaDiasNube = categoria;
+
+  const referencia = doc(
+    db,
+    "configuracionAsistenciaADIUR",
+    claveDiasEntrenamiento(categoria)
+  );
+
+  cancelarEscuchaDiasNube = onSnapshot(
+    referencia,
+    async (snapshot) => {
+      if (snapshot.exists()) {
+        const datos = snapshot.data();
+
+        if (Array.isArray(datos.dias)) {
+          diasEntrenamiento = [...new Set(
+            datos.dias
+              .map(Number)
+              .filter(d => Number.isInteger(d) && d >= 0 && d <= 6)
+          )];
+
+          localStorage.setItem(
+            claveDiasEntrenamiento(categoria),
+            JSON.stringify(diasEntrenamiento)
+          );
+
+          renderizarDiasSemana();
+          renderizarMatriz();
+          renderizarSeguimientoIndividual();
+        }
+      } else {
+        // Si todavía no existe la configuración en la nube,
+        // guarda los días que ya estaban configurados localmente.
+        await guardarDiasEntrenamiento();
+      }
+    },
+    (error) => {
+      console.error("Error al sincronizar los días:", error);
+    }
+  );
+}
+
 
 function renderizarDiasSemana() {
   const contenedor = document.getElementById("diasSemana");
@@ -4045,6 +4130,7 @@ function actualizarCategoriasYReRenderizar() {
   guardarCategoriaSeleccionada();
 
   diasEntrenamiento = cargarDiasEntrenamiento(categoriaSeleccionada);
+  escucharDiasEntrenamientoNube(categoriaSeleccionada);
   diasSinEntrenamiento = cargarDiasSinEntrenamiento();
 
   renderizarSelectorCategorias();
@@ -4063,7 +4149,7 @@ function cambiarCategoria() {
   guardarCategoriaSeleccionada();
 
   diasEntrenamiento = cargarDiasEntrenamiento(categoriaSeleccionada);
-
+escucharDiasEntrenamientoNube(categoriaSeleccionada);
   renderizarDiasSemana();
   renderizarMatriz();
   renderizarSeguimientoIndividual();
