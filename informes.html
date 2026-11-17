@@ -6296,6 +6296,12 @@ window.addEventListener("storage",evento=>{
     window.location.href="Loing.html";
   }
 });
+  // Exponemos las funciones al ámbito global para que los botones del HTML (onclick) las encuentren
+window.siguientePasoCarga = siguientePasoCarga;
+window.nuevoPartido = nuevoPartido;
+window.editarPartido = editarPartido;
+window.verDetallePartido = verDetallePartido;
+// (Agregá aquí cualquier otra función que tus botones HTML invoquen mediante onclick)
 </script>
 
 </body>
