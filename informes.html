@@ -3432,27 +3432,6 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 <script>
 "use strict";
 
-// =====================================================
-// AQUÍ PEGÁS EL PRIMER BLOQUE (FIREBASE)
-// =====================================================
-import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-analytics.js";
-import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCc0dPIEkaKxbHoRC2CgZK412dXVGPOdTI",
-  authDomain: "adiur-b1913.firebaseapp.com",
-  projectId: "adiur-b1913",
-  storageBucket: "adiur-b1913.firebasestorage.app",
-  messagingSenderId: "884643321144",
-  appId: "1:884643321144:web:ba3c314de3a1c9e3545dcd",
-  measurementId: "G-58LL26YXPM"
-};
-
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-const db = getFirestore(app);
-
 /* =====================================================
    CONFIGURACIÓN
 ===================================================== */
@@ -6095,39 +6074,19 @@ function obtenerRolVisible(usuario) {
 }
 
 function inicializar() {
-  const usuario = usuarioActual();
-  $("nombrePerfil").textContent = usuario;
-  $("avatarPerfil").textContent = iniciales(usuario);
+  const usuario=usuarioActual();
+  $("nombrePerfil").textContent=usuario;
+  $("avatarPerfil").textContent=iniciales(usuario);
   const rol = obtenerRolVisible(usuario);
   $("rolPerfil").textContent = rol;
   $("tituloPerfil").textContent = usuario;
   $("avatarPerfilModal").textContent = iniciales(usuario);
   $("rolPerfilModal").textContent = rol;
 
-  plantelPropio = cargarPlantelPropio();
-  jugadoresExternos = cargarJugadorasExternas();
-  partidosFixture = cargarFixture();
+  plantelPropio=cargarPlantelPropio();
+  jugadoresExternos=cargarJugadorasExternas();
+  partidosFixture=cargarFixture();
   cargarPartidos();
-
-  // =====================================================
-  // AQUÍ PEGÁS EL SEGUNDO BLOQUE (ONSNAPSHOT)
-  // =====================================================
-  if (typeof db !== "undefined" && typeof collection !== "undefined" && typeof onSnapshot !== "undefined") {
-    onSnapshot(collection(db, "jugadoras"), (snapshot) => {
-      let listaNube = [];
-      snapshot.forEach((docSnap) => {
-        listaNube.push({ id: docSnap.id, ...docSnap.data() });
-      });
-      
-      jugadorasGlobalesCache = procesarListaJugadoras(listaNube);
-      
-      // Si ya se seleccionó una categoría, actualizar inmediatamente la tabla del Paso 2
-      if (typeof renderizarJugadorasFormulario === "function") {
-        renderizarJugadorasFormulario();
-      }
-    });
-  }
-  // =====================================================
 
   actualizarSelectorFixture();
   completarSelectorRival("");
