@@ -3716,14 +3716,17 @@ function actualizarResumenRevision() {
    UTILIDADES
 ===================================================== */
 
-function leerJSON(clave, defecto) {
-  try {
-    const texto = localStorage.getItem(clave);
-    return texto ? JSON.parse(texto) : defecto;
-  } catch (error) {
-    console.warn("No se pudo leer",clave,error);
-    return defecto;
-  }
+function leerJSON(clave) {
+    try {
+        const item = localStorage.getItem(clave);
+        if (!item) return null;
+        return JSON.parse(item);
+    } catch (error) {
+        console.warn(`El dato en "${clave" estaba corrupto y fue reiniciado.`, error);
+        // Si hay error al parsear, limpiamos la clave rota automáticamente para que no vuelva a fallar
+        localStorage.removeItem(clave);
+        return null;
+    }
 }
 
 function guardarJSON(clave, valor) {
