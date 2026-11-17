@@ -2121,7 +2121,7 @@ body.eliminando .btn-puntos {
                     </div>
 
                     <div class="field">
-                        <label for="jornada">Fecha del torneo *</label>
+                        <label for="jornada" id="labelJornada">Fecha del torneo *</label>
                         <input
                             type="number"
                             id="jornada"
@@ -2231,8 +2231,7 @@ body.eliminando .btn-puntos {
 
                 <p class="notice">
                     * Campos obligatorios. Las competiciones disponibles cambian automáticamente
-                    según la categoría seleccionada. La fecha del torneo es distinta de la fecha
-                    calendario del partido.
+                    según la categoría seleccionada. Para partidos amistosos, la fecha del torneo no es obligatoria.
                 </p>
 
             </div>
@@ -2979,8 +2978,26 @@ function actualizarContadoresCategorias() {
 }
 
 /* =====================================================
-   COMPETICIONES SEGÚN CATEGORÍA
+   COMPETICIONES SEGÚN CATEGORÍA Y VALIDACIÓN DE FECHA
 ===================================================== */
+
+function actualizarRequisitoFecha() {
+    const competicionSelect = document.getElementById("competicion");
+    const jornadaInput = document.getElementById("jornada");
+    const labelJornada = document.getElementById("labelJornada");
+    const esAmistoso = competicionSelect.value === "Amistoso";
+
+    if (esAmistoso) {
+        jornadaInput.removeAttribute("required");
+        labelJornada.textContent = "Fecha del torneo (opcional)";
+        if (!jornadaInput.value) {
+            jornadaInput.value = "1";
+        }
+    } else {
+        jornadaInput.setAttribute("required", "required");
+        labelJornada.textContent = "Fecha del torneo *";
+    }
+}
 
 function actualizarCompeticionesFormulario(valorPreferido = "") {
     const division = document.getElementById("division").value;
@@ -3003,10 +3020,16 @@ function actualizarCompeticionesFormulario(valorPreferido = "") {
     selector.value = opciones.includes(valorPreferido)
         ? valorPreferido
         : opciones[0];
+
+    actualizarRequisitoFecha();
 }
 
 document.getElementById("division").addEventListener("change", () => {
     actualizarCompeticionesFormulario();
+});
+
+document.getElementById("competicion").addEventListener("change", () => {
+    actualizarRequisitoFecha();
 });
 
 function actualizarFiltroCompeticion() {
@@ -3082,6 +3105,7 @@ function abrirModal(id = null) {
             : "Guardar cambios";
 
     document.getElementById("jornada").value = 1;
+    actualizarRequisitoFecha();
 
     const previewAdiur = document.getElementById("previewAdiur");
 
@@ -3126,6 +3150,7 @@ function abrirModal(id = null) {
         }
 
         selectorCompeticion.value = partido.competicion;
+        actualizarRequisitoFecha();
 
         document.getElementById("jornada").value = partido.jornada;
         document.getElementById("fechaPartido").value =
@@ -3206,10 +3231,15 @@ async function guardarPartido(event) {
 
     const division = document.getElementById("division").value;
     const competicion = document.getElementById("competicion").value;
-    const jornada = parseInt(
-        document.getElementById("jornada").value,
-        10
-    );
+    
+    let jornadaVal = document.getElementById("jornada").value;
+    const esAmistoso = competicion === "Amistoso";
+
+    if (esAmistoso && (jornadaVal === "" || jornadaVal === null || isNaN(jornadaVal))) {
+        jornadaVal = 1;
+    }
+
+    const jornada = parseInt(jornadaVal, 10);
 
     const rival = selectorRival.value.trim();
     const fechaPartido = document.getElementById("fechaPartido").value;
@@ -3261,7 +3291,7 @@ async function guardarPartido(event) {
         return;
     }
 
-    if (!Number.isInteger(jornada) || jornada < 1 || jornada > 99) {
+    if (!esAmistoso && (!Number.isInteger(jornada) || jornada < 1 || jornada > 99)) {
         alert("Ingresá un número de fecha válido entre 1 y 99.");
         return;
     }
@@ -3286,7 +3316,7 @@ async function guardarPartido(event) {
         division,
         categoria: division,
         competicion,
-        jornada,
+        jornada: Number.isFinite(jornada) ? jornada : 1,
         fechaPartido,
         fecha: fechaPartido,
         lugarPartido,
@@ -3540,7 +3570,7 @@ function renderizarFixture() {
                     html += `
                         <section class="jornada-card">
                             <div class="jornada-heading">
-                                <strong>FECHA ${fechaNumero}</strong>
+                                <strong>${competicion === "Amistoso" ? "AMISTOSO" : "FECHA " + fechaNumero}</strong>
                             </div>
                     `;
 
