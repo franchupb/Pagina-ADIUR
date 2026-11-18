@@ -475,6 +475,20 @@ window.obtenerRegistrosTiemposLocales = function(){
 
 window.mostrarToastTiempos = mostrarToast;
 
+// Recibir las jugadoras directamente desde Firestore
+window.aplicarJugadorasNube = function(lista){
+    baseJugadoras = Array.isArray(lista)
+        ? lista.map(j => ({
+            id: String(j.id),
+            nombre: String(j.nombre || "").trim(),
+            categoria: String(j.categoria || "").trim()
+        })).filter(j => j.nombre && j.categoria)
+        : [];
+
+    cargarCategorias();
+    actualizarTodo();
+};
+    
     // Recibir las jugadoras desde Firebase
 window.aplicarJugadorasTiemposNube = function(lista){
     baseJugadoras = Array.isArray(lista)
@@ -1073,6 +1087,60 @@ onSnapshot(
     }
 );
 </script>
-    
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
+
+import {
+    getFirestore,
+    collection,
+    onSnapshot
+} from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyCc0dPIEkaKxbHoRC2CgZK412dXVGPOdTI",
+    authDomain: "adiur-b1913.firebaseapp.com",
+    projectId: "adiur-b1913",
+    storageBucket: "adiur-b1913.firebasestorage.app",
+    messagingSenderId: "884643321144",
+    appId: "1:884643321144:web:ba3c314de3a1c9e3545dcd",
+    measurementId: "G-58LL26YXPM"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Escuchar el plantel en tiempo real
+onSnapshot(
+    collection(db, "jugadoras"),
+    (snapshot) => {
+        const lista = [];
+
+        snapshot.forEach((documento) => {
+            const datos = documento.data();
+
+            lista.push({
+                id: documento.id,
+                nombre: datos.nombre || "",
+                categoria: datos.categoria || ""
+            });
+        });
+
+        if (typeof window.aplicarJugadorasNube === "function") {
+            window.aplicarJugadorasNube(lista);
+        }
+    },
+    (error) => {
+        console.error("Error al cargar las jugadoras desde Firebase:", error);
+        if (typeof window.mostrarToastTiempos === "function") {
+            window.mostrarToastTiempos(
+                "No se pudo cargar el plantel desde Firebase.",
+                true
+            );
+        }
+    }
+);
+</script>
+
 </body>
 </html>
