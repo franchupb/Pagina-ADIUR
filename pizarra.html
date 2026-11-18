@@ -364,7 +364,26 @@ body{
 .drawing-toolbar label{font-size:11px;font-weight:700;color:#555;display:flex;gap:6px;align-items:center}.drawing-toolbar input[type=color]{width:34px;height:30px;border:0;background:transparent;padding:0}
 .drawing-toolbar input[type=checkbox]{width:16px;height:16px}.drawing-toolbar select{border:1px solid #ddd;border-radius:7px;padding:7px;background:#fff}
 .pitch-drawings{position:absolute;inset:0;width:100%;height:100%;z-index:10;overflow:visible;pointer-events:none;touch-action:none}.pitch.drawing-active .pitch-drawings{pointer-events:auto;cursor:crosshair}
-.main:fullscreen{background:var(--gris);overflow:auto;padding:18px}.main:fullscreen .pitch{width:min(100%,1500px)}
+.main:fullscreen{background:#eef0f2;overflow:hidden;padding:10px 14px;display:flex;flex-direction:column;gap:8px;width:100vw;height:100vh;max-width:none}
+.main:fullscreen .page-header{display:none}
+.main:fullscreen .controls{flex:0 0 auto;margin:0;padding:8px 10px;gap:8px;background:#fff;border-radius:10px;box-shadow:0 1px 5px #00000012}
+.main:fullscreen .board-wrapper{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;margin:0;padding:10px;overflow:hidden}
+.main:fullscreen .board-top{flex:0 0 auto;margin-bottom:6px}
+.main:fullscreen .pitch-workspace{flex:1 1 auto;min-height:0;grid-template-columns:150px minmax(0,1fr);gap:10px}
+.main:fullscreen .drawing-tools{align-content:center;overflow-y:auto;flex-wrap:nowrap}
+.main:fullscreen .pitch-area{min-height:0;height:100%;padding:0;overflow:hidden}
+.main:fullscreen .pitch{width:auto;height:auto;max-width:100%;max-height:100%;aspect-ratio:1470/980}
+.main:fullscreen .drawing-options{flex:0 0 auto;margin:6px 0 0;padding:7px}
+.main:fullscreen .legend{display:none}
+@media(max-width:700px){.main:fullscreen{padding:5px}.main:fullscreen .controls{max-height:24vh;overflow:auto}.main:fullscreen .pitch-workspace{grid-template-columns:112px minmax(0,1fr);gap:5px}.main:fullscreen .tool-btn{white-space:normal;padding:7px 4px;font-size:10px}.main:fullscreen .drawing-options{gap:5px}}
+.pitch-workspace{display:grid;grid-template-columns:155px minmax(0,1fr);gap:14px;align-items:stretch;width:100%}
+.drawing-tools{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:7px;margin:0;min-width:0}
+.drawing-tools .tool-btn{text-align:left;white-space:nowrap}
+.drawing-tools strong{padding:4px 2px}
+.pitch-workspace .pitch-area{min-width:0}
+.drawing-options{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+@media(max-width:700px){.pitch-workspace{grid-template-columns:112px minmax(0,1fr);gap:7px}.drawing-tools .tool-btn{white-space:normal;font-size:10px;padding:7px 5px}.drawing-options{gap:7px}}
+
 @media(max-width:800px){.drawing-toolbar{gap:6px;padding:9px}.tool-btn{padding:8px;font-size:11px}}
 
 .btn-orange{
@@ -1401,8 +1420,9 @@ body{
 
 
 
-    <div class="drawing-toolbar" aria-label="Herramientas de dibujo">
-      <strong>DIBUJAR:</strong>
+    <div class="pitch-workspace">
+    <div class="drawing-toolbar drawing-tools" aria-label="Herramientas de dibujo">
+      <strong>DIBUJAR</strong>
       <button type="button" class="tool-btn active" data-tool="select" onclick="seleccionarHerramienta(this.dataset.tool)">↖ Seleccionar</button>
       <button type="button" class="tool-btn" data-tool="arrow" onclick="seleccionarHerramienta(this.dataset.tool)">➜ Flecha</button>
       <button type="button" class="tool-btn" data-tool="circle" onclick="seleccionarHerramienta(this.dataset.tool)">○ Círculo</button>
@@ -1440,10 +1460,11 @@ body{
       </div>
 
     </div>
+    </div>
 
 
 
-    <div class="drawing-toolbar" aria-label="Opciones de dibujo">
+    <div class="drawing-toolbar drawing-options" aria-label="Opciones de dibujo">
       <label>Color <input type="color" id="colorDibujo" value="#f47721" aria-label="Color del dibujo"></label>
       <label><input type="checkbox" id="rellenoDibujo"> Relleno</label>
       <label>Grosor <select id="grosorDibujo"><option value="3">Fino</option><option value="5" selected>Medio</option><option value="8">Grueso</option></select></label>
