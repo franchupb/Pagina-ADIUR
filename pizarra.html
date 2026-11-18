@@ -2556,9 +2556,14 @@ function claveLocalPizarra(division){
 }
 
 function idDocumentoPizarra(division){
-  return String(division || "")
-    .normalize("NFD")
-    .replace(/[\\u0300-\\u036f]/g,"")
+  const ids = {
+    "Sub 10":"sub_10",
+    "Sub 12":"sub_12",
+    "Sub 14":"sub_14",
+    "Sub 16":"sub_16",
+    "Primera":"primera"
+  };
+  return ids[division] || "division_" + String(division || "")
     .toLowerCase()
     .replace(/[^a-z0-9]+/g,"_")
     .replace(/^_+|_+$/g,"");
