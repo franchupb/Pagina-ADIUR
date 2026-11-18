@@ -1448,14 +1448,25 @@ body{background:#f2f4f6;color:var(--coach-ink)}
           <button type="button" class="drawer-close" onclick="alternarPanelDibujo()" aria-label="Cerrar herramientas">×</button>
         </div>
         <div class="drawing-toolbar drawing-tools" aria-label="Herramientas de dibujo">
-      <strong class="drawing-options-title">FORMATO DEL TRAZADO</strong>
-      <label>Color <input type="color" id="colorDibujo" value="#f47721" aria-label="Color del dibujo"></label>
-      <label><input type="checkbox" id="rellenoDibujo"> Relleno</label>
-      <label>Grosor <select id="grosorDibujo"><option value="3">Fino</option><option value="5" selected>Medio</option><option value="8">Grueso</option></select></label>
-      <button type="button" class="tool-btn" onclick="finalizarLinea()">✓ Terminar línea</button>
-      <button type="button" class="tool-btn" onclick="deshacerDibujo()">↶ Deshacer</button>
-      <button type="button" class="tool-btn" onclick="limpiarDibujos()">Borrar dibujos</button>
-      <span class="board-help" id="ayudaDibujo" role="status" aria-live="polite">Elegí una herramienta para marcar la jugada.</span>
+          <strong>DIBUJAR</strong>
+          <button type="button" class="tool-btn active" data-tool="select" onclick="seleccionarHerramienta(this.dataset.tool)">↖ Seleccionar</button>
+          <button type="button" class="tool-btn" data-tool="arrow" onclick="seleccionarHerramienta(this.dataset.tool)">➜ Flecha</button>
+          <button type="button" class="tool-btn" data-tool="circle" onclick="seleccionarHerramienta(this.dataset.tool)">○ Círculo</button>
+          <button type="button" class="tool-btn" data-tool="triangle" onclick="seleccionarHerramienta(this.dataset.tool)">△ Triángulo</button>
+          <button type="button" class="tool-btn" data-tool="cross" onclick="seleccionarHerramienta(this.dataset.tool)">✕ Cruz</button>
+          <button type="button" class="tool-btn" data-tool="square" onclick="seleccionarHerramienta(this.dataset.tool)">□ Cuadrado</button>
+          <button type="button" class="tool-btn" data-tool="freehand" onclick="seleccionarHerramienta(this.dataset.tool)">〰 Mano alzada</button>
+          <button type="button" class="tool-btn" data-tool="polyline" onclick="seleccionarHerramienta(this.dataset.tool)">⌁ Línea por vértices</button>
+        </div>
+        <div class="drawing-toolbar drawing-options" aria-label="Formato del trazado">
+          <strong class="drawing-options-title">FORMATO DEL TRAZADO</strong>
+          <label>Color <input type="color" id="colorDibujo" value="#f47721" aria-label="Color del dibujo"></label>
+          <label><input type="checkbox" id="rellenoDibujo"> Relleno</label>
+          <label>Grosor <select id="grosorDibujo"><option value="3">Fino</option><option value="5" selected>Medio</option><option value="8">Grueso</option></select></label>
+          <button type="button" class="tool-btn" onclick="finalizarLinea()">✓ Terminar línea</button>
+          <button type="button" class="tool-btn" onclick="deshacerDibujo()">↶ Deshacer</button>
+          <button type="button" class="tool-btn" onclick="limpiarDibujos()">Borrar dibujos</button>
+          <span class="board-help" id="ayudaDibujo" role="status" aria-live="polite">Elegí una herramienta para marcar la jugada.</span>
         </div>
       </aside>
     </div>
