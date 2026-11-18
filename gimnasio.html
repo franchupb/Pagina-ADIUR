@@ -26,9 +26,7 @@
   --sombra-hover: 0 12px 28px rgba(23,23,23,.085);
 }
 
-*, *::before, *::after {
-  box-sizing: border-box;
-}
+*, *::before, *::after { box-sizing: border-box; }
 
 html {
   scroll-behavior: smooth;
@@ -43,31 +41,12 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-button, input, select {
-  font: inherit;
-}
-
-select, select option {
-  font-family: Arial, Helvetica, sans-serif !important;
-}
-
-button, a {
-  -webkit-tap-highlight-color: transparent;
-}
-
-button {
-  cursor: pointer;
-}
-
-button:disabled {
-  opacity: .5;
-  cursor: not-allowed;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
+button, input, select { font: inherit; }
+select, select option { font-family: Arial, Helvetica, sans-serif !important; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button { cursor: pointer; }
+button:disabled { opacity: .5; cursor: not-allowed; }
+a { color: inherit; text-decoration: none; }
 
 button:focus-visible,
 input:focus-visible,
@@ -78,13 +57,9 @@ a:focus-visible,
   outline-offset: 2px;
 }
 
-.oculto {
-  display: none !important;
-}
+.oculto { display: none !important; }
 
-/* =====================================================
-   BARRA SUPERIOR
-===================================================== */
+/* BARRA SUPERIOR */
 
 .barra-superior {
   position: sticky;
@@ -131,10 +106,7 @@ a:focus-visible,
   object-fit: contain;
 }
 
-.titulo-superior {
-  flex: 1;
-  min-width: 0;
-}
+.titulo-superior { flex: 1; min-width: 0; }
 
 .titulo-superior h1 {
   margin: 0 0 5px;
@@ -193,9 +165,7 @@ a:focus-visible,
   font-weight: 800;
 }
 
-/* =====================================================
-   ESTRUCTURA Y BARRA LATERAL
-===================================================== */
+/* ESTRUCTURA Y BARRA LATERAL */
 
 .contenedor {
   display: flex;
@@ -214,9 +184,7 @@ a:focus-visible,
   transition: margin-left .25s ease, transform .25s ease;
 }
 
-.sidebar.oculto {
-  margin-left: -258px;
-}
+.sidebar.oculto { margin-left: -258px; }
 
 .menu-inicio {
   display: flex;
@@ -232,9 +200,7 @@ a:focus-visible,
   transition: background .2s;
 }
 
-.menu-inicio:hover {
-  background: #ffe7d6;
-}
+.menu-inicio:hover { background: #ffe7d6; }
 
 .icono-menu {
   display: inline-flex;
@@ -246,9 +212,7 @@ a:focus-visible,
   font-size: 18px;
 }
 
-.grupo-menu {
-  margin-bottom: 7px;
-}
+.grupo-menu { margin-bottom: 7px; }
 
 .titulo-grupo {
   display: flex;
@@ -270,9 +234,7 @@ a:focus-visible,
   transition: background .2s;
 }
 
-.titulo-grupo:hover {
-  background: #f7f8fa;
-}
+.titulo-grupo:hover { background: #f7f8fa; }
 
 .flecha {
   display: inline-block;
@@ -282,13 +244,8 @@ a:focus-visible,
   transition: transform .2s;
 }
 
-.grupo-menu.cerrado .flecha {
-  transform: rotate(0deg);
-}
-
-.grupo-menu:not(.cerrado) .flecha {
-  transform: rotate(90deg);
-}
+.grupo-menu.cerrado .flecha { transform: rotate(0deg); }
+.grupo-menu:not(.cerrado) .flecha { transform: rotate(90deg); }
 
 .submenu {
   display: flex;
@@ -297,9 +254,7 @@ a:focus-visible,
   padding: 0 0 5px;
 }
 
-.grupo-menu.cerrado .submenu {
-  display: none;
-}
+.grupo-menu.cerrado .submenu { display: none; }
 
 .submenu a {
   display: flex;
@@ -332,9 +287,7 @@ a:focus-visible,
   background: #d7d9de;
 }
 
-.submenu a.activo .nav-punto {
-  background: var(--naranja);
-}
+.submenu a.activo .nav-punto { background: var(--naranja); }
 
 .separador-sesion {
   margin-top: 19px;
@@ -354,17 +307,10 @@ a:focus-visible,
   transition: background .2s;
 }
 
-.enlace-cerrar-sesion:hover {
-  background: #fff2f1;
-}
+.enlace-cerrar-sesion:hover { background: #fff2f1; }
+.capa-sidebar { display: none; }
 
-.capa-sidebar {
-  display: none;
-}
-
-/* =====================================================
-   CONTENIDO GENERAL
-===================================================== */
+/* CONTENIDO GENERAL */
 
 .contenido {
   flex: 1;
@@ -408,9 +354,7 @@ a:focus-visible,
   line-height: 1.7;
 }
 
-/* =====================================================
-   SELECTOR DE CATEGORÍA
-===================================================== */
+/* SELECTOR DE CATEGORÍA */
 
 .selector-categoria-superior {
   display: flex;
@@ -447,10 +391,7 @@ a:focus-visible,
   stroke-linejoin: round;
 }
 
-.texto-categoria-superior {
-  flex: 1;
-  min-width: 0;
-}
+.texto-categoria-superior { flex: 1; min-width: 0; }
 
 .texto-categoria-superior strong {
   display: block;
@@ -497,9 +438,7 @@ a:focus-visible,
   transition: border-color .2s, box-shadow .2s;
 }
 
-.campo-categoria-superior select:hover {
-  border-color: #c8cdd4;
-}
+.campo-categoria-superior select:hover { border-color: #c8cdd4; }
 
 .campo-categoria-superior select:focus {
   outline: none;
@@ -513,9 +452,7 @@ a:focus-visible,
   cursor: not-allowed;
 }
 
-/* =====================================================
-   TARJETAS GENERALES
-===================================================== */
+/* TARJETAS GENERALES */
 
 .tarjeta {
   min-width: 0;
@@ -554,9 +491,7 @@ a:focus-visible,
   line-height: 1.7;
 }
 
-/* =====================================================
-   CONFIGURACIÓN DE RUTINA
-===================================================== */
+/* CONFIGURACIÓN DE RUTINA */
 
 .tarjeta-configuracion {
   position: relative;
@@ -606,10 +541,7 @@ a:focus-visible,
   stroke-linejoin: round;
 }
 
-.texto-cabecera-configuracion {
-  flex: 1;
-  min-width: 0;
-}
+.texto-cabecera-configuracion { flex: 1; min-width: 0; }
 
 .texto-cabecera-configuracion h3 {
   margin: 0;
@@ -620,9 +552,7 @@ a:focus-visible,
   line-height: 1.4;
 }
 
-.cuerpo-configuracion {
-  padding: 0 24px 22px;
-}
+.cuerpo-configuracion { padding: 0 24px 22px; }
 
 .filtros {
   display: grid;
@@ -630,15 +560,8 @@ a:focus-visible,
   gap: 18px 16px;
 }
 
-.filtros .campo {
-  min-width: 0;
-}
-
-.campo-modo,
-.campo-titulo,
-.campo-semanas {
-  grid-column: span 1;
-}
+.filtros .campo { min-width: 0; }
+.campo-modo, .campo-titulo, .campo-semanas { grid-column: span 1; }
 
 .campo label {
   display: flex;
@@ -660,8 +583,7 @@ a:focus-visible,
   background: #e6a77f;
 }
 
-.campo input,
-.campo select {
+.campo input, .campo select {
   display: block;
   width: 100%;
   min-width: 0;
@@ -680,28 +602,21 @@ a:focus-visible,
   font-size: 11px;
 }
 
-.campo input:hover,
-.campo select:hover {
-  border-color: #c8cdd4;
-}
+.campo input:hover, .campo select:hover { border-color: #c8cdd4; }
 
-.campo input:focus,
-.campo select:focus {
+.campo input:focus, .campo select:focus {
   outline: none;
   border-color: var(--naranja);
   box-shadow: 0 0 0 3px #f4772114;
 }
 
-.campo input:disabled,
-.campo select:disabled {
+.campo input:disabled, .campo select:disabled {
   background: #f5f6f8;
   color: #777d86;
   cursor: not-allowed;
 }
 
-.campo-titulo input {
-  font-weight: 700;
-}
+.campo-titulo input { font-weight: 700; }
 
 .separador-configuracion {
   height: 1px;
@@ -716,8 +631,6 @@ a:focus-visible,
   flex-wrap: wrap;
   gap: 14px;
 }
-
-/* Selector de jugadora reubicado en el editor */
 
 .selector-jugadora-editor {
   width: 100%;
@@ -759,9 +672,7 @@ a:focus-visible,
   box-shadow: 0 0 0 3px #f4772114;
 }
 
-/* =====================================================
-   BOTONES
-===================================================== */
+/* BOTONES */
 
 .botones {
   display: flex;
@@ -787,13 +698,8 @@ a:focus-visible,
   transition: background .18s,border-color .18s,color .18s,transform .15s,box-shadow .18s;
 }
 
-.boton:hover {
-  transform: translateY(-1px);
-}
-
-.boton:active {
-  transform: translateY(0);
-}
+.boton:hover { transform: translateY(-1px); }
+.boton:active { transform: translateY(0); }
 
 .boton-principal {
   background: var(--naranja);
@@ -828,14 +734,8 @@ a:focus-visible,
   background: #fbdede;
 }
 
-.boton-pdf {
-  background: #252525;
-  color: #fff;
-}
-
-.boton-pdf:hover {
-  background: #414141;
-}
+.boton-pdf { background: #252525; color: #fff; }
+.boton-pdf:hover { background: #414141; }
 
 .boton-icono {
   display: inline-flex;
@@ -860,9 +760,7 @@ a:focus-visible,
   color: var(--naranja-oscuro);
 }
 
-/* =====================================================
-   ESTADO DE RUTINA
-===================================================== */
+/* ESTADO DE RUTINA */
 
 .info-rutina {
   display: flex;
@@ -921,9 +819,7 @@ a:focus-visible,
   line-height: 1.5;
 }
 
-/* =====================================================
-   EDITOR: EJERCICIOS UNO DEBAJO DEL OTRO
-===================================================== */
+/* EDITOR */
 
 .editor-ejercicios {
   display: flex;
@@ -983,6 +879,7 @@ a:focus-visible,
 .acciones-grupo-editor {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 8px;
 }
 
@@ -1045,10 +942,7 @@ a:focus-visible,
   font-weight: 900;
 }
 
-.ejercicio-identidad {
-  flex: 1;
-  min-width: 0;
-}
+.ejercicio-identidad { flex: 1; min-width: 0; }
 
 .ejercicio-identidad label {
   display: block;
@@ -1111,10 +1005,7 @@ a:focus-visible,
   background: #fffaf6;
 }
 
-.referencia-repeticiones-info {
-  flex: 1;
-  min-width: 0;
-}
+.referencia-repeticiones-info { flex: 1; min-width: 0; }
 
 .referencia-repeticiones label {
   display: block;
@@ -1160,52 +1051,44 @@ a:focus-visible,
 }
 
 .dias-editor {
-   display: grid;
-   grid-template-columns: repeat(3,minmax(0,1fr));
-   gap: 10px;
-   min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 10px;
+  min-width: 0;
 }
 
-.tiempo-semanal-grid {
-   grid-template-columns: repeat(5,minmax(0,1fr));
-}
+.tiempo-semanal-grid { grid-template-columns: repeat(5,minmax(0,1fr)); }
 
 .entrada-tiempo-unidad {
-   display: flex;
-   align-items: center;
-   gap: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.entrada-tiempo-unidad input {
-   flex: 1;
-   min-width: 0;
-}
+.entrada-tiempo-unidad input { flex: 1; min-width: 0; }
 
 .entrada-tiempo-unidad span {
-   display: inline-flex;
-   align-items: center;
-   justify-content: center;
-   width: 34px;
-   min-height: 38px;
-   border: 1px solid #e8eaee;
-   border-radius: 7px;
-   background: #f5f6f8;
-   color: #646a74;
-   font-size: 15px;
-   font-weight: 900;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  min-height: 38px;
+  border: 1px solid #e8eaee;
+  border-radius: 7px;
+  background: #f5f6f8;
+  color: #646a74;
+  font-size: 15px;
+  font-weight: 900;
 }
 
 .dato-editor input[readonly] {
-   background: #f5f6f8;
-   border-color: #e7e9ed;
-   color: #666d77;
-   font-weight: 800;
+  background: #f5f6f8;
+  border-color: #e7e9ed;
+  color: #666d77;
+  font-weight: 800;
 }
 
-.aviso-progresion-tiempo {
-   margin-bottom: 0;
-   font-size: 11px;
-}
+.aviso-progresion-tiempo { margin-bottom: 0; font-size: 11px; }
 
 .dia-editor {
   min-width: 0;
@@ -1239,14 +1122,8 @@ a:focus-visible,
   white-space: nowrap;
 }
 
-.dato-editor {
-  min-width: 0;
-  margin-bottom: 9px;
-}
-
-.dato-editor:last-child {
-  margin-bottom: 0;
-}
+.dato-editor { min-width: 0; margin-bottom: 9px; }
+.dato-editor:last-child { margin-bottom: 0; }
 
 .dato-editor label {
   display: block;
@@ -1289,9 +1166,7 @@ a:focus-visible,
   border-color: #e9ebef;
 }
 
-.dato-editor input[type="number"] {
-  font-variant-numeric: tabular-nums;
-}
+.dato-editor input[type="number"] { font-variant-numeric: tabular-nums; }
 
 .sin-ejercicios {
   padding: 26px 18px;
@@ -1304,9 +1179,7 @@ a:focus-visible,
   text-align: center;
 }
 
-/* =====================================================
-   BIBLIOTECA
-===================================================== */
+/* BIBLIOTECA */
 
 .biblioteca-cabecera {
   display: flex;
@@ -1376,9 +1249,7 @@ a:focus-visible,
   transition: border-color .2s,box-shadow .2s;
 }
 
-.buscador-biblioteca input::placeholder {
-  color: #999ea7;
-}
+.buscador-biblioteca input::placeholder { color: #999ea7; }
 
 .buscador-biblioteca input:focus {
   outline: none;
@@ -1454,11 +1325,7 @@ a:focus-visible,
   overflow-wrap: anywhere;
 }
 
-.miniatura-detalle {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
+.miniatura-detalle { display: flex; flex-wrap: wrap; gap: 6px; }
 
 .miniatura-detalle span {
   padding: 6px 8px;
@@ -1495,8 +1362,7 @@ a:focus-visible,
   font-size: 8px;
 }
 
-.mini-tabla th,
-.mini-tabla td {
+.mini-tabla th, .mini-tabla td {
   min-width: 0;
   padding: 5px 3px;
   overflow: hidden;
@@ -1513,8 +1379,7 @@ a:focus-visible,
   font-weight: 900;
 }
 
-.mini-tabla th:first-child,
-.mini-tabla td:first-child {
+.mini-tabla th:first-child, .mini-tabla td:first-child {
   width: 36%;
   text-align: left;
 }
@@ -1527,14 +1392,8 @@ a:focus-visible,
   font-weight: 900;
 }
 
-.mini-tabla .mini-ejercicio {
-  color: #333;
-  font-weight: 800;
-}
-
-.mini-tabla .mini-vacio {
-  color: #bbb;
-}
+.mini-tabla .mini-ejercicio { color: #333; font-weight: 800; }
+.mini-tabla .mini-vacio { color: #bbb; }
 
 .miniatura-pie {
   display: flex;
@@ -1615,9 +1474,7 @@ a:focus-visible,
   text-align: center;
 }
 
-/* =====================================================
-   MODAL
-===================================================== */
+/* MODAL */
 
 .modal-rutina {
   position: fixed;
@@ -1631,9 +1488,7 @@ a:focus-visible,
   backdrop-filter: blur(5px);
 }
 
-.modal-rutina.visible {
-  display: flex;
-}
+.modal-rutina.visible { display: flex; }
 
 .modal-contenido {
   display: flex;
@@ -1650,14 +1505,8 @@ a:focus-visible,
 }
 
 @keyframes aparecerModal {
-  from {
-    opacity: 0;
-    transform: translateY(8px) scale(.99);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+  from { opacity: 0; transform: translateY(8px) scale(.99); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .modal-cabecera {
@@ -1670,9 +1519,7 @@ a:focus-visible,
   background: #fff;
 }
 
-.modal-titulo {
-  min-width: 0;
-}
+.modal-titulo { min-width: 0; }
 
 .modal-titulo strong {
   display: block;
@@ -1759,14 +1606,9 @@ a:focus-visible,
   white-space: nowrap;
 }
 
-.control-personas .boton {
-  min-height: 34px;
-  padding: 7px 10px;
-}
+.control-personas .boton { min-height: 34px; padding: 7px 10px; }
 
-/* =====================================================
-   PLANILLA DE PERIODIZACIÓN / PDF
-===================================================== */
+/* PLANILLA / PDF */
 
 .planilla-cabecera {
   position: relative;
@@ -1862,8 +1704,7 @@ a:focus-visible,
   font-size: 10px;
 }
 
-.tabla-planilla th,
-.tabla-planilla td {
+.tabla-planilla th, .tabla-planilla td {
   min-width: 34px;
   padding: 6px 5px;
   border: 1px solid #777;
@@ -1918,9 +1759,7 @@ a:focus-visible,
   font-weight: 900;
 }
 
-.tabla-planilla .valor-vacio {
-  color: #bbb;
-}
+.tabla-planilla .valor-vacio { color: #bbb; }
 
 .tabla-planilla.tabla-principales {
   min-width: 1000px;
@@ -1962,18 +1801,10 @@ a:focus-visible,
   background: #fff;
 }
 
-.tabla-planilla.tabla-complementarios {
-  min-width: 760px;
-}
+.tabla-planilla.tabla-complementarios { min-width: 760px; }
 
-.tabla-planilla.tabla-complementarios th.ejercicio-planilla {
-  width: 220px;
-}
-
-.tabla-planilla.tabla-complementarios td {
-  font-size: 11px;
-  font-weight: 800;
-}
+.tabla-planilla.tabla-complementarios th.ejercicio-planilla { width: 220px; }
+.tabla-planilla.tabla-complementarios td { font-size: 11px; font-weight: 800; }
 
 .planilla-nombre {
   display: flex;
@@ -2001,20 +1832,10 @@ a:focus-visible,
   white-space: nowrap;
 }
 
-.planilla-nombre .linea-nombre {
-  flex: 1;
-  min-width: 35px;
-  height: 20px;
-}
+.planilla-nombre .linea-nombre { flex: 1; min-width: 35px; height: 20px; }
 
-.planillas-personas {
-  display: block;
-  min-width: 0;
-}
-
-.planilla-persona {
-  min-width: 0;
-}
+.planillas-personas { display: block; min-width: 0; }
+.planilla-persona { min-width: 0; }
 
 .planillas-personas.varias-personas {
   display: grid;
@@ -2023,14 +1844,8 @@ a:focus-visible,
   gap: 14px;
 }
 
-.planillas-personas.varias-personas .planilla-persona + .planilla-persona {
-  margin-top: 0;
-}
-
-.planillas-personas.varias-personas .planilla-bloque {
-  min-width: 0;
-  margin-top: 8px;
-}
+.planillas-personas.varias-personas .planilla-persona + .planilla-persona { margin-top: 0; }
+.planillas-personas.varias-personas .planilla-bloque { min-width: 0; margin-top: 8px; }
 
 .planillas-personas.varias-personas .planilla-bloque-titulo {
   padding: 6px 7px;
@@ -2078,22 +1893,15 @@ a:focus-visible,
   max-width: 88px;
 }
 
-.planillas-personas.varias-personas .tabla-planilla .celda-repeticiones {
-  padding: 2px 1px 3px;
-}
-
-.planillas-personas.varias-personas .tabla-planilla .valor-repeticiones {
-  font-size: 8px;
-}
+.planillas-personas.varias-personas .tabla-planilla .celda-repeticiones { padding: 2px 1px 3px; }
+.planillas-personas.varias-personas .tabla-planilla .valor-repeticiones { font-size: 8px; }
 
 .planillas-personas.varias-personas .tabla-planilla .casillero-peso {
   height: 10px;
   margin-top: 2px;
 }
 
-.planillas-personas.varias-personas .tabla-planilla.tabla-complementarios td {
-  font-size: 7px;
-}
+.planillas-personas.varias-personas .tabla-planilla.tabla-complementarios td { font-size: 7px; }
 
 .planillas-personas.varias-personas .planilla-nombre {
   width: 100%;
@@ -2105,80 +1913,31 @@ a:focus-visible,
   font-size: 8px;
 }
 
-.planillas-personas.varias-personas .planilla-nombre strong {
-  font-size: 8px;
-}
+.planillas-personas.varias-personas .planilla-nombre strong { font-size: 8px; }
+.planillas-personas.varias-personas .planilla-nombre .linea-nombre { min-width: 0; height: 15px; }
+.ejercicio-sin-nombre { color: #aaa; font-weight: 400; }
+#printRoutine { display: none; }
 
-.planillas-personas.varias-personas .planilla-nombre .linea-nombre {
-  min-width: 0;
-  height: 15px;
-}
-
-.ejercicio-sin-nombre {
-  color: #aaa;
-  font-weight: 400;
-}
-
-#printRoutine {
-  display: none;
-}
-
-/* =====================================================
-   RESPONSIVE
-===================================================== */
+/* RESPONSIVE */
 
 @media (max-width: 1250px) {
-  .contenido {
-    padding: 25px;
-  }
-
-  .biblioteca-grid {
-    grid-template-columns: repeat(2,minmax(0,1fr));
-  }
-
-  .grupo-editor {
-    padding: 15px;
-  }
-
-  .tiempo-semanal-grid {
-    grid-template-columns: repeat(3,minmax(0,1fr));
-  }
-
-  .cabecera-configuracion {
-    padding: 21px 21px 18px;
-  }
-
-  .cuerpo-configuracion {
-    padding: 0 21px 20px;
-  }
-
-  .selector-categoria-superior {
-    padding: 14px 16px;
-  }
-
-  .campo-categoria-superior {
-    width: 225px;
-    flex-basis: 225px;
-  }
+  .contenido { padding: 25px; }
+  .biblioteca-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .grupo-editor { padding: 15px; }
+  .tiempo-semanal-grid { grid-template-columns: repeat(3,minmax(0,1fr)); }
+  .cabecera-configuracion { padding: 21px 21px 18px; }
+  .cuerpo-configuracion { padding: 0 21px 20px; }
+  .selector-categoria-superior { padding: 14px 16px; }
+  .campo-categoria-superior { width: 225px; flex-basis: 225px; }
 }
 
 @media (min-width: 761px) {
-  .sidebar {
-    position: relative;
-    margin-left: 0;
-    transform: none;
-  }
-
-  .sidebar.oculto {
-    margin-left: -258px;
-    transform: none;
-  }
+  .sidebar { position: relative; margin-left: 0; transform: none; }
+  .sidebar.oculto { margin-left: -258px; transform: none; }
 }
 
 @media (max-width: 760px) {
-  :root {
-    --alto-topbar: 72px;
-  }
+  :root { --alto-topbar: 72px; }
 
   .barra-superior {
     min-height: 72px;
@@ -2186,34 +1945,12 @@ a:focus-visible,
     padding: 10px 13px;
   }
 
-  .boton-menu {
-    width: 38px;
-    height: 38px;
-    font-size: 24px;
-  }
-
-  .logo-superior {
-    width: 44px;
-    height: 44px;
-  }
-
-  .titulo-superior h1 {
-    margin-bottom: 3px;
-    font-size: 15px;
-    letter-spacing: .1px;
-  }
-
-  .titulo-superior p {
-    font-size: 10px;
-  }
-
-  .perfil {
-    display: none;
-  }
-
-  .contenedor {
-    min-height: calc(100vh - 72px);
-  }
+  .boton-menu { width: 38px; height: 38px; font-size: 24px; }
+  .logo-superior { width: 44px; height: 44px; }
+  .titulo-superior h1 { margin-bottom: 3px; font-size: 15px; letter-spacing: .1px; }
+  .titulo-superior p { font-size: 10px; }
+  .perfil { display: none; }
+  .contenedor { min-height: calc(100vh - 72px); }
 
   .sidebar {
     position: fixed;
@@ -2235,14 +1972,8 @@ a:focus-visible,
     transform: translateX(-110%);
   }
 
-  .sidebar.oculto {
-    margin-left: 0;
-    transform: translateX(-110%);
-  }
-
-  .sidebar.visible {
-    transform: translateX(0);
-  }
+  .sidebar.oculto { margin-left: 0; transform: translateX(-110%); }
+  .sidebar.visible { transform: translateX(0); }
 
   .capa-sidebar.visible {
     display: block;
@@ -2252,28 +1983,11 @@ a:focus-visible,
     background: #00000045;
   }
 
-  .contenido {
-    padding: 22px 13px;
-  }
-
-  .cabecera-pagina {
-    margin-bottom: 17px;
-  }
-
-  .cabecera-pagina::before {
-    margin-bottom: 8px;
-    font-size: 9px;
-    letter-spacing: 1.4px;
-  }
-
-  .cabecera-pagina h2 {
-    font-size: 25px;
-    letter-spacing: -.4px;
-  }
-
-  .cabecera-pagina p {
-    font-size: 12px;
-  }
+  .contenido { padding: 22px 13px; }
+  .cabecera-pagina { margin-bottom: 17px; }
+  .cabecera-pagina::before { margin-bottom: 8px; font-size: 9px; letter-spacing: 1.4px; }
+  .cabecera-pagina h2 { font-size: 25px; letter-spacing: -.4px; }
+  .cabecera-pagina p { font-size: 12px; }
 
   .selector-categoria-superior {
     align-items: flex-start;
@@ -2291,55 +2005,18 @@ a:focus-visible,
     border-radius: 10px;
   }
 
-  .icono-categoria-superior svg {
-    width: 20px;
-    height: 20px;
-  }
+  .icono-categoria-superior svg { width: 20px; height: 20px; }
+  .texto-categoria-superior { padding-top: 2px; }
+  .texto-categoria-superior strong { font-size: 12px; }
+  .texto-categoria-superior span { font-size: 10px; }
+  .campo-categoria-superior { width: 100%; flex: 0 0 100%; }
+  .campo-categoria-superior label { margin-bottom: 6px; font-size: 9px; }
+  .campo-categoria-superior select { min-height: 43px; }
 
-  .texto-categoria-superior {
-    padding-top: 2px;
-  }
-
-  .texto-categoria-superior strong {
-    font-size: 12px;
-  }
-
-  .texto-categoria-superior span {
-    font-size: 10px;
-  }
-
-  .campo-categoria-superior {
-    width: 100%;
-    flex: 0 0 100%;
-  }
-
-  .campo-categoria-superior label {
-    margin-bottom: 6px;
-    font-size: 9px;
-  }
-
-  .campo-categoria-superior select {
-    min-height: 43px;
-  }
-
-  .tarjeta {
-    padding: 16px;
-    margin-bottom: 17px;
-    border-radius: 12px;
-  }
-
-  .tarjeta-configuracion {
-    padding: 0;
-  }
-
-  .tarjeta > h3 {
-    font-size: 17px;
-  }
-
-  .descripcion {
-    margin-bottom: 17px;
-    font-size: 11px;
-  }
+  .tarjeta { padding: 16px; margin-bottom: 17px; border-radius: 12px; }
+  .tarjeta-configuracion { padding: 0; }
+  .tarjeta > h3 { font-size: 17px; }
+  .descripcion { margin-bottom: 17px; font-size: 11px; }
 
   .cabecera-configuracion {
     align-items: flex-start;
@@ -2354,44 +2031,16 @@ a:focus-visible,
     border-radius: 10px;
   }
 
-  .icono-configuracion svg {
-    width: 20px;
-    height: 20px;
-  }
+  .icono-configuracion svg { width: 20px; height: 20px; }
+  .texto-cabecera-configuracion h3 { font-size: 16px; }
+  .cuerpo-configuracion { padding: 0 15px 16px; }
+  .filtros { grid-template-columns: 1fr; gap: 14px; }
 
-  .texto-cabecera-configuracion h3 {
-    font-size: 16px;
-  }
+  .campo-modo, .campo-titulo, .campo-semanas { grid-column: 1 / -1; }
 
-  .cuerpo-configuracion {
-    padding: 0 15px 16px;
-  }
-
-  .filtros {
-    grid-template-columns: 1fr;
-    gap: 14px;
-  }
-
-  .campo-modo,
-  .campo-titulo,
-  .campo-semanas {
-    grid-column: 1 / -1;
-  }
-
-  .campo label {
-    margin-bottom: 7px;
-    font-size: 9px;
-  }
-
-  .campo input,
-  .campo select {
-    min-height: 43px;
-    padding: 10px 11px;
-  }
-
-  .separador-configuracion {
-    margin: 17px 0 14px;
-  }
+  .campo label { margin-bottom: 7px; font-size: 9px; }
+  .campo input, .campo select { min-height: 43px; padding: 10px 11px; }
+  .separador-configuracion { margin: 17px 0 14px; }
 
   .pie-configuracion {
     align-items: stretch;
@@ -2406,16 +2055,8 @@ a:focus-visible,
     width: 100%;
   }
 
-  .botones .boton {
-    width: 100%;
-    min-height: 42px;
-  }
-
-  .selector-jugadora-editor {
-    max-width: none;
-    margin-bottom: 15px;
-    padding: 12px;
-  }
+  .botones .boton { width: 100%; min-height: 42px; }
+  .selector-jugadora-editor { max-width: none; margin-bottom: 15px; padding: 12px; }
 
   .info-rutina {
     align-items: flex-start;
@@ -2424,30 +2065,11 @@ a:focus-visible,
     padding: 12px;
   }
 
-  .editor-ejercicios {
-    gap: 18px;
-  }
-
-  .grupo-editor {
-    padding: 12px;
-    border-radius: 10px;
-  }
-
-  .grupo-editor-cabecera {
-    gap: 9px;
-    margin-bottom: 12px;
-    padding-bottom: 12px;
-  }
-
-  .numero-grupo-editor {
-    width: 33px;
-    height: 33px;
-    flex-basis: 33px;
-  }
-
-  .grupo-editor-cabecera h4 {
-    font-size: 13px;
-  }
+  .editor-ejercicios { gap: 18px; }
+  .grupo-editor { padding: 12px; border-radius: 10px; }
+  .grupo-editor-cabecera { gap: 9px; margin-bottom: 12px; padding-bottom: 12px; }
+  .numero-grupo-editor { width: 33px; height: 33px; flex-basis: 33px; }
+  .grupo-editor-cabecera h4 { font-size: 13px; }
 
   .lista-ejercicios-editor {
     display: flex;
@@ -2457,19 +2079,9 @@ a:focus-visible,
     padding: 0;
   }
 
-  .ejercicio-card {
-    width: 100%;
-    max-width: none;
-  }
-
-  .ejercicio-card-cabecera {
-    padding: 12px;
-  }
-
-  .ejercicio-cuerpo {
-    gap: 12px;
-    padding: 11px;
-  }
+  .ejercicio-card { width: 100%; max-width: none; }
+  .ejercicio-card-cabecera { padding: 12px; }
+  .ejercicio-cuerpo { gap: 12px; padding: 11px; }
 
   .referencia-repeticiones {
     align-items: stretch;
@@ -2478,39 +2090,13 @@ a:focus-visible,
     padding: 11px;
   }
 
-  .referencia-repeticiones input {
-    width: 100%;
-    flex-basis: auto;
-  }
-
-  .dias-editor {
-    grid-template-columns: 1fr;
-    gap: 9px;
-  }
-
-  .tiempo-semanal-grid {
-    grid-template-columns: repeat(2,minmax(0,1fr));
-  }
-
-  .dia-editor {
-    padding: 11px;
-    border-radius: 8px;
-  }
-
-  .dia-editor-titulo {
-    margin-bottom: 10px;
-    font-size: 10px;
-  }
-
-  .dato-editor label {
-    font-size: 9px;
-  }
-
-  .dato-editor input {
-    height: 40px;
-    padding: 7px 10px;
-    font-size: 12px;
-  }
+  .referencia-repeticiones input { width: 100%; flex-basis: auto; }
+  .dias-editor { grid-template-columns: 1fr; gap: 9px; }
+  .tiempo-semanal-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .dia-editor { padding: 11px; border-radius: 8px; }
+  .dia-editor-titulo { margin-bottom: 10px; font-size: 10px; }
+  .dato-editor label { font-size: 9px; }
+  .dato-editor input { height: 40px; padding: 7px 10px; font-size: 12px; }
 
   .biblioteca-cabecera {
     align-items: flex-start;
@@ -2518,54 +2104,18 @@ a:focus-visible,
     gap: 12px;
   }
 
-  .biblioteca-cabecera h3 {
-    font-size: 18px;
-  }
+  .biblioteca-cabecera h3 { font-size: 18px; }
+  .biblioteca-cabecera p { font-size: 11px; }
+  .biblioteca-grid { grid-template-columns: 1fr; gap: 13px; }
+  .acciones-miniatura { opacity: 1; transform: none; pointer-events: auto; }
 
-  .biblioteca-cabecera p {
-    font-size: 11px;
-  }
-
-  .biblioteca-grid {
-    grid-template-columns: 1fr;
-    gap: 13px;
-  }
-
-  .acciones-miniatura {
-    opacity: 1;
-    transform: none;
-    pointer-events: auto;
-  }
-
-  .modal-rutina {
-    padding: 8px;
-  }
-
-  .modal-contenido {
-    max-height: 96vh;
-    border-radius: 11px;
-  }
-
-  .modal-cabecera {
-    padding: 12px;
-  }
-
-  .modal-titulo strong {
-    font-size: 13px;
-  }
-
-  .modal-cuerpo {
-    padding: 9px;
-  }
-
-  .modal-planilla {
-    padding: 7px;
-  }
-
-  .modal-acciones {
-    justify-content: stretch;
-    padding: 9px;
-  }
+  .modal-rutina { padding: 8px; }
+  .modal-contenido { max-height: 96vh; border-radius: 11px; }
+  .modal-cabecera { padding: 12px; }
+  .modal-titulo strong { font-size: 13px; }
+  .modal-cuerpo { padding: 9px; }
+  .modal-planilla { padding: 7px; }
+  .modal-acciones { justify-content: stretch; padding: 9px; }
 
   .modal-acciones .boton {
     flex: 1 1 calc(50% - 8px);
@@ -2581,133 +2131,45 @@ a:focus-visible,
     margin-right: 0;
   }
 
-  .control-personas .boton {
-    flex: 0 0 auto;
-    min-width: 0;
-    padding: 8px 9px;
-  }
+  .control-personas .boton { flex: 0 0 auto; min-width: 0; padding: 8px 9px; }
 
-  .planilla-cabecera {
-    min-height: 126px;
-    gap: 5px;
-    padding: 9px 7px;
-  }
-
-  .planilla-cabecera img {
-    left: 8px;
-    width: 44px;
-    height: 44px;
-  }
-
-  .planilla-cabecera-texto strong {
-    font-size: 18px;
-  }
-
-  .planilla-cabecera-texto span {
-    font-size: 12px;
-  }
-
-  .planilla-cabecera-texto small {
-    font-size: 10px;
-  }
-
-  .planilla-nombre {
-    width: 100%;
-    min-width: 0;
-  }
+  .planilla-cabecera { min-height: 126px; gap: 5px; padding: 9px 7px; }
+  .planilla-cabecera img { left: 8px; width: 44px; height: 44px; }
+  .planilla-cabecera-texto strong { font-size: 18px; }
+  .planilla-cabecera-texto span { font-size: 12px; }
+  .planilla-cabecera-texto small { font-size: 10px; }
+  .planilla-nombre { width: 100%; min-width: 0; }
 }
 
 @media (max-width: 420px) {
-  .barra-superior {
-    padding: 8px;
-    gap: 6px;
-  }
+  .barra-superior { padding: 8px; gap: 6px; }
+  .boton-menu { width: 33px; height: 36px; font-size: 22px; }
+  .logo-superior { width: 36px; height: 36px; }
+  .titulo-superior h1 { font-size: 13px; }
+  .titulo-superior p { font-size: 9px; }
+  .contenido { padding: 18px 9px; }
+  .selector-categoria-superior { padding: 12px; }
+  .cabecera-pagina h2 { font-size: 22px; }
+  .tarjeta { padding: 12px; }
+  .tarjeta-configuracion { padding: 0; }
+  .cabecera-configuracion { padding: 15px 12px 13px; }
+  .icono-configuracion { width: 34px; height: 34px; flex-basis: 34px; }
+  .texto-cabecera-configuracion h3 { font-size: 15px; }
+  .cuerpo-configuracion { padding: 0 12px 13px; }
+  .dia-editor { padding: 9px; }
+  .modal-acciones { gap: 6px; }
+  .modal-acciones .boton { flex-basis: 100%; }
 
-  .boton-menu {
-    width: 33px;
-    height: 36px;
-    font-size: 22px;
-  }
-
-  .logo-superior {
-    width: 36px;
-    height: 36px;
-  }
-
-  .titulo-superior h1 {
-    font-size: 13px;
-  }
-
-  .titulo-superior p {
-    font-size: 9px;
-  }
-
-  .contenido {
-    padding: 18px 9px;
-  }
-
-  .selector-categoria-superior {
-    padding: 12px;
-  }
-
-  .cabecera-pagina h2 {
-    font-size: 22px;
-  }
-
-  .tarjeta {
-    padding: 12px;
-  }
-
-  .tarjeta-configuracion {
-    padding: 0;
-  }
-
-  .cabecera-configuracion {
-    padding: 15px 12px 13px;
-  }
-
-  .icono-configuracion {
-    width: 34px;
-    height: 34px;
-    flex-basis: 34px;
-  }
-
-  .texto-cabecera-configuracion h3 {
-    font-size: 15px;
-  }
-
-  .cuerpo-configuracion {
-    padding: 0 12px 13px;
-  }
-
-  .dia-editor {
-    padding: 9px;
-  }
-
-  .modal-acciones {
-    gap: 6px;
-  }
-
-  .modal-acciones .boton {
-    flex-basis: 100%;
-  }
-
-  .mini-tabla th,
-  .mini-tabla td {
+  .mini-tabla th, .mini-tabla td {
     padding: 4px 2px;
     font-size: 7px;
   }
 }
 
-/* =====================================================
-   IMPRESIÓN / PDF
-===================================================== */
+/* IMPRESIÓN / PDF */
 
 @media print {
-  @page {
-    size: A4 landscape;
-    margin: 8mm;
-  }
+  @page { size: A4 landscape; margin: 8mm; }
 
   body.imprimir-solo-rutina {
     background: #fff !important;
@@ -2716,9 +2178,7 @@ a:focus-visible,
     -webkit-print-color-adjust: exact;
   }
 
-  body.imprimir-solo-rutina > *:not(#printRoutine) {
-    display: none !important;
-  }
+  body.imprimir-solo-rutina > *:not(#printRoutine) { display: none !important; }
 
   body.imprimir-solo-rutina #printRoutine {
     display: block !important;
@@ -2740,26 +2200,11 @@ a:focus-visible,
     height: 90px;
   }
 
-  #printRoutine .planilla-cabecera-texto {
-    transform: translateX(2.5%);
-  }
-
-  #printRoutine .planilla-cabecera-texto strong {
-    font-size: 20px;
-  }
-
-  #printRoutine .planilla-cabecera-texto span {
-    font-size: 13px;
-  }
-
-  #printRoutine .planilla-cabecera-texto small {
-    font-size: 10px;
-  }
-
-  #printRoutine .planilla-scroll {
-    overflow: visible;
-    border: 0;
-  }
+  #printRoutine .planilla-cabecera-texto { transform: translateX(2.5%); }
+  #printRoutine .planilla-cabecera-texto strong { font-size: 20px; }
+  #printRoutine .planilla-cabecera-texto span { font-size: 13px; }
+  #printRoutine .planilla-cabecera-texto small { font-size: 10px; }
+  #printRoutine .planilla-scroll { overflow: visible; border: 0; }
 
   #printRoutine .tabla-planilla {
     width: 100%;
@@ -2782,9 +2227,7 @@ a:focus-visible,
     max-width: 115px;
   }
 
-  #printRoutine .tabla-planilla th.indicador-planilla {
-    width: 42px;
-  }
+  #printRoutine .tabla-planilla th.indicador-planilla { width: 42px; }
 
   #printRoutine .planilla-bloque {
     margin-top: 9px;
@@ -2792,18 +2235,14 @@ a:focus-visible,
     page-break-inside: avoid;
   }
 
-  #printRoutine .planillas-personas {
-    display: block;
-  }
+  #printRoutine .planillas-personas { display: block; }
 
   #printRoutine .planilla-persona {
     break-inside: avoid;
     page-break-inside: avoid;
   }
 
-  #printRoutine .planilla-persona + .planilla-persona {
-    margin-top: 12px;
-  }
+  #printRoutine .planilla-persona + .planilla-persona { margin-top: 12px; }
 
   #printRoutine .tabla-planilla.tabla-principales {
     min-width: 0;
@@ -2832,9 +2271,7 @@ a:focus-visible,
     font-size: 10px;
   }
 
-  #printRoutine .planilla-nombre strong {
-    font-size: 10px;
-  }
+  #printRoutine .planilla-nombre strong { font-size: 10px; }
 
   #printRoutine .planillas-personas.varias-personas {
     display: grid;
@@ -2914,9 +2351,7 @@ a:focus-visible,
     font-size: 8px;
   }
 
-  #printRoutine .planillas-personas.varias-personas .planilla-nombre strong {
-    font-size: 8px;
-  }
+  #printRoutine .planillas-personas.varias-personas .planilla-nombre strong { font-size: 8px; }
 
   #printRoutine .planillas-personas.varias-personas .planilla-nombre .linea-nombre {
     min-width: 0;
@@ -2935,11 +2370,7 @@ a:focus-visible,
     max-width: none;
   }
 
-  .sidebar,
-  .capa-sidebar,
-  .barra-superior,
-  .contenido,
-  .modal-rutina {
+  .sidebar, .capa-sidebar, .barra-superior, .contenido, .modal-rutina {
     display: none !important;
   }
 }
@@ -2949,20 +2380,9 @@ a:focus-visible,
 <body>
 
 <header class="barra-superior">
-  <button
-    class="boton-menu"
-    id="botonMenu"
-    type="button"
-    aria-label="Abrir menú"
-    aria-expanded="true"
-  >☰</button>
+  <button class="boton-menu" id="botonMenu" type="button" aria-label="Abrir menú" aria-expanded="true">☰</button>
 
-  <img
-    class="logo-superior"
-    src="Logo ADIUR.jpg"
-    alt="Logo ADIUR"
-    onerror="this.onerror=null;this.src='logo adiur.jpg';"
-  >
+  <img class="logo-superior" src="Logo ADIUR.jpg" alt="Logo ADIUR" onerror="this.onerror=null;this.src='logo adiur.jpg';">
 
   <div class="titulo-superior">
     <h1>ADIUR FEMENINO</h1>
@@ -2988,10 +2408,8 @@ a:focus-visible,
 
     <div class="grupo-menu cerrado" id="grupoPlantel">
       <button class="titulo-grupo" type="button" data-grupo="grupoPlantel" aria-expanded="false">
-        <span>PLANTEL</span>
-        <span class="flecha">›</span>
+        <span>PLANTEL</span><span class="flecha">›</span>
       </button>
-
       <div class="submenu">
         <a href="jugadoras.html"><span class="nav-punto"></span>Jugadoras</a>
         <a href="asistencia.html"><span class="nav-punto"></span>Asistencia</a>
@@ -3000,10 +2418,8 @@ a:focus-visible,
 
     <div class="grupo-menu" id="grupoEntrenamiento">
       <button class="titulo-grupo" type="button" data-grupo="grupoEntrenamiento" aria-expanded="true">
-        <span>ENTRENAMIENTO</span>
-        <span class="flecha">›</span>
+        <span>ENTRENAMIENTO</span><span class="flecha">›</span>
       </button>
-
       <div class="submenu">
         <a href="calendario.html"><span class="nav-punto"></span>Calendario</a>
         <a href="planificacion.html"><span class="nav-punto"></span>Planificación</a>
@@ -3015,10 +2431,8 @@ a:focus-visible,
 
     <div class="grupo-menu cerrado" id="grupoCompetencia">
       <button class="titulo-grupo" type="button" data-grupo="grupoCompetencia" aria-expanded="false">
-        <span>COMPETENCIA</span>
-        <span class="flecha">›</span>
+        <span>COMPETENCIA</span><span class="flecha">›</span>
       </button>
-
       <div class="submenu">
         <a href="Partidos.html"><span class="nav-punto"></span>Partidos</a>
         <a href="informes.html"><span class="nav-punto"></span>Informes</a>
@@ -3029,10 +2443,8 @@ a:focus-visible,
 
     <div class="grupo-menu cerrado" id="grupoRendimientos">
       <button class="titulo-grupo" type="button" data-grupo="grupoRendimientos" aria-expanded="false">
-        <span>RENDIMIENTOS</span>
-        <span class="flecha">›</span>
+        <span>RENDIMIENTOS</span><span class="flecha">›</span>
       </button>
-
       <div class="submenu">
         <a href="testeos.html"><span class="nav-punto"></span>Planilla de testeos</a>
         <a href="tiempos.html"><span class="nav-punto"></span>Tiempos</a>
@@ -3059,7 +2471,6 @@ a:focus-visible,
     </section>
 
     <section class="selector-categoria-superior" aria-label="Selección de categoría del plantel">
-
       <div class="icono-categoria-superior" aria-hidden="true">
         <svg viewBox="0 0 24 24">
           <circle cx="9" cy="8" r="3"></circle>
@@ -3084,13 +2495,10 @@ a:focus-visible,
           <option value="Primera">Primera</option>
         </select>
       </div>
-
     </section>
 
     <section class="tarjeta tarjeta-configuracion" id="panelControlesRutina">
-
       <div class="cabecera-configuracion">
-
         <div class="icono-configuracion" aria-hidden="true">
           <svg viewBox="0 0 24 24">
             <path d="M6 8v8"></path>
@@ -3102,17 +2510,13 @@ a:focus-visible,
             <path d="M18 12h2.5"></path>
           </svg>
         </div>
-
         <div class="texto-cabecera-configuracion">
           <h3>Configuración de la rutina</h3>
         </div>
-
       </div>
 
       <div class="cuerpo-configuracion">
-
         <div class="filtros">
-
           <div class="campo campo-modo" id="campoModo">
             <label for="modo"><span class="punto-label"></span>TIPO DE RUTINA</label>
             <select id="modo">
@@ -3123,12 +2527,7 @@ a:focus-visible,
 
           <div class="campo campo-titulo">
             <label for="tituloRutina"><span class="punto-label"></span>TÍTULO DE LA RUTINA</label>
-            <input
-              id="tituloRutina"
-              type="text"
-              maxlength="90"
-              placeholder="Ej. Potencia y Fuerza · Octubre"
-            >
+            <input id="tituloRutina" type="text" maxlength="90" placeholder="Ej. Potencia y Fuerza · Octubre">
           </div>
 
           <div class="campo campo-semanas">
@@ -3142,35 +2541,25 @@ a:focus-visible,
               <option value="7">7 Semanas</option>
             </select>
           </div>
-
         </div>
 
         <div class="separador-configuracion"></div>
 
         <div class="pie-configuracion">
-
           <div class="botones" id="botonesGestion">
             <button class="boton boton-principal" id="guardarRutina" type="button">
-              <span class="boton-icono">✓</span>
-              Guardar rutina
+              <span class="boton-icono">✓</span>Guardar rutina
             </button>
-
             <button class="boton boton-secundario" id="nuevaRutina" type="button">
-              <span class="boton-icono">+</span>
-              Nueva rutina
+              <span class="boton-icono">+</span>Nueva rutina
             </button>
-
-            <button class="boton boton-secundario" id="aplicarRutina" type="button">
-              Aplicar a jugadoras
-            </button>
+            <button class="boton boton-secundario" id="aplicarRutina" type="button">Aplicar a jugadoras</button>
           </div>
-
         </div>
       </div>
     </section>
 
     <section class="tarjeta" id="panelEditorRutina">
-
       <h3 id="tituloEditor">Nueva rutina</h3>
 
       <p class="descripcion" id="descripcionEditor">
@@ -3203,11 +2592,9 @@ a:focus-visible,
         <span id="textoPermisos"></span>
         <span>ADIUR FEMENINO · Gimnasio</span>
       </div>
-
     </section>
 
     <section class="tarjeta" id="panelBiblioteca">
-
       <div class="biblioteca-cabecera">
         <div>
           <h3>Biblioteca de rutinas</h3>
@@ -3216,23 +2603,14 @@ a:focus-visible,
             para ver su planilla completa o editarla.
           </p>
         </div>
-
-        <span class="contador-biblioteca" id="contadorBiblioteca">
-          0 rutinas guardadas
-        </span>
+        <span class="contador-biblioteca" id="contadorBiblioteca">0 rutinas guardadas</span>
       </div>
 
       <div class="buscador-biblioteca">
-        <input
-          type="search"
-          id="buscarRutina"
-          placeholder="Buscar rutina por título..."
-          aria-label="Buscar rutina por título"
-        >
+        <input type="search" id="buscarRutina" placeholder="Buscar rutina por título..." aria-label="Buscar rutina por título">
       </div>
 
       <div id="listaRutinasGuardadas" class="biblioteca-grid"></div>
-
     </section>
 
   </main>
@@ -3247,12 +2625,7 @@ a:focus-visible,
         <small id="modalSubtitulo">Planilla de entrenamiento</small>
       </div>
 
-      <button
-        class="boton-cerrar-modal"
-        id="cerrarModal"
-        type="button"
-        aria-label="Cerrar vista ampliada"
-      >×</button>
+      <button class="boton-cerrar-modal" id="cerrarModal" type="button" aria-label="Cerrar vista ampliada">×</button>
     </div>
 
     <div class="modal-cuerpo" id="modalCuerpo"></div>
@@ -3285,6 +2658,7 @@ window.firebaseGimnasioReady = (async () => {
   const { initializeApp } = await import(
     "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js"
   );
+
   const {
     getFirestore,
     doc,
@@ -3308,21 +2682,22 @@ window.firebaseGimnasioReady = (async () => {
 
   window.cargarGimnasioNube = async () => {
     const resultado = await getDoc(referenciaCloud);
-    if (resultado.exists()) {
-      return resultado.data().datos || null;
-    }
+    if (resultado.exists()) return resultado.data().datos || null;
     return null;
   };
 
   let colaGuardado = Promise.resolve();
+
   window.guardarGimnasioEnNube = (datos) => {
     const copia = JSON.parse(JSON.stringify(datos));
+
     colaGuardado = colaGuardado.catch(() => {}).then(() =>
       setDoc(referenciaCloud, {
         datos: copia,
         actualizado: serverTimestamp()
       })
     );
+
     return colaGuardado;
   };
 
@@ -3370,6 +2745,7 @@ const DIVISIONES = [
 
 const DIAS_POR_SEMANA = 3;
 const CANTIDAD_RUTINAS_INICIALES = 10;
+const MAX_EJERCICIOS_SECCION = 5;
 
 const divisionSelect = $("division");
 const modoSelect = $("modo");
@@ -3395,18 +2771,21 @@ const MAX_PERSONAS_RUTINA = 5;
 
 function obtenerEstructuraPotenciaPorSemanas(totalSemanas) {
   const num = Number(totalSemanas);
+
   switch (num) {
     case 2:
       return [
         { numero: 1, nombre: "ACUMULACIÓN", d1: 72, d2: 65, d3: 82 },
         { numero: 2, nombre: "PICO", d1: 75, d2: 60, d3: 90 }
       ];
+
     case 3:
       return [
         { numero: 1, nombre: "CARGA 1", d1: 70, d2: 62, d3: 80 },
         { numero: 2, nombre: "CARGA 2", d1: 75, d2: 65, d3: 88 },
         { numero: 3, nombre: "DESCARGA", d1: 65, d2: 55, d3: 70 }
       ];
+
     case 4:
       return [
         { numero: 1, nombre: "BASE 1", d1: 70, d2: 60, d3: 78 },
@@ -3414,6 +2793,7 @@ function obtenerEstructuraPotenciaPorSemanas(totalSemanas) {
         { numero: 3, nombre: "INTENSIDAD", d1: 75, d2: 65, d3: 90 },
         { numero: 4, nombre: "DESCARGA", d1: 65, d2: 55, d3: 68 }
       ];
+
     case 5:
       return [
         { numero: 1, nombre: "SEMANA 1", d1: 70, d2: 60, d3: 78 },
@@ -3422,6 +2802,7 @@ function obtenerEstructuraPotenciaPorSemanas(totalSemanas) {
         { numero: 4, nombre: "SEMANA 4", d1: 78, d2: 65, d3: 92 },
         { numero: 5, nombre: "DESCARGA", d1: 65, d2: 55, d3: 68 }
       ];
+
     case 6:
       return [
         { numero: 1, nombre: "BLOQUE 1 - SEM 1", d1: 70, d2: 60, d3: 78 },
@@ -3431,6 +2812,7 @@ function obtenerEstructuraPotenciaPorSemanas(totalSemanas) {
         { numero: 5, nombre: "BLOQUE 2 - SEM 2", d1: 76, d2: 65, d3: 91 },
         { numero: 6, nombre: "DESCARGA 2", d1: 60, d2: 50, d3: 68 }
       ];
+
     case 7:
     default:
       return [
@@ -3446,7 +2828,9 @@ function obtenerEstructuraPotenciaPorSemanas(totalSemanas) {
 }
 
 function obtenerPlantillaPeriodizacion(cantidadSemanas) {
-  const cantidad = Number(cantidadSemanas) >= 2 && Number(cantidadSemanas) <= 7 ? Number(cantidadSemanas) : 4;
+  const cantidad = Number(cantidadSemanas) >= 2 && Number(cantidadSemanas) <= 7
+    ? Number(cantidadSemanas)
+    : 4;
 
   if (cantidad === 4) {
     return [
@@ -3457,20 +2841,40 @@ function obtenerPlantillaPeriodizacion(cantidadSemanas) {
     ];
   }
 
-  return [
-    { numero: 1, nombre: "ADAPTABILIDAD", repeticiones: [10, 8, 9] },
-    { numero: 2, nombre: "CARGA", repeticiones: [7, 8, 6] },
-    { numero: 3, nombre: "BAJADA", repeticiones: [9, 7, 8] },
-    { numero: 4, nombre: "CARGA", repeticiones: [5, 6, 4] },
-    { numero: 5, nombre: "PICO", repeticiones: [5, 3] }
+  if (cantidad === 5) {
+    return [
+      { numero: 1, nombre: "ADAPTABILIDAD", repeticiones: [10, 8, 9] },
+      { numero: 2, nombre: "CARGA", repeticiones: [7, 8, 6] },
+      { numero: 3, nombre: "BAJADA", repeticiones: [9, 7, 8] },
+      { numero: 4, nombre: "CARGA", repeticiones: [5, 6, 4] },
+      { numero: 5, nombre: "PICO", repeticiones: [5, 3] }
+    ];
+  }
+
+  const patrones = [
+    [10, 8, 9],
+    [7, 8, 6],
+    [9, 7, 8],
+    [5, 6, 4],
+    [5, 3],
+    [7, 5, 6],
+    [5, 3]
   ];
+
+  return Array.from({ length: cantidad }, (_, indice) => ({
+    numero: indice + 1,
+    nombre: "",
+    repeticiones: patrones[indice]
+  }));
 }
 
 function calcularRepeticiones(referencia, repeticionesIniciales) {
   const valorBase = Number(referencia);
   const iniciales = Number(repeticionesIniciales);
+
   const baseValida = Number.isFinite(valorBase) && valorBase > 0 ? valorBase : 1;
   const inicialesValidas = Number.isFinite(iniciales) && iniciales > 0 ? iniciales : 10;
+
   return Math.max(1, Math.round(baseValida + inicialesValidas - 10));
 }
 
@@ -3479,16 +2883,18 @@ function calcularRepeticiones(referencia, repeticionesIniciales) {
 ===================================================== */
 
 function leerSegundosTiempo(valor) {
-  if (valor === null || valor === undefined || String(valor).trim() === "") {
-    return null;
-  }
+  if (valor === null || valor === undefined || String(valor).trim() === "") return null;
+
   const texto = String(valor).trim().replace(",", ".");
   const numeroDirecto = Number(texto);
+
   if (Number.isFinite(numeroDirecto) && numeroDirecto >= 0) {
     return Math.round(numeroDirecto);
   }
+
   const coincidencia = texto.match(/\d+(?:\.\d+)?/);
   if (!coincidencia) return null;
+
   const numero = Number(coincidencia[0]);
   return Number.isFinite(numero) && numero >= 0 ? Math.round(numero) : null;
 }
@@ -3496,15 +2902,32 @@ function leerSegundosTiempo(valor) {
 function obtenerTiempoBaseEjercicio(ejercicio, diasAntiguos = null) {
   const guardado = leerSegundosTiempo(ejercicio?.tiempoBase);
   if (guardado !== null) return guardado;
-  const dias = Array.isArray(diasAntiguos) ? diasAntiguos : (Array.isArray(ejercicio?.dias) ? ejercicio.dias : []);
-  const valorAnterior = dias.map(dia => leerSegundosTiempo(dia?.tiempo)).find(valor => valor !== null);
+
+  const dias = Array.isArray(diasAntiguos)
+    ? diasAntiguos
+    : (Array.isArray(ejercicio?.dias) ? ejercicio.dias : []);
+
+  const valorAnterior = dias
+    .map(dia => leerSegundosTiempo(dia?.tiempo))
+    .find(valor => valor !== null);
+
   return valorAnterior ?? null;
 }
 
 function calcularTiempoSemana(tiempoBase, numeroSemana) {
   const base = leerSegundosTiempo(tiempoBase);
   if (base === null) return null;
-  const progresion = { 1: base, 2: base + 5, 3: base, 4: base + 10, 5: base + 10, 6: base + 10, 7: base + 10 };
+
+  const progresion = {
+    1: base,
+    2: base + 5,
+    3: base,
+    4: base + 10,
+    5: base + 10,
+    6: base + 10,
+    7: base + 10
+  };
+
   return progresion[numeroSemana] ?? null;
 }
 
@@ -3521,10 +2944,13 @@ function leerUsuario() {
   try {
     const valor = localStorage.getItem(SESSION_KEY);
     if (!valor) return {};
+
     const parseado = JSON.parse(valor);
+
     if (typeof parseado === "string") {
       return { usuario: parseado, nombre: parseado };
     }
+
     return parseado || {};
   } catch {
     return { usuario: localStorage.getItem(SESSION_KEY) || "" };
@@ -3537,24 +2963,45 @@ function nombreSesion(obj) {
 }
 
 function esBianca(obj) {
-  const valores = [obj?.usuario, obj?.username, obj?.nombreUsuario, obj?.login, obj?.nombre, obj?.nombreCompleto].map(normalizar);
-  return valores.some(valor => valor === "bianca" || valor === "biancadominguez" || valor === "bianca dominguez");
+  const valores = [
+    obj?.usuario,
+    obj?.username,
+    obj?.nombreUsuario,
+    obj?.login,
+    obj?.nombre,
+    obj?.nombreCompleto
+  ].map(normalizar);
+
+  return valores.some(valor =>
+    valor === "bianca" ||
+    valor === "biancadominguez" ||
+    valor === "bianca dominguez"
+  );
 }
 
 function detectarRol(obj) {
   if (esBianca(obj)) return "jugadora";
+
   const valor = normalizar(obj?.rol || obj?.perfil || obj?.tipo || obj?.role || "");
-  if (valor.includes("jugadora") || valor.includes("deportista") || valor.includes("player")) {
+
+  if (
+    valor.includes("jugadora") ||
+    valor.includes("deportista") ||
+    valor.includes("player")
+  ) {
     return "jugadora";
   }
+
   return "staff";
 }
 
 function leerJugadoras() {
   try {
     const datos = JSON.parse(localStorage.getItem(PLAYERS_KEY) || "[]");
+
     if (Array.isArray(datos)) return datos;
     if (datos && Array.isArray(datos.jugadoras)) return datos.jugadoras;
+
     return [];
   } catch {
     return [];
@@ -3563,16 +3010,33 @@ function leerJugadoras() {
 
 function nombreJugadora(jugadora) {
   if (!jugadora) return "Jugadora";
-  return String(jugadora.nombreCompleto || jugadora.nombreYApellido || jugadora.nombre || [jugadora.nombres, jugadora.apellido].filter(Boolean).join(" ") || "Jugadora");
+
+  return String(
+    jugadora.nombreCompleto ||
+    jugadora.nombreYApellido ||
+    jugadora.nombre ||
+    [jugadora.nombres, jugadora.apellido].filter(Boolean).join(" ") ||
+    "Jugadora"
+  );
 }
 
 function divisionJugadora(jugadora) {
   const valor = jugadora?.division || jugadora?.categoria || jugadora?.división || "Sub 14";
-  return DIVISIONES.find(division => normalizar(division) === normalizar(valor)) || "Sub 14";
+
+  return DIVISIONES.find(division =>
+    normalizar(division) === normalizar(valor)
+  ) || "Sub 14";
 }
 
 function idJugadora(jugadora) {
-  return String(jugadora?.id || jugadora?.usuario || jugadora?.username || jugadora?.nombreUsuario || jugadora?.login || nombreJugadora(jugadora));
+  return String(
+    jugadora?.id ||
+    jugadora?.usuario ||
+    jugadora?.username ||
+    jugadora?.nombreUsuario ||
+    jugadora?.login ||
+    nombreJugadora(jugadora)
+  );
 }
 
 function registroEsBianca(jugadora) {
@@ -3581,13 +3045,23 @@ function registroEsBianca(jugadora) {
 
 function obtenerTodasLasJugadoras() {
   const resultado = [...leerJugadoras()];
+
   if (!resultado.some(registroEsBianca)) {
-    resultado.push({ id: "bianca", usuario: "bianca", nombreCompleto: "Bianca Dominguez", division: "Sub 14" });
+    resultado.push({
+      id: "bianca",
+      usuario: "bianca",
+      nombreCompleto: "Bianca Dominguez",
+      division: "Sub 14"
+    });
   }
+
   const vistos = new Set();
+
   return resultado.filter(jugadora => {
     const id = idJugadora(jugadora);
+
     if (!id || vistos.has(id)) return false;
+
     vistos.add(id);
     return true;
   });
@@ -3595,12 +3069,29 @@ function obtenerTodasLasJugadoras() {
 
 function buscarJugadoraSesion() {
   const jugadoras = obtenerTodasLasJugadoras();
+
   if (esBianca(usuario)) {
     return jugadoras.find(registroEsBianca) || jugadoras[0] || null;
   }
-  const clavesSesion = [usuario?.id, usuario?.jugadoraId, usuario?.nombreCompleto, usuario?.nombre, usuario?.usuario, usuario?.username, usuario?.login].map(normalizar).filter(Boolean);
+
+  const clavesSesion = [
+    usuario?.id,
+    usuario?.jugadoraId,
+    usuario?.nombreCompleto,
+    usuario?.nombre,
+    usuario?.usuario,
+    usuario?.username,
+    usuario?.login
+  ].map(normalizar).filter(Boolean);
+
   return jugadoras.find(jugadora => {
-    const claves = [idJugadora(jugadora), jugadora.usuario, jugadora.username, nombreJugadora(jugadora)].map(normalizar);
+    const claves = [
+      idJugadora(jugadora),
+      jugadora.usuario,
+      jugadora.username,
+      nombreJugadora(jugadora)
+    ].map(normalizar);
+
     return claves.some(clave => clavesSesion.includes(clave));
   }) || null;
 }
@@ -3637,55 +3128,93 @@ function crearRutina() {
     semanas: 4,
 
     // Se conservan estas propiedades para compatibilidad con datos históricos.
-    // Ya no se utilizan en la interfaz ni para calcular los pesos de potencia.
     rmPotencia1: "",
     rmPotencia2: "",
 
     potencia: [crearEjercicio(""), crearEjercicio("")],
-    principales: [crearEjercicio(""), crearEjercicio(""), crearEjercicio(""), crearEjercicio("")],
-    complementarios: [crearEjercicio(""), crearEjercicio(""), crearEjercicio(""), crearEjercicio("")],
-    actualizada: new Date().toISOString()
+
+    // Cada bloque comienza con un solo ejercicio.
+    principales: [crearEjercicio("")],
+    complementarios: [crearEjercicio("")],
+
+    actualizada: new Date().toISOString(),
+    seccionesDinamicasInicializadas: true
   };
 }
 
 function rutinaTieneDatos(rutina) {
   if (!rutina || typeof rutina !== "object") return false;
+
   const nombre = String(rutina.nombre || "").trim();
+
   if (nombre && !/^(rutina|espacio)\s+\d+$/i.test(nombre)) return true;
-  const secciones = [...(rutina.potencia || []), ...(rutina.principales || []), ...(rutina.complementarios || [])];
-  return secciones.some(ejercicio => String(ejercicio.nombre || "").trim() !== "");
+
+  const secciones = [
+    ...(rutina.potencia || []),
+    ...(rutina.principales || []),
+    ...(rutina.complementarios || [])
+  ];
+
+  return secciones.some(ejercicio =>
+    String(ejercicio.nombre || "").trim() !== ""
+  );
 }
 
-function normalizarSeccion(lista, cantidadPorDefecto) {
+function normalizarSeccion(lista, cantidadPorDefecto = 1) {
   const arr = Array.isArray(lista) ? lista : [];
   const resultado = [];
+
   for (let i = 0; i < Math.max(arr.length, cantidadPorDefecto); i++) {
     const original = arr[i] || {};
     const valorBase = original.repeticionesBase ?? 10;
     const numeroBase = Number(valorBase);
-    const repeticionesBase = Number.isFinite(numeroBase) && numeroBase >= 1 ? Math.min(30, Math.round(numeroBase)) : 10;
+
+    const repeticionesBase =
+      Number.isFinite(numeroBase) && numeroBase >= 1
+        ? Math.min(30, Math.round(numeroBase))
+        : 10;
+
     const tiempoBase = String(original.tiempoBase || "");
 
     resultado.push({
       nombre: String(original.nombre || ""),
       repeticionesBase,
       tiempoBase,
-      dias: Array.from({ length: 6 * DIAS_POR_SEMANA }, () => ({ peso: "", tiempo: "", repeticiones: "" }))
+      dias: Array.from(
+        { length: 6 * DIAS_POR_SEMANA },
+        () => ({ peso: "", tiempo: "", repeticiones: "" })
+      )
     });
   }
+
   return resultado;
 }
 
+function ejercicioEsPredeterminadoVacio(ejercicio) {
+  if (!ejercicio) return true;
+
+  const nombre = String(ejercicio.nombre || "").trim();
+  const tiempo = String(ejercicio.tiempoBase || "").trim();
+  const repeticiones = Number(ejercicio.repeticionesBase ?? 10);
+
+  return !nombre && !tiempo && repeticiones === 10;
+}
+
 function normalizarRutina(rutina) {
-  const base = rutina && typeof rutina === "object" ? rutina : crearRutina();
+  const base = rutina && typeof rutina === "object"
+    ? rutina
+    : crearRutina();
+
   if (typeof base.guardada !== "boolean") {
     base.guardada = rutinaTieneDatos(base);
   }
+
   base.nombre = String(base.nombre || "");
+
   const semNum = Number(base.semanas);
   base.semanas = (semNum >= 2 && semNum <= 7) ? semNum : 4;
 
-  // Mantener propiedades antiguas para no perder compatibilidad con registros previos.
+  // Mantener propiedades antiguas para no perder compatibilidad.
   base.rmPotencia1 = String(base.rmPotencia1 || "");
   base.rmPotencia2 = String(base.rmPotencia2 || "");
 
@@ -3693,15 +3222,39 @@ function normalizarRutina(rutina) {
     base.potencia = [crearEjercicio(""), crearEjercicio("")];
     base.principales = base.ejercicios.slice(0, 4);
     base.complementarios = base.ejercicios.slice(4, 8);
-    while (base.principales.length < 4) base.principales.push(crearEjercicio(""));
-    while (base.complementarios.length < 4) base.complementarios.push(crearEjercicio(""));
     delete base.ejercicios;
   }
 
-  const cantidadPotencia = Math.max(1, base.potencia ? base.potencia.length : 2);
+  const cantidadPotencia = Math.max(
+    1,
+    base.potencia ? base.potencia.length : 2
+  );
+
   base.potencia = normalizarSeccion(base.potencia, cantidadPotencia);
-  base.principales = normalizarSeccion(base.principales, 4);
-  base.complementarios = normalizarSeccion(base.complementarios, 4);
+  base.principales = normalizarSeccion(base.principales, 1);
+  base.complementarios = normalizarSeccion(base.complementarios, 1);
+
+  /*
+    Compatibilidad con borradores antiguos:
+    si tenían cuatro tarjetas vacías por defecto, se reduce a una.
+    Las rutinas guardadas y los ejercicios que ya tienen datos se conservan.
+  */
+  if (!base.seccionesDinamicasInicializadas) {
+    if (!base.guardada) {
+      ["principales", "complementarios"].forEach(seccion => {
+        const lista = base[seccion] || [];
+
+        if (
+          lista.length > 1 &&
+          lista.every(ejercicioEsPredeterminadoVacio)
+        ) {
+          base[seccion] = [lista[0]];
+        }
+      });
+    }
+
+    base.seccionesDinamicasInicializadas = true;
+  }
 
   return base;
 }
@@ -3718,11 +3271,13 @@ function cargarDB() {
 function guardarDB() {
   try {
     localStorage.setItem(KEY, JSON.stringify(db));
+
     if (window.guardarGimnasioEnNube) {
       window.guardarGimnasioEnNube(db).catch(error => {
         console.warn("No se pudo sincronizar automáticamente con la nube:", error);
       });
     }
+
     return true;
   } catch (error) {
     mostrarEstado("No se pudieron guardar los cambios.");
@@ -3732,12 +3287,15 @@ function guardarDB() {
 
 function asegurarRutinasGenerales(division) {
   const clave = claveGeneral(division);
+
   if (!Array.isArray(db[clave])) {
     db[clave] = [];
   }
+
   while (db[clave].length < CANTIDAD_RUTINAS_INICIALES) {
     db[clave].push(crearRutina());
   }
+
   db[clave] = db[clave].map(normalizarRutina);
   guardarDB();
 }
@@ -3750,13 +3308,17 @@ function combinarRutinaGeneralEIndividual(general, individual) {
   const resultado = copiarObjeto(normalizarRutina(general));
   const anterior = normalizarRutina(individual || crearRutina());
 
-  // Mantener valores históricos, aunque ya no se utilicen para mostrar cargas.
   resultado.rmPotencia1 = anterior.rmPotencia1 || general.rmPotencia1;
   resultado.rmPotencia2 = anterior.rmPotencia2 || general.rmPotencia2;
 
   resultado.complementarios = resultado.complementarios.map((ejercicio, i) => {
     const ejercicioPersonal = anterior.complementarios?.[i];
-    ejercicio.tiempoBase = obtenerTiempoBaseEjercicio(ejercicioPersonal) ?? obtenerTiempoBaseEjercicio(ejercicio) ?? "";
+
+    ejercicio.tiempoBase =
+      obtenerTiempoBaseEjercicio(ejercicioPersonal) ??
+      obtenerTiempoBaseEjercicio(ejercicio) ??
+      "";
+
     return ejercicio;
   });
 
@@ -3769,13 +3331,18 @@ function combinarRutinaGeneralEIndividual(general, individual) {
 
 function asegurarRutinasIndividuales(jugadora) {
   if (!jugadora) return;
+
   const division = divisionJugadora(jugadora);
   asegurarRutinasGenerales(division);
+
   const clave = claveIndividual(division, idJugadora(jugadora));
+
   if (!Array.isArray(db[clave])) {
     db[clave] = [];
   }
+
   const generales = db[claveGeneral(division)];
+
   generales.forEach((general, indice) => {
     if (!db[clave][indice]) {
       db[clave][indice] = copiarObjeto(general);
@@ -3783,19 +3350,30 @@ function asegurarRutinasIndividuales(jugadora) {
       db[clave][indice] = normalizarRutina(db[clave][indice]);
     }
   });
+
   guardarDB();
 }
 
 function sincronizarRutinaGeneral(division, indice) {
   asegurarRutinasGenerales(division);
+
   const general = db[claveGeneral(division)][indice];
+
   obtenerTodasLasJugadoras()
-    .filter(jugadora => normalizar(divisionJugadora(jugadora)) === normalizar(division))
+    .filter(jugadora =>
+      normalizar(divisionJugadora(jugadora)) === normalizar(division)
+    )
     .forEach(jugadora => {
       asegurarRutinasIndividuales(jugadora);
+
       const clave = claveIndividual(division, idJugadora(jugadora));
-      db[clave][indice] = combinarRutinaGeneralEIndividual(general, db[clave][indice]);
+
+      db[clave][indice] = combinarRutinaGeneralEIndividual(
+        general,
+        db[clave][indice]
+      );
     });
+
   guardarDB();
 }
 
@@ -3805,20 +3383,32 @@ function sincronizarRutinaGeneral(division, indice) {
 
 function obtenerJugadoraSeleccionada() {
   if (esJugadora) return jugadoraSesion;
-  if (!jugadoraSelect.value || jugadoraSelect.value === "__TODAS__") return null;
-  return obtenerTodasLasJugadoras().find(jugadora => idJugadora(jugadora) === jugadoraSelect.value) || null;
+
+  if (!jugadoraSelect.value || jugadoraSelect.value === "__TODAS__") {
+    return null;
+  }
+
+  return obtenerTodasLasJugadoras().find(
+    jugadora => idJugadora(jugadora) === jugadoraSelect.value
+  ) || null;
 }
 
 function obtenerRutinaActual() {
   const division = divisionSelect.value;
+
   asegurarRutinasGenerales(division);
+
   if (modoSelect.value === "general") {
     return db[claveGeneral(division)][indiceActual];
   }
+
   const jugadora = obtenerJugadoraSeleccionada();
   if (!jugadora) return null;
+
   asegurarRutinasIndividuales(jugadora);
+
   const clave = claveIndividual(division, idJugadora(jugadora));
+
   return db[clave][indiceActual] || null;
 }
 
@@ -3840,19 +3430,25 @@ function mostrarEstado(mensaje) {
 
 function poblarJugadoras() {
   const division = divisionSelect.value;
-  const jugadoras = obtenerTodasLasJugadoras().filter(jugadora => normalizar(divisionJugadora(jugadora)) === normalizar(division));
-  const valorAnterior = jugadoraSelect.value;
 
+  const jugadoras = obtenerTodasLasJugadoras().filter(
+    jugadora =>
+      normalizar(divisionJugadora(jugadora)) === normalizar(division)
+  );
+
+  const valorAnterior = jugadoraSelect.value;
   jugadoraSelect.innerHTML = "";
 
   if (esJugadora) {
     const jugadora = jugadoraSesion;
+
     if (jugadora) {
       const opcion = document.createElement("option");
       opcion.value = idJugadora(jugadora);
       opcion.textContent = nombreJugadora(jugadora);
       jugadoraSelect.appendChild(opcion);
     }
+
     jugadoraSelect.disabled = true;
     return;
   }
@@ -3889,14 +3485,28 @@ function renderizarEditor() {
 
   contenedor.innerHTML = "";
 
-  const todasSeleccionadas = modoSelect.value === "individual" && !esJugadora && jugadoraSelect.value === "__TODAS__";
+  const todasSeleccionadas =
+    modoSelect.value === "individual" &&
+    !esJugadora &&
+    jugadoraSelect.value === "__TODAS__";
 
   if (todasSeleccionadas) {
     titulo.textContent = "Seleccioná una jugadora";
-    descripcion.textContent = "Elegí una jugadora para consultar su rutina individual.";
-    $("nombreSeleccionado").textContent = "División: " + divisionSelect.value + " · Sin jugadora seleccionada";
+
+    descripcion.textContent =
+      "Elegí una jugadora para consultar su rutina individual.";
+
+    $("nombreSeleccionado").textContent =
+      "División: " + divisionSelect.value + " · Sin jugadora seleccionada";
+
     $("estadoRutina").textContent = "Vista de consulta";
-    contenedor.innerHTML = `<div class="sin-ejercicios">Seleccioná una jugadora en este apartado para abrir su rutina individual.</div>`;
+
+    contenedor.innerHTML = `
+      <div class="sin-ejercicios">
+        Seleccioná una jugadora en este apartado para abrir su rutina individual.
+      </div>
+    `;
+
     return;
   }
 
@@ -3904,7 +3514,13 @@ function renderizarEditor() {
 
   if (!rutinaActual) {
     titulo.textContent = "No hay una rutina disponible";
-    contenedor.innerHTML = `<div class="sin-ejercicios">No hay una rutina disponible para la selección actual.</div>`;
+
+    contenedor.innerHTML = `
+      <div class="sin-ejercicios">
+        No hay una rutina disponible para la selección actual.
+      </div>
+    `;
+
     return;
   }
 
@@ -3917,31 +3533,45 @@ function renderizarEditor() {
   semanasSelect.disabled = !puedeEditarEstructura();
 
   titulo.textContent = rutinaActual.nombre || "Nueva rutina";
-  descripcion.textContent = "Potencia configurada con ondulación semanal específica (2 a 7 semanas) y 3 días de estímulo neural diferenciado.";
 
-  $("nombreSeleccionado").textContent = "División: " + divisionSelect.value + (modoSelect.value === "individual" ? " · " + nombreJugadora(obtenerJugadoraSeleccionada()) : "");
-  $("estadoRutina").textContent = rutinaActual.guardada ? "Rutina guardada" : "Borrador sin guardar";
+  descripcion.textContent =
+    "Potencia configurada con ondulación semanal específica (2 a 7 semanas) y 3 días de estímulo neural diferenciado.";
 
-  $("avisoGeneral").classList.toggle("oculto", !(esStaff && modoSelect.value === "general"));
+  $("nombreSeleccionado").textContent =
+    "División: " + divisionSelect.value +
+    (
+      modoSelect.value === "individual"
+        ? " · " + nombreJugadora(obtenerJugadoraSeleccionada())
+        : ""
+    );
+
+  $("estadoRutina").textContent =
+    rutinaActual.guardada ? "Rutina guardada" : "Borrador sin guardar";
+
+  $("avisoGeneral").classList.toggle(
+    "oculto",
+    !(esStaff && modoSelect.value === "general")
+  );
+
   $("avisoJugador").classList.toggle("oculto", !esJugadora);
 
   // GRUPO 1: POTENCIA
   const grupoPotencia = document.createElement("section");
   grupoPotencia.className = "grupo-editor";
+
   grupoPotencia.innerHTML = `
     <div class="grupo-editor-cabecera">
       <div class="grupo-editor-info">
         <div class="numero-grupo-editor">01</div>
-        <div>
-          <h4>Ejercicios de potencia</h4>
-        </div>
+        <div><h4>Ejercicios de potencia</h4></div>
       </div>
+
       ${puedeEditarEstructura() ? `
         <div class="acciones-grupo-editor">
           <button type="button" class="boton boton-secundario" id="btnAgregarPotencia" style="padding: 6px 10px; font-size:10px;">+ Agregar ejercicio</button>
-          <button type="button" class="boton boton-peligro" id="btnQuitarPotencia" style="padding: 6px 10px; font-size:10px;" ${rutinaActual.potencia.length <= 1 ? 'disabled' : ''}>− Quitar</button>
+          <button type="button" class="boton boton-peligro" id="btnQuitarPotencia" style="padding: 6px 10px; font-size:10px;" ${rutinaActual.potencia.length <= 1 ? "disabled" : ""}>− Quitar</button>
         </div>
-      ` : ''}
+      ` : ""}
     </div>
     <div class="lista-ejercicios-editor" id="listaPotencia"></div>
   `;
@@ -3949,6 +3579,7 @@ function renderizarEditor() {
   // GRUPO 2: PRINCIPALES
   const grupoPrincipales = document.createElement("section");
   grupoPrincipales.className = "grupo-editor";
+
   grupoPrincipales.innerHTML = `
     <div class="grupo-editor-cabecera">
       <div class="grupo-editor-info">
@@ -3958,6 +3589,13 @@ function renderizarEditor() {
           <p>Fuerza principal programada por repeticiones con ondulación automática.</p>
         </div>
       </div>
+
+      ${puedeEditarEstructura() ? `
+        <div class="acciones-grupo-editor">
+          <button type="button" class="boton boton-secundario" id="btnAgregarPrincipales" style="padding: 6px 10px; font-size:10px;">+ Agregar ejercicio</button>
+          <button type="button" class="boton boton-peligro" id="btnQuitarPrincipales" style="padding: 6px 10px; font-size:10px;" ${rutinaActual.principales.length <= 1 ? "disabled" : ""}>− Quitar</button>
+        </div>
+      ` : ""}
     </div>
     <div class="lista-ejercicios-editor" id="listaPrincipales"></div>
   `;
@@ -3965,6 +3603,7 @@ function renderizarEditor() {
   // GRUPO 3: COMPLEMENTARIOS
   const grupoComplementarios = document.createElement("section");
   grupoComplementarios.className = "grupo-editor";
+
   grupoComplementarios.innerHTML = `
     <div class="grupo-editor-cabecera">
       <div class="grupo-editor-info">
@@ -3974,25 +3613,60 @@ function renderizarEditor() {
           <p>Tiempo base semanal con progresión automática.</p>
         </div>
       </div>
+
+      ${puedeEditarEstructura() ? `
+        <div class="acciones-grupo-editor">
+          <button type="button" class="boton boton-secundario" id="btnAgregarComplementarios" style="padding: 6px 10px; font-size:10px;">+ Agregar ejercicio</button>
+          <button type="button" class="boton boton-peligro" id="btnQuitarComplementarios" style="padding: 6px 10px; font-size:10px;" ${rutinaActual.complementarios.length <= 1 ? "disabled" : ""}>− Quitar</button>
+        </div>
+      ` : ""}
     </div>
     <div class="lista-ejercicios-editor" id="listaComplementarios"></div>
   `;
 
   contenedor.append(grupoPotencia, grupoPrincipales, grupoComplementarios);
 
+  function agregarEjercicio(seccion) {
+    if (!puedeEditarEstructura()) return;
+    if (rutinaActual[seccion].length >= MAX_EJERCICIOS_SECCION) return;
+
+    rutinaActual[seccion].push(crearEjercicio(""));
+    guardarBorradorActual();
+    renderizarEditor();
+  }
+
+  function quitarEjercicio(seccion) {
+    if (!puedeEditarEstructura()) return;
+    if (rutinaActual[seccion].length <= 1) return;
+
+    rutinaActual[seccion].pop();
+    guardarBorradorActual();
+    renderizarEditor();
+  }
+
   if (puedeEditarEstructura()) {
     $("btnAgregarPotencia").addEventListener("click", () => {
-      if (rutinaActual.potencia.length >= 5) return;
-      rutinaActual.potencia.push(crearEjercicio(""));
-      guardarBorradorActual();
-      renderizarEditor();
+      agregarEjercicio("potencia");
     });
 
     $("btnQuitarPotencia").addEventListener("click", () => {
-      if (rutinaActual.potencia.length <= 1) return;
-      rutinaActual.potencia.pop();
-      guardarBorradorActual();
-      renderizarEditor();
+      quitarEjercicio("potencia");
+    });
+
+    $("btnAgregarPrincipales").addEventListener("click", () => {
+      agregarEjercicio("principales");
+    });
+
+    $("btnQuitarPrincipales").addEventListener("click", () => {
+      quitarEjercicio("principales");
+    });
+
+    $("btnAgregarComplementarios").addEventListener("click", () => {
+      agregarEjercicio("complementarios");
+    });
+
+    $("btnQuitarComplementarios").addEventListener("click", () => {
+      quitarEjercicio("complementarios");
     });
   }
 
@@ -4009,9 +3683,12 @@ function renderizarEditor() {
       let cuerpoHTML = "";
 
       if (esPotencia) {
-        const estructuraSemanal = obtenerEstructuraPotenciaPorSemanas(rutinaActual.semanas);
+        const estructuraSemanal =
+          obtenerEstructuraPotenciaPorSemanas(rutinaActual.semanas);
 
-        cuerpoHTML = `<div class="dias-editor" style="grid-template-columns: repeat(${Math.min(rutinaActual.semanas, 4)}, minmax(0, 1fr)); gap: 8px;">`;
+        cuerpoHTML = `
+          <div class="dias-editor" style="grid-template-columns: repeat(${Math.min(rutinaActual.semanas, 4)}, minmax(0, 1fr)); gap: 8px;">
+        `;
 
         estructuraSemanal.forEach(sem => {
           cuerpoHTML += `
@@ -4054,44 +3731,49 @@ function renderizarEditor() {
 
       } else {
 
-        const camposSemana = Array.from({ length: rutinaActual.semanas }, (_, sIdx) => {
-          const numSem = sIdx + 1;
-          const tiempo = calcularTiempoSemana(baseTiempo, numSem);
-          const esBase = sIdx === 0;
+        const camposSemana = Array.from(
+          { length: rutinaActual.semanas },
+          (_, sIdx) => {
+            const numSem = sIdx + 1;
+            const tiempo = calcularTiempoSemana(baseTiempo, numSem);
+            const esBase = sIdx === 0;
 
-          return `
-            <div class="dia-editor ${esBase ? "semana-tiempo-base" : "semana-tiempo-auto"}">
-              <div class="dia-editor-titulo">
-                <span>SEMANA ${numSem}</span>
-                <span class="dia-editor-etiqueta">${esBase ? "BASE" : "AUTO"}</span>
-              </div>
-              <div class="dato-editor">
-                <label>${esBase ? "TIEMPO BASE · SEG" : "TIEMPO CALC"}</label>
-                ${esBase ? `
-                  <div class="entrada-tiempo-unidad">
+            return `
+              <div class="dia-editor ${esBase ? "semana-tiempo-base" : "semana-tiempo-auto"}">
+                <div class="dia-editor-titulo">
+                  <span>SEMANA ${numSem}</span>
+                  <span class="dia-editor-etiqueta">${esBase ? "BASE" : "AUTO"}</span>
+                </div>
+
+                <div class="dato-editor">
+                  <label>${esBase ? "TIEMPO BASE · SEG" : "TIEMPO CALC"}</label>
+
+                  ${esBase ? `
+                    <div class="entrada-tiempo-unidad">
+                      <input
+                        type="number"
+                        min="0"
+                        max="3600"
+                        step="1"
+                        value="${baseTiempo === null ? "" : escaparHTML(String(baseTiempo))}"
+                        data-tiempo-base-seccion="${seccionNombre}"
+                        data-tiempo-base-indice="${indice}"
+                        ${puedeEditarValores() ? "" : "disabled"}
+                      >
+                      <span>″</span>
+                    </div>
+                  ` : `
                     <input
-                      type="number"
-                      min="0"
-                      max="3600"
-                      step="1"
-                      value="${baseTiempo === null ? "" : escaparHTML(String(baseTiempo))}"
-                      data-tiempo-base-seccion="${seccionNombre}"
-                      data-tiempo-base-indice="${indice}"
-                      ${puedeEditarValores() ? "" : "disabled"}
+                      type="text"
+                      value="${escaparHTML(formatearTiempo(tiempo))}"
+                      readonly
                     >
-                    <span>″</span>
-                  </div>
-                ` : `
-                  <input
-                    type="text"
-                    value="${escaparHTML(formatearTiempo(tiempo))}"
-                    readonly
-                  >
-                `}
+                  `}
+                </div>
               </div>
-            </div>
-          `;
-        }).join("");
+            `;
+          }
+        ).join("");
 
         cuerpoHTML = `
           <div class="aviso aviso-progresion-tiempo">Progreso automático de tiempo semanal.</div>
@@ -4101,11 +3783,19 @@ function renderizarEditor() {
 
       tarjeta.innerHTML = `
         <div class="ejercicio-card-cabecera">
-          <div class="ejercicio-numero">${String(indice + 1).padStart(2,"0")}</div>
+          <div class="ejercicio-numero">${String(indice + 1).padStart(2, "0")}</div>
+
           <div class="ejercicio-identidad">
             <label for="nombre-${seccionNombre}-${indice}">
-              ${esPotencia ? "EJERCICIO DE POTENCIA" : seccionNombre === "principales" ? "EJERCICIO PRINCIPAL" : "EJERCICIO COMPLEMENTARIO"}
+              ${
+                esPotencia
+                  ? "EJERCICIO DE POTENCIA"
+                  : seccionNombre === "principales"
+                    ? "EJERCICIO PRINCIPAL"
+                    : "EJERCICIO COMPLEMENTARIO"
+              }
             </label>
+
             <input
               id="nombre-${seccionNombre}-${indice}"
               type="text"
@@ -4118,6 +3808,7 @@ function renderizarEditor() {
             >
           </div>
         </div>
+
         <div class="ejercicio-cuerpo">
           ${cuerpoHTML}
         </div>
@@ -4135,7 +3826,9 @@ function renderizarEditor() {
     input.addEventListener("change", () => {
       const seccion = input.dataset.nombreSeccion;
       const indice = Number(input.dataset.nombreIndice);
+
       if (!rutinaActual || !rutinaActual[seccion][indice]) return;
+
       rutinaActual[seccion][indice].nombre = input.value.trim();
       guardarBorradorActual();
     });
@@ -4145,12 +3838,17 @@ function renderizarEditor() {
     input.addEventListener("change", () => {
       const seccion = input.dataset.repBaseSeccion;
       const indice = Number(input.dataset.repBaseIndice);
+
       if (!rutinaActual || !rutinaActual[seccion][indice]) return;
+
       let valor = Number(input.value);
+
       if (!Number.isFinite(valor) || valor < 1) valor = 1;
       if (valor > 30) valor = 30;
+
       rutinaActual[seccion][indice].repeticionesBase = Math.round(valor);
       input.value = String(rutinaActual[seccion][indice].repeticionesBase);
+
       guardarBorradorActual();
     });
   });
@@ -4161,9 +3859,14 @@ function renderizarEditor() {
 
     input.addEventListener("change", () => {
       if (!rutinaActual || !rutinaActual[seccion][indice]) return;
-      const valor = input.value === "" ? "" : String(Math.min(3600, Math.max(0, leerSegundosTiempo(input.value) ?? 0)));
+
+      const valor = input.value === ""
+        ? ""
+        : String(Math.min(3600, Math.max(0, leerSegundosTiempo(input.value) ?? 0)));
+
       rutinaActual[seccion][indice].tiempoBase = valor;
       input.value = valor;
+
       guardarBorradorActual();
       renderizarEditor();
     });
@@ -4184,7 +3887,9 @@ function guardarBorradorActual() {
 
   if (modoSelect.value === "general" && esStaff) {
     const clave = claveGeneral(division);
+
     asegurarRutinasGenerales(division);
+
     db[clave][indiceActual] = copiarObjeto(rutinaActual);
     guardarDB();
 
@@ -4194,12 +3899,14 @@ function guardarBorradorActual() {
     }
 
   } else if (modoSelect.value === "individual" && puedeEditarValores()) {
-
     const jugadora = obtenerJugadoraSeleccionada();
+
     if (!jugadora) return;
 
     asegurarRutinasIndividuales(jugadora);
+
     const clave = claveIndividual(division, idJugadora(jugadora));
+
     db[clave][indiceActual] = copiarObjeto(rutinaActual);
     guardarDB();
   }
@@ -4207,9 +3914,12 @@ function guardarBorradorActual() {
 
 function cambiarDuracion() {
   if (!puedeEditarEstructura() || !rutinaActual) return;
+
   rutinaActual.semanas = Number(semanasSelect.value) || 4;
+
   guardarBorradorActual();
   renderizarEditor();
+
   mostrarEstado("Duración del bloque actualizada.");
 }
 
@@ -4240,30 +3950,39 @@ function guardarRutinaDefinitiva() {
   const clave = claveGeneral(division);
 
   asegurarRutinasGenerales(division);
+
   db[clave][indiceActual] = normalizarRutina(copiarObjeto(rutina));
 
   if (!guardarDB()) return;
 
   sincronizarRutinaGeneral(division, indiceActual);
+
   rutinaActual = db[clave][indiceActual];
 
   renderizarEditor();
   renderizarBiblioteca();
 
   mostrarEstado("Rutina “" + titulo + "” guardada con éxito.");
-  $("panelBiblioteca").scrollIntoView({ behavior: "smooth", block: "start" });
+
+  $("panelBiblioteca").scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
 }
 
 function crearNuevaRutina() {
   if (!esStaff || modoSelect.value !== "general") return;
 
   const division = divisionSelect.value;
+
   asegurarRutinasGenerales(division);
 
   const clave = claveGeneral(division);
   const rutinas = db[clave];
 
-  let indiceLibre = rutinas.findIndex(r => !r.guardada && !rutinaTieneDatos(r));
+  let indiceLibre = rutinas.findIndex(
+    r => !r.guardada && !rutinaTieneDatos(r)
+  );
 
   if (indiceLibre < 0) {
     indiceLibre = rutinas.length;
@@ -4272,7 +3991,9 @@ function crearNuevaRutina() {
 
   indiceActual = indiceLibre;
   rutinaActual = crearRutina();
+
   db[clave][indiceActual] = copiarObjeto(rutinaActual);
+
   guardarDB();
 
   tituloInput.value = "";
@@ -4284,7 +4005,10 @@ function crearNuevaRutina() {
   mostrarEstado("Nueva rutina creada.");
   tituloInput.focus();
 
-  $("panelEditorRutina").scrollIntoView({ behavior: "smooth", block: "start" });
+  $("panelEditorRutina").scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
 }
 
 function aplicarRutinaAJugadoras() {
@@ -4299,9 +4023,13 @@ function aplicarRutinaAJugadoras() {
 
   const division = divisionSelect.value;
 
-  if (!confirm("¿Aplicar la estructura de “" + rutina.nombre + "” a las jugadoras de " + division + "?")) return;
+  if (!confirm(
+    "¿Aplicar la estructura de “" + rutina.nombre +
+    "” a las jugadoras de " + division + "?"
+  )) return;
 
   sincronizarRutinaGeneral(division, indiceActual);
+
   renderizarEditor();
   renderizarBiblioteca();
 
@@ -4315,17 +4043,31 @@ function aplicarRutinaAJugadoras() {
 function construirPlanillaHTML(rutina, division, cantidadPersonas = 1) {
   const normalizada = normalizarRutina(copiarObjeto(rutina));
   const totalSemanas = normalizada.semanas;
-  const cantidadCopias = Math.min(MAX_PERSONAS_RUTINA, Math.max(1, Number.parseInt(cantidadPersonas, 10) || 1));
+
+  const cantidadCopias = Math.min(
+    MAX_PERSONAS_RUTINA,
+    Math.max(1, Number.parseInt(cantidadPersonas, 10) || 1)
+  );
 
   const nombreSeguro = valor => {
     const nombre = String(valor || "").trim();
-    return nombre ? escaparHTML(nombre) : '<span class="ejercicio-sin-nombre">Ejercicio pendiente</span>';
+
+    return nombre
+      ? escaparHTML(nombre)
+      : '<span class="ejercicio-sin-nombre">Ejercicio pendiente</span>';
   };
 
-  // Planilla Potencia: 3 días por cada semana, sin cálculo de kilos.
-  const estructuraPotencia = obtenerEstructuraPotenciaPorSemanas(totalSemanas);
-  const encSemPotencia = estructuraPotencia.map(sem => `<th class="semana-planilla" colspan="3">SEM ${sem.numero} (${sem.nombre})</th>`).join("");
-  const encDiasPotencia = estructuraPotencia.map(() => `<th>D1</th><th>D2</th><th>D3</th>`).join("");
+  // POTENCIA: los encabezados solo muestran Semana N.
+  const estructuraPotencia =
+    obtenerEstructuraPotenciaPorSemanas(totalSemanas);
+
+  const encSemPotencia = estructuraPotencia.map(sem => `
+    <th class="semana-planilla" colspan="3">Semana ${sem.numero}</th>
+  `).join("");
+
+  const encDiasPotencia = estructuraPotencia
+    .map(() => `<th>D1</th><th>D2</th><th>D3</th>`)
+    .join("");
 
   let filasPotencia = "";
 
@@ -4337,7 +4079,6 @@ function construirPlanillaHTML(rutina, division, cantidadPersonas = 1) {
         celdas += `
           <td class="celda-repeticiones">
             <span class="valor-porcentaje">${pct}%</span>
-            <span class="casillero-peso" title="Peso realizado"></span>
           </td>
         `;
       });
@@ -4351,10 +4092,18 @@ function construirPlanillaHTML(rutina, division, cantidadPersonas = 1) {
     `;
   });
 
-  // Planilla Principales
+  // PRINCIPALES: encabezados Semana 1, Semana 2, etc.
   const plantillaPrin = obtenerPlantillaPeriodizacion(totalSemanas);
-  const encSemPrin = plantillaPrin.map(sem => `<th class="semana-planilla" colspan="${sem.repeticiones.length}">SEM ${sem.numero}</th>`).join("");
-  const encDiasPrin = plantillaPrin.map(sem => sem.repeticiones.map((_, i) => `<th>D${i + 1}</th>`).join("")).join("");
+
+  const encSemPrin = plantillaPrin.map(sem => `
+    <th class="semana-planilla" colspan="${sem.repeticiones.length}">
+      Semana ${sem.numero}
+    </th>
+  `).join("");
+
+  const encDiasPrin = plantillaPrin
+    .map(sem => sem.repeticiones.map((_, i) => `<th>D${i + 1}</th>`).join(""))
+    .join("");
 
   let filasPrincipales = "";
 
@@ -4386,8 +4135,10 @@ function construirPlanillaHTML(rutina, division, cantidadPersonas = 1) {
     `;
   });
 
-  // Planilla Complementarios
-  const encSemComp = estructuraPotencia.map(sem => `<th class="semana-planilla">SEM ${sem.numero}</th>`).join("");
+  // COMPLEMENTARIOS: encabezados Semana 1, Semana 2, etc.
+  const encSemComp = estructuraPotencia.map(sem => `
+    <th class="semana-planilla">Semana ${sem.numero}</th>
+  `).join("");
 
   let filasComplementarias = "";
 
@@ -4397,6 +4148,7 @@ function construirPlanillaHTML(rutina, division, cantidadPersonas = 1) {
     const celdas = estructuraPotencia.map(sem => {
       const tiempo = calcularTiempoSemana(baseTiempo, sem.numero);
       const valor = tiempo !== null ? `${tiempo}″` : "—";
+
       return `<td>${escaparHTML(valor)}</td>`;
     }).join("");
 
@@ -4410,8 +4162,10 @@ function construirPlanillaHTML(rutina, division, cantidadPersonas = 1) {
 
   const cuerpoPersonaHTML = `
     <div class="planilla-persona">
+
       <section class="planilla-bloque">
         <div class="planilla-bloque-titulo">EJERCICIOS DE POTENCIA</div>
+
         <div class="planilla-scroll">
           <table class="tabla-planilla">
             <thead>
@@ -4428,6 +4182,7 @@ function construirPlanillaHTML(rutina, division, cantidadPersonas = 1) {
 
       <section class="planilla-bloque">
         <div class="planilla-bloque-titulo">EJERCICIOS PRINCIPALES</div>
+
         <div class="planilla-scroll">
           <table class="tabla-planilla tabla-principales">
             <thead>
@@ -4444,6 +4199,7 @@ function construirPlanillaHTML(rutina, division, cantidadPersonas = 1) {
 
       <section class="planilla-bloque">
         <div class="planilla-bloque-titulo">EJERCICIOS COMPLEMENTARIOS</div>
+
         <div class="planilla-scroll">
           <table class="tabla-planilla tabla-complementarios">
             <thead>
@@ -4461,17 +4217,20 @@ function construirPlanillaHTML(rutina, division, cantidadPersonas = 1) {
         <strong>Nombre y Apellido:</strong>
         <span class="linea-nombre" aria-hidden="true"></span>
       </div>
+
     </div>
   `;
 
   return `
     <div class="hoja-rutina">
+
       <div class="planilla-cabecera">
         <img
           src="Logo ADIUR.jpg"
           alt="Logo ADIUR"
           onerror="this.onerror=null;this.src='logo adiur.jpg';this.onerror=function(){this.style.display='none'}"
         >
+
         <div class="planilla-cabecera-texto">
           <strong>ADIUR FEMENINO</strong>
           <span>${escaparHTML(normalizada.nombre || "Rutina sin título")}</span>
@@ -4482,6 +4241,7 @@ function construirPlanillaHTML(rutina, division, cantidadPersonas = 1) {
       <div class="planillas-personas${cantidadCopias > 1 ? " varias-personas" : ""}">
         ${Array.from({ length: cantidadCopias }, () => cuerpoPersonaHTML).join("")}
       </div>
+
     </div>
   `;
 }
@@ -4493,14 +4253,25 @@ function construirPlanillaHTML(rutina, division, cantidadPersonas = 1) {
 function construirMiniatura(rutina) {
   const normalizada = normalizarRutina(copiarObjeto(rutina));
   const estructuraPotencia = obtenerEstructuraPotenciaPorSemanas(normalizada.semanas);
-  const encabezados = estructuraPotencia.map(sem => `<th title="Semana ${sem.numero}">S${sem.numero}</th>`).join("");
+
+  const encabezados = estructuraPotencia.map(sem => `
+    <th title="Semana ${sem.numero}">S${sem.numero}</th>
+  `).join("");
 
   function crearFilasSimples(seccionLista, titulo) {
-    let filas = `<tr class="mini-bloque"><td colspan="${estructuraPotencia.length + 1}">${titulo}</td></tr>`;
+    let filas = `
+      <tr class="mini-bloque">
+        <td colspan="${estructuraPotencia.length + 1}">${titulo}</td>
+      </tr>
+    `;
 
     seccionLista.forEach(ejercicio => {
       const nombre = String(ejercicio.nombre || "").trim();
-      filas += `<tr><td class="mini-ejercicio">${escaparHTML(nombre || "Pendiente")}</td>`;
+
+      filas += `
+        <tr>
+          <td class="mini-ejercicio">${escaparHTML(nombre || "Pendiente")}</td>
+      `;
 
       estructuraPotencia.forEach(() => {
         filas += `<td class="mini-vacio">—</td>`;
@@ -4515,6 +4286,7 @@ function construirMiniatura(rutina) {
   return `
     <div class="miniatura-vista">
       <div class="miniatura-vista-titulo">BLOQUE ${normalizada.semanas} SEMANAS</div>
+
       <table class="mini-tabla">
         <thead>
           <tr>
@@ -4522,6 +4294,7 @@ function construirMiniatura(rutina) {
             ${encabezados}
           </tr>
         </thead>
+
         <tbody>
           ${crearFilasSimples(normalizada.potencia, "POTENCIA")}
           ${crearFilasSimples(normalizada.principales, "PRINCIPALES")}
@@ -4541,21 +4314,34 @@ function renderizarBiblioteca() {
   const rutinas = db[claveGeneral(division)] || [];
 
   const guardadas = rutinas
-    .map((rutina, indice) => ({ rutina: normalizarRutina(rutina), indice }))
+    .map((rutina, indice) => ({
+      rutina: normalizarRutina(rutina),
+      indice
+    }))
     .filter(el => el.rutina.guardada)
     .sort((a, b) => a.indice - b.indice);
 
-  $("contadorBiblioteca").textContent = guardadas.length + (guardadas.length === 1 ? " rutina guardada" : " rutinas guardadas");
+  $("contadorBiblioteca").textContent =
+    guardadas.length +
+    (guardadas.length === 1 ? " rutina guardada" : " rutinas guardadas");
 
   const busqueda = normalizar($("buscarRutina").value);
-  const filtradas = guardadas.filter(el => normalizar(el.rutina.nombre).includes(busqueda));
+
+  const filtradas = guardadas.filter(el =>
+    normalizar(el.rutina.nombre).includes(busqueda)
+  );
 
   if (!filtradas.length) {
     contenedor.innerHTML = `
       <div class="sin-rutinas">
-        ${guardadas.length ? "No se encontraron rutinas con ese título." : "Todavía no hay rutinas guardadas para esta división."}
+        ${
+          guardadas.length
+            ? "No se encontraron rutinas con ese título."
+            : "Todavía no hay rutinas guardadas para esta división."
+        }
       </div>
     `;
+
     return;
   }
 
@@ -4573,15 +4359,19 @@ function renderizarBiblioteca() {
           <button type="button" class="accion-mini eliminar" data-eliminar-rutina="${indice}" title="Eliminar rutina">×</button>
         ` : ""}
       </div>
+
       <div class="miniatura-cabecera">
         <div class="miniatura-club">ADIUR FEMENINO</div>
         <h4>${escaparHTML(rutina.nombre || "Rutina sin título")}</h4>
+
         <div class="miniatura-detalle">
           <span>${escaparHTML(division)}</span>
           <span>${rutina.semanas} semanas</span>
         </div>
       </div>
+
       ${construirMiniatura(rutina)}
+
       <div class="miniatura-pie">
         <span>Rutina guardada</span>
         <span>Ver planilla ↗</span>
@@ -4619,9 +4409,11 @@ function editarRutinaGuardada(indice) {
   if (!esStaff) return;
 
   const division = divisionSelect.value;
+
   asegurarRutinasGenerales(division);
 
   const rutina = db[claveGeneral(division)][indice];
+
   if (!rutina || !rutina.guardada) return;
 
   indiceActual = indice;
@@ -4635,7 +4427,11 @@ function editarRutinaGuardada(indice) {
   cerrarVistaAmpliada();
   renderizarEditor();
 
-  $("panelEditorRutina").scrollIntoView({ behavior: "smooth", block: "start" });
+  $("panelEditorRutina").scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+
   mostrarEstado("Editando “" + rutinaActual.nombre + "”.");
 }
 
@@ -4643,6 +4439,7 @@ function eliminarRutinaGuardada(indice) {
   if (!esStaff) return;
 
   const division = divisionSelect.value;
+
   asegurarRutinasGenerales(division);
 
   const clave = claveGeneral(division);
@@ -4672,6 +4469,7 @@ function eliminarRutinaGuardada(indice) {
 
   cerrarVistaAmpliada();
   renderizarBiblioteca();
+
   mostrarEstado("Rutina eliminada.");
 }
 
@@ -4679,12 +4477,18 @@ function renderizarPlanillaVistaActual() {
   if (indiceVistaModal === null) return;
 
   const division = divisionSelect.value;
+
   asegurarRutinasGenerales(division);
 
   const rutina = db[claveGeneral(division)]?.[indiceVistaModal];
+
   if (!rutina || !rutina.guardada) return;
 
-  const cantidad = Math.min(MAX_PERSONAS_RUTINA, Math.max(1, Number.parseInt(cantidadPersonasVista, 10) || 1));
+  const cantidad = Math.min(
+    MAX_PERSONAS_RUTINA,
+    Math.max(1, Number.parseInt(cantidadPersonasVista, 10) || 1)
+  );
+
   cantidadPersonasVista = cantidad;
 
   $("modalCuerpo").innerHTML = `
@@ -4693,22 +4497,32 @@ function renderizarPlanillaVistaActual() {
     </div>
   `;
 
-  $("modalCantidadPersonas").textContent = cantidadPersonasVista + (cantidadPersonasVista === 1 ? " persona" : " personas");
+  $("modalCantidadPersonas").textContent =
+    cantidadPersonasVista +
+    (cantidadPersonasVista === 1 ? " persona" : " personas");
+
   $("modalQuitarPersona").disabled = cantidadPersonasVista <= 1;
   $("modalAgregarPersona").disabled = cantidadPersonasVista >= MAX_PERSONAS_RUTINA;
 }
 
 function cambiarCantidadPersonas(delta) {
   if (indiceVistaModal === null) return;
-  cantidadPersonasVista = Math.min(MAX_PERSONAS_RUTINA, Math.max(1, cantidadPersonasVista + delta));
+
+  cantidadPersonasVista = Math.min(
+    MAX_PERSONAS_RUTINA,
+    Math.max(1, cantidadPersonasVista + delta)
+  );
+
   renderizarPlanillaVistaActual();
 }
 
 function abrirVistaAmpliada(indice) {
   const division = divisionSelect.value;
+
   asegurarRutinasGenerales(division);
 
   const rutina = db[claveGeneral(division)][indice];
+
   if (!rutina || !rutina.guardada) return;
 
   indiceVistaModal = indice;
@@ -4718,6 +4532,7 @@ function abrirVistaAmpliada(indice) {
   $("modalSubtitulo").textContent = division + " · Bloque " + rutina.semanas + " Semanas";
 
   $("controlPersonasRutina").classList.toggle("oculto", !esStaff);
+
   renderizarPlanillaVistaActual();
 
   $("modalEditar").classList.toggle("oculto", !esStaff);
@@ -4730,40 +4545,56 @@ function abrirVistaAmpliada(indice) {
 function cerrarVistaAmpliada() {
   $("modalRutina").classList.remove("visible");
   document.body.style.overflow = "";
+
   indiceVistaModal = null;
   cantidadPersonasVista = 1;
 }
 
 function descargarRutinaPDF(indice, cantidadPersonas = 1) {
   const division = divisionSelect.value;
+
   asegurarRutinasGenerales(division);
 
   const rutina = db[claveGeneral(division)][indice];
+
   if (!rutina || !rutina.guardada) return;
 
   const destino = $("printRoutine");
   const tituloOriginal = document.title;
 
-  destino.innerHTML = construirPlanillaHTML(rutina, division, cantidadPersonas);
-  document.title = "ADIUR FEMENINO - " + rutina.nombre + " - " + division;
+  destino.innerHTML = construirPlanillaHTML(
+    rutina,
+    division,
+    cantidadPersonas
+  );
+
+  document.title =
+    "ADIUR FEMENINO - " + rutina.nombre + " - " + division;
+
   document.body.classList.add("imprimir-solo-rutina");
 
   let limpiezaRealizada = false;
 
   function limpiarImpresion() {
     if (limpiezaRealizada) return;
+
     limpiezaRealizada = true;
+
     document.body.classList.remove("imprimir-solo-rutina");
     destino.innerHTML = "";
     document.title = tituloOriginal;
+
     window.removeEventListener("afterprint", limpiarImpresion);
   }
 
   window.addEventListener("afterprint", limpiarImpresion, { once: true });
+
   window.print();
 
   setTimeout(() => {
-    if (document.body.classList.contains("imprimir-solo-rutina")) limpiarImpresion();
+    if (document.body.classList.contains("imprimir-solo-rutina")) {
+      limpiarImpresion();
+    }
   }, 1500);
 }
 
@@ -4780,9 +4611,10 @@ function actualizarModoVisual() {
 
   $("campoModo").classList.toggle("oculto", esJugadora);
 
-  // El selector se muestra dentro del editor solo para el cuerpo técnico
-  // cuando se elige consultar o trabajar con rutinas individuales.
-  $("campoJugadora").classList.toggle("oculto", esJugadora || esGeneral);
+  $("campoJugadora").classList.toggle(
+    "oculto",
+    esJugadora || esGeneral
+  );
 
   tituloInput.disabled = !esGeneral || esJugadora;
   semanasSelect.disabled = !esGeneral || esJugadora;
@@ -4808,6 +4640,7 @@ function cambiarDivision() {
   if (esJugadora) return;
 
   indiceActual = 0;
+
   poblarJugadoras();
   asegurarRutinasGenerales(divisionSelect.value);
 
@@ -4833,9 +4666,11 @@ function alternarSidebar() {
 
   if (window.innerWidth <= 760) {
     const visible = sidebar.classList.toggle("visible");
+
     sidebar.classList.toggle("oculto", !visible);
     capa.classList.toggle("visible", visible);
     boton.setAttribute("aria-expanded", String(visible));
+
   } else {
     const oculto = sidebar.classList.toggle("oculto");
     boton.setAttribute("aria-expanded", String(!oculto));
@@ -4849,14 +4684,20 @@ function toggleGrupo(id) {
   grupo.classList.toggle("cerrado");
 
   const titulo = grupo.querySelector(".titulo-grupo");
+
   if (titulo) {
-    titulo.setAttribute("aria-expanded", String(!grupo.classList.contains("cerrado")));
+    titulo.setAttribute(
+      "aria-expanded",
+      String(!grupo.classList.contains("cerrado"))
+    );
   }
 }
 
 function configurarMenu() {
   document.querySelectorAll(".titulo-grupo").forEach(titulo => {
-    titulo.addEventListener("click", () => toggleGrupo(titulo.dataset.grupo));
+    titulo.addEventListener("click", () => {
+      toggleGrupo(titulo.dataset.grupo);
+    });
   });
 
   $("botonMenu").addEventListener("click", alternarSidebar);
@@ -4886,19 +4727,30 @@ $("modalRutina").addEventListener("click", e => {
 });
 
 $("modalEditar").addEventListener("click", () => {
-  if (indiceVistaModal !== null) editarRutinaGuardada(indiceVistaModal);
+  if (indiceVistaModal !== null) {
+    editarRutinaGuardada(indiceVistaModal);
+  }
 });
 
 $("modalEliminar").addEventListener("click", () => {
-  if (indiceVistaModal !== null) eliminarRutinaGuardada(indiceVistaModal);
+  if (indiceVistaModal !== null) {
+    eliminarRutinaGuardada(indiceVistaModal);
+  }
 });
 
 $("modalPDF").addEventListener("click", () => {
-  if (indiceVistaModal !== null) descargarRutinaPDF(indiceVistaModal, cantidadPersonasVista);
+  if (indiceVistaModal !== null) {
+    descargarRutinaPDF(indiceVistaModal, cantidadPersonasVista);
+  }
 });
 
-$("modalAgregarPersona").addEventListener("click", () => cambiarCantidadPersonas(1));
-$("modalQuitarPersona").addEventListener("click", () => cambiarCantidadPersonas(-1));
+$("modalAgregarPersona").addEventListener("click", () => {
+  cambiarCantidadPersonas(1);
+});
+
+$("modalQuitarPersona").addEventListener("click", () => {
+  cambiarCantidadPersonas(-1);
+});
 
 document.addEventListener("keydown", e => {
   if (e.key === "Escape") cerrarVistaAmpliada();
@@ -4916,9 +4768,14 @@ async function inicializar() {
 
     const datosNube = await window.cargarGimnasioNube();
 
-    if (datosNube && typeof datosNube === "object" && Object.keys(datosNube).length > 0) {
+    if (
+      datosNube &&
+      typeof datosNube === "object" &&
+      Object.keys(datosNube).length > 0
+    ) {
       db = datosNube;
       localStorage.setItem(KEY, JSON.stringify(db));
+
     } else if (Object.keys(db).length > 0) {
       await window.guardarGimnasioEnNube(db);
     }
@@ -4928,7 +4785,9 @@ async function inicializar() {
   }
 
   $("nombrePerfil").textContent = nombreSesion(usuario);
-  $("avatarPerfil").textContent = nombreSesion(usuario).trim().charAt(0).toUpperCase() || "U";
+
+  $("avatarPerfil").textContent =
+    nombreSesion(usuario).trim().charAt(0).toUpperCase() || "U";
 
   jugadoraSesion = buscarJugadoraSesion();
 
@@ -4950,7 +4809,10 @@ async function inicializar() {
   poblarJugadoras();
 
   DIVISIONES.forEach(division => asegurarRutinasGenerales(division));
-  obtenerTodasLasJugadoras().forEach(j => asegurarRutinasIndividuales(j));
+
+  obtenerTodasLasJugadoras().forEach(j => {
+    asegurarRutinasIndividuales(j);
+  });
 
   divisionSelect.addEventListener("change", cambiarDivision);
   modoSelect.addEventListener("change", cambiarModo);
@@ -4969,7 +4831,8 @@ async function inicializar() {
   tituloInput.addEventListener("input", () => {
     if (rutinaActual && puedeEditarEstructura()) {
       rutinaActual.nombre = tituloInput.value;
-      $("tituloEditor").textContent = tituloInput.value.trim() || "Nueva rutina";
+      $("tituloEditor").textContent =
+        tituloInput.value.trim() || "Nueva rutina";
     }
   });
 
