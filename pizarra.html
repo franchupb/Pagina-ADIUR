@@ -358,6 +358,14 @@ body{
   background:#fff6e9;
   color:#9a5700;
 }
+.drawing-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:11px;margin:10px 0;background:#fafafa;border:1px solid var(--borde);border-radius:12px}
+.drawing-toolbar strong{font-size:12px}.tool-btn{border:1px solid #ddd;background:#fff;color:#333;border-radius:8px;padding:8px 10px;cursor:pointer;font-size:12px;font-weight:700}
+.tool-btn.active{background:var(--naranja-claro);border-color:var(--naranja);color:var(--naranja-oscuro)}
+.drawing-toolbar label{font-size:11px;font-weight:700;color:#555;display:flex;gap:6px;align-items:center}.drawing-toolbar input[type=color]{width:34px;height:30px;border:0;background:transparent;padding:0}
+.drawing-toolbar input[type=checkbox]{width:16px;height:16px}.drawing-toolbar select{border:1px solid #ddd;border-radius:7px;padding:7px;background:#fff}
+.pitch-drawings{position:absolute;inset:0;width:100%;height:100%;z-index:10;overflow:visible;pointer-events:none;touch-action:none}.pitch.drawing-active .pitch-drawings{pointer-events:auto;cursor:crosshair}
+.main:fullscreen{background:var(--gris);overflow:auto;padding:18px}.main:fullscreen .pitch{width:min(100%,1500px)}
+@media(max-width:800px){.drawing-toolbar{gap:6px;padding:9px}.tool-btn{padding:8px;font-size:11px}}
 
 .btn-orange{
   background:var(--naranja);
@@ -1335,6 +1343,8 @@ body{
 
 
 
+    <button class="btn btn-blue" id="pantallaCompletaBtn" type="button" onclick="alternarPantallaCompleta()">⛶ Pantalla completa</button>
+
     <button
       class="btn btn-dark"
       id="guardarPizarraBtn"
@@ -1391,6 +1401,18 @@ body{
 
 
 
+    <div class="drawing-toolbar" aria-label="Herramientas de dibujo">
+      <strong>DIBUJAR:</strong>
+      <button type="button" class="tool-btn active" data-tool="select" onclick="seleccionarHerramienta(this.dataset.tool)">↖ Seleccionar</button>
+      <button type="button" class="tool-btn" data-tool="arrow" onclick="seleccionarHerramienta(this.dataset.tool)">➜ Flecha</button>
+      <button type="button" class="tool-btn" data-tool="circle" onclick="seleccionarHerramienta(this.dataset.tool)">○ Círculo</button>
+      <button type="button" class="tool-btn" data-tool="triangle" onclick="seleccionarHerramienta(this.dataset.tool)">△ Triángulo</button>
+      <button type="button" class="tool-btn" data-tool="cross" onclick="seleccionarHerramienta(this.dataset.tool)">✕ Cruz</button>
+      <button type="button" class="tool-btn" data-tool="square" onclick="seleccionarHerramienta(this.dataset.tool)">□ Cuadrado</button>
+      <button type="button" class="tool-btn" data-tool="freehand" onclick="seleccionarHerramienta(this.dataset.tool)">〰 Mano alzada</button>
+      <button type="button" class="tool-btn" data-tool="polyline" onclick="seleccionarHerramienta(this.dataset.tool)">⌁ Línea por vértices</button>
+    </div>
+
     <div class="pitch-area">
 
 
@@ -1406,6 +1428,8 @@ body{
           alt="Cancha">
 
 
+        <svg class="pitch-drawings" id="pitchDrawings" viewBox="0 0 1000 666.6667" preserveAspectRatio="none" aria-label="Dibujos tácticos"></svg>
+
         <div
           class="pitch-overlay"
           id="pitchOverlay">
@@ -1418,6 +1442,16 @@ body{
     </div>
 
 
+
+    <div class="drawing-toolbar" aria-label="Opciones de dibujo">
+      <label>Color <input type="color" id="colorDibujo" value="#f47721" aria-label="Color del dibujo"></label>
+      <label><input type="checkbox" id="rellenoDibujo"> Relleno</label>
+      <label>Grosor <select id="grosorDibujo"><option value="3">Fino</option><option value="5" selected>Medio</option><option value="8">Grueso</option></select></label>
+      <button type="button" class="tool-btn" onclick="finalizarLinea()">✓ Terminar línea</button>
+      <button type="button" class="tool-btn" onclick="deshacerDibujo()">↶ Deshacer</button>
+      <button type="button" class="tool-btn" onclick="limpiarDibujos()">Borrar dibujos</button>
+      <span class="board-help" id="ayudaDibujo" role="status" aria-live="polite">Elegí una herramienta para dibujar sobre la cancha.</span>
+    </div>
 
     <div class="legend">
 
@@ -2509,6 +2543,40 @@ function crearJugadorManual(){
 
 
 
+/* DIBUJO TÁCTICO: todas las coordenadas se guardan normalizadas. */
+const svgDibujos=document.getElementById("pitchDrawings");
+let herramientaDibujo="select", dibujoActivo=null, puntosLinea=[], manoAlzada=false;
+const SVG_NS="http://www.w3.org/2000/svg";
+function svgEl(tag,attrs){const el=document.createElementNS(SVG_NS,tag);Object.keys(attrs).forEach(k=>el.setAttribute(k,String(attrs[k])));return el;}
+function puntoDibujo(e){const r=svgDibujos.getBoundingClientRect();return {x:Math.max(0,Math.min(1000,(e.clientX-r.left)/r.width*1000)),y:Math.max(0,Math.min(666.6667,(e.clientY-r.top)/r.height*666.6667))};}
+function estiloDibujo(){const c=document.getElementById("colorDibujo").value||"#f47721";return {stroke:c,"stroke-width":document.getElementById("grosorDibujo").value||"5","stroke-linecap":"round","stroke-linejoin":"round",fill:document.getElementById("rellenoDibujo").checked?c:"none","fill-opacity":"0.28"};}
+function seleccionarHerramienta(t){if(["select","arrow","circle","triangle","cross","square","freehand","polyline"].indexOf(t)<0)return;if(t!=="polyline"&&puntosLinea.length)finalizarLinea();herramientaDibujo=t;pitch.classList.toggle("drawing-active",t!=="select");document.querySelectorAll("[data-tool]").forEach(b=>b.classList.toggle("active",b.dataset.tool===t));document.getElementById("ayudaDibujo").textContent=t==="polyline"?"Marcá los vértices con clic y presioná Terminar línea.":t==="select"?"Modo selección: mové jugadoras y pelota.":"Dibujá sobre la cancha; el color, grosor y relleno se aplican a la figura nueva.";}
+function iniciarDibujo(e){if(herramientaDibujo==="select")return;e.preventDefault();const p=puntoDibujo(e),st=estiloDibujo();
+ if(herramientaDibujo==="polyline"){puntosLinea.push(p);pintarPreviaLinea();return;}
+ if(herramientaDibujo==="cross"){const z=13,g=svgEl("g",{});g.append(svgEl("line",{x1:p.x-z,y1:p.y-z,x2:p.x+z,y2:p.y+z,...st,fill:"none"}),svgEl("line",{x1:p.x+z,y1:p.y-z,x2:p.x-z,y2:p.y+z,...st,fill:"none"}));svgDibujos.appendChild(g);return;}
+ let tag,el;if(herramientaDibujo==="arrow"){tag="line";el=svgEl("line",{...st,x1:p.x,y1:p.y,x2:p.x,y2:p.y,fill:"none"});el.setAttribute("marker-end","url(#puntaFlecha)");}
+ else if(herramientaDibujo==="circle"){tag="ellipse";el=svgEl(tag,{...st,cx:p.x,cy:p.y,rx:0,ry:0});}
+ else if(herramientaDibujo==="square"){tag="rect";el=svgEl(tag,{...st,x:p.x,y:p.y,width:0,height:0});}
+ else if(herramientaDibujo==="triangle"){tag="polygon";el=svgEl(tag,{...st,points:p.x+","+p.y+" "+p.x+","+p.y+" "+p.x+","+p.y});}
+ else if(herramientaDibujo==="freehand"){tag="polyline";el=svgEl(tag,{...st,points:p.x+","+p.y,fill:"none"});}
+ else return;svgDibujos.appendChild(el);dibujoActivo={tag:tag,el:el,start:p};manoAlzada=tag==="polyline";try{svgDibujos.setPointerCapture(e.pointerId);}catch(err){} }
+function moverDibujo(e){if(!dibujoActivo)return;const p=puntoDibujo(e),a=dibujoActivo.start,dx=p.x-a.x,dy=p.y-a.y,el=dibujoActivo.el;
+ if(dibujoActivo.tag==="line"){el.setAttribute("x2",p.x);el.setAttribute("y2",p.y);}
+ else if(dibujoActivo.tag==="ellipse"){el.setAttribute("cx",(a.x+p.x)/2);el.setAttribute("cy",(a.y+p.y)/2);el.setAttribute("rx",Math.abs(dx)/2);el.setAttribute("ry",Math.abs(dy)/2);}
+ else if(dibujoActivo.tag==="rect"){el.setAttribute("x",Math.min(a.x,p.x));el.setAttribute("y",Math.min(a.y,p.y));el.setAttribute("width",Math.abs(dx));el.setAttribute("height",Math.abs(dy));}
+ else if(dibujoActivo.tag==="polygon"){el.setAttribute("points",a.x+","+a.y+" "+p.x+","+p.y+" "+(a.x-dx)+","+p.y);}
+ else if(manoAlzada){el.setAttribute("points",el.getAttribute("points")+" "+p.x+","+p.y);} }
+function terminarDibujo(){dibujoActivo=null;manoAlzada=false;}
+function pintarPreviaLinea(){svgDibujos.querySelector("#lineaTemporal")?.remove();if(!puntosLinea.length)return;const el=svgEl("polyline",{id:"lineaTemporal",points:puntosLinea.map(p=>p.x+","+p.y).join(" "),...estiloDibujo(),fill:"none","stroke-dasharray":"8 5"});svgDibujos.appendChild(el);}
+function finalizarLinea(){if(!puntosLinea.length)return;svgDibujos.querySelector("#lineaTemporal")?.remove();if(puntosLinea.length>1)svgDibujos.appendChild(svgEl("polyline",{points:puntosLinea.map(p=>p.x+","+p.y).join(" "),...estiloDibujo(),fill:"none"}));puntosLinea=[];}
+function deshacerDibujo(){if(puntosLinea.length){puntosLinea.pop();pintarPreviaLinea();return;}const el=svgDibujos.lastElementChild;if(el&&el.tagName.toLowerCase()!=="defs")el.remove();}
+function limpiarDibujos(){if(!svgDibujos.querySelector("path,polyline,ellipse,rect,polygon,line,g"))return;if(!confirm("¿Querés borrar todos los dibujos de esta cancha?"))return;svgDibujos.querySelectorAll("path,polyline,ellipse,rect,polygon,line,g").forEach(e=>e.remove());puntosLinea=[];terminarDibujo();}
+svgDibujos.addEventListener("pointerdown",iniciarDibujo);svgDibujos.addEventListener("pointermove",moverDibujo);svgDibujos.addEventListener("pointerup",terminarDibujo);svgDibujos.addEventListener("pointercancel",terminarDibujo);
+svgDibujos.addEventListener("dblclick",e=>{if(herramientaDibujo==="polyline"){e.preventDefault();finalizarLinea();}});
+const defs=svgEl("defs",{}),mk=svgEl("marker",{id:"puntaFlecha",markerWidth:8,markerHeight:8,refX:6,refY:3,orient:"auto",markerUnits:"strokeWidth"});mk.appendChild(svgEl("path",{d:"M0,0 L0,6 L6,3 z",fill:"context-stroke"}));defs.appendChild(mk);svgDibujos.appendChild(defs);
+async function alternarPantallaCompleta(){const el=document.getElementById("main");try{if(document.fullscreenElement)await document.exitFullscreen();else if(el.requestFullscreen)await el.requestFullscreen();else establecerEstadoGuardado("Este navegador no permite pantalla completa.","error");}catch(err){console.error(err);establecerEstadoGuardado("No se pudo activar pantalla completa. Revisá los permisos del navegador.","error");}}
+document.addEventListener("fullscreenchange",()=>{const b=document.getElementById("pantallaCompletaBtn");if(b)b.textContent=document.fullscreenElement?"✕ Salir de pantalla completa":"⛶ Pantalla completa";});
+
 /* =========================
    GUARDAR PIZARRA
 ========================= */
@@ -2537,6 +2605,7 @@ function obtenerDatosPizarra(){
     formacionPropia: document.getElementById("formacionPropia").value,
     formacionRival: document.getElementById("formacionRival").value,
     jugadores,
+    dibujos:Array.from(svgDibujos.children).filter(el=>el.tagName.toLowerCase()!=="defs"&&el.id!=="lineaTemporal").map(el=>el.outerHTML),
     pelota: pelota ? {
       left: pelota.style.left || "50%",
       top: pelota.style.top || "50%"
@@ -2698,7 +2767,8 @@ function aplicarDatosPizarra(datos){
   }
 
   const jugadores = Array.isArray(datos.jugadores) ? datos.jugadores : [];
-  if(jugadores.length > 60){
+  const dibujos = Array.isArray(datos.dibujos) ? datos.dibujos : [];
+  if(jugadores.length > 60 || dibujos.length > 250){
     throw new Error("La pizarra contiene demasiados elementos y no se cargó.");
   }
 
@@ -2732,6 +2802,9 @@ function aplicarDatosPizarra(datos){
     );
     jugador.dataset.arquero = (j.arquero === true || j.arquero === "true") ? "true" : "false";
   });
+
+  // Restauración segura de dibujos vectoriales guardados.
+  dibujos.forEach(markup=>{if(typeof markup!=="string"||markup.length>20000)return;try{const parsed=new DOMParser().parseFromString(markup,"image/svg+xml");const src=parsed.documentElement;const allowed=["path","polyline","ellipse","rect","polygon","line","g"];if(allowed.indexOf(src.tagName)<0)return;const node=document.importNode(src,true);const clean=n=>{Array.from(n.attributes).forEach(a=>{if(/^on/i.test(a.name)||["style","href","xlink:href"].includes(a.name))n.removeAttribute(a.name);});Array.from(n.children).forEach(clean);};clean(node);svgDibujos.appendChild(node);}catch(err){console.warn("Dibujo omitido por formato inválido",err);}});
 
   if(datos.pelota && typeof datos.pelota === "object"){
     const ball = document.createElement("div");
@@ -2848,6 +2921,10 @@ function limpiarPizarra(
 
       }
     );
+
+  svgDibujos.querySelectorAll("path,polyline,ellipse,rect,polygon,line,g").forEach(el=>el.remove());
+  puntosLinea=[];
+  terminarDibujo();
 
 }
 
