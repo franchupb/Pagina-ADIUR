@@ -2669,12 +2669,15 @@ window.firebaseGimnasioReady = (async () => {
     "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js"
   );
 
-  const firebaseConfig = {
-    projectId: "adiur-b1913",
-    appId: "1:1032379124859:web:adiur-fem-web",
+const firebaseConfig = {
+    apiKey: "AIzaSyCc0dPIEkaKxbHoRC2gZK412dXVGPOdTI",
     authDomain: "adiur-b1913.firebaseapp.com",
-    storageBucket: "adiur-b1913.appspot.com"
-  };
+    projectId: "adiur-b1913",
+    storageBucket: "adiur-b1913.firebasestorage.app",
+    messagingSenderId: "884643321144",
+    appId: "1:884643321144:web:ba3c314de3a1c9e3545dcd",
+    measurementId: "G-58LL26YXPM"
+};
 
   const app = initializeApp(firebaseConfig);
   const dbCloud = getFirestore(app);
