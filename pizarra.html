@@ -135,105 +135,105 @@ body{
 
 
 /* =========================
-   SIDEBAR
+   BARRA LATERAL — MISMO DISEÑO QUE PÁGINA PRINCIPAL
 ========================= */
-
 .sidebar{
   position:fixed;
   top:74px;
   left:0;
   bottom:0;
+  z-index:900;
   width:258px;
+  padding:20px 13px;
   background:#fff;
   border-right:1px solid var(--borde);
-  padding:18px 12px;
   overflow-y:auto;
-  z-index:900;
-  transition:.25s;
+  overscroll-behavior:contain;
+  transition:transform .25s ease;
 }
+.sidebar.oculto{transform:translateX(-100%)}
 
-.sidebar.closed{
-  transform:translateX(-100%);
+.menu-inicio{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:13px 14px;
+  margin-bottom:16px;
+  border-radius:11px;
+  background:var(--naranja-claro);
+  color:var(--naranja-oscuro);
+  font-size:13px;
+  font-weight:850;
+  transition:background .2s;
 }
+.menu-inicio:hover{background:#ffe7d6;color:var(--naranja-oscuro)}
+.menu-inicio .icono-inicio{width:15px;text-align:center;font-size:17px;line-height:1}
 
-.menu-section{
-  margin-bottom:8px;
-}
-
-.menu-title{
-  width:100%;
-  border:none;
-  background:transparent;
+.grupo-menu{margin-bottom:8px}
+.titulo-grupo{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:11px 12px;
-  font-size:12px;
-  font-weight:bold;
-  color:#555;
-  text-transform:uppercase;
-  cursor:pointer;
+  min-height:46px;
+  padding:12px 13px;
+  border:0;
   border-radius:8px;
+  background:transparent;
+  color:#171717;
+  font-size:11px;
+  font-weight:850;
+  letter-spacing:.8px;
+  user-select:none;
+  cursor:pointer;
 }
-
-.menu-title:hover{
-  background:var(--gris);
+.titulo-grupo:hover{background:#f8f8f8}
+.flecha{
+  display:inline-block;
+  font-size:16px;
+  font-weight:700;
+  line-height:1;
+  transition:transform .2s;
 }
-
-.menu-title .arrow{
-  transition:.2s;
-  font-size:12px;
-}
-
-.menu-section.open .menu-title .arrow{
-  transform:rotate(180deg);
-}
-
-.submenu{
-  display:none;
-  padding:2px 0 6px;
-}
-
-.menu-section.open .submenu{
-  display:block;
-}
-
-.menu-link{
+.grupo-menu.cerrado .flecha{transform:rotate(0deg)}
+.grupo-menu:not(.cerrado) .flecha{transform:rotate(90deg)}
+.submenu{display:flex;flex-direction:column;gap:3px;padding:0 0 5px}
+.grupo-menu.cerrado .submenu{display:none}
+.submenu a{
   display:flex;
   align-items:center;
-  text-decoration:none;
-  color:#444;
-  padding:10px 13px 10px 28px;
-  border-radius:8px;
+  gap:10px;
+  padding:10px 12px;
+  border-radius:9px;
+  color:#656872;
   font-size:13px;
-  margin:2px 0;
-  transition:.15s;
+  text-decoration:none;
+  transition:background .15s,color .15s;
 }
-
-.menu-link:hover{
-  background:var(--naranja-claro);
-  color:var(--naranja-oscuro);
+.submenu a:hover{background:#f6f6f6;color:#181818}
+.submenu a.activo{background:var(--naranja-claro);color:var(--naranja-oscuro);font-weight:800}
+.nav-punto{width:6px;height:6px;flex-shrink:0;background:#d7d9de;border-radius:50%}
+.submenu a.activo .nav-punto{background:var(--naranja)}
+.separador-sesion{border-top:1px solid #e8e8e8;margin:19px 0 0;padding-top:12px}
+.enlace-cerrar-sesion{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:12px;
+  border-radius:9px;
+  color:#c0392b;
+  font-size:13px;
+  font-weight:700;
+  text-decoration:none;
 }
-
-.menu-link.active{
-  background:var(--naranja);
-  color:#fff;
-  font-weight:bold;
-}
-
-.menu-inicio{
-  margin-bottom:8px;
-}
-
-.menu-inicio .menu-link{
-  padding-left:13px;
-  font-weight:bold;
-}
-
-.logout{
-  margin-top:18px;
-  border-top:1px solid var(--borde);
-  padding-top:12px;
+.enlace-cerrar-sesion:hover{background:#fff2f1;color:#a93226}
+.icono-salir{font-size:17px}
+.capa-sidebar{display:none}
+.capa-sidebar.visible{
+  display:block;
+  position:fixed;
+  inset:74px 0 0;
+  z-index:850;
+  background:rgba(0,0,0,.32);
 }
 
 
@@ -762,13 +762,6 @@ body{
 
 @media(max-width:800px){
 
-  .sidebar{
-    transform:translateX(-100%);
-  }
-
-  .sidebar.open{
-    transform:translateX(0);
-  }
 
   .main{
     margin-left:0;
@@ -805,6 +798,19 @@ body{
 
 }
 
+
+/* Ajustes responsive de la barra lateral compartida */
+@media(max-width:760px){
+  .sidebar{top:74px;bottom:0;left:0;width:258px;max-width:86vw;z-index:900;transform:translateX(0);box-shadow:5px 0 25px #00000012}
+  .sidebar.oculto{transform:translateX(-110%)}
+  .capa-sidebar.visible{display:block;position:fixed;inset:74px 0 0;z-index:850;background:rgba(0,0,0,.32)}
+  .main{margin-left:0;padding:90px 12px 20px}
+}
+@media(min-width:761px){
+  .sidebar{transform:translateX(0)}
+  .sidebar.oculto{transform:translateX(-100%)}
+  .capa-sidebar{display:none!important}
+}
 </style>
 </head>
 
@@ -820,7 +826,11 @@ body{
 
   <button
     class="menu-btn"
-    onclick="toggleSidebar()">
+    id="botonMenu"
+    aria-label="Abrir menú"
+    aria-controls="sidebar"
+    aria-expanded="true"
+    onclick="alternarSidebar()">
 
     <span></span>
     <span></span>
@@ -874,293 +884,72 @@ body{
 
 
 
-<!-- =========================
-     SIDEBAR
-========================= -->
+<!-- CAPA PARA CERRAR EL MENÚ EN CELULARES -->
+<div class="capa-sidebar" id="capaSidebar" onclick="alternarSidebar()" aria-hidden="true"></div>
 
-<aside
-  class="sidebar"
-  id="sidebar">
+<!-- BARRA LATERAL: NAVEGACIÓN COMPARTIDA CON PÁGINA PRINCIPAL -->
+<aside class="sidebar" id="sidebar" aria-label="Navegación principal">
 
+  <a class="menu-inicio" href="pagina principal.html">
+    <span class="icono-inicio" aria-hidden="true">⌂</span>
+    INICIO
+  </a>
 
-  <div class="menu-inicio">
-
-    <a
-      href="pagina principal.html"
-      class="menu-link">
-
-      INICIO
-
-    </a>
-
-  </div>
-
-
-
-  <!-- PLANTEL -->
-
-  <div
-    class="menu-section"
-    id="secPlantel">
-
-    <button
-      class="menu-title"
-      onclick="toggleSection('secPlantel')">
-
-      <span>PLANTEL</span>
-
-      <span class="arrow">
-        ▼
-      </span>
-
-    </button>
-
-
-    <div class="submenu">
-
-      <a
-        href="jugadoras.html"
-        class="menu-link">
-
-        Jugadoras
-
-      </a>
-
-
-      <a
-        href="asistencia.html"
-        class="menu-link">
-
-        Asistencia
-
-      </a>
-
+  <div class="grupo-menu cerrado" id="grupoPlantel">
+    <div class="titulo-grupo" onclick="toggleGrupo('grupoPlantel')" role="button" tabindex="0" aria-expanded="false">
+      <span>PLANTEL</span><span class="flecha" aria-hidden="true">›</span>
     </div>
-
-  </div>
-
-
-
-  <!-- ENTRENAMIENTO -->
-
-  <div
-    class="menu-section"
-    id="secEntrenamiento">
-
-    <button
-      class="menu-title"
-      onclick="toggleSection('secEntrenamiento')">
-
-      <span>ENTRENAMIENTO</span>
-
-      <span class="arrow">
-        ▼
-      </span>
-
-    </button>
-
-
     <div class="submenu">
-
-      <a
-        href="calendario.html"
-        class="menu-link">
-
-        Calendario
-
-      </a>
-
-
-      <a
-        href="planificacion.html"
-        class="menu-link">
-
-        Planificación
-
-      </a>
-
-
-      <a
-        href="biblioteca.html"
-        class="menu-link">
-
-        Biblioteca de ejercicios
-
-      </a>
-
-
-      <a
-        href="gimnasio.html"
-        class="menu-link">
-
-        Gimnasio
-
-      </a>
-
-
-      <a
-        href="calculadora.html"
-        class="menu-link">
-
-        Calculadora
-
-      </a>
-
+      <a href="jugadoras.html"><span class="nav-punto"></span>Jugadoras</a>
+      <a href="asistencia.html"><span class="nav-punto"></span>Asistencia</a>
     </div>
-
   </div>
 
-
-
-  <!-- COMPETENCIA -->
-
-  <div
-    class="menu-section open"
-    id="secCompetencia">
-
-    <button
-      class="menu-title"
-      onclick="toggleSection('secCompetencia')">
-
-      <span>COMPETENCIA</span>
-
-      <span class="arrow">
-        ▼
-      </span>
-
-    </button>
-
-
+  <div class="grupo-menu cerrado" id="grupoEntrenamiento">
+    <div class="titulo-grupo" onclick="toggleGrupo('grupoEntrenamiento')" role="button" tabindex="0" aria-expanded="false">
+      <span>ENTRENAMIENTO</span><span class="flecha" aria-hidden="true">›</span>
+    </div>
     <div class="submenu">
-
-      <a
-        href="Partidos.html"
-        class="menu-link">
-
-        Partidos
-
-      </a>
-
-
-      <a
-        href="informes.html"
-        class="menu-link">
-
-        Informes
-
-      </a>
-
-
-      <a
-        href="estadisticas.html"
-        class="menu-link">
-
-        Estadísticas
-
-      </a>
-
-
-      <a
-        href="pizarra táctica.html"
-        class="menu-link active"
-        data-ocultar-bianca>
-
-        Pizarra táctica
-
-      </a>
-
+      <a href="calendario.html"><span class="nav-punto"></span>Calendario</a>
+      <a href="planificacion.html" data-ocultar-bianca><span class="nav-punto"></span>Planificación</a>
+      <a href="biblioteca.html" data-ocultar-bianca><span class="nav-punto"></span>Biblioteca de ejercicios</a>
+      <a href="gimnasio.html"><span class="nav-punto"></span>Gimnasio</a>
+      <a href="calculadora.html" data-ocultar-bianca><span class="nav-punto"></span>Calculadora</a>
     </div>
-
   </div>
 
-
-
-  <!-- RENDIMIENTOS -->
-
-  <div
-    class="menu-section"
-    id="secRendimientos">
-
-    <button
-      class="menu-title"
-      onclick="toggleSection('secRendimientos')">
-
-      <span>RENDIMIENTOS</span>
-
-      <span class="arrow">
-        ▼
-      </span>
-
-    </button>
-
-
+  <div class="grupo-menu" id="grupoCompetencia">
+    <div class="titulo-grupo" onclick="toggleGrupo('grupoCompetencia')" role="button" tabindex="0" aria-expanded="true">
+      <span>COMPETENCIA</span><span class="flecha" aria-hidden="true">›</span>
+    </div>
     <div class="submenu">
-
-      <a
-        href="testeos.html"
-        class="menu-link">
-
-        Planilla de testeos
-
-      </a>
-
-
-      <a
-        href="tiempos.html"
-        class="menu-link">
-
-        Tiempos
-
-      </a>
-
-
-      <a
-        href="multimedia.html"
-        class="menu-link">
-
-        Multimedia
-
-      </a>
-
-
-      <a
-        href="encuestas.html"
-        class="menu-link">
-
-        Encuestas
-
-      </a>
-
-
-      <a
-        href="lesiones.html"
-        class="menu-link">
-
-        Lesiones
-
-      </a>
-
+      <a href="Partidos.html"><span class="nav-punto"></span>Partidos</a>
+      <a href="informes.html" data-ocultar-bianca><span class="nav-punto"></span>Informes</a>
+      <a href="estadisticas.html" data-ocultar-bianca><span class="nav-punto"></span>Estadísticas</a>
+      <a href="pizarra.html" class="activo" data-ocultar-bianca aria-current="page"><span class="nav-punto"></span>Pizarra táctica</a>
     </div>
-
   </div>
 
+  <div class="grupo-menu cerrado" id="grupoRendimientos">
+    <div class="titulo-grupo" onclick="toggleGrupo('grupoRendimientos')" role="button" tabindex="0" aria-expanded="false">
+      <span>RENDIMIENTOS</span><span class="flecha" aria-hidden="true">›</span>
+    </div>
+    <div class="submenu">
+      <a href="testeos.html"><span class="nav-punto"></span>Planilla de testeos</a>
+      <a href="tiempos.html"><span class="nav-punto"></span>Tiempos</a>
+      <a href="multimedia.html"><span class="nav-punto"></span>Multimedia</a>
+      <a href="encuestas.html"><span class="nav-punto"></span>Encuestas</a>
+      <a href="lesiones.html"><span class="nav-punto"></span>Lesiones</a>
+    </div>
+  </div>
 
-
-  <div class="logout">
-
-    <a
-      href="Loing.html"
-      class="menu-link">
-
+  <div class="separador-sesion">
+    <a class="enlace-cerrar-sesion" href="#" onclick="cerrarSesion(event)">
+      <span class="icono-salir" aria-hidden="true">↪</span>
       Cerrar sesión
-
     </a>
-
   </div>
-
 </aside>
-
-
 
 <!-- =========================
      CONTENIDO
@@ -1705,77 +1494,88 @@ document.getElementById(
 
 
 
-/* =========================
-   SIDEBAR
-========================= */
+/* =====================================================
+   MENÚ LATERAL — MISMO COMPORTAMIENTO QUE PÁGINA PRINCIPAL
+===================================================== */
 
-function toggleSidebar(){
+window.alternarSidebar = function(){
+  const sidebar = document.getElementById("sidebar");
+  const capa = document.getElementById("capaSidebar");
+  const boton = document.getElementById("botonMenu");
+  const main = document.getElementById("main");
+  if(!sidebar || !boton || !main) return;
 
-  const sidebar =
-    document.getElementById("sidebar");
+  sidebar.classList.toggle("oculto");
+  const abierto = !sidebar.classList.contains("oculto");
+  boton.setAttribute("aria-expanded", String(abierto));
+  boton.setAttribute("aria-label", abierto ? "Cerrar menú" : "Abrir menú");
 
-  const main =
-    document.getElementById("main");
-
-
-  if(window.innerWidth <= 800){
-
-    sidebar.classList.toggle("open");
-
+  if(window.innerWidth <= 760){
+    if(capa) capa.classList.toggle("visible", abierto);
+  }else{
+    main.classList.toggle("full", !abierto);
+    if(capa) capa.classList.remove("visible");
   }
-  else{
+};
 
-    sidebar.classList.toggle("closed");
+window.toggleGrupo = function(id){
+  const grupo = document.getElementById(id);
+  if(!grupo) return;
+  grupo.classList.toggle("cerrado");
+  const titulo = grupo.querySelector(".titulo-grupo");
+  if(titulo) titulo.setAttribute("aria-expanded", String(!grupo.classList.contains("cerrado")));
+};
 
-    main.classList.toggle("full");
+document.querySelectorAll(".titulo-grupo[role='button']").forEach(titulo=>{
+  titulo.addEventListener("keydown", event=>{
+    if(event.key === "Enter" || event.key === " "){
+      event.preventDefault();
+      const grupo = titulo.closest(".grupo-menu");
+      if(grupo) window.toggleGrupo(grupo.id);
+    }
+  });
+});
 
+window.cerrarSesion = function(event){
+  if(event) event.preventDefault();
+  try{ localStorage.removeItem("usuarioADIUR"); }catch(error){
+    console.error("No se pudo limpiar la sesión:", error);
   }
+  window.location.href = "Loing.html";
+};
 
+function ajustarSidebarPorPantalla(){
+  const sidebar = document.getElementById("sidebar");
+  const capa = document.getElementById("capaSidebar");
+  const boton = document.getElementById("botonMenu");
+  const main = document.getElementById("main");
+  if(!sidebar || !boton || !main) return;
+
+  if(window.innerWidth <= 760){
+    sidebar.classList.add("oculto");
+    main.classList.remove("full");
+    if(capa) capa.classList.remove("visible");
+    boton.setAttribute("aria-expanded","false");
+    boton.setAttribute("aria-label","Abrir menú");
+  }else{
+    sidebar.classList.remove("oculto");
+    main.classList.remove("full");
+    if(capa) capa.classList.remove("visible");
+    boton.setAttribute("aria-expanded","true");
+    boton.setAttribute("aria-label","Cerrar menú");
+  }
 }
 
+ajustarSidebarPorPantalla();
+window.addEventListener("resize", ajustarSidebarPorPantalla);
 
-function toggleSection(id){
-
-  const section =
-    document.getElementById(id);
-
-  section.classList.toggle("open");
-
-}
-
-
-
-/* =========================
-   BIANCA
-========================= */
-
-const esBianca =
-  usuario.toLowerCase() === "bianca" ||
-  usuario.toLowerCase() === "biancadominguez";
-
-
+/* Permisos de visualización: se mantienen los mismos criterios que en Inicio. */
+const esBianca = usuario.toLowerCase() === "bianca" || usuario.toLowerCase() === "biancadominguez";
 if(esBianca){
-
-  document.querySelectorAll(
-    "[data-ocultar-bianca]"
-  ).forEach(el=>{
-
-    el.style.display="none";
-
-  });
-
-
-  document.querySelectorAll(
-    "#secPlantel, #secRendimientos"
-  ).forEach(el=>{
-
-    el.style.display="none";
-
-  });
-
+  document.getElementById("grupoPlantel")?.remove();
+  document.getElementById("grupoRendimientos")?.remove();
+  document.querySelectorAll("[data-ocultar-bianca]").forEach(el=>el.style.display="none");
 }
-
-
 
 /* =========================
    ELEMENTOS
