@@ -3271,15 +3271,39 @@ function cargarDB() {
   }
 }
 
-function guardarDB() {
-  try {
-    localStorage.setItem(KEY, JSON.stringify(db));
 
-    if (window.guardarGimnasioEnNube) {
-      window.guardarGimnasioEnNube(db).catch(error => {
-        console.warn("No se pudo sincronizar automáticamente con la nube:", error);
-      });
+function guardarDB() {
+    try {
+        localStorage.setItem(KEY, JSON.stringify(db));
+
+        if (typeof window.guardarGimnasioEnNube !== "function") {
+            mostrarEstado("ERROR: Firebase todavía no está conectado.");
+            console.error("guardarGimnasioEnNube no está disponible.");
+            return false;
+        }
+
+        window.guardarGimnasioEnNube(db)
+            .then(() => {
+                mostrarEstado("Rutina guardada correctamente en la nube.");
+                console.log("ADIUR: Rutina sincronizada con Firestore.");
+            })
+            .catch(error => {
+                console.error("ERROR AL GUARDAR EN FIREBASE:", error);
+                mostrarEstado(
+                    "ERROR al guardar en la nube: " +
+                    (error.code || error.message)
+                );
+            });
+
+        return true;
+
+    } catch (error) {
+        console.error("Error al guardar:", error);
+        mostrarEstado("No se pudieron guardar los cambios.");
+        return false;
     }
+}
+
 
     return true;
   } catch (error) {
