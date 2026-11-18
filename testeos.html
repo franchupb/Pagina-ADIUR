@@ -834,7 +834,7 @@ a{text-decoration:none;color:inherit}
 
 .lista-encabezado{
   display:grid;
-  grid-template-columns:minmax(160px,1fr) 120px 120px 83px;
+  grid-template-columns:minmax(160px,1fr) minmax(110px,150px) 83px;
   align-items:center;
   gap:9px;
   padding:8px 8px;
@@ -848,8 +848,6 @@ a{text-decoration:none;color:inherit}
   text-transform:uppercase;
 }
 
-.lista-encabezado .col-comp:empty{display:none}
-
 .lista-jugadoras{
   display:flex;
   flex-direction:column;
@@ -857,7 +855,7 @@ a{text-decoration:none;color:inherit}
 
 .fila-jugadora{
   display:grid;
-  grid-template-columns:minmax(160px,1fr) 120px 120px 83px;
+  grid-template-columns:minmax(160px,1fr) minmax(110px,150px) 83px;
   align-items:center;
   gap:9px;
   min-height:55px;
@@ -1529,7 +1527,7 @@ a{text-decoration:none;color:inherit}
 
   .lista-encabezado,
   .fila-jugadora{
-    grid-template-columns:minmax(135px,1fr) 100px 100px 72px;
+    grid-template-columns:minmax(135px,1fr) 110px 72px;
     gap:6px;
   }
 }
@@ -1636,16 +1634,13 @@ a{text-decoration:none;color:inherit}
     padding:11px 4px;
   }
 
-  .identidad-jugadora{grid-column:1/-1}
-
+  .identidad-jugadora{grid-column:1/-1;grid-row:1}
+  .fila-jugadora .campo-lista,
+  .fila-jugadora .valor-calculado{grid-column:1;grid-row:2}
   .fila-jugadora .estado-jugadora{
     grid-column:2;
     grid-row:2;
     justify-self:start;
-  }
-
-  .fila-jugadora .campo-lista:nth-of-type(2){
-    grid-column:2;
   }
 
   .biblioteca-grid{grid-template-columns:1fr}
@@ -1933,35 +1928,33 @@ a{text-decoration:none;color:inherit}
           <div>
             <span class="kicker">ANÁLISIS DEL RENDIMIENTO</span>
             <h3>Estadísticas de testeos</h3>
-            <p>Elegí una prueba y consultá sus resultados en distintos períodos y agrupaciones.</p>
+            <p>Seleccioná una jugadora para consultar todo su historial. Los promedios grupales y por puesto reúnen las evaluaciones guardadas de la categoría.</p>
           </div>
         </div>
 
         <div class="filtros-stats">
+          <div class="filtro-stats">
+            <label for="selectJugadoraStats">Jugadora a consultar</label>
+            <select id="selectJugadoraStats" onchange="renderizarEstadisticas()">
+              <option value="">Seleccioná una jugadora activa</option>
+            </select>
+          </div>
 
           <div class="filtro-stats">
-            <label for="selectPruebaStats">Prueba a analizar</label>
+            <label for="selectPruebaStats">Filtrar estadísticas grupales por prueba</label>
             <select id="selectPruebaStats" onchange="renderizarEstadisticas()">
-              <option value="">Seleccioná una prueba</option>
+              <option value="">Todas las pruebas</option>
             </select>
           </div>
-
-          <div class="filtro-stats">
-            <label for="selectPeriodoStats">Comparar con período</label>
-            <select id="selectPeriodoStats" onchange="renderizarEstadisticas()">
-              <option value="">Sin comparación</option>
-            </select>
-          </div>
-
         </div>
 
         <div class="stats-resumen" id="resumenStats"></div>
 
         <div class="tabs-stats">
           <button class="tab-stats activa" onclick="cambiarVistaStats('individual',this)">Individual</button>
-          <button class="tab-stats" onclick="cambiarVistaStats('puestos',this)">Por puesto</button>
-          <button class="tab-stats" onclick="cambiarVistaStats('grupal',this)">Grupal</button>
-          <button class="tab-stats" onclick="cambiarVistaStats('historica',this)">Histórica</button>
+          <button class="tab-stats" onclick="cambiarVistaStats('puestos',this)">Promedios por puesto</button>
+          <button class="tab-stats" onclick="cambiarVistaStats('grupal',this)">Números del grupo</button>
+          <button class="tab-stats" onclick="cambiarVistaStats('historica',this)">Evolución grupal</button>
         </div>
 
         <div class="contenido-stats activa" id="statsIndividual"></div>
@@ -2042,13 +2035,6 @@ a{text-decoration:none;color:inherit}
           <option value="menor">Menor valor es mejor</option>
           <option value="ninguno">Sin comparación automática</option>
         </select>
-      </div>
-
-      <div class="form-group">
-        <label style="display:flex;align-items:center;gap:7px">
-          <input type="checkbox" id="incluirComp" checked style="width:auto;height:auto">
-          Incluir comparación COMP
-        </label>
       </div>
 
       <div class="modal-footer">
@@ -2176,6 +2162,7 @@ let filtroEstado="todas";
 let busqueda="";
 
 let planillasBiblioteca=[];
+let planillasOperativas=[];
 let planillaActiva=null;
 let jugadorasPlanillaActiva=[];
 
@@ -2187,26 +2174,17 @@ let pestañaActual="carga";
 ===================================================== */
 
 const COLUMNAS_POR_DEFECTO=[
-  {id:"salto_sin",grupo:"SALTOS",claseGrupo:"cat-saltos",label:"Sin Impulso",criterio:"mayor",compId:"salto_sin_comp"},
-  {id:"salto_sin_comp",grupo:"SALTOS",claseGrupo:"cat-saltos",label:"COMP",esComp:true},
+  {id:"salto_sin",grupo:"SALTOS",claseGrupo:"cat-saltos",label:"Sin Impulso",criterio:"mayor"},
+  {id:"salto_con",grupo:"SALTOS",claseGrupo:"cat-saltos",label:"Con Impulso",criterio:"mayor"},
 
-  {id:"salto_con",grupo:"SALTOS",claseGrupo:"cat-saltos",label:"Con Impulso",criterio:"mayor",compId:"salto_con_comp"},
-  {id:"salto_con_comp",grupo:"SALTOS",claseGrupo:"cat-saltos",label:"COMP",esComp:true},
-
-  {id:"vel_30",grupo:"VELOCIDAD",claseGrupo:"cat-velocidad",label:"30",criterio:"menor",compId:"vel_30_comp"},
-  {id:"vel_30_comp",grupo:"VELOCIDAD",claseGrupo:"cat-velocidad",label:"COMP",esComp:true},
-
+  {id:"vel_30",grupo:"VELOCIDAD",claseGrupo:"cat-velocidad",label:"30",criterio:"menor"},
   {id:"vel_15_15",grupo:"VELOCIDAD",claseGrupo:"cat-velocidad",label:"15-15",criterio:"menor"},
 
   {id:"vo2_30_15",grupo:"Vo2 máx",claseGrupo:"cat-vo2",label:"30-15",criterio:"mayor"},
-
   {id:"postural_apecs",grupo:"POSTURAL",claseGrupo:"cat-postural",label:"A.P.E.C.S",criterio:"ninguno"},
 
-  {id:"illinois_mod",grupo:"AGILIDAD",claseGrupo:"cat-agilidad",label:"Illinois Mod",criterio:"menor",compId:"illinois_mod_comp"},
-  {id:"illinois_mod_comp",grupo:"AGILIDAD",claseGrupo:"cat-agilidad",label:"COMP",esComp:true},
-
-  {id:"illinois_norm",grupo:"AGILIDAD",claseGrupo:"cat-agilidad",label:"Illinois Norm",criterio:"menor",compId:"illinois_norm_comp"},
-  {id:"illinois_norm_comp",grupo:"AGILIDAD",claseGrupo:"cat-agilidad",label:"COMP",esComp:true},
+  {id:"illinois_mod",grupo:"AGILIDAD",claseGrupo:"cat-agilidad",label:"Illinois Mod",criterio:"menor"},
+  {id:"illinois_norm",grupo:"AGILIDAD",claseGrupo:"cat-agilidad",label:"Illinois Norm",criterio:"menor"},
 
   {id:"peso",grupo:"INDICES",claseGrupo:"cat-indices",label:"PESO",criterio:"ninguno"},
   {id:"altura",grupo:"INDICES",claseGrupo:"cat-indices",label:"ALTURA",criterio:"ninguno"},
@@ -2353,6 +2331,31 @@ window.cambiarVistaStats=function(tipo,boton){
    CARGA DE JUGADORAS Y POSICIONES
 ===================================================== */
 
+function jugadoraEstaActiva(j){
+  const estadoRaw=
+    j?.estado||j?.estadoJugadora||j?.situacion||j?.status||j?.condicion||
+    j?.datos?.estado||j?.datos?.situacion||"";
+
+  const estado=normalizar(estadoRaw);
+  const estadoInactivo=/lesion|inactiv|baja|retirad|suspendid|desvinculad|no activa|no activo/.test(estado);
+
+  const indicadoresDesactivados=[
+    j?.activa,j?.activo,j?.estaActiva,j?.estaActivo,
+    j?.habilitada,j?.habilitado
+  ].some(valor=>{
+    const texto=normalizar(valor);
+    return valor===false||valor===0||[
+      "false","no","0","inactiva","inactivo","lesionada","lesionado","baja"
+    ].includes(texto);
+  });
+
+  const indicadoresInactivos=[
+    j?.inactiva,j?.inactivo,j?.lesionada,j?.lesionado
+  ].some(valor=>valor===true);
+
+  return !estadoInactivo&&!indicadoresDesactivados&&!indicadoresInactivos;
+}
+
 async function cargarJugadorasPorDivision(division){
 
   let listaTotal=[];
@@ -2388,8 +2391,8 @@ async function cargarJugadorasPorDivision(division){
   const categoria=normalizar(division).replace(/\s+/g,"");
 
   datosJugadorasDivision=listaTotal.filter(j=>{
-    const cat=normalizar(j.categoria||j.division||"").replace(/\s+/g,"");
-    return cat===categoria;
+    const cat=normalizar(j.categoria||j.division||j.category||"").replace(/\s+/g,"");
+    return cat===categoria&&jugadoraEstaActiva(j);
   });
 
   posicionesPorJugadora={};
@@ -2712,7 +2715,6 @@ function jugadoraCompleta(nombre,prueba){
 function renderizarEditor(){
 
   const editor=document.getElementById("panelEditor");
-
   const pruebas=obtenerPruebas(grupoSeleccionado);
 
   if(!grupoSeleccionado){
@@ -2741,13 +2743,11 @@ function renderizarEditor(){
   }
 
   const prueba=pruebas.find(p=>p.id===pruebaSeleccionada);
-
   const cantidad=contarResultados(prueba);
   const total=jugadorasDivision.length;
   const porcentaje=total?Math.round(cantidad/total*100):0;
 
   const pestañas=pruebas.map(p=>{
-
     const n=contarResultados(p);
 
     return`
@@ -2774,13 +2774,11 @@ function renderizarEditor(){
   }).join("");
 
   const filas=jugadorasDivision.map((nombre,indice)=>{
-
     const fila=valoresActuales[nombre]||{};
     const puesto=posicionesPorJugadora[nombre]||"Sin puesto asignado";
     const completa=jugadoraCompleta(nombre,prueba);
 
     if(prueba.esCalculadoIMC){
-
       const imc=calcularIMC(fila.peso,fila.altura);
 
       return`
@@ -2789,7 +2787,6 @@ function renderizarEditor(){
           data-nombre="${escapeHTML(nombre)}"
           data-completa="${completa?"si":"no"}"
         >
-
           <div class="identidad-jugadora">
             <span class="numero-jugadora">${indice+1}</span>
             <div>
@@ -2805,13 +2802,11 @@ function renderizarEditor(){
           <span class="estado-jugadora">
             ${completa?"Calculado":"Pendiente"}
           </span>
-
         </div>
       `;
     }
 
     const resultado=fila[prueba.id]??"";
-    const comp=prueba.compId?(fila[prueba.compId]??""):"";
 
     return`
       <div
@@ -2819,7 +2814,6 @@ function renderizarEditor(){
         data-nombre="${escapeHTML(nombre)}"
         data-completa="${completa?"si":"no"}"
       >
-
         <div class="identidad-jugadora">
           <span class="numero-jugadora">${indice+1}</span>
           <div>
@@ -2834,7 +2828,7 @@ function renderizarEditor(){
             type="text"
             inputmode="${prueba.grupo==="POSTURAL"?"text":"decimal"}"
             value="${escapeHTML(resultado)}"
-            placeholder="Ingresar"
+            placeholder="Ingresar resultado"
             data-jugadora="${escapeHTML(nombre)}"
             data-columna="${escapeHTML(prueba.id)}"
             data-prueba="${escapeHTML(prueba.id)}"
@@ -2843,55 +2837,26 @@ function renderizarEditor(){
           >
         </div>
 
-        ${
-          prueba.compId
-            ? `<div class="campo-lista">
-                 <label>COMP</label>
-                 <input
-                   type="text"
-                   inputmode="decimal"
-                   value="${escapeHTML(comp)}"
-                   placeholder="Anterior"
-                   data-jugadora="${escapeHTML(nombre)}"
-                   data-columna="${escapeHTML(prueba.compId)}"
-                   data-prueba="${escapeHTML(prueba.id)}"
-                   onchange="actualizarCeldaDesdeGrupo(this)"
-                   ${!puedeEditar?"disabled":""}
-                 >
-               </div>`
-            : `<div></div>`
-        }
-
         <span class="estado-jugadora">
           ${completa?"Completado":"Pendiente"}
         </span>
-
       </div>
     `;
   }).join("");
 
-  const descripcion=prueba.compId
-    ?"Cargá el valor actual y, cuando corresponda, el anterior en COMP."
-    :"Completá el resultado de cada jugadora.";
-
   editor.innerHTML=`
-
     <div class="editor-titulo">
       <div>
         <strong>${escapeHTML(grupoSeleccionado)}</strong>
-        <small>${escapeHTML(descripcion)}</small>
+        <small>Registrá un único resultado por jugadora. Las comparaciones se consultan en Estadísticas.</small>
       </div>
 
-      ${
-        modoGestion&&puedeEditar
-          ? `<button class="btn-secundario" type="button" onclick="alternarModoEliminar()">Terminar edición</button>`
-          : ""
-      }
+      ${modoGestion&&puedeEditar
+        ? `<button class="btn-secundario" type="button" onclick="alternarModoEliminar()">Terminar edición</button>`
+        : ""}
     </div>
 
-    <div class="pruebas-lista">
-      ${pestañas}
-    </div>
+    <div class="pruebas-lista">${pestañas}</div>
 
     <div class="editor-prueba-info">
       <div>
@@ -2908,7 +2873,6 @@ function renderizarEditor(){
     </div>
 
     <div class="herramientas-lista">
-
       <input
         type="search"
         id="buscarJugadora"
@@ -2918,59 +2882,35 @@ function renderizarEditor(){
       >
 
       <div class="filtros-lista">
-
-        <button
-          type="button"
-          class="filtro-lista ${filtroEstado==="todas"?"activo":""}"
-          data-filtro="todas"
-        >Todas</button>
-
-        <button
-          type="button"
-          class="filtro-lista ${filtroEstado==="pendientes"?"activo":""}"
-          data-filtro="pendientes"
-        >Pendientes</button>
-
-        <button
-          type="button"
-          class="filtro-lista ${filtroEstado==="completadas"?"activo":""}"
-          data-filtro="completadas"
-        >Completadas</button>
-
+        <button type="button" class="filtro-lista ${filtroEstado==="todas"?"activo":""}" data-filtro="todas">Todas</button>
+        <button type="button" class="filtro-lista ${filtroEstado==="pendientes"?"activo":""}" data-filtro="pendientes">Pendientes</button>
+        <button type="button" class="filtro-lista ${filtroEstado==="completadas"?"activo":""}" data-filtro="completadas">Completadas</button>
       </div>
-
     </div>
 
     <div class="lista-encabezado">
       <span>Jugadora / puesto</span>
       <span>Resultado</span>
-      <span>${prueba.compId?"COMP anterior":""}</span>
       <span>Estado</span>
     </div>
 
     <div class="lista-jugadoras" id="listaJugadoras">
-      ${
-        jugadorasDivision.length
-          ? filas
-          : `<div class="lista-sin-jugadoras">No hay jugadoras cargadas para esta categoría.</div>`
-      }
+      ${jugadorasDivision.length
+        ?filas
+        :`<div class="lista-sin-jugadoras">No hay jugadoras ACTIVAS en esta categoría.</div>`}
     </div>
 
     <div class="ayuda-editor">
-      Los resultados se guardan automáticamente al salir de cada campo.
+      Los resultados se guardan automáticamente al salir de cada campo. Para revisar la evolución de cada jugadora, ingresá en Estadísticas.
     </div>
   `;
 
-  editor.querySelectorAll("[data-prueba]").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-      seleccionarPrueba(btn.dataset.prueba);
-    });
+  editor.querySelectorAll("button[data-prueba]").forEach(btn=>{
+    btn.addEventListener("click",()=>seleccionarPrueba(btn.dataset.prueba));
   });
 
   editor.querySelectorAll("[data-eliminar]").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-      eliminarColumna(Number(btn.dataset.eliminar));
-    });
+    btn.addEventListener("click",()=>eliminarColumna(Number(btn.dataset.eliminar)));
   });
 
   editor.querySelectorAll("[data-filtro]").forEach(btn=>{
@@ -2980,11 +2920,13 @@ function renderizarEditor(){
     });
   });
 
-  document.getElementById("buscarJugadora")
-    .addEventListener("input",e=>{
+  const buscador=document.getElementById("buscarJugadora");
+  if(buscador){
+    buscador.addEventListener("input",e=>{
       busqueda=e.target.value;
       aplicarFiltrosLista();
     });
+  }
 }
 
 /* =====================================================
@@ -3122,7 +3064,6 @@ window.agregarNuevaColumnaTest=function(event){
   const grupo=document.getElementById("categoriaTest").value;
   const nombre=document.getElementById("nombreTest").value.trim();
   const criterio=document.getElementById("criterioTest").value;
-  const incluirComp=document.getElementById("incluirComp").checked;
 
   if(!nombre)return;
 
@@ -3137,26 +3078,14 @@ window.agregarNuevaColumnaTest=function(event){
   };
 
   const id="test_"+Date.now();
-  const compId=incluirComp?id+"_comp":null;
 
   columnasActuales.push({
     id,
     grupo,
     claseGrupo:clases[grupo]||"cat-custom",
     label:nombre,
-    criterio,
-    compId
+    criterio
   });
-
-  if(incluirComp){
-    columnasActuales.push({
-      id:compId,
-      grupo,
-      claseGrupo:clases[grupo]||"cat-custom",
-      label:"COMP",
-      esComp:true
-    });
-  }
 
   grupoSeleccionado=grupo;
   pruebaSeleccionada=id;
@@ -3216,6 +3145,23 @@ async function cargarBiblioteca(){
 
   const division=document.getElementById("selectDivision").value;
   const mapa=new Map();
+  const operativas=new Map();
+
+  function agregarOperativa(item){
+    if(!item||item.division!==division||!item.mes||!Array.isArray(item.columnas))return;
+
+    const clave=item.clave||obtenerClavePlanilla(item.division,item.mes);
+    const normalizada={...item,clave};
+    const anterior=operativas.get(clave);
+    const fechaNueva=new Date(item.ultimaActualizacion||item.fechaGuardado||0).getTime();
+    const fechaAnterior=anterior
+      ?new Date(anterior.ultimaActualizacion||anterior.fechaGuardado||0).getTime()
+      :0;
+
+    if(!anterior||fechaNueva>=fechaAnterior){
+      operativas.set(clave,normalizada);
+    }
+  }
 
   leerBibliotecaLocal().forEach(item=>{
     if(item.tipo==="biblioteca_testeos"&&item.division===division){
@@ -3223,9 +3169,21 @@ async function cargarBiblioteca(){
     }
   });
 
+  // Recupera también las planillas operativas de períodos anteriores.
+  // Estas se guardan automáticamente, aunque no se hayan agregado a Biblioteca Test.
+  Object.keys(localStorage).forEach(key=>{
+    if(!key.startsWith("testeos_adiur_")||key.startsWith("testeos_adiur___biblioteca__"))return;
+
+    try{
+      const item=JSON.parse(localStorage.getItem(key)||"null");
+      if(item&&item.tipo!=="biblioteca_testeos")agregarOperativa(item);
+    }catch(error){
+      console.warn("No se pudo leer una planilla local:",key,error);
+    }
+  });
+
   if(nubeActiva&&db){
     try{
-
       const snap=await getDocs(collection(db,"testeos_adiur"));
 
       snap.forEach(d=>{
@@ -3237,6 +3195,8 @@ async function cargarBiblioteca(){
           data.clave
         ){
           mapa.set(data.clave,{...data,idBiblioteca:d.id});
+        }else if(data?.tipo!=="biblioteca_testeos"){
+          agregarOperativa({...data,clave:data.clave||d.id});
         }
       });
 
@@ -3254,14 +3214,16 @@ async function cargarBiblioteca(){
     new Date(b.fechaGuardado||0)-new Date(a.fechaGuardado||0)
   );
 
+  planillasOperativas=[...operativas.values()];
+
   renderizarBiblioteca();
   actualizarSelectoresStats();
 }
-
 function resumirPlanilla(item){
 
   const columnas=(item.columnas||[]).filter(c=>!c.esComp);
-  const jugadoras=item.jugadoras||Object.keys(item.valores||{});
+  const nombresGuardados=item.jugadoras||Object.keys(item.valores||{});
+  const jugadoras=nombresGuardados.filter(nombre=>jugadorasDivision.includes(nombre));
   let registros=0;
 
   columnas.forEach(col=>{
@@ -3451,9 +3413,10 @@ window.guardarPlanillaEnBiblioteca=async function(){
 
 function construirDocumentoPlanilla(item){
 
-  const columnas=item.columnas||[];
+  const columnas=(item.columnas||[]).filter(col=>!col.esComp);
   const valores=item.valores||{};
-  const jugadoras=item.jugadoras||Object.keys(valores).sort();
+  const nombresGuardados=item.jugadoras||Object.keys(valores).sort();
+  const jugadoras=nombresGuardados.filter(nombre=>jugadorasDivision.includes(nombre));
 
   const grupos=[];
 
@@ -3659,88 +3622,152 @@ window.imprimirPlanillaBiblioteca=function(){
 };
 
 /* =====================================================
-   ESTADÍSTICAS: SELECTORES
+   ESTADÍSTICAS: HISTORIAL COMPLETO
 ===================================================== */
 
-function actualizarSelectoresStats(){
+function tieneResultadosPlanilla(item,nombres=jugadorasDivision){
+  const columnas=(item.columnas||[]).filter(c=>!c.esComp);
+  const datos=item.valores||{};
 
-  const selectPrueba=document.getElementById("selectPruebaStats");
-  const selectPeriodo=document.getElementById("selectPeriodoStats");
-
-  if(!selectPrueba||!selectPeriodo)return;
-
-  const anterior=selectPrueba.value;
-
-  const pruebas=columnasActuales.filter(c=>!c.esComp);
-
-  selectPrueba.innerHTML=`
-    <option value="">Seleccioná una prueba</option>
-    ${pruebas.map(p=>`
-      <option value="${escapeHTML(p.id)}">
-        ${escapeHTML(p.grupo)} · ${escapeHTML(p.label)}
-      </option>
-    `).join("")}
-  `;
-
-  if(pruebas.some(p=>p.id===anterior)){
-    selectPrueba.value=anterior;
-  }else if(pruebas.length){
-    selectPrueba.value=pruebas[0].id;
-  }
-
-  const division=document.getElementById("selectDivision").value;
-  const claveActual=obtenerClavePlanilla(
-    division,
-    document.getElementById("selectMes").value.trim()
-  );
-
-  const comparables=planillasBiblioteca.filter(i=>
-    i.division===division&&i.clave!==claveActual
-  );
-
-  const anteriorPeriodo=selectPeriodo.value;
-
-  selectPeriodo.innerHTML=`
-    <option value="">Sin comparación</option>
-    ${comparables.map(i=>`
-      <option value="${escapeHTML(i.clave)}">${escapeHTML(i.mes)}</option>
-    `).join("")}
-  `;
-
-  if(comparables.some(i=>i.clave===anteriorPeriodo)){
-    selectPeriodo.value=anteriorPeriodo;
-  }
+  return columnas.some(col=>nombres.some(nombre=>{
+    const valor=obtenerValor(datos,nombre,col);
+    return valor!==null&&valor!==undefined&&String(valor).trim()!=="";
+  }));
 }
 
-/* =====================================================
-   ESTADÍSTICAS: IDENTIFICAR PRUEBA ENTRE PLANILLAS
-===================================================== */
+function obtenerHistorialPlanillas(){
+  const division=document.getElementById("selectDivision").value;
+  const mapa=new Map();
+
+  planillasBiblioteca
+    .filter(item=>item.division===division&&item.clave)
+    .forEach(item=>mapa.set(item.clave,{...item}));
+
+  const operativas=[...planillasOperativas];
+
+  // Relee localStorage para incluir cambios recientes incluso antes de la próxima carga.
+  Object.keys(localStorage).forEach(key=>{
+    if(!key.startsWith("testeos_adiur_")||key.startsWith("testeos_adiur___biblioteca__"))return;
+    try{
+      const item=JSON.parse(localStorage.getItem(key)||"null");
+      if(item&&item.tipo!=="biblioteca_testeos"&&item.division===division&&item.mes){
+        operativas.push({...item,clave:item.clave||obtenerClavePlanilla(item.division,item.mes)});
+      }
+    }catch(error){}
+  });
+
+  operativas.forEach(item=>{
+    if(item.division!==division||!item.clave)return;
+    const anterior=mapa.get(item.clave);
+    const fechaNueva=new Date(item.ultimaActualizacion||item.fechaGuardado||0).getTime();
+    const fechaAnterior=anterior
+      ?new Date(anterior.ultimaActualizacion||anterior.fechaGuardado||0).getTime()
+      :0;
+
+    if(!anterior||fechaNueva>=fechaAnterior){
+      mapa.set(item.clave,{...item});
+    }
+  });
+
+  const periodo=document.getElementById("selectMes").value.trim();
+  const claveActual=obtenerClavePlanilla(division,periodo);
+
+  const actual={
+    tipo:"biblioteca_testeos",
+    clave:claveActual,
+    division,
+    mes:periodo||"Período actual",
+    columnas:columnasActuales,
+    valores:valoresActuales,
+    jugadoras:[...jugadorasDivision],
+    posiciones:{...posicionesPorJugadora},
+    fechaGuardado:new Date().toISOString(),
+    esActual:true
+  };
+
+  if(periodo&&tieneResultadosPlanilla(actual)){
+    mapa.set(claveActual,actual);
+  }
+
+  return [...mapa.values()].sort((a,b)=>
+    new Date(a.fechaGuardado||a.ultimaActualizacion||0).getTime()-
+    new Date(b.fechaGuardado||b.ultimaActualizacion||0).getTime()
+  );
+}
+
+function obtenerPruebasHistoricas(){
+  const mapa=new Map();
+
+  obtenerHistorialPlanillas().forEach(item=>{
+    (item.columnas||[]).filter(col=>!col.esComp).forEach(col=>{
+      const clave=normalizar(col.grupo)+"|"+normalizar(col.label);
+      if(!mapa.has(clave))mapa.set(clave,col);
+    });
+  });
+
+  if(!mapa.size){
+    columnasActuales.filter(col=>!col.esComp).forEach(col=>{
+      mapa.set(normalizar(col.grupo)+"|"+normalizar(col.label),col);
+    });
+  }
+
+  return [...mapa.values()].sort((a,b)=>
+    normalizar(a.grupo).localeCompare(normalizar(b.grupo))||
+    normalizar(a.label).localeCompare(normalizar(b.label))
+  );
+}
+
+function actualizarSelectoresStats(){
+  const selectPrueba=document.getElementById("selectPruebaStats");
+  const selectJugadora=document.getElementById("selectJugadoraStats");
+  if(!selectPrueba||!selectJugadora)return;
+
+  const pruebaAnterior=selectPrueba.value;
+  const jugadoraAnterior=selectJugadora.value;
+  const pruebas=obtenerPruebasHistoricas();
+
+  selectPrueba.innerHTML=`
+    <option value="">Todas las pruebas</option>
+    ${pruebas.map(p=>`
+      <option value="${escapeHTML(p.id)}">${escapeHTML(p.grupo)} · ${escapeHTML(p.label)}</option>
+    `).join("")}
+  `;
+
+  if(pruebas.some(p=>p.id===pruebaAnterior)){
+    selectPrueba.value=pruebaAnterior;
+  }else{
+    selectPrueba.value="";
+  }
+
+  selectJugadora.innerHTML=`
+    <option value="">Seleccioná una jugadora activa</option>
+    ${jugadorasDivision.map(nombre=>`
+      <option value="${escapeHTML(nombre)}">${escapeHTML(nombre)}</option>
+    `).join("")}
+  `;
+
+  selectJugadora.value=jugadorasDivision.includes(jugadoraAnterior)
+    ?jugadoraAnterior
+    :"";
+}
 
 function encontrarPrueba(snapshot,actual){
+  const columnas=(snapshot.columnas||[]).filter(c=>!c.esComp);
 
-  const columnas=snapshot.columnas||[];
-
-  let encontrada=columnas.find(c=>
-    c.id===actual.id&&!c.esComp
-  );
-
+  const encontrada=columnas.find(c=>c.id===actual.id);
   if(encontrada)return encontrada;
 
   return columnas.find(c=>
-    !c.esComp&&
     normalizar(c.grupo)===normalizar(actual.grupo)&&
     normalizar(c.label)===normalizar(actual.label)
   )||null;
 }
 
 function promedioPrueba(prueba,datos,jugadoras){
-
   let suma=0,cantidad=0,mejor=null;
 
   jugadoras.forEach(nombre=>{
-
     const valor=numero(obtenerValor(datos,nombre,prueba));
-
     if(valor===null)return;
 
     suma+=valor;
@@ -3755,170 +3782,305 @@ function promedioPrueba(prueba,datos,jugadoras){
     }
   });
 
-  return{
-    promedio:cantidad?suma/cantidad:null,
-    cantidad,
-    mejor
-  };
+  return{promedio:cantidad?suma/cantidad:null,cantidad,mejor};
 }
 
 function obtenerPruebaStats(){
-  const id=document.getElementById("selectPruebaStats").value;
-  return columnasActuales.find(c=>c.id===id&&!c.esComp)||null;
+  const id=document.getElementById("selectPruebaStats")?.value||"";
+  if(!id)return null;
+  return obtenerPruebasHistoricas().find(c=>c.id===id)||null;
 }
 
-function obtenerComparacionStats(){
-  const clave=document.getElementById("selectPeriodoStats").value;
-  return planillasBiblioteca.find(i=>i.clave===clave)||null;
+function recolectarHistorialJugadora(nombre){
+  const mapa=new Map();
+  const historial=obtenerHistorialPlanillas();
+
+  historial.forEach(item=>{
+    (item.columnas||[]).filter(col=>!col.esComp).forEach(col=>{
+      const valor=obtenerValor(item.valores||{},nombre,col);
+      if(valor===null||valor===undefined||String(valor).trim()==="")return;
+
+      const clave=normalizar(col.grupo)+"|"+normalizar(col.label);
+      if(!mapa.has(clave))mapa.set(clave,{prueba:col,registros:[]});
+
+      mapa.get(clave).registros.push({
+        clave:item.clave,
+        periodo:item.mes||"Período sin nombre",
+        fecha:item.fechaGuardado||item.ultimaActualizacion||"",
+        valor
+      });
+    });
+  });
+
+  return [...mapa.values()].map(item=>({
+    prueba:item.prueba,
+    registros:item.registros.sort((a,b)=>
+      new Date(a.fecha||0).getTime()-new Date(b.fecha||0).getTime()
+    )
+  })).sort((a,b)=>
+    normalizar(a.prueba.grupo).localeCompare(normalizar(b.prueba.grupo))||
+    normalizar(a.prueba.label).localeCompare(normalizar(b.prueba.label))
+  );
+}
+
+function describirCambio(prueba,actual,anterior){
+  const nActual=numero(actual);
+  const nAnterior=numero(anterior);
+
+  if(nActual===null||nAnterior===null){
+    return{diferencia:"—",estado:"Sin comparación numérica",clase:"estado-igual"};
+  }
+
+  const delta=nActual-nAnterior;
+  if(Math.abs(delta)<0.000001){
+    return{diferencia:"0",estado:"Sin cambios",clase:"estado-igual"};
+  }
+
+  if(prueba.criterio==="mayor"){
+    return delta>0
+      ?{diferencia:formatear(delta),estado:"Mejoró",clase:"estado-mejora"}
+      :{diferencia:formatear(delta),estado:"Empeoró",clase:"estado-empeora"};
+  }
+
+  if(prueba.criterio==="menor"){
+    return delta<0
+      ?{diferencia:formatear(delta),estado:"Mejoró",clase:"estado-mejora"}
+      :{diferencia:formatear(delta),estado:"Empeoró",clase:"estado-empeora"};
+  }
+
+  return{diferencia:formatear(delta),estado:"Diferencia",clase:"estado-igual"};
 }
 
 /* =====================================================
-   ESTADÍSTICAS: RESUMEN GENERAL
+   RESUMEN DE ESTADÍSTICAS INDIVIDUALES
 ===================================================== */
 
-function renderizarStatsResumen(prueba){
-
+function renderizarStatsResumen(){
   const contenedor=document.getElementById("resumenStats");
-
-  const pruebas=columnasActuales.filter(c=>!c.esComp);
-  const posibles=pruebas.length*jugadorasDivision.length;
-
-  let registrados=0;
-
-  pruebas.forEach(p=>{
-    registrados+=contarResultados(p);
-  });
-
-  const actual=prueba
-    ?promedioPrueba(prueba,valoresActuales,jugadorasDivision)
-    :{promedio:null,cantidad:0,mejor:null};
-
-  const completitud=posibles
-    ?Math.round(registrados/posibles*100)
-    :0;
+  const nombre=document.getElementById("selectJugadoraStats")?.value||"";
+  const historial=nombre?recolectarHistorialJugadora(nombre):[];
+  const registros=historial.reduce((total,item)=>total+item.registros.length,0);
+  const periodos=new Set(historial.flatMap(item=>item.registros.map(r=>r.clave))).size;
 
   contenedor.innerHTML=`
     <div class="stats-card">
-      <span>JUGADORAS</span>
-      <strong>${jugadorasDivision.length}</strong>
-      <small>En la categoría</small>
+      <span>JUGADORA</span>
+      <strong style="font-size:13px">${nombre?escapeHTML(nombre):"—"}</strong>
+      <small>${nombre?"Historial individual":"Seleccioná una jugadora"}</small>
     </div>
-
     <div class="stats-card">
-      <span>RESULTADOS CARGADOS</span>
-      <strong>${registrados}</strong>
-      <small>Sobre ${posibles} campos</small>
+      <span>PERÍODOS CON DATOS</span>
+      <strong>${periodos}</strong>
+      <small>Planillas cargadas</small>
     </div>
-
     <div class="stats-card">
-      <span>PROMEDIO DE LA PRUEBA</span>
-      <strong>${formatear(actual.promedio)}</strong>
-      <small>${actual.cantidad} registros numéricos</small>
+      <span>PRUEBAS REGISTRADAS</span>
+      <strong>${historial.length}</strong>
+      <small>Tipos de evaluación</small>
     </div>
-
     <div class="stats-card">
-      <span>COMPLETITUD</span>
-      <strong>${completitud}%</strong>
-      <small>De la evaluación actual</small>
+      <span>RESULTADOS HISTÓRICOS</span>
+      <strong>${registros}</strong>
+      <small>Registros de la jugadora</small>
     </div>
   `;
 }
 
 /* =====================================================
-   ESTADÍSTICAS: COMPARACIÓN INDIVIDUAL
+   ESTADÍSTICAS: HISTORIAL COMPLETO DE UNA JUGADORA
 ===================================================== */
 
-function renderizarStatsIndividual(prueba,snapshot){
-
+function renderizarStatsIndividual(){
   const contenedor=document.getElementById("statsIndividual");
+  const nombre=document.getElementById("selectJugadoraStats")?.value||"";
 
-  if(!prueba){
-    contenedor.innerHTML=`<div class="stats-vacio">No hay pruebas para analizar.</div>`;
+  if(!nombre){
+    contenedor.innerHTML=`<div class="stats-vacio">Seleccioná una jugadora ACTIVA para consultar todos sus resultados de las planillas guardadas.</div>`;
     return;
   }
 
-  if(!snapshot){
-    contenedor.innerHTML=`
-      <div class="stats-vacio">
-        Seleccioná un período guardado en el filtro superior para comparar
-        los resultados de cada jugadora.
+  const historial=recolectarHistorialJugadora(nombre);
+  if(!historial.length){
+    contenedor.innerHTML=`<div class="stats-vacio">Todavía no hay resultados guardados de ${escapeHTML(nombre)} en esta categoría.</div>`;
+    return;
+  }
+
+  contenedor.innerHTML=historial.map(item=>{
+    const filas=item.registros.map((registro,indice)=>{
+      const cambio=indice>0
+        ?describirCambio(item.prueba,registro.valor,item.registros[indice-1].valor)
+        :{diferencia:"—",estado:"Primera medición",clase:"estado-igual"};
+
+      const fecha=registro.fecha
+        ?new Date(registro.fecha).toLocaleDateString("es-AR")
+        :"—";
+
+      return`
+        <tr>
+          <td class="fuerte">${escapeHTML(registro.periodo)}</td>
+          <td>${escapeHTML(registro.valor)}</td>
+          <td>${fecha}</td>
+          <td>${escapeHTML(cambio.diferencia)}</td>
+          <td class="${cambio.clase}">${escapeHTML(cambio.estado)}</td>
+        </tr>
+      `;
+    }).join("");
+
+    return`
+      <div class="stats-bloque" style="margin-bottom:10px">
+        <h4>${escapeHTML(item.prueba.grupo)} · ${escapeHTML(item.prueba.label)}</h4>
+        <p>${item.registros.length} mediciones guardadas · La evolución se calcula únicamente dentro de esta misma prueba.</p>
+        <div class="tabla-stats-wrap">
+          <table class="tabla-stats">
+            <thead>
+              <tr>
+                <th>Período</th>
+                <th>Resultado</th>
+                <th>Fecha de carga</th>
+                <th>Diferencia</th>
+                <th>Evolución</th>
+              </tr>
+            </thead>
+            <tbody>${filas}</tbody>
+          </table>
+        </div>
       </div>
     `;
+  }).join("");
+}
+
+/* =====================================================
+   ESTADÍSTICAS: PROMEDIOS POR PUESTO
+===================================================== */
+
+function renderizarStatsPuestos(pruebaFiltro){
+  const contenedor=document.getElementById("statsPuestos");
+  const historial=obtenerHistorialPlanillas();
+  const pruebas=obtenerPruebasHistoricas().filter(p=>!pruebaFiltro||p.id===pruebaFiltro.id||(
+    normalizar(p.grupo)===normalizar(pruebaFiltro.grupo)&&
+    normalizar(p.label)===normalizar(pruebaFiltro.label)
+  ));
+
+  if(!jugadorasDivision.length||!historial.length||!pruebas.length){
+    contenedor.innerHTML=`<div class="stats-vacio">No hay evaluaciones suficientes para calcular promedios por puesto.</div>`;
     return;
   }
 
-  const anterior=encontrarPrueba(snapshot,prueba);
+  const bloques=pruebas.map(prueba=>{
+    const puestos=new Map();
 
-  if(!anterior){
-    contenedor.innerHTML=`
-      <div class="stats-vacio">
-        La evaluación seleccionada no contiene esta prueba.
+    historial.forEach(item=>{
+      const equivalente=encontrarPrueba(item,prueba);
+      if(!equivalente)return;
+
+      jugadorasDivision.forEach(nombre=>{
+        const valor=obtenerValor(item.valores||{},nombre,equivalente);
+        if(valor===null||valor===undefined||String(valor).trim()==="")return;
+
+        const puesto=posicionesPorJugadora[nombre]||"Sin puesto asignado";
+        if(!puestos.has(puesto))puestos.set(puesto,{suma:0,numericos:0,registros:0});
+
+        const acumulado=puestos.get(puesto);
+        acumulado.registros++;
+        const n=numero(valor);
+        if(n!==null){
+          acumulado.suma+=n;
+          acumulado.numericos++;
+        }
+      });
+    });
+
+    if(!puestos.size)return "";
+
+    const tarjetas=[...puestos.entries()].sort((a,b)=>a[0].localeCompare(b[0])).map(([puesto,dato])=>`
+      <div class="stats-puesto-card">
+        <strong>${escapeHTML(puesto)}</strong>
+        <small>${dato.registros} registros · ${dato.numericos} numéricos</small>
+        <b>${dato.numericos?formatear(dato.suma/dato.numericos):"—"}</b>
+        <small>Promedio histórico · ${escapeHTML(prueba.label)}</small>
+      </div>
+    `).join("");
+
+    return`
+      <div class="stats-bloque" style="margin-bottom:10px">
+        <h4>${escapeHTML(prueba.grupo)} · ${escapeHTML(prueba.label)}</h4>
+        <p>Promedios agrupados por el puesto actual de las jugadoras activas, usando todas las planillas guardadas.</p>
+        <div class="stats-puestos">${tarjetas}</div>
       </div>
     `;
+  }).filter(Boolean).join("");
+
+  contenedor.innerHTML=bloques||`<div class="stats-vacio">No hay resultados numéricos o registros para agrupar por puesto.</div>`;
+}
+
+/* =====================================================
+   ESTADÍSTICAS: NÚMEROS GENERALES DEL GRUPO
+===================================================== */
+
+function renderizarStatsGrupal(pruebaFiltro){
+  const contenedor=document.getElementById("statsGrupal");
+  const historial=obtenerHistorialPlanillas();
+  const pruebas=obtenerPruebasHistoricas().filter(p=>!pruebaFiltro||p.id===pruebaFiltro.id||(
+    normalizar(p.grupo)===normalizar(pruebaFiltro.grupo)&&
+    normalizar(p.label)===normalizar(pruebaFiltro.label)
+  ));
+
+  if(!historial.length||!pruebas.length){
+    contenedor.innerHTML=`<div class="stats-vacio">Todavía no hay planillas guardadas para obtener los números del grupo.</div>`;
     return;
   }
 
-  const filas=jugadorasDivision.map(nombre=>{
+  const filas=pruebas.map(prueba=>{
+    let registros=0,suma=0,numericos=0,periodos=0,periodosConPrueba=0;
 
-    const actual=obtenerValor(valoresActuales,nombre,prueba);
-    const previo=obtenerValor(snapshot.valores||{},nombre,anterior);
+    historial.forEach(item=>{
+      const equivalente=encontrarPrueba(item,prueba);
+      if(!equivalente)return;
+      periodosConPrueba++;
+      let huboRegistro=false;
 
-    const nActual=numero(actual);
-    const nPrevio=numero(previo);
+      jugadorasDivision.forEach(nombre=>{
+        const valor=obtenerValor(item.valores||{},nombre,equivalente);
+        if(valor===null||valor===undefined||String(valor).trim()==="")return;
+        registros++;
+        huboRegistro=true;
+        const n=numero(valor);
+        if(n!==null){suma+=n;numericos++;}
+      });
 
-    let diferencia="—";
-    let estado="Sin datos";
-    let clase="";
+      if(huboRegistro)periodos++;
+    });
 
-    if(nActual!==null&&nPrevio!==null){
-
-      const delta=nActual-nPrevio;
-      diferencia=formatear(delta);
-
-      if(Math.abs(delta)<0.000001){
-        estado="Sin cambios";
-        clase="estado-igual";
-      }else if(prueba.criterio==="mayor"){
-        estado=delta>0?"Mejoró":"Empeoró";
-        clase=delta>0?"estado-mejora":"estado-empeora";
-      }else if(prueba.criterio==="menor"){
-        estado=delta<0?"Mejoró":"Empeoró";
-        clase=delta<0?"estado-mejora":"estado-empeora";
-      }else{
-        estado="Diferencia";
-        clase="";
-      }
-    }
+    const posibles=periodosConPrueba*jugadorasDivision.length;
+    const porcentaje=posibles?Math.round(registros/posibles*100):0;
+    const promedio=numericos?suma/numericos:null;
 
     return`
       <tr>
-        <td class="fuerte">${escapeHTML(nombre)}</td>
-        <td>${actual===null?"—":escapeHTML(actual)}</td>
-        <td>${previo===null?"—":escapeHTML(previo)}</td>
-        <td>${diferencia}</td>
-        <td class="${clase}">${estado}</td>
+        <td class="fuerte">${escapeHTML(prueba.grupo)}</td>
+        <td>${escapeHTML(prueba.label)}</td>
+        <td>${registros}</td>
+        <td>${periodos}/${historial.length}</td>
+        <td>${porcentaje}%</td>
+        <td class="fuerte">${formatear(promedio)}</td>
       </tr>
     `;
   }).join("");
 
   contenedor.innerHTML=`
     <div class="stats-bloque">
-      <h4>Resultados por jugadora</h4>
-      <p>
-        ${escapeHTML(prueba.label)} ·
-        Actual: ${escapeHTML(document.getElementById("selectMes").value)} ·
-        Anterior: ${escapeHTML(snapshot.mes)}
-      </p>
-
+      <h4>Promedios y registros de la categoría</h4>
+      <p>${jugadorasDivision.length} jugadoras activas · ${historial.length} períodos incluidos. Cada promedio se calcula únicamente con los resultados de la misma prueba.</p>
       <div class="tabla-stats-wrap">
         <table class="tabla-stats">
           <thead>
             <tr>
-              <th>Jugadora</th>
-              <th>Actual</th>
-              <th>Anterior</th>
-              <th>Diferencia</th>
-              <th>Evolución</th>
+              <th>Grupo</th>
+              <th>Prueba</th>
+              <th>Registros</th>
+              <th>Períodos con datos</th>
+              <th>Completitud</th>
+              <th>Promedio histórico</th>
             </tr>
           </thead>
           <tbody>${filas}</tbody>
@@ -3929,262 +4091,101 @@ function renderizarStatsIndividual(prueba,snapshot){
 }
 
 /* =====================================================
-   ESTADÍSTICAS: POR PUESTO
+   ESTADÍSTICAS: EVOLUCIÓN HISTÓRICA DEL GRUPO
 ===================================================== */
 
-function renderizarStatsPuestos(prueba){
+function renderizarStatsHistorica(pruebaFiltro){
+  const contenedor=document.getElementById("statsHistorica");
+  const historial=obtenerHistorialPlanillas();
+  const pruebas=obtenerPruebasHistoricas().filter(p=>!pruebaFiltro||p.id===pruebaFiltro.id||(
+    normalizar(p.grupo)===normalizar(pruebaFiltro.grupo)&&
+    normalizar(p.label)===normalizar(pruebaFiltro.label)
+  ));
 
-  const contenedor=document.getElementById("statsPuestos");
-
-  if(!prueba){
-    contenedor.innerHTML=`<div class="stats-vacio">Seleccioná una prueba.</div>`;
-    return;
-  }
-
-  const grupos=new Map();
-
-  jugadorasDivision.forEach(nombre=>{
-
-    const puesto=posicionesPorJugadora[nombre]||"Sin puesto asignado";
-
-    if(!grupos.has(puesto))grupos.set(puesto,[]);
-
-    grupos.get(puesto).push(nombre);
-  });
-
-  if(!grupos.size){
-    contenedor.innerHTML=`<div class="stats-vacio">No hay jugadoras para analizar.</div>`;
-    return;
-  }
-
-  const tarjetas=[];
-
-  grupos.forEach((jugadoras,puesto)=>{
-
-    const promedio=promedioPrueba(
-      prueba,
-      valoresActuales,
-      jugadoras
-    );
-
-    tarjetas.push(`
-      <div class="stats-puesto-card">
-        <strong>${escapeHTML(puesto)}</strong>
-        <small>${jugadoras.length} jugadoras · ${promedio.cantidad} resultados</small>
-        <b>${formatear(promedio.promedio)}</b>
-        <small>Promedio de la prueba</small>
-      </div>
-    `);
-  });
-
-  contenedor.innerHTML=`
-    <div class="stats-bloque">
-      <h4>Resultados agrupados por posición</h4>
-      <p>${escapeHTML(prueba.grupo)} · ${escapeHTML(prueba.label)}</p>
-      <div class="stats-puestos">${tarjetas.join("")}</div>
-    </div>
-  `;
-}
-
-/* =====================================================
-   ESTADÍSTICAS: GRUPALES
-===================================================== */
-
-function renderizarStatsGrupal(){
-
-  const contenedor=document.getElementById("statsGrupal");
-
-  const grupos=obtenerGrupos();
-
-  if(!grupos.length){
-    contenedor.innerHTML=`<div class="stats-vacio">No hay grupos configurados.</div>`;
+  if(!historial.length||!pruebas.length){
+    contenedor.innerHTML=`<div class="stats-vacio">No hay datos históricos para mostrar.</div>`;
     return;
   }
 
   const filas=[];
-
-  grupos.forEach(grupo=>{
-
-    const pruebas=obtenerPruebas(grupo);
-
+  historial.forEach(item=>{
     pruebas.forEach(prueba=>{
+      const equivalente=encontrarPrueba(item,prueba);
+      if(!equivalente)return;
 
-      const cantidad=contarResultados(prueba);
-      const total=jugadorasDivision.length;
-      const porcentaje=total?Math.round(cantidad/total*100):0;
+      const registros=[];
+      jugadorasDivision.forEach(nombre=>{
+        const valor=obtenerValor(item.valores||{},nombre,equivalente);
+        if(valor!==null&&valor!==undefined&&String(valor).trim()!=="")registros.push(valor);
+      });
 
-      const promedio=promedioPrueba(
-        prueba,
-        valoresActuales,
-        jugadorasDivision
-      );
+      const numericos=registros.map(numero).filter(n=>n!==null);
+      const promedio=numericos.length
+        ?numericos.reduce((suma,n)=>suma+n,0)/numericos.length
+        :null;
 
-      filas.push(`
-        <tr>
-          <td class="fuerte">${escapeHTML(grupo)}</td>
-          <td>${escapeHTML(prueba.label)}</td>
-          <td>${cantidad}/${total}</td>
-          <td>
-            <div style="display:flex;align-items:center;gap:7px">
-              <div class="mini-barra"><span style="width:${porcentaje}%"></span></div>
-              <strong>${porcentaje}%</strong>
-            </div>
-          </td>
-          <td>${formatear(promedio.promedio)}</td>
-        </tr>
-      `);
+      filas.push({
+        periodo:item.mes||"Período sin nombre",
+        fecha:item.fechaGuardado||"",
+        grupo:prueba.grupo,
+        prueba:prueba.label,
+        registros:registros.length,
+        promedio
+      });
     });
   });
 
-  contenedor.innerHTML=`
-    <div class="stats-bloque">
-      <h4>Completitud de las evaluaciones</h4>
-      <p>Los resultados se muestran por prueba. No se mezclan unidades de medición.</p>
-
-      <div class="tabla-stats-wrap">
-        <table class="tabla-stats">
-          <thead>
-            <tr>
-              <th>Grupo</th>
-              <th>Prueba</th>
-              <th>Registros</th>
-              <th>Completitud</th>
-              <th>Promedio</th>
-            </tr>
-          </thead>
-          <tbody>${filas.join("")}</tbody>
-        </table>
-      </div>
-    </div>
-  `;
-}
-
-/* =====================================================
-   ESTADÍSTICAS: HISTÓRICA
-===================================================== */
-
-function renderizarStatsHistorica(prueba){
-
-  const contenedor=document.getElementById("statsHistorica");
-
-  if(!prueba){
-    contenedor.innerHTML=`<div class="stats-vacio">Seleccioná una prueba.</div>`;
+  if(!filas.length){
+    contenedor.innerHTML=`<div class="stats-vacio">Las planillas guardadas todavía no contienen resultados de estas pruebas.</div>`;
     return;
   }
 
-  const claveActual=obtenerClavePlanilla(
-    document.getElementById("selectDivision").value,
-    document.getElementById("selectMes").value.trim()
-  );
-
-  const periodos=planillasBiblioteca.filter(i=>i.clave!==claveActual);
-
-  const filas=periodos.map(snapshot=>{
-
-    const equivalente=encontrarPrueba(snapshot,prueba);
-
-    if(!equivalente)return "";
-
-    const jugadoras=snapshot.jugadoras||Object.keys(snapshot.valores||{});
-
-    const stats=promedioPrueba(
-      equivalente,
-      snapshot.valores||{},
-      jugadoras
-    );
-
-    return{
-      nombre:snapshot.mes,
-      fecha:snapshot.fechaGuardado,
-      promedio:stats.promedio,
-      cantidad:stats.cantidad
-    };
-  }).filter(Boolean);
-
-  const actual=promedioPrueba(
-    prueba,
-    valoresActuales,
-    jugadorasDivision
-  );
-
-  filas.push({
-    nombre:document.getElementById("selectMes").value+" · Actual",
-    fecha:new Date().toISOString(),
-    promedio:actual.promedio,
-    cantidad:actual.cantidad
-  });
-
-  filas.sort((a,b)=>
-    new Date(a.fecha||0).getTime()-new Date(b.fecha||0).getTime()
-  );
-
-  if(filas.length===1&&filas[0].cantidad===0){
-    contenedor.innerHTML=`
-      <div class="stats-vacio">
-        Todavía no hay resultados guardados de esta prueba.
-      </div>
-    `;
-    return;
-  }
-
-  const maximo=Math.max(
-    ...filas.map(f=>f.promedio||0),
-    1
-  );
-
   contenedor.innerHTML=`
     <div class="stats-bloque">
-      <h4>Evolución de promedios</h4>
-      <p>${escapeHTML(prueba.grupo)} · ${escapeHTML(prueba.label)}</p>
-
+      <h4>Evolución de la categoría por período</h4>
+      <p>Promedios por prueba y período. No se mezclan unidades ni tipos de evaluación.</p>
       <div class="tabla-stats-wrap">
         <table class="tabla-stats">
           <thead>
             <tr>
               <th>Período</th>
+              <th>Grupo</th>
+              <th>Prueba</th>
               <th>Registros</th>
               <th>Promedio</th>
-              <th>Referencia visual</th>
             </tr>
           </thead>
           <tbody>
             ${filas.map(f=>`
               <tr>
-                <td class="fuerte">${escapeHTML(f.nombre)}</td>
-                <td>${f.cantidad}</td>
+                <td class="fuerte">${escapeHTML(f.periodo)}</td>
+                <td>${escapeHTML(f.grupo)}</td>
+                <td>${escapeHTML(f.prueba)}</td>
+                <td>${f.registros}</td>
                 <td class="fuerte">${formatear(f.promedio)}</td>
-                <td>
-                  <div class="mini-barra">
-                    <span style="width:${f.promedio===null?0:(f.promedio/maximo*100)}%"></span>
-                  </div>
-                </td>
               </tr>
             `).join("")}
           </tbody>
         </table>
       </div>
-      <p style="margin-top:10px;margin-bottom:0">
-        La barra representa la magnitud del promedio, no una puntuación de rendimiento.
-      </p>
     </div>
   `;
 }
 
 /* =====================================================
-   RENDERIZAR ESTADÍSTICAS
+   RENDERIZAR TODAS LAS VISTAS ESTADÍSTICAS
 ===================================================== */
 
 function renderizarEstadisticas(){
-
   const prueba=obtenerPruebaStats();
-  const snapshot=obtenerComparacionStats();
-
-  renderizarStatsResumen(prueba);
-  renderizarStatsIndividual(prueba,snapshot);
+  renderizarStatsResumen();
+  renderizarStatsIndividual();
   renderizarStatsPuestos(prueba);
-  renderizarStatsGrupal();
+  renderizarStatsGrupal(prueba);
   renderizarStatsHistorica(prueba);
 }
+
+
 
 /* =====================================================
    CAMBIO DE CATEGORÍA Y PERÍODO
