@@ -924,6 +924,47 @@ body{background:#f2f4f6;color:var(--coach-ink)}
  .main:fullscreen .drawing-tools .tool-btn{min-height:27px;font-size:8px;padding:4px}
  .main:fullscreen .drawing-options{padding:4px;margin-top:3px}
 }
+
+/* Pantalla completa: la cancha ocupa todo el espacio útil y el panel se despliega a demanda. */
+.drawing-panel-toggle{display:none}
+.drawing-drawer{display:contents}
+.drawing-options-title{display:none}
+.main:fullscreen{max-width:none!important;width:100vw;height:100vh;margin:0;padding:8px;background:#17212b;gap:7px}
+.main:fullscreen .controls{flex:0 0 auto;max-width:none;margin:0;grid-template-columns:repeat(4,minmax(100px,1fr));padding:7px 9px}
+.main:fullscreen .board-wrapper{position:relative;flex:1 1 0;min-height:0;max-width:none;width:100%;margin:0;padding:0;border:0;border-radius:8px;background:#17212b;overflow:hidden;box-shadow:none}
+.main:fullscreen .board-top{display:none}
+.main:fullscreen .pitch-workspace{position:absolute;inset:0;display:block;width:100%;height:100%;min-height:0}
+.main:fullscreen .pitch-area{position:absolute;inset:0;width:100%;height:100%;min-height:0;padding:0;border:0;border-radius:0;background:#17212b;overflow:hidden}
+.main:fullscreen .pitch{width:100%;height:100%;max-width:none;max-height:none;aspect-ratio:auto;border-radius:0;box-shadow:none;background:#17212b}
+.main:fullscreen .pitch-image{width:100%;height:100%;object-fit:contain;object-position:center}
+.main:fullscreen .pitch-overlay,.main:fullscreen .pitch-drawings{width:100%;height:100%}
+.main:fullscreen .drawing-panel-toggle{display:flex;position:absolute;z-index:40;top:12px;left:12px;min-height:38px;align-items:center;box-shadow:0 4px 16px #0005}
+.main:fullscreen .drawing-drawer{display:none;position:absolute;z-index:35;top:58px;left:12px;bottom:12px;width:min(470px,calc(100% - 24px));max-height:calc(100% - 70px);grid-template-columns:minmax(130px,.8fr) minmax(190px,1.2fr);gap:8px;align-items:start;padding:10px;overflow:auto;border:1px solid #ffffff40;border-radius:12px;background:rgba(255,255,255,.97);box-shadow:0 12px 36px #0005;backdrop-filter:blur(10px)}
+.main:fullscreen .drawing-drawer.open{display:grid}
+.main:fullscreen .drawing-tools{display:flex;flex-direction:column;max-height:100%;overflow:auto;align-content:stretch;padding:8px}
+.main:fullscreen .drawing-options{display:flex;flex-direction:column;align-items:stretch;align-content:start;gap:10px;margin:0;padding:10px;min-width:0}
+.main:fullscreen .drawing-options-title{display:block;font-size:10px;letter-spacing:.8px;color:#697784}
+.main:fullscreen .drawing-options label{justify-content:space-between;flex-wrap:wrap;font-size:11px}
+.main:fullscreen .drawing-options input[type=color]{width:48px;height:34px}
+.main:fullscreen .drawing-options select{min-width:100px}
+.main:fullscreen .drawing-options #ayudaDibujo{flex:0 0 auto;min-width:0}
+.main:fullscreen .legend{display:none}
+@media(max-width:700px){
+ .main:fullscreen{padding:4px;gap:4px}
+ .main:fullscreen .controls{grid-template-columns:repeat(2,minmax(0,1fr));max-height:28vh;overflow:auto}
+ .main:fullscreen .quick-actions{flex-wrap:wrap;overflow:visible}
+ .main:fullscreen .quick-actions .btn{flex:1 1 auto}
+ .main:fullscreen .save-status{margin-left:0}
+ .main:fullscreen .drawing-drawer{top:54px;left:7px;bottom:7px;width:min(420px,calc(100% - 14px));grid-template-columns:minmax(105px,.85fr) minmax(150px,1.15fr);padding:7px;gap:6px}
+ .main:fullscreen .drawing-tools .tool-btn{font-size:9px;padding:6px 5px;min-height:30px}
+ .main:fullscreen .drawing-options{padding:7px;gap:7px}
+}
+@media(max-width:420px){
+ .main:fullscreen .drawing-drawer{grid-template-columns:1fr}
+ .main:fullscreen .drawing-tools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+ .main:fullscreen .drawing-tools strong{grid-column:1/-1}
+}
+
 </style>
 </head>
 
@@ -1321,6 +1362,8 @@ body{background:#f2f4f6;color:var(--coach-ink)}
 
 
     <div class="pitch-workspace">
+    <button type="button" class="btn btn-dark drawing-panel-toggle" id="toggleDrawingPanel" onclick="alternarPanelDibujo()" aria-expanded="false" aria-controls="drawingDrawer">☰ Herramientas de dibujo</button>
+    <aside class="drawing-drawer" id="drawingDrawer" aria-label="Panel de dibujo">
     <div class="drawing-toolbar drawing-tools" aria-label="Herramientas de dibujo">
       <strong>DIBUJAR</strong>
       <button type="button" class="tool-btn active" data-tool="select" onclick="seleccionarHerramienta(this.dataset.tool)">↖ Seleccionar</button>
@@ -1360,11 +1403,9 @@ body{background:#f2f4f6;color:var(--coach-ink)}
       </div>
 
     </div>
-    </div>
 
-
-
-    <div class="drawing-toolbar drawing-options" aria-label="Opciones de dibujo">
+    <div class="drawing-toolbar drawing-options" aria-label="Formato del trazado">
+      <strong class="drawing-options-title">FORMATO DEL TRAZADO</strong>
       <label>Color <input type="color" id="colorDibujo" value="#f47721" aria-label="Color del dibujo"></label>
       <label><input type="checkbox" id="rellenoDibujo"> Relleno</label>
       <label>Grosor <select id="grosorDibujo"><option value="3">Fino</option><option value="5" selected>Medio</option><option value="8">Grueso</option></select></label>
@@ -1373,6 +1414,7 @@ body{background:#f2f4f6;color:var(--coach-ink)}
       <button type="button" class="tool-btn" onclick="limpiarDibujos()">Borrar dibujos</button>
       <span class="board-help" id="ayudaDibujo" role="status" aria-live="polite">Elegí una herramienta para marcar la jugada.</span>
     </div>
+    </aside>
 
     <div class="legend">
 
@@ -2507,6 +2549,14 @@ svgDibujos.addEventListener("pointerdown",iniciarDibujo);svgDibujos.addEventList
 svgDibujos.addEventListener("dblclick",e=>{if(herramientaDibujo==="polyline"){e.preventDefault();finalizarLinea();}});
 const defs=svgEl("defs",{}),mk=svgEl("marker",{id:"puntaFlecha",markerWidth:8,markerHeight:8,refX:6,refY:3,orient:"auto",markerUnits:"strokeWidth"});mk.appendChild(svgEl("path",{d:"M0,0 L0,6 L6,3 z",fill:"context-stroke"}));defs.appendChild(mk);svgDibujos.appendChild(defs);
 async function alternarPantallaCompleta(){const el=document.getElementById("main");try{if(document.fullscreenElement)await document.exitFullscreen();else if(el.requestFullscreen)await el.requestFullscreen();else establecerEstadoGuardado("Este navegador no permite pantalla completa.","error");}catch(err){console.error(err);establecerEstadoGuardado("No se pudo activar pantalla completa. Revisá los permisos del navegador.","error");}}
+function alternarPanelDibujo(){
+  const panel=document.getElementById("drawingDrawer");
+  const boton=document.getElementById("toggleDrawingPanel");
+  if(!panel||!boton)return;
+  const abierto=panel.classList.toggle("open");
+  boton.setAttribute("aria-expanded",String(abierto));
+  boton.textContent=abierto?"✕ Cerrar herramientas":"☰ Herramientas de dibujo";
+}
 document.addEventListener("fullscreenchange",()=>{const b=document.getElementById("pantallaCompletaBtn");if(b)b.textContent=document.fullscreenElement?"✕ Salir de pantalla completa":"⛶ Pantalla completa";});
 
 /* =========================
