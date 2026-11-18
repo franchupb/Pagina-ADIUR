@@ -325,6 +325,40 @@ body{
   transform:translateY(-1px);
 }
 
+.btn:disabled{
+  opacity:.65;
+  cursor:wait;
+  transform:none;
+}
+
+.save-status{
+  display:inline-flex;
+  align-items:center;
+  min-height:34px;
+  padding:7px 10px;
+  border-radius:8px;
+  background:#f4f5f7;
+  color:#555;
+  font-size:11px;
+  font-weight:600;
+  line-height:1.35;
+}
+
+.save-status.ok{
+  background:#e9f7ef;
+  color:#187744;
+}
+
+.save-status.error{
+  background:#fff0f0;
+  color:#b42318;
+}
+
+.save-status.loading{
+  background:#fff6e9;
+  color:#9a5700;
+}
+
 .btn-orange{
   background:var(--naranja);
   color:#fff;
@@ -1303,11 +1337,20 @@ body{
 
     <button
       class="btn btn-dark"
+      id="guardarPizarraBtn"
       onclick="guardarPizarra()">
 
-      Guardar
+      Guardar en la nube
 
     </button>
+
+    <span
+      class="save-status"
+      id="estadoGuardadoPizarra"
+      role="status"
+      aria-live="polite">
+      Preparando guardado...
+    </span>
 
 
 
@@ -2470,288 +2513,304 @@ function crearJugadorManual(){
    GUARDAR PIZARRA
 ========================= */
 
-function guardarPizarra(){
+function obtenerDatosPizarra(){
+  const division = document.getElementById("division").value;
+  const jugadores = [];
 
-  const division =
-    document.getElementById(
-      "division"
-    ).value;
+  document.querySelectorAll(".player").forEach(j=>{
+    jugadores.push({
+      numero: String(j.dataset.numero || ""),
+      equipo: j.dataset.equipo === "opponent" ? "opponent" : "own",
+      arquero: j.dataset.arquero === "true",
+      left: j.style.left || "50%",
+      top: j.style.top || "50%",
+      nombre: j.querySelector(".player-name")?.textContent || ""
+    });
+  });
 
+  const pelota = document.querySelector(".ball");
 
-  const cancha =
-    document.getElementById(
-      "tipoCancha"
-    ).value;
-
-
-  const jugadores =
-    [];
-
-
-  document
-    .querySelectorAll(
-      ".player"
-    )
-    .forEach(
-      j=>{
-
-        jugadores.push({
-
-          numero:
-            j.dataset.numero,
-
-          equipo:
-            j.dataset.equipo,
-
-          arquero:
-            j.dataset.arquero,
-
-          left:
-            j.style.left,
-
-          top:
-            j.style.top,
-
-          nombre:
-            j.querySelector(
-              ".player-name"
-            )?.textContent || ""
-
-        });
-
-      }
-    );
-
-
-  const pelota =
-    document.querySelector(
-      ".ball"
-    );
-
-
-  const datos = {
-
+  return {
+    version: 1,
     division,
-
-    cancha,
-
-    formacionPropia:
-      document.getElementById(
-        "formacionPropia"
-      ).value,
-
-    formacionRival:
-      document.getElementById(
-        "formacionRival"
-      ).value,
-
+    cancha: document.getElementById("tipoCancha").value,
+    formacionPropia: document.getElementById("formacionPropia").value,
+    formacionRival: document.getElementById("formacionRival").value,
     jugadores,
+    pelota: pelota ? {
+      left: pelota.style.left || "50%",
+      top: pelota.style.top || "50%"
+    } : null
+  };
+}
 
-    pelota:
-      pelota
-      ? {
+function establecerEstadoGuardado(mensaje, tipo=""){
+  const estado = document.getElementById("estadoGuardadoPizarra");
+  if(!estado) return;
+  estado.textContent = mensaje;
+  estado.className = "save-status" + (tipo ? " " + tipo : "");
+}
 
-          left:
-            pelota.style.left,
+function claveLocalPizarra(division){
+  return "pizarraTacticaADIUR_" + division;
+}
 
-          top:
-            pelota.style.top
+function idDocumentoPizarra(division){
+  return String(division || "")
+    .normalize("NFD")
+    .replace(/[\\u0300-\\u036f]/g,"")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g,"_")
+    .replace(/^_+|_+$/g,"");
+}
 
-        }
-      : null
+/* =====================================================
+   FIREBASE - PIZARRA TÁCTICA ADIUR
+   Cada división se guarda en su propio documento.
+===================================================== */
 
+window.firebasePizarraReady = (async()=>{
+  const [{initializeApp,getApp,getApps},{getFirestore,doc,getDoc,setDoc,serverTimestamp}] =
+    await Promise.all([
+      import("https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js"),
+      import("https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js")
+    ]);
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCc0dPIEkaKxbHoRC2gZK412dXVGPOdTI",
+    authDomain: "adiur-b1913.firebaseapp.com",
+    projectId: "adiur-b1913",
+    storageBucket: "adiur-b1913.firebasestorage.app",
+    messagingSenderId: "884643321144",
+    appId: "1:884643321144:web:ba3c314de3a1c9e3545dcd",
+    measurementId: "G-58LL26YXPM"
   };
 
+  const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-  localStorage.setItem(
+  window.cargarPizarraDesdeNube = async(division)=>{
+    const referencia = doc(db,"pizarraTacticaADIUR",idDocumentoPizarra(division));
+    const resultado = await getDoc(referencia);
+    if(!resultado.exists()) return null;
+    const documento = resultado.data();
+    return documento && documento.datos ? documento.datos : null;
+  };
 
-    "pizarraTacticaADIUR_" +
-    division,
+  window.guardarPizarraEnNube = async(division,datos)=>{
+    const referencia = doc(db,"pizarraTacticaADIUR",idDocumentoPizarra(division));
+    const copia = JSON.parse(JSON.stringify(datos));
+    await setDoc(referencia,{
+      division,
+      datos:copia,
+      actualizado:serverTimestamp(),
+      actualizadoPor:usuario || "Usuario"
+    });
+    return true;
+  };
 
-    JSON.stringify(datos)
+  return true;
+})();
 
-  );
+window.firebasePizarraReady.catch(error=>{
+  window.firebasePizarraError = error;
+  console.error("No se pudo inicializar Firebase para la pizarra:",error);
+});
 
+let contadorCargaPizarra = 0;
+let guardadoEnCurso = false;
 
-  alert(
-    "Pizarra guardada correctamente."
-  );
+async function guardarPizarra(){
+  const boton = document.getElementById("guardarPizarraBtn");
+  if(guardadoEnCurso) return;
 
-}
+  guardadoEnCurso = true;
+  if(boton) boton.disabled = true;
 
-
-
-/* =========================
-   CARGAR PIZARRA
-========================= */
-
-function cargarGuardada(){
-
-  const division =
-    document.getElementById(
-      "division"
-    ).value;
-
-
-  const guardada =
-    localStorage.getItem(
-
-      "pizarraTacticaADIUR_" +
-      division
-
-    );
-
-
-  if(!guardada){
-
-    limpiarPizarra(false);
-
-    cargarFormacionPropia();
-
-    return;
-
-  }
-
+  const division = document.getElementById("division").value;
+  let datos;
 
   try{
-
-    const datos =
-      JSON.parse(
-        guardada
-      );
-
-
-    limpiarPizarra(false);
-
-
-    document.getElementById(
-      "tipoCancha"
-    ).value =
-      datos.cancha ||
-      "completa";
-
-
-    cambiarCancha();
-
-
-    document.getElementById(
-      "formacionPropia"
-    ).value =
-      datos.formacionPropia ||
-      "433";
-
-
-    document.getElementById(
-      "formacionRival"
-    ).value =
-      datos.formacionRival ||
-      "ninguna";
-
-
-    if(
-      datos.jugadores
-    ){
-
-      datos.jugadores.forEach(
-        j=>{
-
-          crearJugador(
-
-            j.numero,
-
-            parseFloat(
-              j.left
-            ),
-
-            parseFloat(
-              j.top
-            ),
-
-            j.equipo,
-
-            j.arquero === "true",
-
-            j.nombre
-
-          );
-
-        }
-      );
-
-    }
-
-
-    if(
-      datos.pelota
-    ){
-
-      const ball =
-        document.createElement(
-          "div"
-        );
-
-
-      ball.className =
-        "ball";
-
-
-      ball.textContent =
-        "⚽";
-
-
-      ball.style.left =
-        datos.pelota.left;
-
-
-      ball.style.top =
-        datos.pelota.top;
-
-
-      ball.addEventListener(
-        "pointerdown",
-        iniciarArrastre
-      );
-
-
-      ball.addEventListener(
-        "dblclick",
-        function(){
-
-          if(
-            confirm(
-              "¿Querés quitar la pelota?"
-            )
-          ){
-
-            ball.remove();
-
-          }
-
-        }
-      );
-
-
-      pitch.appendChild(
-        ball
-      );
-
-    }
-
-
-  }
-  catch(error){
-
-    console.error(
-      error
-    );
-
-    cargarFormacionPropia();
-
+    datos = obtenerDatosPizarra();
+  }catch(error){
+    console.error("No se pudo preparar la pizarra:",error);
+    establecerEstadoGuardado("No se pudo preparar la pizarra. Revisá los elementos e intentá nuevamente.","error");
+    guardadoEnCurso = false;
+    if(boton) boton.disabled = false;
+    return;
   }
 
+  let respaldoLocal = false;
+  try{
+    localStorage.setItem(claveLocalPizarra(division),JSON.stringify(datos));
+    respaldoLocal = true;
+  }catch(error){
+    console.warn("No se pudo guardar el respaldo local:",error);
+  }
+
+  establecerEstadoGuardado("Guardando en la nube...","loading");
+
+  try{
+    await window.firebasePizarraReady;
+    if(typeof window.guardarPizarraEnNube !== "function"){
+      throw new Error("La función de guardado en la nube no está disponible.");
+    }
+
+    await window.guardarPizarraEnNube(division,datos);
+
+    if(document.getElementById("division").value === division){
+      establecerEstadoGuardado(
+        "Guardada en la nube" + (respaldoLocal ? " y en este dispositivo." : "."),
+        "ok"
+      );
+    }
+  }catch(error){
+    console.error("Error al guardar la pizarra en Firestore:",error);
+    if(document.getElementById("division").value === division){
+      establecerEstadoGuardado(
+        respaldoLocal
+          ? "No se pudo guardar en la nube. Quedó una copia en este dispositivo."
+          : "No se pudo guardar. Revisá tu conexión e intentá nuevamente.",
+        "error"
+      );
+    }
+  }finally{
+    guardadoEnCurso = false;
+    if(boton) boton.disabled = false;
+  }
 }
 
+/* Valida y aplica los datos antes de modificar la cancha visible. */
+function normalizarPosicion(valor,porDefecto){
+  const numero = typeof valor === "number" ? valor : parseFloat(String(valor || ""));
+  if(!Number.isFinite(numero)) return porDefecto;
+  return Math.max(2,Math.min(98,numero));
+}
 
+function aplicarDatosPizarra(datos){
+  if(!datos || typeof datos !== "object" || Array.isArray(datos)){
+    throw new Error("El contenido guardado no tiene un formato válido.");
+  }
+
+  const jugadores = Array.isArray(datos.jugadores) ? datos.jugadores : [];
+  if(jugadores.length > 60){
+    throw new Error("La pizarra contiene demasiados elementos y no se cargó.");
+  }
+
+  const cancha = ["completa","mitad"].includes(datos.cancha) ? datos.cancha : "completa";
+  const opcionesPropias = Array.from(document.getElementById("formacionPropia").options).map(o=>o.value);
+  const opcionesRivales = Array.from(document.getElementById("formacionRival").options).map(o=>o.value);
+  const formacionPropia = opcionesPropias.includes(datos.formacionPropia) ? datos.formacionPropia : "433";
+  const formacionRival = opcionesRivales.includes(datos.formacionRival) ? datos.formacionRival : "ninguna";
+
+  const jugadoresValidos = jugadores.filter(j=>
+    j && typeof j === "object" &&
+    (j.equipo === "own" || j.equipo === "opponent") &&
+    String(j.numero ?? "").length <= 8
+  );
+
+  limpiarPizarra(false);
+
+  document.getElementById("tipoCancha").value = cancha;
+  cambiarCancha();
+  document.getElementById("formacionPropia").value = formacionPropia;
+  document.getElementById("formacionRival").value = formacionRival;
+
+  jugadoresValidos.forEach(j=>{
+    const jugador = crearJugador(
+      String(j.numero || "?"),
+      normalizarPosicion(j.left,50),
+      normalizarPosicion(j.top,50),
+      j.equipo,
+      j.arquero === true || j.arquero === "true",
+      String(j.nombre || "").slice(0,80)
+    );
+    jugador.dataset.arquero = (j.arquero === true || j.arquero === "true") ? "true" : "false";
+  });
+
+  if(datos.pelota && typeof datos.pelota === "object"){
+    const ball = document.createElement("div");
+    ball.className = "ball";
+    ball.textContent = "⚽";
+    ball.style.left = normalizarPosicion(datos.pelota.left,50) + "%";
+    ball.style.top = normalizarPosicion(datos.pelota.top,50) + "%";
+    ball.addEventListener("pointerdown",iniciarArrastre);
+    ball.addEventListener("dblclick",function(){
+      if(confirm("¿Querés quitar la pelota?")) ball.remove();
+    });
+    pitch.appendChild(ball);
+  }
+}
+
+async function cargarGuardada(){
+  const division = document.getElementById("division").value;
+  const miCarga = ++contadorCargaPizarra;
+  let datosLocales = null;
+
+  try{
+    const local = localStorage.getItem(claveLocalPizarra(division));
+    if(local) datosLocales = JSON.parse(local);
+  }catch(error){
+    console.warn("No se pudo leer el respaldo local de la pizarra:",error);
+  }
+
+  if(miCarga !== contadorCargaPizarra) return;
+
+  if(datosLocales){
+    try{
+      aplicarDatosPizarra(datosLocales);
+      establecerEstadoGuardado("Copia local cargada. Comprobando la nube...","loading");
+    }catch(error){
+      console.warn("El respaldo local no es válido:",error);
+      datosLocales = null;
+    }
+  }
+
+  if(!datosLocales){
+    limpiarPizarra(false);
+    if(miCarga === contadorCargaPizarra) cargarFormacionPropia();
+    establecerEstadoGuardado("Buscando pizarra guardada...","loading");
+  }
+
+  try{
+    await window.firebasePizarraReady;
+    if(miCarga !== contadorCargaPizarra) return;
+
+    const datosNube = await window.cargarPizarraDesdeNube(division);
+    if(miCarga !== contadorCargaPizarra) return;
+
+    if(datosNube){
+      aplicarDatosPizarra(datosNube);
+      try{
+        localStorage.setItem(claveLocalPizarra(division),JSON.stringify(datosNube));
+      }catch(error){
+        console.warn("No se pudo actualizar el respaldo local:",error);
+      }
+      establecerEstadoGuardado("Pizarra recuperada desde la nube.","ok");
+      return;
+    }
+
+    // Migra a Firestore una pizarra antigua que solo existía en este navegador.
+    if(datosLocales){
+      await window.guardarPizarraEnNube(division,datosLocales);
+      if(miCarga === contadorCargaPizarra){
+        establecerEstadoGuardado("Pizarra local migrada y guardada en la nube.","ok");
+      }
+    }else{
+      establecerEstadoGuardado("No hay una pizarra guardada para esta división.","");
+    }
+  }catch(error){
+    console.error("No se pudo recuperar la pizarra desde Firestore:",error);
+    if(miCarga === contadorCargaPizarra){
+      establecerEstadoGuardado(
+        datosLocales
+          ? "Sin conexión con la nube. Se muestra la copia de este dispositivo."
+          : "No se pudo conectar con la nube. Podés trabajar y guardar una copia local.",
+        "error"
+      );
+    }
+  }
+}
 
 /* =========================
    LIMPIAR
