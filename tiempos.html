@@ -574,13 +574,29 @@ function actualizarAccesoCategoria(){
     $("selectorCategoriaGlobal").setAttribute("aria-invalid",c?"false":"true");
 }
 function cargarCategorias(){
-    baseJugadoras=leerBaseJugadoras();
-    const select=$("selectorCategoriaGlobal"),anterior=select.value;
-    select.replaceChildren(new Option("Seleccioná una categoría para continuar",""));
+    const select=$("selectorCategoriaGlobal");
+    const anterior=select.value;
+
+    // No sobrescribir baseJugadoras: puede venir desde Firebase.
+    select.replaceChildren(
+        new Option("Seleccioná una categoría para continuar","")
+    );
+
     select.options[0].disabled=true;
     select.options[0].selected=true;
-    [...new Set(baseJugadoras.map(j=>j.categoria).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es")).forEach(c=>select.add(new Option(c,c)));
-    select.value=[...select.options].some(o=>o.value===anterior&&o.value!=="")?anterior:"";
+
+    [...new Set(
+        baseJugadoras
+            .map(j=>String(j.categoria||"").trim())
+            .filter(Boolean)
+    )]
+    .sort((a,b)=>a.localeCompare(b,"es"))
+    .forEach(c=>select.add(new Option(c,c)));
+
+    select.value=[...select.options].some(
+        o=>o.value===anterior&&o.value!==""
+    )?anterior:"";
+
     actualizarAccesoCategoria();
     poblarJugadorasFormulario();
     poblarFiltroJugadoras();
@@ -1028,7 +1044,6 @@ window.addEventListener("storage",e=>{
 datasetRendimiento=cargarRegistros();
 baseJugadoras=leerBaseJugadoras();
 cargarCategorias();
-$("selectorCategoriaGlobal").value="";
 actualizarAccesoCategoria();
 $("panelFormulario").classList.add("oculto");
 $("addFecha").value=hoyLocal();
@@ -1038,54 +1053,6 @@ renderizarPasadaFormulario();
 actualizarPerfil();
 ajustarMenu();
 actualizarTodo();
-</script>
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
-
-import {
-    getFirestore,
-    collection,
-    onSnapshot
-} from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
-
-const firebaseConfig = {
-    apiKey: "AIzaSyCc0dPIEkaKxbHoRC2CgZK412dXVGPOdTI",
-    authDomain: "adiur-b1913.firebaseapp.com",
-    projectId: "adiur-b1913",
-    storageBucket: "adiur-b1913.firebasestorage.app",
-    messagingSenderId: "884643321144",
-    appId: "1:884643321144:web:ba3c314de3a1c9e3545dcd",
-    measurementId: "G-58LL26YXPM"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-onSnapshot(
-    collection(db, "jugadoras"),
-    (snapshot) => {
-        const lista = snapshot.docs.map(docSnap => ({
-            id: docSnap.id,
-            nombre: docSnap.data().nombre || "",
-            categoria: docSnap.data().categoria || ""
-        }));
-
-        if (typeof window.aplicarJugadorasTiemposNube === "function") {
-            window.aplicarJugadorasTiemposNube(lista);
-        }
-    },
-    (error) => {
-        console.error("Error al cargar las jugadoras desde Firebase:", error);
-
-        if (typeof window.mostrarToastTiempos === "function") {
-            window.mostrarToastTiempos(
-                "No se pudieron cargar las categorías desde la nube.",
-                true
-            );
-        }
-    }
-);
 </script>
 
 <script type="module">
