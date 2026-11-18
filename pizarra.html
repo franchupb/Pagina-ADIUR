@@ -3172,3 +3172,34 @@ document
   .drawing-tools .tool-btn,.drawing-options label,.drawing-options .tool-btn{width:34px;min-width:34px}
   .drawing-tools .tool-btn{height:34px;min-height:34px;font-size:18px}
 }
+
+
+/* Mantener la barra en el mismo sitio también al usar pantalla completa. */
+.main:fullscreen .drawing-drawer{
+  display:flex!important;
+  position:absolute;
+  top:50%;
+  left:7px;
+  right:auto;
+  bottom:auto;
+  transform:translateY(-50%);
+  width:48px;
+  max-width:48px;
+  max-height:calc(100% - 24px);
+  grid-template-columns:none;
+  grid-template-rows:none;
+  padding:5px;
+  gap:5px;
+  overflow-y:auto;
+  overflow-x:hidden;
+}
+.main:fullscreen .drawing-tools{display:flex;flex-direction:column;gap:4px;padding:0}
+.main:fullscreen .drawing-tools .tool-btn{width:36px;min-width:36px;height:36px;min-height:36px;padding:0;font-size:20px}
+.main:fullscreen .drawing-options{display:flex;flex-direction:column;align-items:center;gap:5px;margin:0;padding:5px 0 0}
+.main:fullscreen .drawing-options label{width:36px;min-height:30px;justify-content:center;font-size:14px}
+.main:fullscreen .drawing-options .tool-btn{width:36px;min-width:36px;min-height:30px;padding:3px;font-size:16px}
+@media(max-width:700px){
+ .main:fullscreen .drawing-drawer{left:5px;width:44px;max-width:44px;padding:4px;max-height:calc(100% - 12px)}
+ .main:fullscreen .drawing-tools .tool-btn,.main:fullscreen .drawing-options label,.main:fullscreen .drawing-options .tool-btn{width:34px;min-width:34px}
+ .main:fullscreen .drawing-tools .tool-btn{height:34px;min-height:34px;font-size:18px}
+}
