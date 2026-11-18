@@ -2706,9 +2706,11 @@ async function guardarPizarra(){
 
   try{
     datos = obtenerDatosPizarra();
+    const bytes = new Blob([JSON.stringify(datos)]).size;
+    if(bytes > 700000) throw new Error("La pizarra supera el tamaño seguro para Firestore. Quitá algunos dibujos o simplificá los trazos.");
   }catch(error){
     console.error("No se pudo preparar la pizarra:",error);
-    establecerEstadoGuardado("No se pudo preparar la pizarra. Revisá los elementos e intentá nuevamente.","error");
+    establecerEstadoGuardado(error.message || "No se pudo preparar la pizarra. Revisá los elementos e intentá nuevamente.","error");
     guardadoEnCurso = false;
     if(boton) boton.disabled = false;
     return;
