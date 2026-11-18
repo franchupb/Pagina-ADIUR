@@ -965,6 +965,77 @@ body{background:#f2f4f6;color:var(--coach-ink)}
  .main:fullscreen .drawing-tools strong{grid-column:1/-1}
 }
 
+
+/* Pizarra inmersiva: la cancha seleccionada es el fondo del escenario; las herramientas son un panel independiente. */
+.pitch-workspace{position:relative;display:block;min-height:560px;width:100%;overflow:hidden;border-radius:11px;background:#163d2d}
+.pitch-area{display:flex;align-items:center;justify-content:center;width:100%;min-height:560px;height:100%;padding:12px;background:#163d2d;border:0}
+.pitch{position:relative;width:min(100%,1200px);height:auto;aspect-ratio:1470/980;flex:0 1 auto;margin:auto}
+.pitch-image{width:100%;height:100%;object-fit:contain;object-position:center}
+.drawing-panel-toggle{display:flex;position:absolute;z-index:42;top:14px;left:14px;align-items:center;gap:8px;min-height:42px;padding:10px 14px;border:1px solid #ffffff38;border-radius:10px;background:rgba(22,32,42,.94);color:#fff;font-size:12px;font-weight:750;box-shadow:0 5px 18px #0004;backdrop-filter:blur(8px)}
+.drawing-panel-toggle:hover{background:#263747;transform:translateY(-1px)}
+.drawing-drawer{display:none;position:absolute;z-index:41;top:66px;left:14px;bottom:14px;width:min(520px,calc(100% - 28px));grid-template-columns:minmax(150px,.9fr) minmax(210px,1.1fr);grid-template-rows:auto 1fr;gap:12px;padding:14px;overflow:auto;border:1px solid #ffffff55;border-radius:14px;background:rgba(250,252,253,.97);box-shadow:0 16px 48px #0006;backdrop-filter:blur(14px)}
+.drawing-drawer.open{display:grid}
+.drawer-heading{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:10px;border-bottom:1px solid #e7ebef}
+.drawer-heading>div{display:flex;flex-direction:column;gap:3px}
+.drawer-eyebrow{font-size:9px;font-weight:850;letter-spacing:1.1px;color:#9a6a48}
+.drawer-heading strong{font-size:14px;color:#202a35}
+.drawer-close{width:30px;height:30px;border:0;border-radius:8px;background:#edf1f4;color:#354454;font-size:22px;line-height:1;cursor:pointer}
+.drawing-tools{display:flex;flex-direction:column;align-items:stretch;gap:5px;min-width:0;margin:0;padding:9px;border:1px solid #e7ebef;border-radius:10px;background:#f4f7f9}
+.drawing-tools strong{padding:3px 4px 7px;font-size:9px;letter-spacing:1px;color:#77838d}
+.drawing-tools .tool-btn{text-align:left;min-height:36px;padding:8px 9px;border:1px solid transparent;border-radius:8px;background:transparent;color:#40505e;font-size:11px;font-weight:700}
+.drawing-tools .tool-btn:hover{background:white;border-color:#e1e7ec}
+.drawing-tools .tool-btn.active{background:#fff0e6;border-color:#f6c6a5;color:#bd520d;box-shadow:inset 3px 0 #f47721}
+.drawing-options{display:flex;flex-direction:column;align-items:stretch;align-content:start;gap:11px;min-width:0;margin:0;padding:11px;border:1px solid #e7ebef;border-radius:10px;background:#fff}
+.drawing-options-title{display:block;font-size:9px;letter-spacing:1px;color:#77838d}
+.drawing-options label{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:11px;font-weight:750;color:#52606d}
+.drawing-options input[type=color]{width:54px;height:34px;border:0;background:transparent;cursor:pointer}
+.drawing-options select{min-width:110px;padding:8px;border:1px solid #dce3e8;border-radius:7px;background:#fff}
+.drawing-options input[type=checkbox]{width:17px;height:17px;accent-color:#f47721}
+.drawing-options .tool-btn{min-height:35px;padding:8px 10px;border:1px solid #e0e5e9;border-radius:8px;background:#f8fafb;color:#44515d;font-size:10px;font-weight:750}
+.drawing-options #ayudaDibujo{min-width:0;color:#77838d;font-size:10px;line-height:1.5}
+.main:fullscreen{width:100vw;height:100vh;max-width:none;margin:0;padding:8px;background:#163d2d;display:flex;flex-direction:column;gap:7px;overflow:hidden}
+.main:fullscreen .page-header{display:none}
+.main:fullscreen .controls{flex:0 0 auto;max-width:none;width:100%;margin:0;grid-template-columns:repeat(4,minmax(100px,1fr));padding:7px 9px;gap:7px 9px}
+.main:fullscreen .quick-actions{padding-top:7px;gap:6px}
+.main:fullscreen .quick-actions .btn{min-height:31px;padding:7px 10px}
+.main:fullscreen .save-status{min-height:28px}
+.main:fullscreen .board-wrapper{position:relative;flex:1 1 0;min-height:0;width:100%;max-width:none;margin:0;padding:0;border:0;border-radius:9px;background:#163d2d;overflow:hidden;box-shadow:none}
+.main:fullscreen .board-top{display:none}
+.main:fullscreen .pitch-workspace{position:absolute;inset:0;width:100%;height:100%;min-height:0;border-radius:0;background:#163d2d}
+.main:fullscreen .pitch-area{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;width:100%;height:100%;min-height:0;padding:0;background:#163d2d}
+.main:fullscreen .pitch{width:auto;height:100%;max-width:100%;max-height:100%;aspect-ratio:1470/980;flex:0 1 auto;border-radius:0;box-shadow:none}
+.main:fullscreen .pitch-image{width:100%;height:100%;object-fit:contain;object-position:center}
+.main:fullscreen .pitch-drawings,.main:fullscreen .pitch-overlay{inset:0;width:100%;height:100%}
+.main:fullscreen .drawing-panel-toggle{top:12px;left:12px}
+.main:fullscreen .drawing-drawer{top:64px;left:12px;bottom:12px;width:min(520px,calc(100% - 24px))}
+.main:fullscreen .legend{display:none}
+@media(max-width:760px){
+ .pitch-workspace,.pitch-area{min-height:380px}
+ .pitch-area{padding:8px}
+ .drawing-drawer{top:62px;left:8px;bottom:8px;width:min(500px,calc(100% - 16px));grid-template-columns:minmax(115px,.9fr) minmax(155px,1.1fr);gap:7px;padding:9px}
+ .drawing-tools{padding:6px;gap:4px}
+ .drawing-tools .tool-btn{font-size:9px;min-height:32px;padding:6px}
+ .drawing-options{padding:8px;gap:8px}
+ .main:fullscreen{padding:4px;gap:4px}
+ .main:fullscreen .controls{grid-template-columns:repeat(2,minmax(0,1fr));max-height:30vh;overflow:auto}
+ .main:fullscreen .quick-actions{flex-wrap:wrap;overflow:visible}
+ .main:fullscreen .quick-actions .btn{flex:1 1 auto}
+ .main:fullscreen .save-status{margin-left:0}
+ .main:fullscreen .pitch{height:auto;width:min(100%,calc(100vh - 120px));max-height:100%;aspect-ratio:1470/980}
+ .main:fullscreen .drawing-drawer{top:58px;left:7px;bottom:7px;width:min(440px,calc(100% - 14px));grid-template-columns:minmax(105px,.9fr) minmax(145px,1.1fr);padding:7px}
+}
+@media(max-width:430px){
+ .drawing-drawer{grid-template-columns:1fr}
+ .drawing-tools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+ .drawing-tools strong{grid-column:1/-1}
+ .main:fullscreen .drawing-drawer{grid-template-columns:1fr}
+ .main:fullscreen .drawing-tools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:700px) and (orientation:landscape){
+ .main:fullscreen .controls{max-height:24vh}
+ .main:fullscreen .pitch{height:100%;width:auto;max-width:100%}
+}
+
 </style>
 </head>
 
@@ -1362,49 +1433,21 @@ body{background:#f2f4f6;color:var(--coach-ink)}
 
 
     <div class="pitch-workspace">
-    <button type="button" class="btn btn-dark drawing-panel-toggle" id="toggleDrawingPanel" onclick="alternarPanelDibujo()" aria-expanded="false" aria-controls="drawingDrawer">☰ Herramientas de dibujo</button>
-    <aside class="drawing-drawer" id="drawingDrawer" aria-label="Panel de dibujo">
-    <div class="drawing-toolbar drawing-tools" aria-label="Herramientas de dibujo">
-      <strong>DIBUJAR</strong>
-      <button type="button" class="tool-btn active" data-tool="select" onclick="seleccionarHerramienta(this.dataset.tool)">↖ Seleccionar</button>
-      <button type="button" class="tool-btn" data-tool="arrow" onclick="seleccionarHerramienta(this.dataset.tool)">➜ Flecha</button>
-      <button type="button" class="tool-btn" data-tool="circle" onclick="seleccionarHerramienta(this.dataset.tool)">○ Círculo</button>
-      <button type="button" class="tool-btn" data-tool="triangle" onclick="seleccionarHerramienta(this.dataset.tool)">△ Triángulo</button>
-      <button type="button" class="tool-btn" data-tool="cross" onclick="seleccionarHerramienta(this.dataset.tool)">✕ Cruz</button>
-      <button type="button" class="tool-btn" data-tool="square" onclick="seleccionarHerramienta(this.dataset.tool)">□ Cuadrado</button>
-      <button type="button" class="tool-btn" data-tool="freehand" onclick="seleccionarHerramienta(this.dataset.tool)">〰 Mano alzada</button>
-      <button type="button" class="tool-btn" data-tool="polyline" onclick="seleccionarHerramienta(this.dataset.tool)">⌁ Línea por vértices</button>
-    </div>
-
-    <div class="pitch-area">
-
-
-      <div
-        class="pitch"
-        id="pitch">
-
-
-        <img
-          id="pitchImage"
-          class="pitch-image"
-          src="cancha completa.jpg"
-          alt="Cancha">
-
-
-        <svg class="pitch-drawings" id="pitchDrawings" viewBox="0 0 1000 666.6667" preserveAspectRatio="none" aria-label="Dibujos tácticos"></svg>
-
-        <div
-          class="pitch-overlay"
-          id="pitchOverlay">
-
+      <div class="pitch-area">
+        <div class="pitch" id="pitch">
+          <img id="pitchImage" class="pitch-image" src="cancha completa.jpg" alt="Cancha">
+          <svg class="pitch-drawings" id="pitchDrawings" viewBox="0 0 1000 666.6667" preserveAspectRatio="none" aria-label="Dibujos tácticos"></svg>
+          <div class="pitch-overlay" id="pitchOverlay"></div>
         </div>
-
-
       </div>
 
-    </div>
-
-    <div class="drawing-toolbar drawing-options" aria-label="Formato del trazado">
+      <button type="button" class="btn btn-dark drawing-panel-toggle" id="toggleDrawingPanel" onclick="alternarPanelDibujo()" aria-expanded="false" aria-controls="drawingDrawer">✎ Herramientas y trazados</button>
+      <aside class="drawing-drawer" id="drawingDrawer" aria-label="Panel de dibujo">
+        <div class="drawer-heading">
+          <div><span class="drawer-eyebrow">EDICIÓN TÁCTICA</span><strong>Herramientas de dibujo</strong></div>
+          <button type="button" class="drawer-close" onclick="alternarPanelDibujo()" aria-label="Cerrar herramientas">×</button>
+        </div>
+        <div class="drawing-toolbar drawing-tools" aria-label="Herramientas de dibujo">
       <strong class="drawing-options-title">FORMATO DEL TRAZADO</strong>
       <label>Color <input type="color" id="colorDibujo" value="#f47721" aria-label="Color del dibujo"></label>
       <label><input type="checkbox" id="rellenoDibujo"> Relleno</label>
@@ -1413,8 +1456,9 @@ body{background:#f2f4f6;color:var(--coach-ink)}
       <button type="button" class="tool-btn" onclick="deshacerDibujo()">↶ Deshacer</button>
       <button type="button" class="tool-btn" onclick="limpiarDibujos()">Borrar dibujos</button>
       <span class="board-help" id="ayudaDibujo" role="status" aria-live="polite">Elegí una herramienta para marcar la jugada.</span>
+        </div>
+      </aside>
     </div>
-    </aside>
 
     <div class="legend">
 
