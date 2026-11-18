@@ -1276,6 +1276,67 @@ body{background:#f2f4f6;color:var(--coach-ink)}
   .main:fullscreen .pitch .drawing-drawer{left:5px;width:44px;max-width:44px;padding:4px}
 }
 
+
+/* CABECERA COMPARTIDA: mismos estilos que Pagina Principal.html */
+.barra-superior{
+  position:sticky;top:0;z-index:1000;
+  display:flex;align-items:center;gap:15px;
+  min-height:84px;padding:12px 25px;
+  background:#fff;border-bottom:1px solid var(--borde);
+}
+.boton-menu{
+  width:42px;height:42px;flex-shrink:0;border:0;
+  background:#fff;border-radius:9px;font-size:27px;color:var(--negro);
+  cursor:pointer;-webkit-tap-highlight-color:transparent;
+}
+.boton-menu:hover{background:var(--gris)}
+.logo-superior{
+  width:55px;height:55px;flex-shrink:0;object-fit:contain;
+  border-radius:50%;padding:2px;background:#fff;
+}
+.titulo-superior{flex:1;min-width:0}
+.titulo-superior h1{
+  margin:0 0 5px;font-size:23px;font-weight:900;letter-spacing:.5px;
+  text-transform:uppercase;
+}
+.titulo-superior p{margin:0;color:var(--gris-texto);font-size:13px}
+.perfil{display:flex;align-items:center;gap:10px;min-width:0;margin-left:auto}
+.nombre-perfil{
+  max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  font-size:13px;font-weight:bold;
+}
+.rol-perfil{color:var(--gris-texto);font-size:11px;margin-top:4px}
+.avatar{
+  width:42px;height:42px;display:flex;flex-shrink:0;
+  align-items:center;justify-content:center;background:var(--negro);
+  color:#fff;border-radius:50%;font-weight:bold;
+}
+.sidebar{top:84px}
+.capa-sidebar.visible{inset:84px 0 0}
+.main{padding-top:28px}
+@media(max-width:760px){
+  .barra-superior{gap:9px;min-height:74px;padding:9px 12px}
+  .logo-superior{width:44px;height:44px}
+  .titulo-superior h1{font-size:17px}
+  .titulo-superior p{font-size:11px}
+  .nombre-perfil{max-width:95px;font-size:12px}
+  .rol-perfil{font-size:10px}
+  .avatar{width:38px;height:38px}
+  .sidebar{top:74px}
+  .capa-sidebar.visible{inset:74px 0 0}
+  .main{padding-top:16px}
+}
+@media(max-width:420px){
+  .barra-superior{gap:7px;padding:8px}
+  .boton-menu{width:36px;height:38px;font-size:24px}
+  .logo-superior{width:39px;height:39px}
+  .titulo-superior h1{font-size:14px;letter-spacing:.2px}
+  .titulo-superior p{font-size:10px}
+  .nombre-perfil{max-width:72px;font-size:11px}
+  .rol-perfil{font-size:9px}
+  .avatar{width:34px;height:34px}
+}
+
 </style>
 </head>
 
@@ -1287,64 +1348,36 @@ body{background:#f2f4f6;color:var(--coach-ink)}
      BARRA SUPERIOR
 ========================= -->
 
-<header class="topbar">
-
+<header class="barra-superior">
   <button
-    class="menu-btn"
+    class="boton-menu"
     id="botonMenu"
     aria-label="Abrir menú"
     aria-controls="sidebar"
     aria-expanded="true"
-    onclick="alternarSidebar()">
-
-    <span></span>
-    <span></span>
-    <span></span>
-
-  </button>
-
+    type="button"
+    onclick="alternarSidebar()"
+  >☰</button>
 
   <img
-    class="logo-top"
+    class="logo-superior"
     src="Logo ADIUR.jpg"
-    onerror="this.src='logo adiur.jpg'"
-    alt="ADIUR">
+    alt="Logo ADIUR"
+    onerror="if(!this.dataset.intento){this.dataset.intento='1';this.src='logo adiur.jpg'}else{this.style.display='none'}"
+  >
 
-
-  <div class="top-title">
-
+  <div class="titulo-superior">
     <h1>ADIUR FEMENINO</h1>
-
-    <span>Pizarra táctica</span>
-
+    <p>Pizarra táctica</p>
   </div>
 
-
-  <div class="profile">
-
-    <div class="profile-info">
-
-      <strong id="nombreUsuario">
-        Usuario
-      </strong>
-
-      <small id="rolUsuario">
-        Cuerpo técnico
-      </small>
-
+  <div class="perfil">
+    <div>
+      <div class="nombre-perfil" id="nombreUsuario">Usuario</div>
+      <div class="rol-perfil" id="rolUsuario">Club ADIUR</div>
     </div>
-
-
-    <div
-      class="avatar"
-      id="avatarUsuario">
-
-      U
-
-    </div>
-
+    <div class="avatar" id="avatarUsuario" aria-label="Usuario">U</div>
   </div>
-
 </header>
 
 
@@ -1355,7 +1388,7 @@ body{background:#f2f4f6;color:var(--coach-ink)}
 <!-- BARRA LATERAL: NAVEGACIÓN COMPARTIDA CON PÁGINA PRINCIPAL -->
 <aside class="sidebar" id="sidebar" aria-label="Navegación principal">
 
-  <a class="menu-inicio" href="pagina principal.html">
+  <a class="menu-inicio" href="Pagina Principal.html">
     <span class="icono-inicio" aria-hidden="true">⌂</span>
     INICIO
   </a>
@@ -1880,61 +1913,29 @@ body{background:#f2f4f6;color:var(--coach-ink)}
 <script>
 
 /* =========================
-   USUARIO
+   USUARIO Y PERMISOS — MISMA LÓGICA QUE PÁGINA PRINCIPAL
 ========================= */
-
-const usuario =
-  localStorage.getItem("usuarioADIUR") || "Usuario";
-
-const usuariosAdmin = [
-  "fran",
-  "francisco",
-  "franciscoperezbasla"
-];
-
-const usuariosTecnico = [
-  "toto"
-];
-
-let rol = "Jugadora";
-
-
-if(
-  usuariosAdmin.includes(
-    usuario.toLowerCase()
-  )
-){
-
-  rol = "Administrador";
-
+let usuario = "";
+try{
+  usuario = (localStorage.getItem("usuarioADIUR") || "").trim();
+}catch(error){
+  console.error("No se pudo consultar la sesión:",error);
 }
-else if(
-  usuariosTecnico.includes(
-    usuario.toLowerCase()
-  )
-){
-
-  rol = "Cuerpo técnico";
-
+if(!usuario){
+  window.location.replace("Loing.html");
 }
 
+const usuarioNormalizado = usuario.toLowerCase().replace(/\\s+/g," ").trim();
+const usuarioCompacto = usuarioNormalizado.replace(/\\s+/g,"");
+const esFran = ["fran","francisco","francisco perez basla","franciscoperezbasla"].includes(usuarioNormalizado) || usuarioCompacto==="franciscoperezbasla";
+const esToto = usuarioNormalizado==="toto";
+const esBianca = ["bianca","biancadominguez"].includes(usuarioCompacto);
+const rol = esFran ? "Administrador" : esToto ? "Cuerpo técnico" : esBianca ? "Jugadora · Sub 14" : "Club ADIUR";
 
-document.getElementById(
-  "nombreUsuario"
-).textContent = usuario;
-
-
-document.getElementById(
-  "rolUsuario"
-).textContent = rol;
-
-
-document.getElementById(
-  "avatarUsuario"
-).textContent =
-  usuario.charAt(0).toUpperCase();
-
-
+document.getElementById("nombreUsuario").textContent = usuario || "Usuario";
+document.getElementById("rolUsuario").textContent = rol;
+document.getElementById("avatarUsuario").textContent = (usuario || "U").charAt(0).toUpperCase();
+document.getElementById("avatarUsuario").setAttribute("aria-label","Usuario: "+(usuario || "Usuario"));
 
 /* =====================================================
    MENÚ LATERAL — MISMO COMPORTAMIENTO QUE PÁGINA PRINCIPAL
