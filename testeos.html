@@ -7,1980 +7,1801 @@
 
 <style>
 :root {
-  --naranja: #f47721;
-  --naranja-oscuro: #dc5e0b;
-  --naranja-claro: #fff0e6;
-  --negro: #171717;
-  --gris: #f4f5f7;
-  --gris-texto: #747474;
-  --borde: #e8e8e8;
-  --blanco: #fff;
-  --rojo: #ef4444;
-  --rojo-oscuro: #dc2626;
-  --verde: #18743b;
+  --naranja:#f47721;
+  --naranja-oscuro:#dc5e0b;
+  --naranja-claro:#fff0e6;
+  --negro:#171717;
+  --gris:#f4f5f7;
+  --gris-texto:#747474;
+  --borde:#e8e8e8;
+  --rojo:#ef4444;
+  --verde:#18743b;
+  --sombra:0 5px 18px rgba(23,23,23,.045);
 }
 
-* {
-  box-sizing: border-box;
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f5f6f8;
+  color:var(--negro);
 }
 
-body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: var(--gris);
-  color: var(--negro);
-}
-
-button, input, select, textarea {
-  font: inherit;
-}
-
-button, a {
-  -webkit-tap-highlight-color: transparent;
-}
-
-button {
-  cursor: pointer;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
+button,input,select,textarea{font:inherit}
+button,a{-webkit-tap-highlight-color:transparent}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
 
 /* =====================================================
    BARRA SUPERIOR
 ===================================================== */
 
-.barra-superior {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  min-height: 84px;
-  padding: 12px 25px;
-  background: #fff;
-  border-bottom: 1px solid var(--borde);
+.barra-superior{
+  position:sticky;
+  top:0;
+  z-index:100;
+  display:flex;
+  align-items:center;
+  gap:15px;
+  min-height:84px;
+  padding:12px 25px;
+  background:#fff;
+  border-bottom:1px solid var(--borde);
 }
 
-.boton-menu {
-  width: 42px;
-  height: 42px;
-  flex-shrink: 0;
-  border: 0;
-  background: white;
-  border-radius: 9px;
-  font-size: 27px;
-  color: var(--negro);
+.boton-menu{
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  flex-shrink:0;
+  border:0;
+  background:#fff;
+  border-radius:9px;
+  font-size:22px;
+  color:var(--negro);
 }
 
-.boton-menu:hover {
-  background: var(--gris);
+.boton-menu:hover{background:var(--gris)}
+
+.logo-superior{
+  width:55px;
+  height:55px;
+  flex-shrink:0;
+  object-fit:contain;
+  border-radius:50%;
+  padding:2px;
+  background:#fff;
 }
 
-.logo-superior {
-  width: 55px;
-  height: 55px;
-  flex-shrink: 0;
-  object-fit: contain;
-  border-radius: 50%;
-  padding: 2px;
-  background: white;
+.titulo-superior{flex:1;min-width:0}
+
+.titulo-superior h1{
+  margin:0 0 5px;
+  font-size:21px;
+  font-weight:900;
+  letter-spacing:.35px;
 }
 
-.titulo-superior {
-  flex: 1;
-  min-width: 0;
+.titulo-superior p{
+  margin:0;
+  color:var(--gris-texto);
+  font-size:13px;
 }
 
-.titulo-superior h1 {
-  margin: 0 0 5px;
-  font-size: 23px;
-  font-weight: 900;
-  letter-spacing: .5px;
+.estado-nube{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 10px;
+  border-radius:20px;
+  background:#e0f5e7;
+  color:#18743b;
+  font-size:11px;
+  font-weight:bold;
+  white-space:nowrap;
 }
 
-.titulo-superior p {
-  margin: 0;
-  color: var(--gris-texto);
-  font-size: 13px;
+.estado-nube.guardando{
+  background:#fef3c7;
+  color:#b45309;
 }
 
-.estado-nube {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  font-weight: bold;
-  padding: 5px 10px;
-  border-radius: 20px;
-  background: #e0f5e7;
-  color: #18743b;
+.estado-nube.error{
+  background:#fee2e2;
+  color:#991b1b;
 }
 
-.estado-nube.guardando {
-  background: #fef3c7;
-  color: #b45309;
+.perfil{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width:0;
 }
 
-.estado-nube.error {
-  background: #fee2e2;
-  color: #991b1b;
+.avatar{
+  width:42px;
+  height:42px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+  border-radius:50%;
+  background:var(--negro);
+  color:#fff;
+  font-weight:bold;
 }
 
-.perfil {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-width: 0;
+.nombre-perfil{
+  max-width:150px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:13px;
+  font-weight:bold;
 }
 
-.avatar {
-  width: 42px;
-  height: 42px;
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-  background: var(--negro);
-  color: white;
-  border-radius: 50%;
-  font-weight: bold;
-}
-
-.nombre-perfil {
-  max-width: 150px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: 13px;
-  font-weight: bold;
-}
-
-.rol-perfil {
-  color: var(--gris-texto);
-  font-size: 11px;
-  margin-top: 4px;
-}
-
-/* =====================================================
-   ESTRUCTURA GENERAL
-===================================================== */
-
-.contenedor {
-  display: flex;
-  min-height: calc(100vh - 84px);
-  align-items: stretch;
+.rol-perfil{
+  margin-top:4px;
+  color:var(--gris-texto);
+  font-size:11px;
 }
 
 /* =====================================================
-   BARRA LATERAL
+   ESTRUCTURA Y BARRA LATERAL
 ===================================================== */
 
-.sidebar {
-  width: 258px;
-  flex: 0 0 258px;
-  padding: 20px 13px;
-  background: #fff;
-  border-right: 1px solid var(--borde);
-  transition: margin-left .25s ease;
-  overflow-y: auto;
+.contenedor{
+  display:flex;
+  min-height:calc(100vh - 84px);
+  align-items:stretch;
 }
 
-.sidebar.oculto {
-  margin-left: -258px;
+.sidebar{
+  width:258px;
+  flex:0 0 258px;
+  padding:20px 13px;
+  background:#fff;
+  border-right:1px solid var(--borde);
+  transition:margin-left .25s ease,transform .25s ease;
+  overflow-y:auto;
 }
 
-.menu-inicio {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 13px 14px;
-  margin-bottom: 16px;
-  border-radius: 11px;
-  background: #fff;
-  color: var(--negro);
-  font-size: 13px;
-  font-weight: 850;
-  transition: background .2s;
+.sidebar.oculto{margin-left:-258px}
+
+.menu-inicio{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:13px 14px;
+  margin-bottom:16px;
+  border-radius:11px;
+  font-size:13px;
+  font-weight:850;
+  transition:background .2s;
 }
 
-.menu-inicio:hover {
-  background: var(--gris);
+.menu-inicio:hover{background:var(--gris)}
+
+.grupo-menu{margin-bottom:8px}
+
+.titulo-grupo{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  min-height:46px;
+  padding:12px 13px;
+  border-radius:8px;
+  cursor:pointer;
+  color:#171717;
+  font-size:11px;
+  font-weight:850;
+  letter-spacing:.8px;
+  user-select:none;
 }
 
-.grupo-menu {
-  margin-bottom: 8px;
+.titulo-grupo:hover{background:#f8f8f8}
+
+.flecha{
+  display:inline-block;
+  font-size:16px;
+  font-weight:700;
+  line-height:1;
+  transition:transform .2s;
 }
 
-.titulo-grupo {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 13px;
-  min-height: 46px;
-  cursor: pointer;
-  border-radius: 8px;
-  color: #171717;
-  font-size: 11px;
-  font-weight: 850;
-  letter-spacing: .8px;
-  user-select: none;
+.grupo-menu.cerrado .flecha{transform:rotate(0deg)}
+.grupo-menu:not(.cerrado) .flecha{transform:rotate(90deg)}
+
+.submenu{
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+  padding:0 0 5px;
 }
 
-.titulo-grupo:hover {
-  background: #f8f8f8;
+.grupo-menu.cerrado .submenu{display:none}
+
+.submenu a{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  border-radius:9px;
+  color:#656872;
+  font-size:13px;
+  transition:background .15s,color .15s;
 }
 
-.flecha {
-  display: inline-block;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 1;
-  transition: transform .2s;
+.submenu a:hover{
+  background:#f6f6f6;
+  color:#181818;
 }
 
-.grupo-menu.cerrado .flecha {
-  transform: rotate(0deg);
+.submenu a.activo{
+  background:var(--naranja-claro);
+  color:var(--naranja-oscuro);
+  font-weight:800;
 }
 
-.grupo-menu:not(.cerrado) .flecha {
-  transform: rotate(90deg);
+.nav-punto{
+  width:6px;
+  height:6px;
+  flex-shrink:0;
+  background:#d7d9de;
+  border-radius:50%;
 }
 
-.submenu {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  padding: 0 0 5px 0;
+.submenu a.activo .nav-punto{background:var(--naranja)}
+
+.separador-sesion{
+  margin:19px 0 0;
+  padding-top:12px;
+  border-top:1px solid #e8e8e8;
 }
 
-.grupo-menu.cerrado .submenu {
-  display: none;
+.enlace-cerrar-sesion{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:12px;
+  border-radius:9px;
+  color:#c0392b;
+  font-size:13px;
+  font-weight:700;
 }
 
-.submenu a {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: 9px;
-  font-size: 13px;
-  color: #656872;
-  transition: background .15s, color .15s;
+.enlace-cerrar-sesion:hover{background:#fff2f1}
+
+.capa-sidebar{display:none}
+
+/* =====================================================
+   CONTENIDO GENERAL
+===================================================== */
+
+.contenido{
+  flex:1;
+  min-width:0;
+  max-width:100%;
+  padding:10px clamp(12px,1.6vw,22px) 30px;
 }
 
-.submenu a:hover {
-  background: #f6f6f6;
-  color: #181818;
+.encabezado-seccion{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:15px;
+  margin-bottom:17px;
+  flex-wrap:wrap;
 }
 
-.submenu a.activo {
-  background: var(--naranja-claro);
-  color: var(--naranja-oscuro);
-  font-weight: 800;
+.sobretitulo-seccion{
+  margin-bottom:7px;
+  color:var(--naranja-oscuro);
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:1.35px;
 }
 
-.nav-punto {
-  width: 6px;
-  height: 6px;
-  flex-shrink: 0;
-  background: #d7d9de;
-  border-radius: 50%;
+.encabezado-seccion h2{
+  margin:0 0 7px;
+  font-size:27px;
+  font-weight:900;
+  letter-spacing:-.55px;
 }
 
-.submenu a.activo .nav-punto {
-  background: var(--naranja);
+.encabezado-seccion p{
+  margin:0;
+  color:#777;
+  font-size:11px;
+  line-height:1.5;
 }
 
-.separador-sesion {
-  border-top: 1px solid #e8e8e8;
-  margin: 19px 0 0;
-  padding-top: 12px;
+.panel{
+  margin-bottom:16px;
+  padding:19px;
+  background:#fff;
+  border:1px solid #e7e8eb;
+  border-radius:15px;
+  box-shadow:var(--sombra);
 }
 
-.enlace-cerrar-sesion {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px;
-  border-radius: 9px;
-  color: #c0392b;
-  font-size: 13px;
-  font-weight: 700;
+.btn-principal{
+  min-height:40px;
+  padding:10px 14px;
+  border:0;
+  border-radius:9px;
+  background:var(--naranja);
+  color:#fff;
+  font-size:12px;
+  font-weight:bold;
+  box-shadow:0 3px 8px rgba(244,119,33,.16);
+  transition:background .15s;
 }
 
-.enlace-cerrar-sesion:hover {
-  background: #fff2f1;
-  color: #a93226;
+.btn-principal:hover{background:var(--naranja-oscuro)}
+
+.btn-secundario{
+  min-height:40px;
+  padding:10px 14px;
+  border:1px solid var(--borde);
+  border-radius:9px;
+  background:#fff;
+  color:var(--negro);
+  font-size:12px;
+  font-weight:bold;
 }
 
-.capa-sidebar {
-  display: none;
+.btn-secundario:hover{background:var(--gris)}
+
+.btn-peligro{
+  min-height:40px;
+  padding:10px 14px;
+  border:1px solid #fecdd3;
+  border-radius:9px;
+  background:#fff1f2;
+  color:#dc2626;
+  font-size:12px;
+  font-weight:bold;
+}
+
+.acciones-columnas{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
 }
 
 /* =====================================================
-   CONTENIDO PRINCIPAL - PLANILLA DE TESTEOS
+   SELECTOR DE CATEGORÍA
 ===================================================== */
 
-.contenido {
-  flex: 1;
-  min-width: 0;
-  padding: 24px;
-  max-width: 100%;
+.selector-categoria-panel{
+  display:grid;
+  grid-template-columns:42px minmax(0,1fr) minmax(230px,264px);
+  align-items:center;
+  gap:14px;
+  min-height:81px;
+  margin:0 0 16px;
+  padding:13px 17px;
+  background:#fff;
+  border:1px solid #f1d3c3;
+  border-left:4px solid var(--naranja);
+  border-radius:12px;
+  box-shadow:0 3px 12px rgba(23,23,23,.025);
 }
 
-.encabezado-seccion {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
+.selector-categoria-icono{
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  border-radius:11px;
+  background:#fff0e6;
+  color:var(--naranja-oscuro);
+  font-size:22px;
+  font-weight:800;
 }
 
-.encabezado-seccion h2 {
-  margin: 0 0 6px;
-  font-size: 25px;
+.selector-categoria-texto{min-width:0}
+
+.selector-categoria-texto span{
+  display:block;
+  margin-bottom:4px;
+  color:var(--naranja-oscuro);
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:1px;
 }
 
-.encabezado-seccion p {
-  margin: 0;
-  color: var(--gris-texto);
-  font-size: 13px;
+.selector-categoria-texto strong{
+  display:block;
+  margin-bottom:4px;
+  color:#171717;
+  font-size:14px;
+  font-weight:900;
 }
 
-.panel {
-  background: white;
-  border: 1px solid var(--borde);
-  border-radius: 14px;
-  padding: 20px;
-  margin-bottom: 22px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+.selector-categoria-texto p{
+  margin:0;
+  color:#858585;
+  font-size:10px;
+  line-height:1.35;
 }
 
-.controles-planilla {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  flex-wrap: wrap;
-  gap: 15px;
-  margin-bottom: 20px;
+.selector-categoria-control select{
+  width:100%;
+  height:40px;
+  padding:0 13px;
+  border:1px solid #efc8b4;
+  border-radius:9px;
+  outline:none;
+  background:#fffaf7;
+  color:#292929;
+  font-size:11px;
+  font-weight:800;
 }
 
-.filtros-grupo {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-}
-
-.campo-filtro {
-  min-width: 190px;
-}
-
-.campo-filtro label {
-  display: block;
-  font-size: 11px;
-  font-weight: bold;
-  text-transform: uppercase;
-  color: var(--gris-texto);
-  margin-bottom: 6px;
-}
-
-.campo-filtro select {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid var(--borde);
-  border-radius: 8px;
-  background: white;
-  font-size: 13px;
-  font-weight: bold;
-  outline: none;
-}
-
-.campo-filtro select:focus {
-  border-color: var(--naranja);
-}
-
-.acciones-columnas {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.btn-principal {
-  background: var(--naranja);
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 8px;
-  font-weight: bold;
-  font-size: 13px;
-  transition: background .15s;
-}
-
-.btn-principal:hover {
-  background: var(--naranja-oscuro);
-}
-
-.btn-secundario {
-  background: white;
-  border: 1px solid var(--borde);
-  color: var(--negro);
-  padding: 10px 16px;
-  border-radius: 8px;
-  font-weight: bold;
-  font-size: 13px;
-}
-
-.btn-secundario:hover {
-  background: var(--gris);
-}
-
-.btn-peligro {
-  background: #fff1f2;
-  border: 1px solid #fecdd3;
-  color: var(--rojo-oscuro);
-  padding: 10px 16px;
-  border-radius: 8px;
-  font-weight: bold;
-  font-size: 13px;
-}
-
-.btn-peligro:hover {
-  background: #ffe4e6;
+.selector-categoria-control select:focus{
+  border-color:var(--naranja);
+  box-shadow:0 0 0 3px rgba(244,119,33,.1);
 }
 
 /* =====================================================
-   TABLA ESTILO PLANILLA ADIUR (COMO EN LA IMAGEN)
+   IDENTIFICACIÓN DEL PERÍODO
 ===================================================== */
 
-.titulo-hoja-planilla {
-  text-align: center;
-  margin-bottom: 12px;
+.panel-periodo{
+  display:grid;
+  grid-template-columns:minmax(220px,1fr) minmax(260px,390px) auto;
+  align-items:center;
+  gap:20px;
+  padding:17px 19px;
+  border-left:4px solid var(--naranja);
 }
 
-.titulo-hoja-planilla h3 {
-  margin: 0;
-  color: var(--naranja);
-  font-size: 19px;
-  font-weight: 900;
-  text-transform: uppercase;
+.seccion-kicker{
+  display:block;
+  margin-bottom:6px;
+  color:var(--naranja-oscuro);
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:1px;
 }
 
-.titulo-hoja-planilla span {
-  font-size: 13px;
-  font-weight: bold;
-  color: var(--negro);
+.periodo-info h3{
+  margin:0 0 5px;
+  font-size:16px;
+  font-weight:900;
 }
 
-.tabla-wrapper {
-  width: 100%;
-  overflow-x: auto;
-  border: 1px solid #999;
-  border-radius: 6px;
-  background: #fff;
+.periodo-info p{
+  max-width:520px;
+  margin:0;
+  color:#858585;
+  font-size:10px;
+  line-height:1.5;
 }
 
-.tabla-testeos {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 12px;
-  text-align: center;
-  white-space: nowrap;
+.periodo-campo label{
+  display:block;
+  margin-bottom:6px;
+  color:#666;
+  font-size:10px;
+  font-weight:800;
 }
 
-.tabla-testeos th,
-.tabla-testeos td {
-  border: 1px solid #777;
-  padding: 5px 7px;
-  height: 28px;
+.periodo-campo input{
+  width:100%;
+  height:40px;
+  padding:0 12px;
+  border:1px solid #e2e4e8;
+  border-radius:9px;
+  outline:none;
+  background:#fff;
+  color:#222;
+  font-size:12px;
+  font-weight:700;
 }
 
-/* Columna fija izquierda (N° y Nombre) */
-
-.col-fija-num {
-  position: sticky;
-  left: 0;
-  z-index: 20;
-  background: #f47721;
-  color: #000;
-  font-weight: bold;
-  min-width: 34px;
+.periodo-campo input:focus{
+  border-color:var(--naranja);
+  box-shadow:0 0 0 3px rgba(244,119,33,.1);
 }
 
-.col-fija-nombre {
-  position: sticky;
-  left: 34px;
-  z-index: 20;
-  background: #fff;
-  text-align: left !important;
-  padding-left: 10px !important;
-  min-width: 185px;
-  font-weight: 600;
-  border-right: 2px solid #444 !important;
+.periodo-campo small{
+  display:block;
+  margin-top:5px;
+  color:#989898;
+  font-size:9px;
+  line-height:1.35;
 }
 
-thead .col-fija-num {
-  z-index: 30;
-  background: var(--naranja);
+.periodo-acciones{
+  display:flex;
+  align-items:center;
+  flex-direction:column;
+  gap:6px;
 }
 
-thead .col-fija-nombre {
-  z-index: 30;
-  background: #e5e7eb;
-  text-align: center !important;
-  font-weight: 900;
+.periodo-acciones .btn-principal{
+  min-width:145px;
+  white-space:nowrap;
 }
 
-.fila-mes-banner th {
-  background: #fff;
-  font-size: 13px;
-  font-weight: 900;
-  padding: 6px;
-  border-bottom: 2px solid #444;
+.estado-guardado-planilla{
+  min-height:12px;
+  color:#287b47;
+  font-size:9px;
+  font-weight:700;
+  text-align:center;
 }
 
-/* Colores de Categorías */
+/* =====================================================
+   TÍTULOS DE SECCIÓN
+===================================================== */
 
-.cat-jugadoras { background: #e5e7eb; color: #000; font-weight: 900; }
-.cat-saltos    { background: #ffe599; color: #000; font-weight: 900; }
-.cat-velocidad { background: #f9cb9c; color: #000; font-weight: 900; }
-.cat-vo2       { background: #e06666; color: #000; font-weight: 900; }
-.cat-postural  { background: #b6d7a8; color: #000; font-weight: 900; }
-.cat-agilidad  { background: #6fa8dc; color: #000; font-weight: 900; }
-.cat-indices   { background: #b4a7d6; color: #000; font-weight: 900; }
-.cat-custom    { background: #a2c4c9; color: #000; font-weight: 900; }
-
-.th-subtest {
-  background: #f8fafc;
-  font-weight: 800;
-  font-size: 11px;
-  position: relative;
+.panel-cabecera-planilla,
+.panel-titulo-fila{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:15px;
 }
 
-.btn-quitar-col {
-  display: inline-block;
-  margin-left: 5px;
-  background: #fee2e2;
-  color: #b91c1c;
-  border: 1px solid #fca5a5;
-  border-radius: 4px;
-  font-size: 10px;
-  line-height: 1;
-  padding: 1px 4px;
-  cursor: pointer;
+.panel-carga-grupos-cabecera{margin-bottom:15px}
+
+.panel-cabecera-planilla h3,
+.panel-titulo-fila h3{
+  margin:0 0 5px;
+  color:#202020;
+  font-size:17px;
+  font-weight:900;
+  letter-spacing:-.25px;
 }
 
-.btn-quitar-col:hover {
-  background: #ef4444;
-  color: #fff;
+.panel-cabecera-planilla p,
+.panel-titulo-fila p{
+  margin:0;
+  color:#858585;
+  font-size:10px;
+  line-height:1.45;
 }
 
-/* Inputs dentro de celdas */
+/* =====================================================
+   CARGA GUIADA DE TESTEOS · PASOS
+===================================================== */
 
-.celda-input {
-  width: 62px;
-  border: none;
-  background: transparent;
-  text-align: center;
-  font-size: 12px;
-  font-weight: 600;
-  color: #111;
-  outline: none;
-  padding: 2px;
+.panel-grupos{padding:19px}
+
+.flujo-carga-test{
+  display:flex;
+  flex-direction:column;
+  gap:13px;
 }
 
-.celda-input:focus {
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: inset 0 0 0 2px var(--naranja);
-  border-radius: 3px;
+.paso-carga-test{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:2px 0 0;
 }
 
-.celda-input:disabled {
-  color: #111;
-  cursor: default;
+.numero-paso{
+  width:25px;
+  height:25px;
+  flex:0 0 25px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:var(--naranja-claro);
+  color:var(--naranja-oscuro);
+  font-size:11px;
+  font-weight:900;
 }
 
-/* Colores semáforo de rendimiento */
-
-.estado-mejor  { background-color: #b7e1cd !important; }
-.estado-peor   { background-color: #f4cccc !important; }
-.imc-bajo      { background-color: #6d9eeb !important; font-weight: bold; }
-.imc-normal    { background-color: #93c47d !important; font-weight: bold; }
-.imc-alto      { background-color: #f6b26b !important; font-weight: bold; }
-
-/* Fila de Promedios */
-
-.fila-promedios td {
-  background: #f1f5f9;
-  font-weight: 900;
-  border-top: 2px solid #333;
-  color: #000;
+.paso-carga-test strong{
+  display:block;
+  color:#292929;
+  font-size:11px;
+  font-weight:900;
 }
 
-.fila-promedios .col-fija-nombre {
-  background: #e2e8f0;
-  text-align: center !important;
+.paso-carga-test small{
+  display:block;
+  margin-top:3px;
+  color:#898989;
+  font-size:9px;
 }
+
+/* =====================================================
+   PASO 1 · SELECCIÓN DE ÁREAS
+===================================================== */
+
+.navegacion-grupos{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
+  gap:9px;
+}
+
+.area-selector-card{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width:0;
+  min-height:66px;
+  padding:11px 12px;
+  border:1px solid #e7e8eb;
+  border-radius:10px;
+  background:#fff;
+  color:#333;
+  text-align:left;
+  transition:border-color .18s,background .18s,box-shadow .18s;
+}
+
+.area-selector-card:hover{
+  border-color:#edc2a9;
+  background:#fffdfa;
+}
+
+.area-selector-card.seleccionada{
+  border-color:var(--naranja);
+  background:#fff8f3;
+  box-shadow:0 0 0 2px rgba(244,119,33,.08);
+}
+
+.area-selector-icono{
+  width:35px;
+  height:35px;
+  flex:0 0 35px;
+  display:grid;
+  place-items:center;
+  border-radius:9px;
+  background:#f3f4f6;
+  color:#545b65;
+  font-size:16px;
+  font-weight:900;
+}
+
+.area-selector-card.seleccionada .area-selector-icono{
+  background:var(--naranja-claro);
+  color:var(--naranja-oscuro);
+}
+
+.area-selector-contenido{
+  display:block;
+  flex:1;
+  min-width:0;
+}
+
+.area-selector-contenido strong{
+  display:block;
+  color:#2d2d2d;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.35px;
+}
+
+.area-selector-contenido small{
+  display:block;
+  margin-top:4px;
+  color:#888;
+  font-size:8px;
+}
+
+.area-selector-marca{
+  width:7px;
+  height:7px;
+  flex:0 0 7px;
+  border-radius:50%;
+  background:#d7dbe0;
+}
+
+.area-selector-card.seleccionada .area-selector-marca{
+  background:var(--naranja);
+  box-shadow:0 0 0 3px rgba(244,119,33,.13);
+}
+
+/* =====================================================
+   PASO 2 · SELECTOR DE PRUEBAS
+===================================================== */
+
+.editor-prueba{
+  min-width:0;
+  overflow:hidden;
+  border:1px solid #e7e8eb;
+  border-radius:12px;
+  background:#fff;
+}
+
+.editor-inicial{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  min-height:190px;
+  padding:25px 15px;
+  text-align:center;
+}
+
+.editor-inicial-icono{
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  margin-bottom:10px;
+  border-radius:12px;
+  background:var(--naranja-claro);
+  color:var(--naranja-oscuro);
+  font-size:21px;
+}
+
+.editor-inicial strong{
+  color:#333;
+  font-size:12px;
+}
+
+.editor-inicial p{
+  max-width:340px;
+  margin:6px 0 0;
+  color:#888;
+  font-size:10px;
+  line-height:1.5;
+}
+
+.editor-prueba-cabecera{
+  padding:15px 16px 12px;
+  background:#fcfcfd;
+  border-bottom:1px solid #eceef1;
+}
+
+.editor-prueba-cabecera-superior{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.editor-prueba-kicker{
+  display:block;
+  margin-bottom:5px;
+  color:var(--naranja-oscuro);
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.9px;
+}
+
+.editor-prueba-titulo{
+  margin:0;
+  color:#222;
+  font-size:15px;
+  font-weight:900;
+}
+
+.editor-prueba-descripcion{
+  margin:5px 0 0;
+  color:#888;
+  font-size:9px;
+  line-height:1.4;
+}
+
+.editor-progreso-texto{
+  flex:0 0 auto;
+  padding:7px 9px;
+  border-radius:8px;
+  background:#f0f2f4;
+  color:#666;
+  font-size:9px;
+  font-weight:900;
+  white-space:nowrap;
+}
+
+.editor-progreso-barra{
+  width:100%;
+  height:5px;
+  margin-top:12px;
+  overflow:hidden;
+  border-radius:10px;
+  background:#e9ebee;
+}
+
+.editor-progreso-barra span{
+  display:block;
+  width:0;
+  height:100%;
+  border-radius:inherit;
+  background:var(--naranja);
+  transition:width .2s ease;
+}
+
+.selector-pruebas-wrap{
+  padding:12px 14px 11px;
+  border-bottom:1px solid #f0f0f0;
+}
+
+.selector-pruebas-label{
+  display:block;
+  margin-bottom:8px;
+  color:#858585;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.8px;
+  text-transform:uppercase;
+}
+
+.selector-pruebas{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:7px;
+}
+
+.prueba-selector-item{
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:3px;
+  border:1px solid #e7e8eb;
+  border-radius:8px;
+  background:#fff;
+}
+
+.prueba-selector-item.activa{
+  border-color:#f0b38f;
+  background:#fff7f1;
+}
+
+.prueba-selector-boton{
+  min-height:29px;
+  padding:5px 9px;
+  border:0;
+  border-radius:6px;
+  background:transparent;
+  color:#636363;
+  font-size:9px;
+  font-weight:800;
+}
+
+.prueba-selector-item.activa .prueba-selector-boton{
+  color:var(--naranja-oscuro);
+}
+
+.prueba-selector-cantidad{
+  display:inline-block;
+  margin-left:4px;
+  color:#999;
+  font-size:8px;
+  font-weight:800;
+}
+
+.prueba-selector-eliminar{
+  width:22px;
+  height:22px;
+  border:0;
+  border-radius:5px;
+  background:#fff0f0;
+  color:#bd3c3c;
+  font-size:13px;
+  font-weight:900;
+}
+
+.prueba-selector-eliminar:hover{background:#ffe0e0}
+
+/* =====================================================
+   PASO 3 · CARGA POR JUGADORA
+===================================================== */
+
+.paso-completar-test{
+  margin:13px 14px 10px;
+}
+
+.herramientas-jugadoras-test{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:12px 14px;
+  background:#fff;
+}
+
+.busqueda-jugadoras-test{
+  width:min(290px,100%);
+  height:34px;
+  padding:0 10px;
+  border:1px solid #e5e7ea;
+  border-radius:8px;
+  outline:none;
+  color:#333;
+  font-size:10px;
+}
+
+.busqueda-jugadoras-test:focus{
+  border-color:var(--naranja);
+  box-shadow:0 0 0 2px rgba(244,119,33,.09);
+}
+
+.filtros-estado-test{
+  display:flex;
+  align-items:center;
+  gap:4px;
+  padding:3px;
+  border:1px solid #eceef0;
+  border-radius:8px;
+  background:#f7f8f9;
+}
+
+.filtro-estado-test{
+  min-height:26px;
+  padding:5px 8px;
+  border:0;
+  border-radius:6px;
+  background:transparent;
+  color:#777;
+  font-size:8px;
+  font-weight:800;
+}
+
+.filtro-estado-test.activo{
+  background:#fff;
+  color:var(--naranja-oscuro);
+  box-shadow:0 1px 3px rgba(0,0,0,.07);
+}
+
+.lista-jugadoras-test{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(245px,1fr));
+  gap:9px;
+  padding:0 14px 14px;
+}
+
+.jugadora-test-card{
+  min-width:0;
+  padding:11px;
+  border:1px solid #e9eaed;
+  border-radius:10px;
+  background:#fff;
+  transition:border-color .15s,background .15s;
+}
+
+.jugadora-test-card.completada{
+  border-color:#d7eadc;
+  background:#fcfffd;
+}
+
+.jugadora-test-cabecera{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  min-width:0;
+  margin-bottom:10px;
+}
+
+.jugadora-test-numero{
+  width:27px;
+  height:27px;
+  flex:0 0 27px;
+  display:grid;
+  place-items:center;
+  border-radius:8px;
+  background:#f2f3f5;
+  color:#737983;
+  font-size:9px;
+  font-weight:900;
+}
+
+.jugadora-test-card.completada .jugadora-test-numero{
+  background:#e5f4e9;
+  color:#287a43;
+}
+
+.jugadora-test-nombre{
+  flex:1;
+  min-width:0;
+  color:#333;
+  font-size:10px;
+  font-weight:900;
+  line-height:1.3;
+}
+
+.jugadora-test-estado{
+  flex:0 0 auto;
+  padding:4px 6px;
+  border-radius:20px;
+  background:#f1f2f4;
+  color:#858585;
+  font-size:7px;
+  font-weight:900;
+  text-transform:uppercase;
+}
+
+.jugadora-test-card.completada .jugadora-test-estado{
+  background:#e8f5eb;
+  color:#287a43;
+}
+
+.jugadora-test-campos{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:7px;
+}
+
+.jugadora-test-campos.con-comp{
+  grid-template-columns:1fr 1fr;
+}
+
+.campo-resultado-test label{
+  display:block;
+  margin-bottom:4px;
+  color:#858585;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.35px;
+  text-transform:uppercase;
+}
+
+.campo-resultado-test input{
+  width:100%;
+  height:35px;
+  padding:0 9px;
+  border:1px solid #e3e6e9;
+  border-radius:7px;
+  outline:none;
+  background:#fff;
+  color:#292929;
+  font-size:11px;
+  font-weight:700;
+  text-align:left;
+}
+
+.campo-resultado-test input::placeholder{
+  color:#b7bbc1;
+  font-weight:400;
+}
+
+.campo-resultado-test input:focus{
+  border-color:var(--naranja);
+  box-shadow:0 0 0 2px rgba(244,119,33,.1);
+}
+
+.campo-resultado-test input:disabled{
+  background:#f7f8f9;
+  color:#888;
+}
+
+.resultado-imc-test{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  min-height:35px;
+  padding:0 9px;
+  border-radius:7px;
+  background:#f2f5f8;
+  color:#536273;
+  font-size:10px;
+  font-weight:900;
+}
+
+.resultado-imc-test small{
+  color:#8b949e;
+  font-size:8px;
+  font-weight:700;
+}
+
+.lista-jugadoras-vacia{
+  grid-column:1/-1;
+  padding:26px 14px;
+  color:#858585;
+  font-size:10px;
+  text-align:center;
+}
+
+.ayuda-resultado-test{
+  margin:0 14px 14px;
+  padding:9px 11px;
+  border-radius:8px;
+  background:#fafafa;
+  color:#898989;
+  font-size:8px;
+  line-height:1.5;
+}
+
+.ayuda-grupos{
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  margin-top:13px;
+  padding-top:11px;
+  border-top:1px solid #f0f0f0;
+}
+
+.ayuda-registro-icono{
+  width:15px;
+  height:15px;
+  flex:0 0 15px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:#f0f1f3;
+  color:#777;
+  font-size:9px;
+  font-weight:900;
+}
+
+.ayuda-grupos p{
+  margin:0;
+  color:#858585;
+  font-size:9px;
+  line-height:1.5;
+}
+
+.estado-vacio-grupos{
+  padding:25px 15px;
+  border:1px dashed #ddd;
+  border-radius:10px;
+  color:#888;
+  font-size:11px;
+  text-align:center;
+}
+
+/* =====================================================
+   BIBLIOTECA TEST
+===================================================== */
+
+.panel-biblioteca{padding:19px}
+
+.cabecera-biblioteca-test{
+  align-items:center;
+  margin-bottom:15px;
+}
+
+.contador-biblioteca{
+  flex:0 0 auto;
+  padding:7px 10px;
+  border-radius:20px;
+  background:#f1f2f4;
+  color:#686868;
+  font-size:9px;
+  font-weight:800;
+}
+
+.biblioteca-test-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
+  gap:11px;
+}
+
+.biblioteca-vacia{
+  grid-column:1/-1;
+  padding:25px 15px;
+  border:1px dashed #dedfe3;
+  border-radius:10px;
+  color:#777;
+  font-size:11px;
+  text-align:center;
+  line-height:1.5;
+}
+
+.biblioteca-vacia span{
+  display:block;
+  margin-top:5px;
+  color:#999;
+  font-size:9px;
+}
+
+.tarjeta-biblioteca{
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+  padding:13px;
+  border:1px solid #e6e7ea;
+  border-radius:11px;
+  background:#fff;
+  cursor:pointer;
+  transition:border-color .15s,box-shadow .15s,transform .15s;
+}
+
+.tarjeta-biblioteca:hover{
+  border-color:#f0b18b;
+  box-shadow:0 5px 16px rgba(23,23,23,.07);
+  transform:translateY(-2px);
+}
+
+.biblioteca-tarjeta-arriba{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:10px;
+}
+
+.biblioteca-chip{
+  display:inline-flex;
+  align-items:center;
+  padding:5px 7px;
+  border-radius:6px;
+  background:#fff0e6;
+  color:#b95713;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.35px;
+}
+
+.biblioteca-fecha{
+  color:#999;
+  font-size:8px;
+  white-space:nowrap;
+}
+
+.tarjeta-biblioteca h4{
+  margin:0 0 5px;
+  color:#252525;
+  font-size:14px;
+  font-weight:900;
+  line-height:1.25;
+  overflow-wrap:anywhere;
+}
+
+.tarjeta-biblioteca p{
+  margin:0;
+  color:#888;
+  font-size:9px;
+}
+
+.biblioteca-mini-datos{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  margin:12px 0;
+}
+
+.biblioteca-mini-datos span{
+  padding:5px 7px;
+  border:1px solid #ededed;
+  border-radius:6px;
+  color:#666;
+  font-size:8px;
+  font-weight:700;
+}
+
+.biblioteca-grupos{
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px;
+  margin:auto 0 12px;
+}
+
+.biblioteca-grupos span{
+  padding:4px 6px;
+  border-radius:5px;
+  background:#f4f5f7;
+  color:#686868;
+  font-size:8px;
+  font-weight:800;
+}
+
+.biblioteca-abrir{
+  width:100%;
+  min-height:32px;
+  border:1px solid #f1c4a9;
+  border-radius:7px;
+  background:#fff9f5;
+  color:#b85717;
+  font-size:9px;
+  font-weight:900;
+}
+
+.biblioteca-abrir:hover{background:#fff0e6}
+
+/* =====================================================
+   PLANILLA FINAL / VISTA AMPLIADA
+===================================================== */
+
+.planilla-cabecera{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:82px;
+  padding:8px 12px;
+  border:1px solid #888;
+  background:#fff;
+  text-align:center;
+}
+
+.planilla-cabecera img{
+  position:absolute;
+  top:50%;
+  left:17%;
+  width:65px;
+  height:65px;
+  object-fit:contain;
+  transform:translateY(-50%);
+}
+
+.planilla-cabecera-texto{
+  width:100%;
+  text-align:center;
+}
+
+.planilla-cabecera-texto strong{
+  display:block;
+  font-size:17px;
+  font-weight:900;
+}
+
+.planilla-cabecera-texto span{
+  display:block;
+  margin-top:4px;
+  font-size:12px;
+  font-weight:900;
+}
+
+.planilla-cabecera-texto small{
+  display:block;
+  margin-top:4px;
+  color:#555;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.5px;
+}
+
+.planilla-print-titulo{
+  margin:12px 0 0;
+  padding:7px 9px;
+  background:#303030;
+  color:#fff;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.6px;
+}
+
+.planilla-print-scroll{
+  width:100%;
+  overflow-x:auto;
+  border:1px solid #999;
+  border-top:0;
+}
+
+.tabla-print{
+  width:100%;
+  min-width:800px;
+  border-collapse:collapse;
+  table-layout:auto;
+  background:#fff;
+  color:#111;
+  font-size:9px;
+  text-align:center;
+  white-space:nowrap;
+}
+
+.tabla-print th,
+.tabla-print td{
+  padding:5px 6px;
+  border:1px solid #888;
+}
+
+.tabla-print thead th{font-weight:900}
+
+.tabla-print .print-num{
+  width:28px;
+  background:#fff0e6;
+}
+
+.tabla-print .print-nombre{
+  min-width:160px;
+  text-align:left;
+  padding-left:8px;
+  background:#f4f5f7;
+}
+
+.tabla-print .print-subtest{
+  background:#fafafa;
+  color:#333;
+  font-size:8px;
+}
+
+.tabla-print .print-promedios td{
+  background:#edf0f4;
+  font-weight:900;
+}
+
+.planilla-print-pie{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:9px;
+  color:#777;
+  font-size:8px;
+}
+
+#printRoutine{display:none}
 
 /* =====================================================
    MODALES
 ===================================================== */
 
-.modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.5);
-  z-index: 200;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-
-.modal.activo {
-  display: flex;
-}
-
-.modal-contenido {
-  background: white;
-  border-radius: 12px;
-  padding: 25px;
-  width: 100%;
-  max-width: 460px;
-  box-shadow: 0 5px 25px rgba(0,0,0,0.15);
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 18px;
-}
-
-.modal-header h3 {
-  margin: 0;
-  font-size: 18px;
-}
-
-.btn-cerrar-modal {
-  background: none;
-  border: none;
-  font-size: 22px;
-  color: #777;
-}
-
-.form-group {
-  margin-bottom: 14px;
-}
-
-.form-group label {
-  display: block;
-  font-size: 12px;
-  font-weight: bold;
-  margin-bottom: 6px;
-  color: #444;
-}
-
-.form-group input, .form-group select {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid var(--borde);
-  border-radius: 8px;
-  font-size: 13px;
-  outline: none;
-}
-
-.form-group input:focus, .form-group select:focus {
-  border-color: var(--naranja);
-}
-
-.modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-@media (max-width: 760px) {
-  .sidebar {
-    position: fixed;
-    top: 72px;
-    bottom: 0;
-    left: 0;
-    z-index: 150;
-    width: 258px;
-    max-width: 86vw;
-    box-shadow: 5px 0 25px rgba(0,0,0,0.1);
-    transform: translateX(-110%);
-    transition: transform .25s ease;
-  }
-
-  .sidebar:not(.oculto) {
-    transform: translateX(0);
-  }
-
-  .capa-sidebar.visible {
-    display: block;
-    position: fixed;
-    inset: 72px 0 0;
-    background: rgba(0,0,0,0.3);
-    z-index: 140;
-  }
-
-  .contenido {
-    padding: 14px;
-  }
-}
-
-/* =====================================================
-   REDISEÑO VISUAL · SISTEMA DE TESTEOS ADIUR FEMENINO
-===================================================== */
-
-:root {
-  --sombra-suave: 0 5px 18px rgba(23,23,23,.045);
-}
-
-body {
-  background: #f5f6f8;
-  color: #171717;
-}
-
-.barra-superior {
-  min-height: 84px;
-  padding: 12px 25px;
-  gap: 15px;
-  box-shadow: 0 1px 5px rgba(0,0,0,.025);
-}
-
-.boton-menu {
-  display: grid;
-  place-items: center;
-  font-size: 22px;
-}
-
-.titulo-superior h1 {
-  font-size: 21px;
-  letter-spacing: .35px;
-}
-
-.sidebar {
-  background: #fff;
-}
-
-.contenido {
-  padding: 30px clamp(16px,2.5vw,36px);
-}
-
-.encabezado-seccion {
-  align-items: flex-end;
-  margin-bottom: 22px;
-}
-
-.sobretitulo-seccion {
-  color: var(--naranja-oscuro);
-  font-size: 10px;
-  font-weight: 900;
-  letter-spacing: 1.35px;
-  margin-bottom: 8px;
-}
-
-.encabezado-seccion h2 {
-  font-size: 28px;
-  letter-spacing: -.65px;
-  margin-bottom: 7px;
-}
-
-.encabezado-seccion p {
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-.etiqueta-contexto {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 9px 12px;
-  border: 1px solid #e9e9e9;
-  background: #fff;
-  border-radius: 9px;
-  color: #656565;
-  font-size: 11px;
-  font-weight: 700;
-}
-
-.punto-contexto {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #2e9b5d;
-  box-shadow: 0 0 0 3px #e5f5eb;
-}
-
-.resumen-testeos {
-  display: grid;
-  grid-template-columns: repeat(4,minmax(0,1fr));
-  gap: 13px;
-  margin-bottom: 18px;
-}
-
-.resumen-card {
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  min-width: 0;
-  padding: 17px 18px;
-  background: #fff;
-  border: 1px solid var(--borde);
-  border-radius: 13px;
-  box-shadow: var(--sombra-suave);
-}
-
-.resumen-icono {
-  width: 39px;
-  height: 39px;
-  flex: 0 0 39px;
-  display: grid;
-  place-items: center;
-  border-radius: 11px;
-  font-size: 18px;
-  font-weight: 800;
-}
-
-.resumen-icono.naranja { background: #fff0e6; color: #dc5e0b; }
-.resumen-icono.verde { background: #e8f6ed; color: #21834a; }
-.resumen-icono.azul { background: #eaf1ff; color: #4269ad; }
-.resumen-icono.gris { background: #f0f1f3; color: #656b75; }
-
-.resumen-label {
-  display: block;
-  color: #747474;
-  font-size: 11px;
-  font-weight: 700;
-  margin-bottom: 3px;
-}
-
-.resumen-card strong {
-  display: block;
-  font-size: 23px;
-  line-height: 1.15;
-  letter-spacing: -.5px;
-}
-
-.resumen-card small {
-  display: block;
-  color: #929292;
-  font-size: 10px;
-  margin-top: 4px;
-}
-
-.panel {
-  padding: 21px;
-  border-radius: 15px;
-  border-color: #e7e8eb;
-  box-shadow: var(--sombra-suave);
-}
-
-.panel-planilla {
-  overflow: hidden;
-}
-
-.controles-planilla {
-  align-items: flex-end;
-  padding-bottom: 17px;
-  border-bottom: 1px solid #f0f0f0;
-  margin-bottom: 16px;
-}
-
-.filtros-grupo {
-  gap: 12px;
-}
-
-.campo-filtro {
-  min-width: 180px;
-}
-
-.campo-filtro label {
-  color: #777;
-  font-size: 10px;
-  letter-spacing: .55px;
-}
-
-.campo-filtro select {
-  min-height: 42px;
-  border-radius: 9px;
-  font-weight: 700;
-  border-color: #e2e4e8;
-}
-
-.campo-filtro select:focus {
-  box-shadow: 0 0 0 3px rgba(244,119,33,.12);
-}
-
-.btn-principal, .btn-secundario, .btn-peligro {
-  min-height: 40px;
-  padding: 10px 14px;
-  border-radius: 9px;
-}
-
-.btn-principal {
-  box-shadow: 0 3px 8px rgba(244,119,33,.16);
-}
-
-.acciones-columnas {
-  gap: 8px;
-}
-
-.barra-herramientas-planilla {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin: 0 0 17px;
-}
-
-.buscador-jugadora {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  width: min(360px,100%);
-  min-height: 39px;
-  padding: 0 12px;
-  background: #fafafa;
-  border: 1px solid #e7e8eb;
-  border-radius: 9px;
-  color: #888;
-}
-
-.buscador-jugadora span {
-  font-size: 21px;
-  line-height: 1;
-}
-
-.buscador-jugadora input {
-  width: 100%;
-  min-width: 0;
-  border: 0;
-  outline: 0;
-  background: transparent;
-  color: #222;
-  font-size: 12px;
-}
-
-.buscador-jugadora:focus-within {
-  border-color: var(--naranja);
-  box-shadow: 0 0 0 3px rgba(244,119,33,.1);
-}
-
-.herramientas-secundarias {
-  display: flex;
-  gap: 7px;
-}
-
-.btn-herramienta {
-  min-height: 36px;
-  padding: 8px 11px;
-  border: 1px solid #e5e6e9;
-  background: #fff;
-  border-radius: 8px;
-  color: #555;
-  font-size: 11px;
-  font-weight: 700;
-}
-
-.btn-herramienta:hover {
-  background: #f7f7f7;
-  border-color: #d6d8dc;
-}
-
-.titulo-hoja-planilla {
-  text-align: left;
-  display: flex;
-  align-items: baseline;
-  gap: 11px;
-  flex-wrap: wrap;
-  margin: 2px 0 12px;
-}
-
-.titulo-hoja-planilla h3 {
-  font-size: 14px;
-  letter-spacing: .35px;
-}
-
-.titulo-hoja-planilla span {
-  color: #858585;
-  font-size: 11px;
-  font-weight: 600;
-}
-
-.tabla-wrapper {
-  border: 1px solid #e2e4e8;
-  border-radius: 10px;
-  overflow: auto;
-  max-height: calc(100vh - 390px);
-  min-height: 220px;
-}
-
-.tabla-testeos {
-  font-size: 11px;
-}
-
-.tabla-testeos th,
-.tabla-testeos td {
-  border: 1px solid #e5e7eb;
-  padding: 6px 8px;
-  height: 35px;
-}
-
-.col-fija-num {
-  background: #fff4eb;
-  color: #a84d0b;
-  min-width: 38px;
-}
-
-thead .col-fija-num {
-  background: #fff0e6;
-  color: #a84d0b;
-}
-
-.col-fija-nombre {
-  min-width: 205px;
-  background: #fff;
-  border-right: 1px solid #d5d8de !important;
-}
-
-thead .col-fija-nombre {
-  background: #f4f5f7;
-  color: #555;
-}
-
-.fila-mes-banner th {
-  background: #fafafa;
-  color: #666;
-  font-size: 11px;
-  letter-spacing: .7px;
-  text-transform: uppercase;
-  border-bottom: 1px solid #dfe1e5;
-}
-
-.cat-jugadoras, .cat-saltos, .cat-velocidad, .cat-vo2,
-.cat-postural, .cat-agilidad, .cat-indices, .cat-custom {
-  color: #30343a;
-  font-size: 10px;
-  letter-spacing: .45px;
-}
-
-.cat-jugadoras { background: #e9ebef; }
-.cat-saltos { background: #fff0cc; }
-.cat-velocidad { background: #ffeadb; }
-.cat-vo2 { background: #f9dddd; }
-.cat-postural { background: #e2f0df; }
-.cat-agilidad { background: #e0edfb; }
-.cat-indices { background: #ece7f7; }
-.cat-custom { background: #e1eff0; }
-
-.th-subtest {
-  position: sticky;
-  top: 0;
-  background: #fafbfc;
-  color: #62666e;
-  font-size: 10px;
-}
-
-.celda-input {
-  width: 68px;
-  min-height: 25px;
-  border-radius: 5px;
-  font-size: 11px;
-}
-
-.celda-input:focus {
-  background: #fff;
-  box-shadow: inset 0 0 0 1.5px var(--naranja);
-}
-
-.estado-mejor { background: #e1f3e7 !important; color: #176b38; }
-.estado-peor { background: #fde9e8 !important; color: #a62c2c; }
-.imc-bajo { background: #e5efff !important; color: #315b9b; }
-.imc-normal { background: #e1f3e7 !important; color: #176b38; }
-.imc-alto { background: #fff0dc !important; color: #9a5a0c; }
-
-.fila-promedios td {
-  background: #f6f7f9;
-  color: #42464d;
-  border-top: 2px solid #d9dce2;
-}
-
-.fila-promedios .col-fija-nombre {
-  background: #eef0f3;
-}
-
-.btn-quitar-col {
-  border-radius: 5px;
-  padding: 2px 5px;
-}
-
-.estado-nube {
-  white-space: nowrap;
-}
-
-.modal {
-  backdrop-filter: blur(3px);
-}
-
-.modal-contenido {
-  border: 1px solid #ececec;
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 18px 55px rgba(0,0,0,.18);
-}
-
-.modal-header h3 {
-  font-size: 19px;
-  letter-spacing: -.3px;
-}
-
-.form-group label {
-  color: #555;
-  font-size: 11px;
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:200;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(0,0,0,.5);
+  backdrop-filter:blur(3px);
+}
+
+.modal.activo{display:flex}
+
+.modal-contenido{
+  width:100%;
+  max-width:460px;
+  max-height:90vh;
+  overflow-y:auto;
+  padding:24px;
+  border:1px solid #ececec;
+  border-radius:16px;
+  background:#fff;
+  box-shadow:0 18px 55px rgba(0,0,0,.18);
+}
+
+.modal-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:18px;
+}
+
+.modal-header h3{
+  margin:0;
+  font-size:19px;
+  letter-spacing:-.3px;
+}
+
+.btn-cerrar-modal{
+  width:32px;
+  height:32px;
+  border:0;
+  border-radius:8px;
+  background:none;
+  color:#777;
+  font-size:22px;
+}
+
+.btn-cerrar-modal:hover{background:#f2f2f2}
+
+.form-group{margin-bottom:14px}
+
+.form-group label{
+  display:block;
+  margin-bottom:6px;
+  color:#555;
+  font-size:11px;
+  font-weight:bold;
 }
 
 .form-group input,
-.form-group select {
-  min-height: 42px;
-  border-radius: 9px;
-  border-color: #e3e5e8;
+.form-group select{
+  width:100%;
+  min-height:42px;
+  padding:10px;
+  border:1px solid #e3e5e8;
+  border-radius:9px;
+  outline:none;
+  font-size:13px;
 }
 
 .form-group input:focus,
-.form-group select:focus {
-  box-shadow: 0 0 0 3px rgba(244,119,33,.1);
+.form-group select:focus{
+  border-color:var(--naranja);
+  box-shadow:0 0 0 3px rgba(244,119,33,.1);
 }
 
-.btn-cerrar-modal {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
+.modal-footer{
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
+  margin-top:20px;
 }
 
-.btn-cerrar-modal:hover {
-  background: #f2f2f2;
+.modal-biblioteca{z-index:250}
+
+.modal-contenido-biblioteca{
+  display:flex;
+  flex-direction:column;
+  width:min(1180px,96vw);
+  max-width:1180px;
+  max-height:92vh;
+  padding:20px;
 }
 
-@media(max-width:1050px) {
-  .resumen-testeos {
-    grid-template-columns: repeat(2,minmax(0,1fr));
-  }
+.modal-contenido-biblioteca .modal-header{
+  flex:0 0 auto;
 }
 
-@media(max-width:760px) {
-  .barra-superior {
-    min-height: 72px;
-    padding: 9px 12px;
-    gap: 9px;
+.modal-subtitulo-biblioteca{
+  margin:5px 0 0;
+  color:#858585;
+  font-size:10px;
+}
+
+.modal-planilla-cuerpo{
+  min-height:100px;
+  flex:1 1 auto;
+  overflow:auto;
+  padding:8px;
+  border:1px solid #e6e7ea;
+  border-radius:9px;
+  background:#f4f5f7;
+}
+
+.modal-planilla-cuerpo .planilla-cabecera{background:#fff}
+.modal-planilla-cuerpo .planilla-print-scroll{background:#fff}
+.modal-planilla-cuerpo .tabla-print{min-width:900px}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width:1100px){
+  .panel-periodo{
+    grid-template-columns:1fr minmax(240px,1fr);
   }
 
-  .logo-superior {
-    width: 43px;
-    height: 43px;
-  }
-
-  .titulo-superior h1 {
-    font-size: 15px;
-    margin-bottom: 3px;
-  }
-
-  .titulo-superior p {
-    font-size: 10px;
-  }
-
-  .estado-nube {
-    font-size: 0;
-    padding: 7px;
-    width: 30px;
-    height: 30px;
-    justify-content: center;
-    overflow: hidden;
-  }
-
-  .perfil {
-    gap: 6px;
-  }
-
-  .avatar {
-    width: 36px;
-    height: 36px;
-  }
-
-  .nombre-perfil {
-    max-width: 80px;
-    font-size: 11px;
-  }
-
-  .rol-perfil {
-    display: none;
-  }
-
-  .contenido {
-    padding: 20px 13px;
-  }
-
-  .encabezado-seccion {
-    align-items: flex-start;
-    margin-bottom: 17px;
-  }
-
-  .encabezado-seccion h2 {
-    font-size: 23px;
-  }
-
-  .etiqueta-contexto {
-    display: none;
-  }
-
-  .resumen-testeos {
-    grid-template-columns: repeat(2,minmax(0,1fr));
-    gap: 9px;
-  }
-
-  .resumen-card {
-    padding: 13px 11px;
-    gap: 9px;
-    border-radius: 11px;
-  }
-
-  .resumen-icono {
-    width: 33px;
-    height: 33px;
-    flex-basis: 33px;
-    font-size: 15px;
-  }
-
-  .resumen-card strong {
-    font-size: 20px;
-  }
-
-  .resumen-card small {
-    font-size: 9px;
-  }
-
-  .panel {
-    padding: 14px 11px;
-  }
-
-  .controles-planilla {
-    align-items: stretch;
-  }
-
-  .filtros-grupo {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 9px;
-  }
-
-  .campo-filtro {
-    min-width: 0;
-  }
-
-  .acciones-columnas {
-    width: 100%;
-  }
-
-  .acciones-columnas button {
-    flex: 1;
-    padding: 9px 8px;
-    font-size: 11px;
-  }
-
-  .barra-herramientas-planilla {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  .buscador-jugadora {
-    width: 100%;
-  }
-
-  .herramientas-secundarias {
-    justify-content: flex-end;
-  }
-
-  .tabla-wrapper {
-    max-height: calc(100vh - 440px);
-  }
-
-  .col-fija-nombre {
-    min-width: 170px;
-  }
-
-  .titulo-hoja-planilla {
-    gap: 6px;
-    flex-direction: column;
+  .periodo-acciones{
+    grid-column:1/-1;
+    align-items:flex-end;
+    flex-direction:row;
+    justify-content:flex-end;
   }
 }
 
-@media print {
-  @page {
-    size: landscape;
-    margin: 10mm;
+@media(max-width:760px){
+
+  .barra-superior{
+    min-height:72px;
+    padding:9px 12px;
+    gap:9px;
   }
 
-  body {
-    background: #fff;
+  .logo-superior{width:43px;height:43px}
+
+  .titulo-superior h1{
+    font-size:15px;
+    margin-bottom:3px;
   }
 
-  .barra-superior,
-  .sidebar,
-  .capa-sidebar,
-  .encabezado-acciones,
-  .acciones-columnas,
-  .barra-herramientas-planilla,
-  .controles-planilla .filtros-grupo {
-    display: none !important;
+  .titulo-superior p{font-size:10px}
+
+  .estado-nube{
+    width:30px;
+    height:30px;
+    justify-content:center;
+    padding:7px;
+    overflow:hidden;
+    font-size:0;
   }
 
-  .contenedor {
-    display: block;
-    min-height: 0;
+  .perfil{gap:6px}
+  .avatar{width:36px;height:36px}
+
+  .nombre-perfil{
+    max-width:80px;
+    font-size:11px;
   }
 
-  .contenido {
-    padding: 0;
+  .rol-perfil{display:none}
+
+  .sidebar{
+    position:fixed;
+    top:72px;
+    bottom:0;
+    left:0;
+    z-index:150;
+    width:258px;
+    max-width:86vw;
+    margin-left:0;
+    transform:translateX(-110%);
+    box-shadow:5px 0 25px rgba(0,0,0,.1);
   }
 
-  .encabezado-seccion {
-    margin: 0 0 12px;
+  .sidebar:not(.oculto){transform:translateX(0)}
+  .sidebar.oculto{margin-left:0}
+
+  .capa-sidebar.visible{
+    display:block;
+    position:fixed;
+    inset:72px 0 0;
+    z-index:140;
+    background:rgba(0,0,0,.3);
   }
 
-  .encabezado-seccion h2 {
-    font-size: 18px;
+  .contenido{padding:14px 12px 24px}
+
+  .encabezado-seccion{gap:10px}
+  .encabezado-seccion h2{font-size:23px}
+  .encabezado-seccion p{font-size:10px}
+
+  .selector-categoria-panel{
+    grid-template-columns:38px minmax(0,1fr);
+    gap:10px;
+    padding:12px;
   }
 
-  .resumen-testeos {
-    display: none;
+  .selector-categoria-icono{
+    width:38px;
+    height:38px;
   }
 
-  .panel {
-    border: 0;
-    box-shadow: none;
-    padding: 0;
+  .selector-categoria-texto p{font-size:9px}
+  .selector-categoria-control{grid-column:1/-1}
+  .selector-categoria-control select{height:39px}
+
+  .panel-periodo{
+    grid-template-columns:1fr;
+    gap:12px;
+    padding:15px;
   }
 
-  .tabla-wrapper {
-    max-height: none;
-    overflow: visible;
-    border: 1px solid #aaa;
+  .periodo-acciones{
+    grid-column:auto;
+    align-items:stretch;
   }
 
-  .tabla-testeos {
-    font-size: 9px;
+  .periodo-acciones .btn-principal{width:100%}
+
+  .panel-grupos,.panel-biblioteca{padding:14px 11px}
+
+  .panel-carga-grupos-cabecera{
+    align-items:flex-start;
+    flex-direction:column;
   }
 
-  .tabla-testeos th,
-  .tabla-testeos td {
-    padding: 3px 4px;
-    height: auto;
+  .panel-carga-grupos-cabecera .acciones-columnas{width:100%}
+  .panel-carga-grupos-cabecera .acciones-columnas button{flex:1}
+
+  .navegacion-grupos{
+    grid-template-columns:repeat(2,minmax(0,1fr));
   }
 
-  .celda-input {
-    width: 48px;
+  .area-selector-card{
+    min-height:60px;
+    padding:9px;
+    gap:7px;
   }
+
+  .area-selector-icono{
+    width:31px;
+    height:31px;
+    flex-basis:31px;
+    font-size:14px;
+  }
+
+  .herramientas-jugadoras-test{
+    align-items:stretch;
+    flex-direction:column;
+  }
+
+  .busqueda-jugadoras-test{width:100%}
+  .filtros-estado-test{align-self:flex-start}
+
+  .lista-jugadoras-test{
+    grid-template-columns:1fr;
+    padding:0 10px 11px;
+  }
+
+  .editor-prueba-cabecera,
+  .selector-pruebas-wrap{
+    padding-left:11px;
+    padding-right:11px;
+  }
+
+  .resultado-jugadora-item{
+    grid-template-columns:minmax(100px,1fr) minmax(85px,110px);
+    gap:7px;
+  }
+
+  .jugadora-test-campos.con-comp{grid-template-columns:1fr 1fr}
+
+  .biblioteca-test-grid{
+    grid-template-columns:repeat(auto-fill,minmax(190px,1fr));
+  }
+
+  .modal-contenido-biblioteca{
+    width:98vw;
+    max-height:95vh;
+    padding:12px;
+  }
+
+  .modal-contenido-biblioteca .modal-footer{
+    flex-direction:column-reverse;
+  }
+
+  .modal-contenido-biblioteca .modal-footer button{width:100%}
+}
+
+@media(max-width:420px){
+  .biblioteca-test-grid{grid-template-columns:1fr}
+  .grupo-resumen-derecha{gap:5px}
+  .grupo-cantidad{font-size:8px}
 }
 
 /* =====================================================
-   NUEVA EXPERIENCIA DE TESTEOS · SELECTOR, CARGA Y VISTA PDF
+   IMPRESIÓN / PDF
 ===================================================== */
 
-.contenido {
-  padding: 10px clamp(12px,1.6vw,22px) 30px;
-}
+@media print{
 
-.encabezado-seccion {
-  align-items: flex-start;
-  margin-bottom: 17px;
-}
-
-.encabezado-seccion h2 {
-  font-size: 27px;
-  letter-spacing: -.55px;
-  margin-bottom: 7px;
-}
-
-.encabezado-seccion p {
-  font-size: 11px;
-  color: #777;
-}
-
-.sobretitulo-seccion {
-  margin-bottom: 7px;
-  color: var(--naranja-oscuro);
-  font-size: 9px;
-  font-weight: 900;
-  letter-spacing: 1.35px;
-}
-
-.selector-categoria-panel {
-  display: grid;
-  grid-template-columns: 42px minmax(0,1fr) minmax(230px,264px);
-  align-items: center;
-  gap: 14px;
-  min-height: 81px;
-  margin: 0 0 16px;
-  padding: 13px 17px;
-  background: #fff;
-  border: 1px solid #f1d3c3;
-  border-left: 4px solid var(--naranja);
-  border-radius: 12px;
-  box-shadow: 0 3px 12px rgba(23,23,23,.025);
-}
-
-.selector-categoria-icono {
-  width: 42px;
-  height: 42px;
-  display: grid;
-  place-items: center;
-  border-radius: 11px;
-  background: #fff0e6;
-  color: var(--naranja-oscuro);
-  font-size: 22px;
-  font-weight: 800;
-}
-
-.selector-categoria-texto {
-  min-width: 0;
-}
-
-.selector-categoria-texto span {
-  display: block;
-  margin-bottom: 4px;
-  color: var(--naranja-oscuro);
-  font-size: 8px;
-  font-weight: 900;
-  letter-spacing: 1px;
-}
-
-.selector-categoria-texto strong {
-  display: block;
-  margin-bottom: 4px;
-  color: #171717;
-  font-size: 14px;
-  font-weight: 900;
-}
-
-.selector-categoria-texto p {
-  margin: 0;
-  color: #858585;
-  font-size: 10px;
-  line-height: 1.35;
-}
-
-.selector-categoria-control select {
-  width: 100%;
-  height: 40px;
-  padding: 0 13px;
-  border: 1px solid #efc8b4;
-  border-radius: 9px;
-  outline: none;
-  background: #fffaf7;
-  color: #292929;
-  font-size: 11px;
-  font-weight: 800;
-}
-
-.selector-categoria-control select:focus {
-  border-color: var(--naranja);
-  box-shadow: 0 0 0 3px rgba(244,119,33,.1);
-}
-
-.panel-titulo-fila,
-.panel-cabecera-planilla {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 15px;
-}
-
-.panel-titulo-fila {
-  margin-bottom: 16px;
-}
-
-.seccion-kicker {
-  display: block;
-  margin-bottom: 6px;
-  color: var(--naranja-oscuro);
-  font-size: 9px;
-  font-weight: 900;
-  letter-spacing: 1px;
-}
-
-.panel-titulo-fila h3,
-.panel-cabecera-planilla h3 {
-  margin: 0 0 5px;
-  color: #202020;
-  font-size: 17px;
-  font-weight: 900;
-  letter-spacing: -.25px;
-}
-
-.panel-titulo-fila p,
-.panel-cabecera-planilla p {
-  margin: 0;
-  color: #858585;
-  font-size: 10px;
-  line-height: 1.45;
-}
-
-.etiqueta-flujo {
-  flex: 0 0 auto;
-  padding: 7px 10px;
-  border-radius: 20px;
-  background: #fff2e9;
-  color: #bb570f;
-  font-size: 9px;
-  font-weight: 800;
-}
-
-.panel-planilla {
-  padding: 19px 20px 16px;
-}
-
-.panel-cabecera-planilla {
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.panel-cabecera-planilla .acciones-columnas {
-  flex: 0 0 auto;
-}
-
-.controles-planilla {
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 12px 0;
-  border-top: 1px solid #f0f0f0;
-  border-bottom: 1px solid #f0f0f0;
-  margin-bottom: 14px;
-}
-
-.campo-mes-evaluacion {
-  min-width: 175px;
-}
-
-.campo-mes-evaluacion select {
-  min-height: 39px;
-}
-
-.barra-herramientas-planilla {
-  flex: 1;
-  margin: 0;
-  justify-content: flex-end;
-}
-
-.buscador-jugadora {
-  max-width: 310px;
-}
-
-.titulo-hoja-planilla {
-  margin: 2px 0 10px;
-}
-
-.tabla-wrapper {
-  max-height: 530px;
-  min-height: 160px;
-}
-
-.leyenda-resultados {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 15px;
-  margin-top: 11px;
-  color: #777;
-  font-size: 9px;
-}
-
-.leyenda-resultados span {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.leyenda-color {
-  width: 9px;
-  height: 9px;
-  display: inline-block;
-  border-radius: 3px;
-}
-
-.leyenda-color.mejor { background: #a9ddba; }
-.leyenda-color.peor { background: #efb9b5; }
-.leyenda-color.promedio { background: #dce1e8; }
-
-.panel-vista-previa {
-  padding: 19px 20px 20px;
-}
-
-.cabecera-vista-previa {
-  margin-bottom: 14px;
-}
-
-.boton-imprimir {
-  white-space: nowrap;
-}
-
-.preview-hoja-marco {
-  padding: 15px;
-  overflow: auto;
-  background: #f0f1f3;
-  border: 1px solid #e5e6e8;
-  border-radius: 10px;
-}
-
-.preview-hoja {
-  width: 100%;
-  min-width: 850px;
-  margin: 0 auto;
-  padding: 18px;
-  background: #fff;
-  border: 1px solid #dedede;
-  box-shadow: 0 3px 10px rgba(0,0,0,.045);
-}
-
-.preview-vacio {
-  padding: 35px 15px;
-  text-align: center;
-  color: #8b8b8b;
-  font-size: 11px;
-}
-
-.planilla-cabecera {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 82px;
-  padding: 8px 12px;
-  border: 1px solid #888;
-  background: #fff;
-  text-align: center;
-}
-
-.planilla-cabecera img {
-  position: absolute;
-  top: 50%;
-  left: 17%;
-  width: 65px;
-  height: 65px;
-  object-fit: contain;
-  transform: translateY(-50%);
-}
-
-.planilla-cabecera-texto {
-  width: 100%;
-  text-align: center;
-}
-
-.planilla-cabecera-texto strong {
-  display: block;
-  font-size: 17px;
-  font-weight: 900;
-}
-
-.planilla-cabecera-texto span {
-  display: block;
-  margin-top: 4px;
-  font-size: 12px;
-  font-weight: 900;
-}
-
-.planilla-cabecera-texto small {
-  display: block;
-  margin-top: 4px;
-  color: #555;
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: .5px;
-}
-
-.planilla-print-titulo {
-  margin: 12px 0 0;
-  padding: 7px 9px;
-  background: #303030;
-  color: #fff;
-  font-size: 9px;
-  font-weight: 900;
-  letter-spacing: .6px;
-}
-
-.planilla-print-scroll {
-  width: 100%;
-  overflow-x: auto;
-  border: 1px solid #999;
-  border-top: 0;
-}
-
-.tabla-print {
-  width: 100%;
-  min-width: 800px;
-  border-collapse: collapse;
-  table-layout: auto;
-  background: #fff;
-  color: #111;
-  font-size: 9px;
-  text-align: center;
-  white-space: nowrap;
-}
-
-.tabla-print th,
-.tabla-print td {
-  padding: 5px 6px;
-  border: 1px solid #888;
-}
-
-.tabla-print thead th {
-  font-weight: 900;
-}
-
-.tabla-print .print-num {
-  width: 28px;
-  background: #fff0e6;
-}
-
-.tabla-print .print-nombre {
-  min-width: 160px;
-  text-align: left;
-  padding-left: 8px;
-  background: #f4f5f7;
-}
-
-.tabla-print .print-subtest {
-  background: #fafafa;
-  color: #333;
-  font-size: 8px;
-}
-
-.tabla-print .print-promedios td {
-  background: #edf0f4;
-  font-weight: 900;
-}
-
-.planilla-print-pie {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  margin-top: 9px;
-  color: #777;
-  font-size: 8px;
-}
-
-#printRoutine {
-  display: none;
-}
-
-@media(max-width:1100px) {
-  .panel-periodo {
-    grid-template-columns: 1fr minmax(240px,1fr);
+  @page{
+    size:A4 landscape;
+    margin:8mm;
   }
 
-  .periodo-acciones {
-    grid-column: 1/-1;
-    align-items: flex-end;
-    flex-direction: row;
-    justify-content: flex-end;
-  }
-}
-
-@media(max-width:760px) {
-  .contenido {
-    padding: 14px 12px 24px;
+  body.imprimir-solo-testeos{
+    background:#fff !important;
+    color:#111 !important;
+    print-color-adjust:exact;
+    -webkit-print-color-adjust:exact;
   }
 
-  .encabezado-seccion {
-    gap: 10px;
+  body.imprimir-solo-testeos > *:not(#printRoutine){
+    display:none !important;
   }
 
-  .encabezado-seccion h2 {
-    font-size: 23px;
+  body.imprimir-solo-testeos #printRoutine{
+    display:block !important;
+    width:100%;
+    color:#111;
+    background:#fff;
   }
 
-  .encabezado-seccion p {
-    max-width: 600px;
-    font-size: 10px;
+  #printRoutine .planilla-cabecera{
+    min-height:82px;
+    page-break-inside:avoid;
   }
 
-  .selector-categoria-panel {
-    grid-template-columns: 38px minmax(0,1fr);
-    gap: 10px;
-    padding: 12px;
+  #printRoutine .planilla-cabecera img{
+    left:17%;
+    width:65px;
+    height:65px;
   }
 
-  .selector-categoria-icono {
-    width: 38px;
-    height: 38px;
+  #printRoutine .planilla-print-scroll{
+    overflow:visible;
+    border:0;
   }
 
-  .selector-categoria-texto p {
-    font-size: 9px;
-  }
-
-  .selector-categoria-control {
-    grid-column: 1/-1;
-  }
-
-  .selector-categoria-control select {
-    height: 39px;
-  }
-
-  .panel-periodo {
-    grid-template-columns: 1fr;
-    gap: 12px;
-    padding: 15px;
-  }
-
-  .periodo-acciones {
-    grid-column: auto;
-    align-items: stretch;
-  }
-
-  .periodo-acciones .btn-principal {
-    width: 100%;
-  }
-
-  .panel-grupos,
-  .panel-biblioteca {
-    padding: 14px 11px;
-  }
-
-  .panel-carga-grupos-cabecera {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .panel-carga-grupos-cabecera .acciones-columnas {
-    width: 100%;
-  }
-
-  .panel-carga-grupos-cabecera .acciones-columnas button {
-    flex: 1;
-  }
-
-  .grupo-pruebas > summary {
-    padding: 10px;
-  }
-
-  .pruebas-del-grupo {
-    grid-template-columns: 1fr;
-    padding: 8px;
-  }
-
-  .resultado-jugadora-item {
-    grid-template-columns: minmax(100px,1fr) minmax(85px,110px);
-    gap: 7px;
-  }
-
-  .resultado-jugadora-item .resultado-jugadora-campo-comp {
-    grid-column: 2;
-  }
-
-  .resultado-jugadora-calculado {
-    grid-column: 2;
-  }
-
-  .biblioteca-test-grid {
-    grid-template-columns: repeat(auto-fill,minmax(190px,1fr));
-  }
-
-  .modal-contenido-biblioteca {
-    width: 98vw;
-    max-height: 95vh;
-    padding: 12px;
-  }
-
-  .modal-contenido-biblioteca .modal-footer {
-    flex-direction: column-reverse;
-  }
-
-  .modal-contenido-biblioteca .modal-footer button {
-    width: 100%;
-  }
-}
-
-@media(max-width:420px) {
-  .biblioteca-test-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .grupo-resumen-derecha {
-    gap: 5px;
-  }
-
-  .grupo-cantidad {
-    font-size: 8px;
-  }
-}
-
-/* Impresión exclusiva de una evaluación abierta desde Biblioteca Test */
-
-@media print {
-  @page {
-    size: A4 landscape;
-    margin: 8mm;
-  }
-
-  body.imprimir-solo-testeos > *:not(#printRoutine) {
-    display: none !important;
-  }
-
-  body.imprimir-solo-testeos #printRoutine {
-    display: block !important;
-    width: 100%;
-    color: #111;
-    background: #fff;
-  }
-
-  #printRoutine .planilla-cabecera {
-    min-height: 82px;
-    page-break-inside: avoid;
-  }
-
-  #printRoutine .planilla-cabecera img {
-    left: 17%;
-    width: 65px;
-    height: 65px;
-  }
-
-  #printRoutine .planilla-print-scroll {
-    overflow: visible;
-    border: 0;
-  }
-
-  #printRoutine .tabla-print {
-    width: 100%;
-    min-width: 0;
-    table-layout: fixed;
-    font-size: 7px;
+  #printRoutine .tabla-print{
+    width:100%;
+    min-width:0;
+    table-layout:fixed;
+    font-size:7px;
   }
 
   #printRoutine .tabla-print th,
-  #printRoutine .tabla-print td {
-    padding: 3px 2px;
-    font-size: 7px;
-    overflow-wrap: anywhere;
+  #printRoutine .tabla-print td{
+    padding:3px 2px;
+    font-size:7px;
+    overflow-wrap:anywhere;
+  }
+
+  #printRoutine .tabla-print .print-nombre{
+    width:135px;
+    min-width:135px;
+    max-width:135px;
   }
 }
-
 </style>
 </head>
 
 <body>
 
-<!-- BARRA SUPERIOR -->
+<!-- =====================================================
+     BARRA SUPERIOR
+===================================================== -->
 
 <header class="barra-superior">
   <button class="boton-menu" id="botonMenu" aria-label="Abrir menú" onclick="alternarSidebar()">☰</button>
@@ -2022,8 +1843,7 @@ thead .col-fija-nombre {
 
     <div class="grupo-menu cerrado" id="grupoPlantel">
       <div class="titulo-grupo" onclick="toggleGrupo('grupoPlantel')">
-        <span>PLANTEL</span>
-        <span class="flecha">›</span>
+        <span>PLANTEL</span><span class="flecha">›</span>
       </div>
 
       <div class="submenu">
@@ -2034,8 +1854,7 @@ thead .col-fija-nombre {
 
     <div class="grupo-menu cerrado" id="grupoEntrenamiento">
       <div class="titulo-grupo" onclick="toggleGrupo('grupoEntrenamiento')">
-        <span>ENTRENAMIENTO</span>
-        <span class="flecha">›</span>
+        <span>ENTRENAMIENTO</span><span class="flecha">›</span>
       </div>
 
       <div class="submenu">
@@ -2047,8 +1866,7 @@ thead .col-fija-nombre {
 
     <div class="grupo-menu cerrado" id="grupoCompetencia">
       <div class="titulo-grupo" onclick="toggleGrupo('grupoCompetencia')">
-        <span>COMPETENCIA</span>
-        <span class="flecha">›</span>
+        <span>COMPETENCIA</span><span class="flecha">›</span>
       </div>
 
       <div class="submenu">
@@ -2060,8 +1878,7 @@ thead .col-fija-nombre {
 
     <div class="grupo-menu" id="grupoRendimientos">
       <div class="titulo-grupo" onclick="toggleGrupo('grupoRendimientos')">
-        <span>RENDIMIENTOS</span>
-        <span class="flecha">›</span>
+        <span>RENDIMIENTOS</span><span class="flecha">›</span>
       </div>
 
       <div class="submenu">
@@ -2195,18 +2012,35 @@ thead .col-fija-nombre {
         </div>
       </div>
 
-      <div id="gruposTesteos" class="grupos-testeos">
-        <div class="estado-vacio-grupos">
-          Seleccioná una categoría para comenzar.
+      <div class="flujo-carga-test">
+
+        <div class="paso-carga-test">
+          <span class="numero-paso">1</span>
+          <div>
+            <strong>Elegí el área de evaluación</strong>
+            <small>Primero seleccioná el grupo de pruebas que vas a completar.</small>
+          </div>
         </div>
+
+        <div id="navegacionGrupos" class="navegacion-grupos" aria-label="Áreas de evaluación"></div>
+
+        <div id="editorPrueba" class="editor-prueba">
+          <div class="editor-inicial">
+            <span class="editor-inicial-icono">◎</span>
+            <strong>Seleccioná un área para comenzar</strong>
+            <p>Después vas a elegir la prueba y completar los resultados de cada jugadora.</p>
+          </div>
+        </div>
+
       </div>
 
       <div class="ayuda-grupos">
         <span class="ayuda-registro-icono">i</span>
         <p>
-          Completá los resultados dentro de cada prueba. Los cambios se guardan automáticamente;
-          cuando termines el período, presioná <strong>Guardar planilla</strong>
-          para conservar una versión en la Biblioteca Test.
+          Los resultados se guardan automáticamente al salir de cada campo.
+          Podés completar una prueba, pasar a otra y continuar cuando quieras.
+          Al finalizar el período, presioná <strong>Guardar planilla</strong>
+          para crear una ficha en Biblioteca Test.
         </p>
       </div>
 
@@ -2240,9 +2074,10 @@ thead .col-fija-nombre {
   </main>
 </div>
 
-<!-- MODAL PARA AGREGAR UN NUEVO TEST / COLUMNA -->
+<!-- MODAL PARA AGREGAR UNA NUEVA PRUEBA -->
 
 <div class="modal" id="modalAgregarTest">
+
   <div class="modal-contenido">
 
     <div class="modal-header">
@@ -2288,7 +2123,7 @@ thead .col-fija-nombre {
       </div>
 
       <div class="form-group">
-        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
           <input type="checkbox" id="incluirComp" checked style="width:auto;">
           Incluir columna de comparación (COMP) al lado
         </label>
@@ -2309,6 +2144,7 @@ thead .col-fija-nombre {
       </div>
 
     </form>
+
   </div>
 </div>
 
@@ -2434,6 +2270,10 @@ if (!puedeEditar) {
   document.getElementById("accionesTecnico").style.display = "none";
 }
 
+/* =====================================================
+   NAVEGACIÓN
+===================================================== */
+
 window.cerrarSesion = function(event) {
   event.preventDefault();
   localStorage.removeItem("usuarioADIUR");
@@ -2460,27 +2300,133 @@ function actualizarEstadoNube(estado, texto) {
 ===================================================== */
 
 const COLUMNAS_POR_DEFECTO = [
-  { id: "salto_sin", grupo: "SALTOS", claseGrupo: "cat-saltos", label: "Sin Impulso", criterio: "mayor", compId: "salto_sin_comp" },
-  { id: "salto_sin_comp", grupo: "SALTOS", claseGrupo: "cat-saltos", label: "COMP", esComp: true },
-  { id: "salto_con", grupo: "SALTOS", claseGrupo: "cat-saltos", label: "Con Impulso", criterio: "mayor", compId: "salto_con_comp" },
-  { id: "salto_con_comp", grupo: "SALTOS", claseGrupo: "cat-saltos", label: "COMP", esComp: true },
 
-  { id: "vel_30", grupo: "VELOCIDAD", claseGrupo: "cat-velocidad", label: "30", criterio: "menor", compId: "vel_30_comp" },
-  { id: "vel_30_comp", grupo: "VELOCIDAD", claseGrupo: "cat-velocidad", label: "COMP", esComp: true },
-  { id: "vel_15_15", grupo: "VELOCIDAD", claseGrupo: "cat-velocidad", label: "15-15", criterio: "menor" },
+  {
+    id:"salto_sin",
+    grupo:"SALTOS",
+    claseGrupo:"cat-saltos",
+    label:"Sin Impulso",
+    criterio:"mayor",
+    compId:"salto_sin_comp"
+  },
+  {
+    id:"salto_sin_comp",
+    grupo:"SALTOS",
+    claseGrupo:"cat-saltos",
+    label:"COMP",
+    esComp:true
+  },
 
-  { id: "vo2_30_15", grupo: "Vo2 máx", claseGrupo: "cat-vo2", label: "30-15", criterio: "mayor" },
+  {
+    id:"salto_con",
+    grupo:"SALTOS",
+    claseGrupo:"cat-saltos",
+    label:"Con Impulso",
+    criterio:"mayor",
+    compId:"salto_con_comp"
+  },
+  {
+    id:"salto_con_comp",
+    grupo:"SALTOS",
+    claseGrupo:"cat-saltos",
+    label:"COMP",
+    esComp:true
+  },
 
-  { id: "postural_apecs", grupo: "POSTURAL", claseGrupo: "cat-postural", label: "A.P.E.C.S", criterio: "ninguno" },
+  {
+    id:"vel_30",
+    grupo:"VELOCIDAD",
+    claseGrupo:"cat-velocidad",
+    label:"30",
+    criterio:"menor",
+    compId:"vel_30_comp"
+  },
+  {
+    id:"vel_30_comp",
+    grupo:"VELOCIDAD",
+    claseGrupo:"cat-velocidad",
+    label:"COMP",
+    esComp:true
+  },
 
-  { id: "illinois_mod", grupo: "AGILIDAD", claseGrupo: "cat-agilidad", label: "Illinois Mod", criterio: "menor", compId: "illinois_mod_comp" },
-  { id: "illinois_mod_comp", grupo: "AGILIDAD", claseGrupo: "cat-agilidad", label: "COMP", esComp: true },
-  { id: "illinois_norm", grupo: "AGILIDAD", claseGrupo: "cat-agilidad", label: "Illinois Norm", criterio: "menor", compId: "illinois_norm_comp" },
-  { id: "illinois_norm_comp", grupo: "AGILIDAD", claseGrupo: "cat-agilidad", label: "COMP", esComp: true },
+  {
+    id:"vel_15_15",
+    grupo:"VELOCIDAD",
+    claseGrupo:"cat-velocidad",
+    label:"15-15",
+    criterio:"menor"
+  },
 
-  { id: "peso", grupo: "INDICES", claseGrupo: "cat-indices", label: "PESO", criterio: "ninguno" },
-  { id: "altura", grupo: "INDICES", claseGrupo: "cat-indices", label: "ALTURA", criterio: "ninguno" },
-  { id: "imc", grupo: "INDICES", claseGrupo: "cat-indices", label: "I.M.C", esCalculadoIMC: true }
+  {
+    id:"vo2_30_15",
+    grupo:"Vo2 máx",
+    claseGrupo:"cat-vo2",
+    label:"30-15",
+    criterio:"mayor"
+  },
+
+  {
+    id:"postural_apecs",
+    grupo:"POSTURAL",
+    claseGrupo:"cat-postural",
+    label:"A.P.E.C.S",
+    criterio:"ninguno"
+  },
+
+  {
+    id:"illinois_mod",
+    grupo:"AGILIDAD",
+    claseGrupo:"cat-agilidad",
+    label:"Illinois Mod",
+    criterio:"menor",
+    compId:"illinois_mod_comp"
+  },
+  {
+    id:"illinois_mod_comp",
+    grupo:"AGILIDAD",
+    claseGrupo:"cat-agilidad",
+    label:"COMP",
+    esComp:true
+  },
+
+  {
+    id:"illinois_norm",
+    grupo:"AGILIDAD",
+    claseGrupo:"cat-agilidad",
+    label:"Illinois Norm",
+    criterio:"menor",
+    compId:"illinois_norm_comp"
+  },
+  {
+    id:"illinois_norm_comp",
+    grupo:"AGILIDAD",
+    claseGrupo:"cat-agilidad",
+    label:"COMP",
+    esComp:true
+  },
+
+  {
+    id:"peso",
+    grupo:"INDICES",
+    claseGrupo:"cat-indices",
+    label:"PESO",
+    criterio:"ninguno"
+  },
+  {
+    id:"altura",
+    grupo:"INDICES",
+    claseGrupo:"cat-indices",
+    label:"ALTURA",
+    criterio:"ninguno"
+  },
+  {
+    id:"imc",
+    grupo:"INDICES",
+    claseGrupo:"cat-indices",
+    label:"I.M.C",
+    esCalculadoIMC:true
+  }
+
 ];
 
 let columnasActuales = [];
@@ -2490,29 +2436,36 @@ let modoEliminar = false;
 let timeoutGuardado = null;
 let promesaCargaPlanilla = Promise.resolve();
 
+let grupoSeleccionadoTest = "";
+let pruebaSeleccionadaTest = "";
+let filtroJugadorasTest = "todas";
+let busquedaJugadorasTest = "";
+
 /* =====================================================
-   OBTENER JUGADORAS DESDE LA NUBE O LOCALSTORAGE
+   OBTENER JUGADORAS DESDE FIREBASE O LOCALSTORAGE
 ===================================================== */
 
 async function cargarJugadorasPorDivision(division) {
-  let listaTotal = [];
 
-  // 1. Intentar leer desde Firestore (colección "jugadoras"
-  //    o documento "plantel/jugadoras").
+  let listaTotal = [];
 
   if (nubeActiva && db) {
     try {
+
       const snapCol = await getDocs(collection(db, "jugadoras"));
 
       snapCol.forEach(docSnap => {
         listaTotal.push({
-          id: docSnap.id,
+          id:docSnap.id,
           ...docSnap.data()
         });
       });
 
       if (listaTotal.length === 0) {
-        const docPlantel = await getDoc(doc(db, "plantel", "jugadoras"));
+
+        const docPlantel = await getDoc(
+          doc(db, "plantel", "jugadoras")
+        );
 
         if (
           docPlantel.exists() &&
@@ -2527,9 +2480,8 @@ async function cargarJugadorasPorDivision(division) {
     }
   }
 
-  // 2. Respaldo / fusión con localStorage de jugadoras.html.
-
   if (listaTotal.length === 0) {
+
     const rawLocal =
       localStorage.getItem("jugadorasADIUR") ||
       localStorage.getItem("plantelADIUR");
@@ -2541,13 +2493,12 @@ async function cargarJugadorasPorDivision(division) {
     }
   }
 
-  // Filtrar por la división elegida.
-
   const divNormalizada =
     division.toLowerCase().replace(/\s+/g, "");
 
   return listaTotal
     .filter(j => {
+
       const cat = (j.categoria || j.division || "")
         .toLowerCase()
         .replace(/\s+/g, "");
@@ -2555,20 +2506,20 @@ async function cargarJugadorasPorDivision(division) {
       return cat === divNormalizada;
     })
     .map(j => {
+
       if (j.nombre && j.apellido) {
         return `${j.nombre.trim()} ${j.apellido.trim()}`;
       }
 
       return (j.nombre || j.nombreCompleto || "Sin nombre").trim();
     })
-    .sort((a, b) => a.localeCompare(b));
+    .sort((a,b) => a.localeCompare(b));
 }
 
 /* =====================================================
    CARGAR Y GUARDAR PLANILLA EN LA NUBE (FIRESTORE)
 
-   LA CONFIGURACIÓN Y EL GUARDADO OPERATIVO ORIGINAL
-   SE CONSERVAN.
+   SE CONSERVAN LAS CLAVES Y ESTRUCTURA ORIGINALES.
 ===================================================== */
 
 function obtenerClavePlanilla(division, mes) {
@@ -2576,11 +2527,10 @@ function obtenerClavePlanilla(division, mes) {
 }
 
 async function cargarDatosPlanilla(division, mes) {
+
   actualizarEstadoNube("guardando", "☁️ Sincronizando...");
 
   const clave = obtenerClavePlanilla(division, mes);
-
-  // Cargar jugadoras de la división.
 
   jugadorasDivision = await cargarJugadorasPorDivision(division);
 
@@ -2588,10 +2538,12 @@ async function cargarDatosPlanilla(division, mes) {
 
   if (nubeActiva && db) {
     try {
+
       const refDoc = doc(db, "testeos_adiur", clave);
       const snap = await getDoc(refDoc);
 
       if (snap.exists()) {
+
         const data = snap.data();
 
         columnasActuales =
@@ -2600,6 +2552,7 @@ async function cargarDatosPlanilla(division, mes) {
             : JSON.parse(JSON.stringify(COLUMNAS_POR_DEFECTO));
 
         valoresActuales = data.valores || {};
+
         cargadoDeNube = true;
       }
 
@@ -2609,10 +2562,14 @@ async function cargarDatosPlanilla(division, mes) {
   }
 
   if (!cargadoDeNube) {
-    const localRaw = localStorage.getItem("testeos_adiur_" + clave);
+
+    const localRaw =
+      localStorage.getItem("testeos_adiur_" + clave);
 
     if (localRaw) {
+
       try {
+
         const parsed = JSON.parse(localRaw);
 
         columnasActuales =
@@ -2622,6 +2579,7 @@ async function cargarDatosPlanilla(division, mes) {
         valoresActuales = parsed.valores || {};
 
       } catch (e) {
+
         columnasActuales =
           JSON.parse(JSON.stringify(COLUMNAS_POR_DEFECTO));
 
@@ -2629,6 +2587,7 @@ async function cargarDatosPlanilla(division, mes) {
       }
 
     } else {
+
       columnasActuales =
         JSON.parse(JSON.stringify(COLUMNAS_POR_DEFECTO));
 
@@ -2646,24 +2605,27 @@ async function cargarDatosPlanilla(division, mes) {
 /* =====================================================
    GUARDADO AUTOMÁTICO ORIGINAL
 
-   ESTA FUNCIÓN MANTIENE EL MISMO PAYLOAD, COLECCIÓN,
-   CLAVE DE DOCUMENTO, RESPALDO LOCAL Y DEBOUNCE.
+   MANTIENE EL MISMO PAYLOAD, COLECCIÓN, CLAVE DE DOCUMENTO,
+   RESPALDO LOCAL Y DEBOUNCE DE 600 MS.
 ===================================================== */
 
 function programarGuardadoNube() {
-  const division = document.getElementById("selectDivision").value;
-  const mes = document.getElementById("selectMes").value;
-  const clave = obtenerClavePlanilla(division, mes);
 
-  // Guardar inmediatamente en respaldo local.
+  const division =
+    document.getElementById("selectDivision").value;
+
+  const mes =
+    document.getElementById("selectMes").value;
+
+  const clave = obtenerClavePlanilla(division, mes);
 
   const payload = {
     division,
     mes,
-    columnas: columnasActuales,
-    valores: valoresActuales,
-    actualizadoPor: usuarioGuardado,
-    ultimaActualizacion: new Date().toISOString()
+    columnas:columnasActuales,
+    valores:valoresActuales,
+    actualizadoPor:usuarioGuardado,
+    ultimaActualizacion:new Date().toISOString()
   };
 
   localStorage.setItem(
@@ -2680,7 +2642,9 @@ function programarGuardadoNube() {
   timeoutGuardado = setTimeout(async () => {
 
     if (nubeActiva && db) {
+
       try {
+
         await setDoc(
           doc(db, "testeos_adiur", clave),
           payload
@@ -2689,6 +2653,7 @@ function programarGuardadoNube() {
         actualizarEstadoNube("", "☁️ Guardado en la nube");
 
       } catch (err) {
+
         console.error("Error guardando en Firestore:", err);
 
         actualizarEstadoNube(
@@ -2698,6 +2663,7 @@ function programarGuardadoNube() {
       }
 
     } else {
+
       actualizarEstadoNube("", "💾 Guardado localmente");
     }
 
@@ -2710,14 +2676,15 @@ function programarGuardadoNube() {
 
 function escaparHTML(valor) {
   return String(valor ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 }
 
 function parsearNumero(val) {
+
   if (val === undefined || val === null || val === "") {
     return NaN;
   }
@@ -2729,14 +2696,11 @@ function parsearNumero(val) {
 }
 
 function calcularIMC(pesoRaw, alturaRaw) {
+
   const peso = parsearNumero(pesoRaw);
   let altura = parsearNumero(alturaRaw);
 
-  if (
-    isNaN(peso) ||
-    isNaN(altura) ||
-    altura <= 0
-  ) {
+  if (isNaN(peso) || isNaN(altura) || altura <= 0) {
     return null;
   }
 
@@ -2750,6 +2714,7 @@ function calcularIMC(pesoRaw, alturaRaw) {
 function obtenerClaseColorCelda(jugadora, col, valorRaw) {
 
   if (col.esCalculadoIMC) {
+
     const imc = calcularIMC(
       valoresActuales[jugadora]?.["peso"],
       valoresActuales[jugadora]?.["altura"]
@@ -2762,15 +2727,12 @@ function obtenerClaseColorCelda(jugadora, col, valorRaw) {
     return "imc-alto";
   }
 
-  if (
-    !col.compId ||
-    !col.criterio ||
-    col.criterio === "ninguno"
-  ) {
+  if (!col.compId || !col.criterio || col.criterio === "ninguno") {
     return "";
   }
 
   const valActual = parsearNumero(valorRaw);
+
   const valComp = parsearNumero(
     valoresActuales[jugadora]?.[col.compId]
   );
@@ -2803,12 +2765,15 @@ function contarResultadosPrueba(
   datos = valoresActuales,
   jugadoras = jugadorasDivision
 ) {
+
   let total = 0;
 
   jugadoras.forEach(jugadora => {
+
     const fila = datos[jugadora] || {};
 
     if (columna.esCalculadoIMC) {
+
       if (calcularIMC(fila.peso, fila.altura) !== null) {
         total++;
       }
@@ -2840,7 +2805,8 @@ function obtenerGruposActuales() {
     ...new Set(columnasActuales.map(c => c.grupo))
   ];
 
-  nombres.sort((a, b) => {
+  nombres.sort((a,b) => {
+
     const ia = ordenPreferido.indexOf(a);
     const ib = ordenPreferido.indexOf(b);
 
@@ -2857,236 +2823,671 @@ function obtenerGruposActuales() {
   return nombres;
 }
 
+function obtenerEstadisticaGrupo(grupo) {
+
+  const pruebas = columnasActuales.filter(
+    col => col.grupo === grupo && !col.esComp
+  );
+
+  let completos = 0;
+
+  const posibles =
+    pruebas.length * jugadorasDivision.length;
+
+  pruebas.forEach(prueba => {
+    completos += contarResultadosPrueba(prueba);
+  });
+
+  return {
+    pruebas,
+    completos,
+    posibles,
+    porcentaje:posibles
+      ? Math.round(completos / posibles * 100)
+      : 0
+  };
+}
+
+function obtenerIconoGrupo(grupo) {
+
+  const iconos = {
+    "SALTOS":"↟",
+    "VELOCIDAD":"ϟ",
+    "AGILIDAD":"↗",
+    "Vo2 máx":"♥",
+    "INDICES":"◇",
+    "POSTURAL":"⌖",
+    "OTRO TEST":"＋"
+  };
+
+  return iconos[grupo] || "▦";
+}
+
+/* =====================================================
+   RENDERIZAR SELECTOR DE ÁREAS
+===================================================== */
+
 function renderizarGruposTesteos() {
 
-  const contenedor = document.getElementById("gruposTesteos");
+  const navegacion =
+    document.getElementById("navegacionGrupos");
 
-  if (!contenedor) return;
+  const editor =
+    document.getElementById("editorPrueba");
+
+  if (!navegacion || !editor) return;
 
   const grupos = obtenerGruposActuales();
 
   if (!grupos.length) {
-    contenedor.innerHTML = `
-      <div class="estado-vacio-grupos">
-        Todavía no hay pruebas configuradas.
-        Usá <strong>+ Nueva prueba</strong> para crear la primera.
+
+    grupoSeleccionadoTest = "";
+    pruebaSeleccionadaTest = "";
+
+    navegacion.innerHTML = "";
+
+    editor.innerHTML = `
+      <div class="editor-inicial">
+        <span class="editor-inicial-icono">＋</span>
+        <strong>Todavía no hay pruebas configuradas</strong>
+        <p>Usá el botón “Nueva prueba” para agregar los testeos que necesitás registrar.</p>
       </div>
     `;
+
     return;
   }
 
-  // Conservar los grupos y pruebas que estaban desplegados.
+  if (!grupos.includes(grupoSeleccionadoTest)) {
+    grupoSeleccionadoTest = grupos[0];
+  }
 
-  const gruposAbiertos = new Set(
-    [...contenedor.querySelectorAll(".grupo-pruebas[open]")]
-      .map(el => el.dataset.grupo)
+  const pruebasDelGrupo = columnasActuales.filter(
+    col => col.grupo === grupoSeleccionadoTest && !col.esComp
   );
 
-  const pruebasAbiertas = new Set(
-    [...contenedor.querySelectorAll(".testeo-card[open]")]
-      .map(el => el.dataset.prueba)
-  );
+  if (!pruebasDelGrupo.some(col => col.id === pruebaSeleccionadaTest)) {
+    pruebaSeleccionadaTest = pruebasDelGrupo[0]?.id || "";
+  }
 
-  contenedor.innerHTML = grupos.map(grupo => {
+  navegacion.innerHTML = grupos.map(grupo => {
 
-    const pruebas = columnasActuales
-      .map((col, indice) => ({
-        ...col,
-        indiceOriginal: indice
-      }))
-      .filter(col => col.grupo === grupo && !col.esComp);
+    const resumen = obtenerEstadisticaGrupo(grupo);
+    const activa = grupo === grupoSeleccionadoTest;
 
-    if (!pruebas.length) return "";
-
-    const claseGrupo = pruebas[0].claseGrupo || "cat-custom";
-
-    const cantidadRegistros = pruebas.reduce(
-      (suma, col) => suma + contarResultadosPrueba(col),
-      0
-    );
-
-    const capacidad =
-      pruebas.length * jugadorasDivision.length;
-
-    const porcentaje = capacidad
-      ? Math.round(cantidadRegistros / capacidad * 100)
-      : 0;
-
-    const contenidoPruebas = pruebas.map(col => {
-
-      const completados = contarResultadosPrueba(col);
-      const total = jugadorasDivision.length;
-      const abierta = pruebasAbiertas.has(col.id);
-      const indiceOriginal = col.indiceOriginal;
-
-      const htmlJugadoras = jugadorasDivision.length
-
-        ? jugadorasDivision.map(jugadora => {
-
-            const fila = valoresActuales[jugadora] || {};
-
-            if (col.esCalculadoIMC) {
-              const imc = calcularIMC(fila.peso, fila.altura);
-
-              return `
-                <div class="resultado-jugadora-item">
-                  <div class="resultado-jugadora-nombre">
-                    ${escaparHTML(jugadora)}
-                  </div>
-
-                  <div class="resultado-jugadora-calculado">
-                    ${
-                      imc === null
-                        ? "Pendiente"
-                        : "I.M.C · " + imc.toFixed(2).replace(".", ",")
-                    }
-                  </div>
-                </div>
-              `;
-            }
-
-            const resultado = fila[col.id] ?? "";
-            const comparacion = col.compId
-              ? (fila[col.compId] ?? "")
-              : "";
-
-            return `
-              <div class="resultado-jugadora-item">
-
-                <div class="resultado-jugadora-nombre">
-                  ${escaparHTML(jugadora)}
-                </div>
-
-                <div class="resultado-jugadora-campo">
-                  <label>Resultado</label>
-
-                  <input
-                    type="text"
-                    value="${escaparHTML(resultado)}"
-                    placeholder="—"
-                    data-jugadora="${escaparHTML(jugadora)}"
-                    data-columna="${escaparHTML(col.id)}"
-                    onchange="actualizarCeldaDesdeGrupo(this)"
-                    ${!puedeEditar ? "disabled" : ""}
-                    aria-label="Resultado de ${escaparHTML(col.label)} para ${escaparHTML(jugadora)}"
-                  >
-                </div>
-
-                ${col.compId ? `
-                  <div class="resultado-jugadora-campo resultado-jugadora-campo-comp">
-                    <label>COMP</label>
-
-                    <input
-                      type="text"
-                      value="${escaparHTML(comparacion)}"
-                      placeholder="—"
-                      data-jugadora="${escaparHTML(jugadora)}"
-                      data-columna="${escaparHTML(col.compId)}"
-                      onchange="actualizarCeldaDesdeGrupo(this)"
-                      ${!puedeEditar ? "disabled" : ""}
-                      aria-label="Comparación de ${escaparHTML(col.label)} para ${escaparHTML(jugadora)}"
-                    >
-                  </div>
-                ` : ""}
-
-              </div>
-            `;
-          }).join("")
-
-        : `
-          <div class="prueba-sin-jugadoras">
-            No hay jugadoras cargadas para esta categoría.
-          </div>
-        `;
-
-      return `
-        <details
-          class="testeo-card"
-          data-prueba="${escaparHTML(col.id)}"
-          ${abierta ? "open" : ""}
-        >
-
-          <summary>
-            <div class="testeo-titulo">
-              <strong>${escaparHTML(col.label)}</strong>
-              <span class="testeo-badge">${completados}/${total}</span>
-            </div>
-
-            <div class="testeo-acciones">
-              ${
-                modoEliminar && puedeEditar
-                  ? `<button
-                       type="button"
-                       class="btn-eliminar-prueba"
-                       onclick="event.preventDefault();event.stopPropagation();eliminarColumna(${indiceOriginal})"
-                     >Eliminar</button>`
-                  : ""
-              }
-
-              <span class="testeo-flecha">›</span>
-            </div>
-          </summary>
-
-          <div class="lista-resultados-jugadoras">
-            ${htmlJugadoras}
-          </div>
-
-        </details>
-      `;
-    }).join("");
-
-    const abierto = gruposAbiertos.size
-      ? gruposAbiertos.has(grupo)
-      : true;
+    const claseGrupo =
+      resumen.pruebas[0]?.claseGrupo || "cat-custom";
 
     return `
-      <details
-        class="grupo-pruebas"
-        data-grupo="${escaparHTML(grupo)}"
-        ${abierto ? "open" : ""}
+      <button
+        type="button"
+        class="area-selector-card ${activa ? "seleccionada" : ""}"
+        data-grupo-test="${escaparHTML(grupo)}"
+        aria-pressed="${activa}"
       >
+        <span class="area-selector-icono ${escaparHTML(claseGrupo)}">
+          ${obtenerIconoGrupo(grupo)}
+        </span>
 
-        <summary>
-          <div class="grupo-resumen-izquierda">
-            <span class="grupo-color ${escaparHTML(claseGrupo)}"></span>
+        <span class="area-selector-contenido">
+          <strong>${escaparHTML(grupo.toUpperCase())}</strong>
+          <small data-grupo-resumen="${escaparHTML(grupo)}">
+            ${resumen.pruebas.length}
+            ${resumen.pruebas.length === 1 ? "prueba" : "pruebas"}
+            · ${resumen.completos}/${resumen.posibles} datos
+          </small>
+        </span>
 
-            <div class="grupo-resumen-texto">
-              <strong>${escaparHTML(grupo.toUpperCase())}</strong>
-              <small>
-                ${pruebas.length}
-                ${pruebas.length === 1 ? "prueba" : "pruebas"}
-                · ${porcentaje}% completado
-              </small>
-            </div>
-          </div>
-
-          <div class="grupo-resumen-derecha">
-            <span class="grupo-cantidad">
-              ${cantidadRegistros} / ${capacidad}
-            </span>
-            <span class="grupo-flecha">›</span>
-          </div>
-        </summary>
-
-        <div class="pruebas-del-grupo">
-          ${contenidoPruebas}
-        </div>
-
-      </details>
+        <span class="area-selector-marca"></span>
+      </button>
     `;
   }).join("");
 
-  actualizarTextoPeriodo();
+  navegacion.querySelectorAll("[data-grupo-test]").forEach(boton => {
+
+    boton.addEventListener("click", () => {
+      seleccionarGrupoTest(boton.dataset.grupoTest);
+    });
+
+  });
+
+  renderizarEditorPrueba();
 }
 
-function actualizarTextoPeriodo() {
-  const titulo = document.getElementById("tituloPeriodoActivo");
+function seleccionarGrupoTest(grupo) {
 
-  if (titulo) {
-    titulo.textContent =
-      document.getElementById("selectMes").value.trim();
+  grupoSeleccionadoTest = grupo;
+
+  const primeraPrueba = columnasActuales.find(
+    col => col.grupo === grupo && !col.esComp
+  );
+
+  pruebaSeleccionadaTest = primeraPrueba?.id || "";
+
+  filtroJugadorasTest = "todas";
+  busquedaJugadorasTest = "";
+
+  renderizarGruposTesteos();
+}
+
+function seleccionarPruebaTest(id) {
+
+  pruebaSeleccionadaTest = id;
+
+  filtroJugadorasTest = "todas";
+  busquedaJugadorasTest = "";
+
+  renderizarEditorPrueba();
+}
+
+/* =====================================================
+   ESTADO DE CADA JUGADORA
+===================================================== */
+
+function calcularEstadoJugadora(prueba, jugadora) {
+
+  const fila = valoresActuales[jugadora] || {};
+
+  if (prueba.esCalculadoIMC) {
+    return calcularIMC(fila.peso, fila.altura) !== null;
+  }
+
+  return fila[prueba.id] !== undefined &&
+    String(fila[prueba.id]).trim() !== "";
+}
+
+/* =====================================================
+   PASO 2 Y PASO 3 · EDITOR DE PRUEBA
+===================================================== */
+
+function renderizarEditorPrueba() {
+
+  const editor = document.getElementById("editorPrueba");
+
+  if (!editor) return;
+
+  const pruebas = columnasActuales
+    .map((col, indice) => ({
+      ...col,
+      indiceOriginal:indice
+    }))
+    .filter(col =>
+      col.grupo === grupoSeleccionadoTest &&
+      !col.esComp
+    );
+
+  if (!pruebas.length) {
+
+    editor.innerHTML = `
+      <div class="editor-inicial">
+        <strong>No hay pruebas en este grupo</strong>
+        <p>Podés crear una nueva prueba desde el botón superior.</p>
+      </div>
+    `;
+
+    return;
+  }
+
+  let prueba = pruebas.find(
+    col => col.id === pruebaSeleccionadaTest
+  );
+
+  if (!prueba) {
+    prueba = pruebas[0];
+    pruebaSeleccionadaTest = prueba.id;
+  }
+
+  const completados = contarResultadosPrueba(prueba);
+  const total = jugadorasDivision.length;
+
+  const porcentaje = total
+    ? Math.round(completados / total * 100)
+    : 0;
+
+  // Pestañas de pruebas del grupo.
+
+  const selectores = pruebas.map(col => {
+
+    const cantidad = contarResultadosPrueba(col);
+    const activa = col.id === prueba.id;
+
+    return `
+      <div class="prueba-selector-item ${activa ? "activa" : ""}">
+
+        <button
+          type="button"
+          class="prueba-selector-boton"
+          data-prueba-test="${escaparHTML(col.id)}"
+          aria-pressed="${activa}"
+        >
+          ${escaparHTML(col.label)}
+          <span class="prueba-selector-cantidad">${cantidad}/${total}</span>
+        </button>
+
+        ${modoEliminar && puedeEditar ? `
+          <button
+            type="button"
+            class="prueba-selector-eliminar"
+            data-eliminar-prueba="${col.indiceOriginal}"
+            title="Eliminar prueba"
+            aria-label="Eliminar ${escaparHTML(col.label)}"
+          >×</button>
+        ` : ""}
+
+      </div>
+    `;
+  }).join("");
+
+  // Tarjetas individuales de jugadoras.
+
+  const tarjetas = jugadorasDivision.map((jugadora, indice) => {
+
+    const fila = valoresActuales[jugadora] || {};
+
+    const completada =
+      calcularEstadoJugadora(prueba, jugadora);
+
+    if (prueba.esCalculadoIMC) {
+
+      const imc = calcularIMC(fila.peso, fila.altura);
+
+      const textoIMC = imc === null
+        ? "Pendiente"
+        : imc.toFixed(2).replace(".", ",");
+
+      return `
+        <article
+          class="jugadora-test-card ${completada ? "completada" : ""}"
+          data-card-jugadora="${escaparHTML(jugadora)}"
+          data-completada="${completada ? "si" : "no"}"
+        >
+
+          <div class="jugadora-test-cabecera">
+            <span class="jugadora-test-numero">${indice + 1}</span>
+            <strong class="jugadora-test-nombre">${escaparHTML(jugadora)}</strong>
+            <span class="jugadora-test-estado">
+              ${completada ? "Calculado" : "Pendiente"}
+            </span>
+          </div>
+
+          <div class="resultado-imc-test">
+            <small>I.M.C. automático</small>
+            <strong>${textoIMC}</strong>
+          </div>
+
+        </article>
+      `;
+    }
+
+    const resultado = fila[prueba.id] ?? "";
+
+    const comparacion = prueba.compId
+      ? (fila[prueba.compId] ?? "")
+      : "";
+
+    return `
+      <article
+        class="jugadora-test-card ${completada ? "completada" : ""}"
+        data-card-jugadora="${escaparHTML(jugadora)}"
+        data-completada="${completada ? "si" : "no"}"
+      >
+
+        <div class="jugadora-test-cabecera">
+          <span class="jugadora-test-numero">${indice + 1}</span>
+
+          <strong class="jugadora-test-nombre">
+            ${escaparHTML(jugadora)}
+          </strong>
+
+          <span class="jugadora-test-estado">
+            ${completada ? "Completado" : "Pendiente"}
+          </span>
+        </div>
+
+        <div class="jugadora-test-campos ${prueba.compId ? "con-comp" : ""}">
+
+          <div class="campo-resultado-test">
+            <label>Resultado</label>
+
+            <input
+              type="text"
+              inputmode="${prueba.grupo === "POSTURAL" ? "text" : "decimal"}"
+              value="${escaparHTML(resultado)}"
+              placeholder="Ingresar resultado"
+              data-jugadora="${escaparHTML(jugadora)}"
+              data-columna="${escaparHTML(prueba.id)}"
+              data-prueba-principal="${escaparHTML(prueba.id)}"
+              onchange="actualizarCeldaDesdeGrupo(this)"
+              ${!puedeEditar ? "disabled" : ""}
+              aria-label="Resultado de ${escaparHTML(prueba.label)} para ${escaparHTML(jugadora)}"
+            >
+          </div>
+
+          ${prueba.compId ? `
+            <div class="campo-resultado-test">
+              <label>COMP · Anterior</label>
+
+              <input
+                type="text"
+                inputmode="${prueba.grupo === "POSTURAL" ? "text" : "decimal"}"
+                value="${escaparHTML(comparacion)}"
+                placeholder="Comparación"
+                data-jugadora="${escaparHTML(jugadora)}"
+                data-columna="${escaparHTML(prueba.compId)}"
+                data-prueba-principal="${escaparHTML(prueba.id)}"
+                onchange="actualizarCeldaDesdeGrupo(this)"
+                ${!puedeEditar ? "disabled" : ""}
+                aria-label="Comparación anterior para ${escaparHTML(jugadora)}"
+              >
+            </div>
+          ` : ""}
+
+        </div>
+      </article>
+    `;
+  }).join("");
+
+  const descripcion = prueba.esCalculadoIMC
+    ? "Este indicador se obtiene automáticamente al completar peso y altura en el grupo Índices."
+    : prueba.compId
+      ? "Cargá el resultado actual y, cuando corresponda, el valor anterior en COMP."
+      : "Ingresá el resultado de cada jugadora. Los datos se guardan automáticamente al salir del campo.";
+
+  editor.innerHTML = `
+
+    <div class="editor-prueba-cabecera">
+
+      <div class="editor-prueba-cabecera-superior">
+
+        <div>
+          <span class="editor-prueba-kicker">
+            ${escaparHTML(grupoSeleccionadoTest.toUpperCase())} · PRUEBA SELECCIONADA
+          </span>
+
+          <h4 class="editor-prueba-titulo">
+            ${escaparHTML(prueba.label)}
+          </h4>
+
+          <p class="editor-prueba-descripcion">
+            ${descripcion}
+          </p>
+        </div>
+
+        <span class="editor-progreso-texto" id="progresoTextoPrueba">
+          ${completados} de ${total}
+        </span>
+
+      </div>
+
+      <div class="editor-progreso-barra">
+        <span id="progresoBarraPrueba" style="width:${porcentaje}%"></span>
+      </div>
+
+    </div>
+
+    <div class="selector-pruebas-wrap">
+
+      <span class="selector-pruebas-label">
+        2 · Seleccioná la prueba que vas a completar
+      </span>
+
+      <div class="selector-pruebas">
+        ${selectores}
+      </div>
+
+    </div>
+
+    <div class="paso-carga-test paso-completar-test">
+      <span class="numero-paso">3</span>
+
+      <div>
+        <strong>Completá los resultados por jugadora</strong>
+        <small>Ingresá el valor de la prueba en cada tarjeta. Los datos se guardan automáticamente.</small>
+      </div>
+    </div>
+
+    <div class="herramientas-jugadoras-test">
+
+      <input
+        type="search"
+        class="busqueda-jugadoras-test"
+        id="buscarJugadorasEnPrueba"
+        placeholder="Buscar jugadora..."
+        value="${escaparHTML(busquedaJugadorasTest)}"
+        aria-label="Buscar jugadora dentro de esta prueba"
+      >
+
+      <div class="filtros-estado-test" role="group" aria-label="Filtrar jugadoras">
+
+        <button
+          type="button"
+          class="filtro-estado-test ${filtroJugadorasTest === "todas" ? "activo" : ""}"
+          data-filtro-test="todas"
+        >
+          Todas
+        </button>
+
+        <button
+          type="button"
+          class="filtro-estado-test ${filtroJugadorasTest === "pendientes" ? "activo" : ""}"
+          data-filtro-test="pendientes"
+        >
+          Pendientes
+        </button>
+
+        <button
+          type="button"
+          class="filtro-estado-test ${filtroJugadorasTest === "completadas" ? "activo" : ""}"
+          data-filtro-test="completadas"
+        >
+          Completadas
+        </button>
+
+      </div>
+
+    </div>
+
+    <div class="lista-jugadoras-test" id="listaJugadorasTest">
+
+      ${
+        jugadorasDivision.length
+          ? tarjetas
+          : `<div class="lista-jugadoras-vacia">No hay jugadoras cargadas para esta categoría.</div>`
+      }
+
+    </div>
+
+    <div class="ayuda-resultado-test">
+      Consejo: podés filtrar por “Pendientes” para completar primero a las jugadoras que todavía no tienen un resultado registrado.
+    </div>
+
+  `;
+
+  // Selección de otra prueba.
+
+  editor.querySelectorAll("[data-prueba-test]").forEach(boton => {
+
+    boton.addEventListener("click", () => {
+      seleccionarPruebaTest(boton.dataset.pruebaTest);
+    });
+
+  });
+
+  // Eliminación de pruebas.
+
+  editor.querySelectorAll("[data-eliminar-prueba]").forEach(boton => {
+
+    boton.addEventListener("click", event => {
+      event.stopPropagation();
+      eliminarColumna(Number(boton.dataset.eliminarPrueba));
+    });
+
+  });
+
+  // Filtros de estado.
+
+  editor.querySelectorAll("[data-filtro-test]").forEach(boton => {
+
+    boton.addEventListener("click", () => {
+      cambiarFiltroJugadorasTest(boton.dataset.filtroTest);
+    });
+
+  });
+
+  // Búsqueda por nombre.
+
+  const buscador =
+    document.getElementById("buscarJugadorasEnPrueba");
+
+  if (buscador) {
+
+    buscador.addEventListener("input", () => {
+
+      busquedaJugadorasTest = buscador.value;
+
+      aplicarFiltrosJugadorasTest();
+    });
   }
 }
+
+/* =====================================================
+   FILTROS DE JUGADORAS
+===================================================== */
+
+function cambiarFiltroJugadorasTest(filtro) {
+
+  filtroJugadorasTest = filtro;
+
+  renderizarEditorPrueba();
+}
+
+function aplicarFiltrosJugadorasTest() {
+
+  const termino = String(busquedaJugadorasTest || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
+
+  document.querySelectorAll(".jugadora-test-card").forEach(card => {
+
+    const nombre = String(card.dataset.cardJugadora || "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase();
+
+    const coincideNombre = nombre.includes(termino);
+
+    const completada = card.dataset.completada === "si";
+
+    const coincideEstado =
+      filtroJugadorasTest === "todas" ||
+      (filtroJugadorasTest === "pendientes" && !completada) ||
+      (filtroJugadorasTest === "completadas" && completada);
+
+    card.style.display =
+      coincideNombre && coincideEstado ? "" : "none";
+  });
+}
+
+/* =====================================================
+   ACTUALIZAR PROGRESOS
+===================================================== */
+
+function actualizarProgresosTest() {
+
+  const prueba = columnasActuales.find(
+    col => col.id === pruebaSeleccionadaTest
+  );
+
+  if (prueba) {
+
+    const completados = contarResultadosPrueba(prueba);
+    const total = jugadorasDivision.length;
+
+    const porcentaje = total
+      ? Math.round(completados / total * 100)
+      : 0;
+
+    const texto =
+      document.getElementById("progresoTextoPrueba");
+
+    const barra =
+      document.getElementById("progresoBarraPrueba");
+
+    if (texto) {
+      texto.textContent = `${completados} de ${total}`;
+    }
+
+    if (barra) {
+      barra.style.width = porcentaje + "%";
+    }
+
+    const botonPrueba = [
+      ...document.querySelectorAll("[data-prueba-test]")
+    ].find(elemento =>
+      elemento.dataset.pruebaTest === prueba.id
+    );
+
+    const selector =
+      botonPrueba?.querySelector(".prueba-selector-cantidad");
+
+    if (selector) {
+      selector.textContent = `${completados}/${total}`;
+    }
+  }
+
+  document.querySelectorAll("[data-grupo-test]").forEach(boton => {
+
+    const grupo = boton.dataset.grupoTest;
+    const resumen = obtenerEstadisticaGrupo(grupo);
+
+    const texto = [
+      ...boton.querySelectorAll("[data-grupo-resumen]")
+    ].find(elemento =>
+      elemento.dataset.grupoResumen === grupo
+    );
+
+    if (texto) {
+      texto.textContent =
+        `${resumen.pruebas.length} ` +
+        `${resumen.pruebas.length === 1 ? "prueba" : "pruebas"} · ` +
+        `${resumen.completos}/${resumen.posibles} datos`;
+    }
+
+  });
+}
+
+function actualizarEstadoTarjetaJugadora(input) {
+
+  const jugadora = input.dataset.jugadora;
+  const idPrueba = input.dataset.pruebaPrincipal;
+
+  const prueba = columnasActuales.find(
+    col => col.id === idPrueba
+  );
+
+  const card = input.closest(".jugadora-test-card");
+
+  if (!prueba || !card) return;
+
+  const completa = calcularEstadoJugadora(prueba, jugadora);
+
+  card.dataset.completada = completa ? "si" : "no";
+
+  card.classList.toggle("completada", completa);
+
+  const estado =
+    card.querySelector(".jugadora-test-estado");
+
+  if (estado) {
+    estado.textContent =
+      completa ? "Completado" : "Pendiente";
+  }
+}
+
+/* =====================================================
+   GUARDAR RESULTADOS DE CADA JUGADORA
+===================================================== */
 
 window.actualizarCeldaDesdeGrupo = function(input) {
 
@@ -3102,11 +3503,13 @@ window.actualizarCeldaDesdeGrupo = function(input) {
 
   valoresActuales[jugadora][colId] = valor;
 
+  actualizarEstadoTarjetaJugadora(input);
+
+  actualizarProgresosTest();
+
+  aplicarFiltrosJugadorasTest();
+
   programarGuardadoNube();
-
-  // Actualizar contadores y valores calculados conservando los grupos abiertos.
-
-  renderizarGruposTesteos();
 };
 
 function renderizarTablaPlanilla() {
@@ -3114,11 +3517,7 @@ function renderizarTablaPlanilla() {
 }
 
 /* =====================================================
-   BIBLIOTECA TEST · SNAPSHOTS DE PLANILLAS GUARDADAS
-
-   Se guardan documentos de biblioteca independientes dentro
-   de la colección existente. El documento operativo original
-   mantiene su clave y payload de siempre.
+   BIBLIOTECA TEST · PLANILLAS GUARDADAS
 ===================================================== */
 
 let planillasBiblioteca = [];
@@ -3126,7 +3525,9 @@ let planillaBibliotecaActiva = null;
 let jugadoresBibliotecaActiva = [];
 
 function leerBibliotecaLocal() {
+
   try {
+
     const datos = JSON.parse(
       localStorage.getItem("bibliotecaTesteosADIUR") || "[]"
     );
@@ -3139,6 +3540,7 @@ function leerBibliotecaLocal() {
 }
 
 function escribirBibliotecaLocal(lista) {
+
   localStorage.setItem(
     "bibliotecaTesteosADIUR",
     JSON.stringify(lista)
@@ -3179,16 +3581,21 @@ function resumirPlanilla(datos) {
       ) {
         registros++;
       }
+
     });
   });
 
   return {
-    jugadoras: jugadoras.length,
-    pruebas,
+    jugadoras:jugadoras.length,
+    pruebas:pruebas.length,
     registros,
-    grupos: [...new Set(pruebas.map(c => c.grupo))]
+    grupos:[...new Set(pruebas.map(c => c.grupo))]
   };
 }
+
+/* =====================================================
+   RECUPERAR BIBLIOTECA TEST
+===================================================== */
 
 async function cargarBibliotecaTest() {
 
@@ -3197,22 +3604,28 @@ async function cargarBibliotecaTest() {
 
   const mapa = new Map();
 
-  // Primero se recupera el índice guardado en localStorage.
+  // Respaldo local.
 
   leerBibliotecaLocal().forEach(item => {
+
     if (
       item.division === division &&
       item.tipo === "biblioteca_testeos"
     ) {
       mapa.set(item.clave, item);
     }
+
   });
 
-  // Después se consulta la misma colección Firestore ya utilizada por Testeos.
+  // Recuperación desde la misma colección Firestore.
 
   if (nubeActiva && db) {
+
     try {
-      const snap = await getDocs(collection(db, "testeos_adiur"));
+
+      const snap = await getDocs(
+        collection(db, "testeos_adiur")
+      );
 
       snap.forEach(docSnap => {
 
@@ -3224,14 +3637,16 @@ async function cargarBibliotecaTest() {
           data.division === division &&
           data.clave
         ) {
+
           mapa.set(data.clave, {
             ...data,
-            idBiblioteca: docSnap.id
+            idBiblioteca:docSnap.id
           });
         }
+
       });
 
-      // Actualizar el respaldo local sin eliminar entradas de otras categorías.
+      // Actualizar el respaldo local sin borrar otras categorías.
 
       const todos = leerBibliotecaLocal()
         .filter(item => item.division !== division);
@@ -3241,6 +3656,7 @@ async function cargarBibliotecaTest() {
       escribirBibliotecaLocal(todos);
 
     } catch (error) {
+
       console.warn(
         "No se pudo actualizar Biblioteca Test desde Firestore:",
         error
@@ -3248,16 +3664,20 @@ async function cargarBibliotecaTest() {
     }
   }
 
-  planillasBiblioteca = [...mapa.values()]
-    .sort((a,b) => {
-      const fa = new Date(a.fechaGuardado || 0).getTime();
-      const fb = new Date(b.fechaGuardado || 0).getTime();
+  planillasBiblioteca = [...mapa.values()].sort((a,b) => {
 
-      return fb - fa;
-    });
+    const fa = new Date(a.fechaGuardado || 0).getTime();
+    const fb = new Date(b.fechaGuardado || 0).getTime();
+
+    return fb - fa;
+  });
 
   renderizarBibliotecaTest();
 }
+
+/* =====================================================
+   RENDERIZAR LAS TARJETAS DE BIBLIOTECA TEST
+===================================================== */
 
 function renderizarBibliotecaTest() {
 
@@ -3349,13 +3769,14 @@ function renderizarBibliotecaTest() {
     `;
   }).join("");
 
-  // El evento se vincula solamente a la tarjeta para evitar doble apertura
-  // cuando se presiona el botón interno de "Abrir evaluación completa".
+  // Abrir la ficha seleccionada.
 
   contenedor.querySelectorAll(".tarjeta-biblioteca").forEach(elemento => {
 
     const abrir = () => {
-      const indice = Number(elemento.dataset.abrirPlanilla);
+
+      const indice =
+        Number(elemento.dataset.abrirPlanilla);
 
       if (Number.isInteger(indice)) {
         abrirPlanillaBiblioteca(indice);
@@ -3365,10 +3786,14 @@ function renderizarBibliotecaTest() {
     elemento.addEventListener("click", abrir);
 
     elemento.addEventListener("keydown", event => {
+
       if (event.key === "Enter" || event.key === " ") {
+
         event.preventDefault();
+
         abrir();
       }
+
     });
   });
 }
@@ -3380,9 +3805,6 @@ function renderizarBibliotecaTest() {
 window.guardarPlanillaEnBiblioteca = async function() {
 
   if (!puedeEditar) return;
-
-  // Si el nombre del período acaba de cambiar, esperar la carga de sus datos
-  // antes de crear el snapshot para la biblioteca.
 
   await promesaCargaPlanilla;
 
@@ -3399,22 +3821,27 @@ window.guardarPlanillaEnBiblioteca = async function() {
     document.getElementById("btnGuardarPlanilla");
 
   if (!periodo) {
+
     estado.textContent =
       "Escribí el nombre del período antes de guardar.";
 
     document.getElementById("selectMes").focus();
+
     return;
   }
 
   if (periodo.includes("/")) {
+
     estado.textContent =
       "El nombre del período no puede contener barras (/).";
 
     document.getElementById("selectMes").focus();
+
     return;
   }
 
   if (!columnasActuales.length) {
+
     estado.textContent =
       "No hay pruebas configuradas para guardar.";
 
@@ -3422,31 +3849,32 @@ window.guardarPlanillaEnBiblioteca = async function() {
   }
 
   const clave = obtenerClavePlanilla(division, periodo);
+
   const ahora = new Date().toISOString();
 
-  // Payload idéntico al que utiliza el guardado operativo original.
+  // Payload de trabajo con la estructura original.
 
   const payload = {
     division,
-    mes: periodo,
-    columnas: columnasActuales,
-    valores: valoresActuales,
-    actualizadoPor: usuarioGuardado,
-    ultimaActualizacion: ahora
+    mes:periodo,
+    columnas:columnasActuales,
+    valores:valoresActuales,
+    actualizadoPor:usuarioGuardado,
+    ultimaActualizacion:ahora
   };
 
-  // Snapshot independiente para Biblioteca Test.
+  // Snapshot independiente de Biblioteca Test.
 
   const snapshot = {
-    tipo: "biblioteca_testeos",
+    tipo:"biblioteca_testeos",
     clave,
     division,
-    mes: periodo,
-    columnas: JSON.parse(JSON.stringify(columnasActuales)),
-    valores: JSON.parse(JSON.stringify(valoresActuales)),
-    jugadoras: [...jugadorasDivision],
-    actualizadoPor: usuarioGuardado,
-    fechaGuardado: ahora
+    mes:periodo,
+    columnas:JSON.parse(JSON.stringify(columnasActuales)),
+    valores:JSON.parse(JSON.stringify(valoresActuales)),
+    jugadoras:[...jugadorasDivision],
+    actualizadoPor:usuarioGuardado,
+    fechaGuardado:ahora
   };
 
   const marcadoresLocales = leerBibliotecaLocal().filter(
@@ -3457,7 +3885,7 @@ window.guardarPlanillaEnBiblioteca = async function() {
 
   escribirBibliotecaLocal(marcadoresLocales);
 
-  // Mantener el documento operativo en su clave original.
+  // Guardar también el documento de trabajo original.
 
   localStorage.setItem(
     "testeos_adiur_" + clave,
@@ -3474,15 +3902,10 @@ window.guardarPlanillaEnBiblioteca = async function() {
 
     if (nubeActiva && db) {
 
-      // Se guarda el documento de trabajo con su estructura original.
-
       await setDoc(
         doc(db, "testeos_adiur", clave),
         payload
       );
-
-      // El snapshot de biblioteca es un documento separado
-      // dentro de la misma colección existente.
 
       await setDoc(
         doc(db, "testeos_adiur", "__biblioteca__" + clave),
@@ -3524,7 +3947,7 @@ window.guardarPlanillaEnBiblioteca = async function() {
 };
 
 /* =====================================================
-   CONSTRUCCIÓN DE LA PLANILLA DE BIBLIOTECA
+   CONSTRUIR PLANILLA PARA VISTA AMPLIADA Y PDF
 ===================================================== */
 
 function construirDocumentoPlanilla(datos, listaJugadoras) {
@@ -3547,6 +3970,7 @@ function construirDocumentoPlanilla(datos, listaJugadoras) {
     : new Date().toLocaleDateString("es-AR");
 
   if (!jugadoras.length) {
+
     return `
       <div class="preview-vacio">
         Esta evaluación no contiene jugadoras para mostrar.
@@ -3564,12 +3988,14 @@ function construirDocumentoPlanilla(datos, listaJugadoras) {
       ultimo.span++;
 
     } else {
+
       grupos.push({
-        nombre: col.grupo,
-        clase: col.claseGrupo || "cat-custom",
-        span: 1
+        nombre:col.grupo,
+        clase:col.claseGrupo || "cat-custom",
+        span:1
       });
     }
+
   });
 
   const htmlGrupo = grupos.map(g => `
@@ -3609,6 +4035,7 @@ function construirDocumentoPlanilla(datos, listaJugadoras) {
       }
 
       return `<td>${escaparHTML(valor)}</td>`;
+
     }).join("");
 
     return `
@@ -3618,6 +4045,7 @@ function construirDocumentoPlanilla(datos, listaJugadoras) {
         ${celdas}
       </tr>
     `;
+
   }).join("");
 
   const promedios = columnas.map(col => {
@@ -3639,6 +4067,7 @@ function construirDocumentoPlanilla(datos, listaJugadoras) {
         }
 
       } else {
+
         numero = parsearNumero(fila[col.id]);
       }
 
@@ -3646,6 +4075,7 @@ function construirDocumentoPlanilla(datos, listaJugadoras) {
         suma += numero;
         cantidad++;
       }
+
     });
 
     return `
@@ -3657,9 +4087,11 @@ function construirDocumentoPlanilla(datos, listaJugadoras) {
         }
       </td>
     `;
+
   }).join("");
 
   return `
+
     <div class="planilla-cabecera">
 
       <img
@@ -3722,11 +4154,12 @@ function construirDocumentoPlanilla(datos, listaJugadoras) {
         · Período: ${escaparHTML(periodo)}
       </span>
     </div>
+
   `;
 }
 
 /* =====================================================
-   ABRIR UNA PLANILLA DE BIBLIOTECA
+   ABRIR Y CERRAR UNA EVALUACIÓN DE LA BIBLIOTECA
 ===================================================== */
 
 window.abrirPlanillaBiblioteca = function(indice) {
@@ -3756,7 +4189,9 @@ window.abrirPlanillaBiblioteca = function(indice) {
   document.getElementById("modalPlanillaBiblioteca").innerHTML =
     construirDocumentoPlanilla(item, jugadoras);
 
-  document.getElementById("modalVistaBiblioteca").classList.add("activo");
+  document
+    .getElementById("modalVistaBiblioteca")
+    .classList.add("activo");
 
   document.body.style.overflow = "hidden";
 };
@@ -3771,15 +4206,18 @@ window.cerrarVistaBiblioteca = function() {
 };
 
 /* =====================================================
-   IMPRIMIR PLANILLA DE BIBLIOTECA / PDF
+   IMPRIMIR / GUARDAR PDF
 ===================================================== */
 
 window.imprimirPlanillaBiblioteca = function() {
 
   if (!planillaBibliotecaActiva) return;
 
-  const destino = document.getElementById("printRoutine");
+  const destino =
+    document.getElementById("printRoutine");
+
   const tituloOriginal = document.title;
+
   const item = planillaBibliotecaActiva;
 
   destino.innerHTML = construirDocumentoPlanilla(
@@ -3809,7 +4247,7 @@ window.imprimirPlanillaBiblioteca = function() {
     window.removeEventListener("afterprint", limpiar);
   }
 
-  window.addEventListener("afterprint", limpiar, { once: true });
+  window.addEventListener("afterprint", limpiar, { once:true });
 
   window.print();
 
@@ -3885,16 +4323,17 @@ window.exportarPlanillaCSV = function() {
 
   const blob = new Blob(
     [contenido],
-    { type: "text/csv;charset=utf-8;" }
+    { type:"text/csv;charset=utf-8;" }
   );
 
   const url = URL.createObjectURL(blob);
+
   const enlace = document.createElement("a");
 
   enlace.href = url;
 
   enlace.download =
-    `ADIUR_Testeos_${division.replace(/\s+/g, "_")}_${mes}.csv`;
+    `ADIUR_Testeos_${division.replace(/\s+/g,"_")}_${mes}.csv`;
 
   document.body.appendChild(enlace);
 
@@ -3906,24 +4345,8 @@ window.exportarPlanillaCSV = function() {
 };
 
 /* =====================================================
-   INTERACCIONES DEL USUARIO
+   CAMBIO DE CATEGORÍA Y PERÍODO
 ===================================================== */
-
-window.actualizarCelda = function(jugadora, colId, nuevoValor) {
-
-  if (!puedeEditar) return;
-
-  if (!valoresActuales[jugadora]) {
-    valoresActuales[jugadora] = {};
-  }
-
-  valoresActuales[jugadora][colId] =
-    String(nuevoValor ?? "").trim();
-
-  programarGuardadoNube();
-
-  renderizarGruposTesteos();
-};
 
 window.cambiarFiltroPlanilla = function() {
 
@@ -3955,19 +4378,15 @@ window.cambiarFiltroPlanilla = function() {
     return;
   }
 
-  // Mostrar estado de carga para evitar editar la evaluación anterior
-  // mientras se recupera el período recién seleccionado.
-
-  document.getElementById("gruposTesteos").innerHTML = `
-    <div class="estado-vacio-grupos">
-      Cargando evaluación del período...
-    </div>
-  `;
-
-  promesaCargaPlanilla = cargarDatosPlanilla(division, periodo);
+  promesaCargaPlanilla =
+    cargarDatosPlanilla(division, periodo);
 
   return promesaCargaPlanilla;
 };
+
+/* =====================================================
+   MODAL PARA AGREGAR NUEVA PRUEBA
+===================================================== */
 
 window.abrirModalAgregarTest = function() {
 
@@ -3984,6 +4403,10 @@ window.cerrarModal = function(id) {
     .getElementById(id)
     .classList.remove("activo");
 };
+
+/* =====================================================
+   CREAR NUEVA PRUEBA Y ASIGNARLA A SU GRUPO
+===================================================== */
 
 window.agregarNuevaColumnaTest = function(event) {
 
@@ -4004,13 +4427,13 @@ window.agregarNuevaColumnaTest = function(event) {
     document.getElementById("incluirComp").checked;
 
   const mapaClases = {
-    "SALTOS": "cat-saltos",
-    "VELOCIDAD": "cat-velocidad",
-    "Vo2 máx": "cat-vo2",
-    "POSTURAL": "cat-postural",
-    "AGILIDAD": "cat-agilidad",
-    "INDICES": "cat-indices",
-    "OTRO TEST": "cat-custom"
+    "SALTOS":"cat-saltos",
+    "VELOCIDAD":"cat-velocidad",
+    "Vo2 máx":"cat-vo2",
+    "POSTURAL":"cat-postural",
+    "AGILIDAD":"cat-agilidad",
+    "INDICES":"cat-indices",
+    "OTRO TEST":"cat-custom"
   };
 
   const baseId = "test_" + Date.now();
@@ -4020,24 +4443,30 @@ window.agregarNuevaColumnaTest = function(event) {
     : null;
 
   columnasActuales.push({
-    id: baseId,
-    grupo: grupo,
-    claseGrupo: mapaClases[grupo] || "cat-custom",
-    label: nombre,
-    criterio: criterio,
-    compId: compId
+    id:baseId,
+    grupo:grupo,
+    claseGrupo:mapaClases[grupo] || "cat-custom",
+    label:nombre,
+    criterio:criterio,
+    compId:compId
   });
 
   if (incluirComp) {
 
     columnasActuales.push({
-      id: compId,
-      grupo: grupo,
-      claseGrupo: mapaClases[grupo] || "cat-custom",
-      label: "COMP",
-      esComp: true
+      id:compId,
+      grupo:grupo,
+      claseGrupo:mapaClases[grupo] || "cat-custom",
+      label:"COMP",
+      esComp:true
     });
   }
+
+  grupoSeleccionadoTest = grupo;
+  pruebaSeleccionadaTest = baseId;
+
+  filtroJugadorasTest = "todas";
+  busquedaJugadorasTest = "";
 
   cerrarModal("modalAgregarTest");
 
@@ -4046,15 +4475,21 @@ window.agregarNuevaColumnaTest = function(event) {
   programarGuardadoNube();
 };
 
+/* =====================================================
+   GESTIÓN Y ELIMINACIÓN DE PRUEBAS
+===================================================== */
+
 window.alternarModoEliminar = function() {
 
   modoEliminar = !modoEliminar;
 
-  const boton = document.getElementById("btnModoEliminar");
+  const boton =
+    document.getElementById("btnModoEliminar");
 
-  boton.textContent = modoEliminar
-    ? "Finalizar gestión"
-    : "Gestionar pruebas";
+  boton.textContent =
+    modoEliminar
+      ? "Finalizar gestión"
+      : "Gestionar pruebas";
 
   boton.classList.toggle("modo-activo", modoEliminar);
 
@@ -4097,16 +4532,24 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Si no tiene permisos técnicos, conserva la navegación y consulta,
-  // pero no permite crear pruebas ni guardar nuevas planillas de biblioteca.
+  // Los usuarios sin permisos técnicos pueden consultar,
+  // pero no crear pruebas ni guardar nuevas planillas.
 
   if (!puedeEditar) {
+
     document.getElementById("accionesTecnico").style.display = "none";
+
     document.getElementById("accionesPeriodo").style.display = "none";
   }
 
   if (esBianca) {
     document.getElementById("selectDivision").value = "Sub 14";
+  }
+
+  // En móvil, la barra lateral inicia cerrada.
+
+  if (window.matchMedia("(max-width:760px)").matches) {
+    document.getElementById("sidebar").classList.add("oculto");
   }
 
   cambiarFiltroPlanilla();
@@ -4128,6 +4571,7 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
 </script>
 
 </body>
