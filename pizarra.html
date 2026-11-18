@@ -1441,31 +1441,24 @@ body{background:#f2f4f6;color:var(--coach-ink)}
         </div>
       </div>
 
-      <button type="button" class="btn btn-dark drawing-panel-toggle" id="toggleDrawingPanel" onclick="alternarPanelDibujo()" aria-expanded="false" aria-controls="drawingDrawer">✎ Herramientas y trazados</button>
-      <aside class="drawing-drawer" id="drawingDrawer" aria-label="Panel de dibujo">
-        <div class="drawer-heading">
-          <div><span class="drawer-eyebrow">EDICIÓN TÁCTICA</span><strong>Herramientas de dibujo</strong></div>
-          <button type="button" class="drawer-close" onclick="alternarPanelDibujo()" aria-label="Cerrar herramientas">×</button>
-        </div>
+      <aside class="drawing-drawer" id="drawingDrawer" aria-label="Herramientas de dibujo">
         <div class="drawing-toolbar drawing-tools" aria-label="Herramientas de dibujo">
-          <strong>DIBUJAR</strong>
-          <button type="button" class="tool-btn active" data-tool="select" onclick="seleccionarHerramienta(this.dataset.tool)">↖ Seleccionar</button>
-          <button type="button" class="tool-btn" data-tool="arrow" onclick="seleccionarHerramienta(this.dataset.tool)">➜ Flecha</button>
-          <button type="button" class="tool-btn" data-tool="circle" onclick="seleccionarHerramienta(this.dataset.tool)">○ Círculo</button>
-          <button type="button" class="tool-btn" data-tool="triangle" onclick="seleccionarHerramienta(this.dataset.tool)">△ Triángulo</button>
-          <button type="button" class="tool-btn" data-tool="cross" onclick="seleccionarHerramienta(this.dataset.tool)">✕ Cruz</button>
-          <button type="button" class="tool-btn" data-tool="square" onclick="seleccionarHerramienta(this.dataset.tool)">□ Cuadrado</button>
-          <button type="button" class="tool-btn" data-tool="freehand" onclick="seleccionarHerramienta(this.dataset.tool)">〰 Mano alzada</button>
-          <button type="button" class="tool-btn" data-tool="polyline" onclick="seleccionarHerramienta(this.dataset.tool)">⌁ Línea por vértices</button>
+          <button type="button" class="tool-btn active" data-tool="select" onclick="seleccionarHerramienta(this.dataset.tool)">↖</button>
+          <button type="button" class="tool-btn" data-tool="arrow" onclick="seleccionarHerramienta(this.dataset.tool)">➜</button>
+          <button type="button" class="tool-btn" data-tool="circle" onclick="seleccionarHerramienta(this.dataset.tool)">○</button>
+          <button type="button" class="tool-btn" data-tool="triangle" onclick="seleccionarHerramienta(this.dataset.tool)">△</button>
+          <button type="button" class="tool-btn" data-tool="cross" onclick="seleccionarHerramienta(this.dataset.tool)">✕</button>
+          <button type="button" class="tool-btn" data-tool="square" onclick="seleccionarHerramienta(this.dataset.tool)">□</button>
+          <button type="button" class="tool-btn" data-tool="freehand" onclick="seleccionarHerramienta(this.dataset.tool)">〰</button>
+          <button type="button" class="tool-btn" data-tool="polyline" onclick="seleccionarHerramienta(this.dataset.tool)">⌁</button>
         </div>
         <div class="drawing-toolbar drawing-options" aria-label="Formato del trazado">
-          <strong class="drawing-options-title">FORMATO DEL TRAZADO</strong>
-          <label>Color <input type="color" id="colorDibujo" value="#f47721" aria-label="Color del dibujo"></label>
-          <label><input type="checkbox" id="rellenoDibujo"> Relleno</label>
-          <label>Grosor <select id="grosorDibujo"><option value="3">Fino</option><option value="5" selected>Medio</option><option value="8">Grueso</option></select></label>
-          <button type="button" class="tool-btn" onclick="finalizarLinea()">✓ Terminar línea</button>
-          <button type="button" class="tool-btn" onclick="deshacerDibujo()">↶ Deshacer</button>
-          <button type="button" class="tool-btn" onclick="limpiarDibujos()">Borrar dibujos</button>
+          <label title="Color del trazo"><input type="color" id="colorDibujo" value="#f47721" aria-label="Color del dibujo"></label>
+          <label title="Activar o desactivar relleno"><input type="checkbox" id="rellenoDibujo" aria-label="Relleno">◩</label>
+          <label title="Grosor del trazo"><select id="grosorDibujo" aria-label="Grosor"><option value="3">1</option><option value="5" selected>2</option><option value="8">3</option></select></label>
+          <button type="button" class="tool-btn" onclick="finalizarLinea()">✓</button>
+          <button type="button" class="tool-btn" onclick="deshacerDibujo()">↶</button>
+          <button type="button" class="tool-btn" onclick="limpiarDibujos()">⌫</button>
           <span class="board-help" id="ayudaDibujo" role="status" aria-live="polite">Elegí una herramienta para marcar la jugada.</span>
         </div>
       </aside>
@@ -3064,4 +3057,118 @@ document
   .drawing-tools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
   .drawing-tools strong{grid-column:1/-1}
   .main:fullscreen .drawing-drawer{grid-template-columns:1fr;max-width:270px}
+}
+
+
+/* Herramientas integradas en la cancha: rail de iconos junto al arco izquierdo. */
+.drawing-drawer{
+  display:flex!important;
+  position:absolute;
+  z-index:38;
+  top:50%;
+  left:7px;
+  bottom:auto;
+  transform:translateY(-50%);
+  width:48px;
+  max-height:calc(100% - 24px);
+  flex-direction:column;
+  gap:5px;
+  padding:5px;
+  overflow-y:auto;
+  overflow-x:hidden;
+  border:1px solid #ffffff55;
+  border-radius:12px;
+  background:rgba(18,35,31,.78);
+  box-shadow:0 4px 16px #0005;
+  backdrop-filter:blur(5px);
+}
+.drawing-tools{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  padding:0;
+  border:0;
+  background:transparent;
+}
+.drawing-tools .tool-btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:36px;
+  min-width:36px;
+  height:36px;
+  min-height:36px;
+  padding:0;
+  border:1px solid #ffffff30;
+  border-radius:8px;
+  background:#ffffffeb;
+  color:#26352f;
+  font-size:20px;
+  line-height:1;
+  text-align:center;
+}
+.drawing-tools .tool-btn.active{
+  background:#fff0e6;
+  border-color:#f47721;
+  color:#bd520d;
+  box-shadow:inset 0 0 0 2px #f47721;
+}
+.drawing-options{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:5px;
+  margin:0;
+  padding:5px 0 0;
+  border:0;
+  border-top:1px solid #ffffff55;
+  border-radius:0;
+  background:transparent;
+}
+.drawing-options label{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:36px;
+  min-height:30px;
+  gap:2px;
+  padding:2px;
+  border-radius:7px;
+  background:#ffffffeb;
+  color:#26352f;
+  font-size:14px;
+}
+.drawing-options input[type=color]{width:27px;height:25px;padding:0;border:0;background:transparent}
+.drawing-options input[type=checkbox]{width:14px;height:14px;accent-color:#f47721}
+.drawing-options select{width:30px;min-width:0;padding:4px 1px;border:0;background:transparent;font-size:10px}
+.drawing-options .tool-btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:36px;
+  min-width:36px;
+  min-height:30px;
+  padding:3px;
+  border:1px solid #ffffff30;
+  border-radius:7px;
+  background:#ffffffeb;
+  color:#26352f;
+  font-size:16px;
+}
+.drawing-options #ayudaDibujo{
+  position:absolute;
+  width:1px;
+  height:1px;
+  padding:0;
+  margin:-1px;
+  overflow:hidden;
+  clip:rect(0,0,0,0);
+  white-space:nowrap;
+  border:0;
+}
+.drawing-panel-toggle,.drawer-heading{display:none!important}
+@media(max-width:700px){
+  .drawing-drawer{left:5px;width:44px;padding:4px;gap:4px;max-height:calc(100% - 12px)}
+  .drawing-tools .tool-btn,.drawing-options label,.drawing-options .tool-btn{width:34px;min-width:34px}
+  .drawing-tools .tool-btn{height:34px;min-height:34px;font-size:18px}
 }
