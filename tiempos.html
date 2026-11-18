@@ -1055,17 +1055,21 @@ ajustarMenu();
 actualizarTodo();
 </script>
 
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
 
 import {
     getFirestore,
     collection,
-    onSnapshot
+    onSnapshot,
+    doc,
+    setDoc,
+    deleteDoc
 } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCc0dPIEkaKxbHoRC2CgZK412dXVGPOdTI",
+    apiKey: "AIzaSyCc0dPIEkaKxbHoRC2gZK412dXVGPOdTI",
     authDomain: "adiur-b1913.firebaseapp.com",
     projectId: "adiur-b1913",
     storageBucket: "adiur-b1913.firebasestorage.app",
@@ -1077,37 +1081,80 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Escuchar el plantel en tiempo real
+// ======================================
+// JUGADORAS: ESCUCHAR CAMBIOS EN FIREBASE
+// ======================================
+
 onSnapshot(
     collection(db, "jugadoras"),
     (snapshot) => {
-        const lista = [];
-
-        snapshot.forEach((documento) => {
-            const datos = documento.data();
-
-            lista.push({
-                id: documento.id,
-                nombre: datos.nombre || "",
-                categoria: datos.categoria || ""
-            });
-        });
+        const lista = snapshot.docs.map(documento => ({
+            id: documento.id,
+            nombre: documento.data().nombre || "",
+            categoria: documento.data().categoria || ""
+        }));
 
         if (typeof window.aplicarJugadorasNube === "function") {
             window.aplicarJugadorasNube(lista);
         }
     },
     (error) => {
-        console.error("Error al cargar las jugadoras desde Firebase:", error);
+        console.error("Error al cargar jugadoras:", error);
+    }
+);
+
+// ======================================
+// TIEMPOS: ESCUCHAR REGISTROS EN FIREBASE
+// ======================================
+
+onSnapshot(
+    collection(db, "tiemposRendimiento"),
+    (snapshot) => {
+        const lista = snapshot.docs.map(documento => ({
+            ...documento.data(),
+            id: documento.id
+        }));
+
+        if (typeof window.aplicarRegistrosTiemposNube === "function") {
+            window.aplicarRegistrosTiemposNube(lista);
+        }
+    },
+    (error) => {
+        console.error("Error al cargar los tiempos desde Firebase:", error);
+
         if (typeof window.mostrarToastTiempos === "function") {
             window.mostrarToastTiempos(
-                "No se pudo cargar el plantel desde Firebase.",
+                "No se pudieron sincronizar los tiempos desde la nube.",
                 true
             );
         }
     }
 );
+
+// ======================================
+// GUARDAR O ACTUALIZAR UNA EVALUACIÓN
+// ======================================
+
+window.guardarRegistroTiemposNube = async function(registro) {
+    await setDoc(
+        doc(db, "tiemposRendimiento", String(registro.id)),
+        registro
+    );
+};
+
+// ======================================
+// ELIMINAR UNA EVALUACIÓN
+// ======================================
+
+window.eliminarRegistroTiemposNube = async function(id) {
+    await deleteDoc(
+        doc(db, "tiemposRendimiento", String(id))
+    );
+};
+
+console.log("Firebase conectado: jugadoras y tiempos sincronizados.");
 </script>
+
 
 </body>
 </html>
