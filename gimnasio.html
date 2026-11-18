@@ -3272,6 +3272,7 @@ function cargarDB() {
 }
 
 
+
 function guardarDB() {
     try {
         localStorage.setItem(KEY, JSON.stringify(db));
@@ -3302,14 +3303,6 @@ function guardarDB() {
         mostrarEstado("No se pudieron guardar los cambios.");
         return false;
     }
-}
-
-
-    return true;
-  } catch (error) {
-    mostrarEstado("No se pudieron guardar los cambios.");
-    return false;
-  }
 }
 
 function asegurarRutinasGenerales(division) {
