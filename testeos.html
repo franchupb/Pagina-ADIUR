@@ -14,30 +14,45 @@
   --gris:#f4f5f7;
   --gris-texto:#747474;
   --borde:#e8e8e8;
-  --rojo:#ef4444;
   --verde:#18743b;
+  --rojo:#c93636;
+  --azul:#4269ad;
   --sombra:0 5px 18px rgba(23,23,23,.045);
 }
 
-*{box-sizing:border-box}
+* {
+  box-sizing:border-box;
+}
 
-body{
+body {
   margin:0;
   font-family:Arial,Helvetica,sans-serif;
   background:#f5f6f8;
   color:var(--negro);
 }
 
-button,input,select,textarea{font:inherit}
-button,a{-webkit-tap-highlight-color:transparent}
-button{cursor:pointer}
-a{color:inherit;text-decoration:none}
+button,input,select,textarea {
+  font:inherit;
+}
+
+button,a {
+  -webkit-tap-highlight-color:transparent;
+}
+
+button {
+  cursor:pointer;
+}
+
+a {
+  color:inherit;
+  text-decoration:none;
+}
 
 /* =====================================================
    BARRA SUPERIOR
 ===================================================== */
 
-.barra-superior{
+.barra-superior {
   position:sticky;
   top:0;
   z-index:100;
@@ -50,7 +65,7 @@ a{color:inherit;text-decoration:none}
   border-bottom:1px solid var(--borde);
 }
 
-.boton-menu{
+.boton-menu {
   width:42px;
   height:42px;
   display:grid;
@@ -63,9 +78,11 @@ a{color:inherit;text-decoration:none}
   color:var(--negro);
 }
 
-.boton-menu:hover{background:var(--gris)}
+.boton-menu:hover {
+  background:var(--gris);
+}
 
-.logo-superior{
+.logo-superior {
   width:55px;
   height:55px;
   flex-shrink:0;
@@ -75,22 +92,25 @@ a{color:inherit;text-decoration:none}
   background:#fff;
 }
 
-.titulo-superior{flex:1;min-width:0}
+.titulo-superior {
+  flex:1;
+  min-width:0;
+}
 
-.titulo-superior h1{
+.titulo-superior h1 {
   margin:0 0 5px;
   font-size:21px;
   font-weight:900;
   letter-spacing:.35px;
 }
 
-.titulo-superior p{
+.titulo-superior p {
   margin:0;
   color:var(--gris-texto);
   font-size:13px;
 }
 
-.estado-nube{
+.estado-nube {
   display:inline-flex;
   align-items:center;
   gap:6px;
@@ -103,24 +123,24 @@ a{color:inherit;text-decoration:none}
   white-space:nowrap;
 }
 
-.estado-nube.guardando{
+.estado-nube.guardando {
   background:#fef3c7;
   color:#b45309;
 }
 
-.estado-nube.error{
+.estado-nube.error {
   background:#fee2e2;
   color:#991b1b;
 }
 
-.perfil{
+.perfil {
   display:flex;
   align-items:center;
   gap:10px;
   min-width:0;
 }
 
-.avatar{
+.avatar {
   width:42px;
   height:42px;
   display:flex;
@@ -133,7 +153,7 @@ a{color:inherit;text-decoration:none}
   font-weight:bold;
 }
 
-.nombre-perfil{
+.nombre-perfil {
   max-width:150px;
   overflow:hidden;
   text-overflow:ellipsis;
@@ -142,7 +162,7 @@ a{color:inherit;text-decoration:none}
   font-weight:bold;
 }
 
-.rol-perfil{
+.rol-perfil {
   margin-top:4px;
   color:var(--gris-texto);
   font-size:11px;
@@ -152,13 +172,13 @@ a{color:inherit;text-decoration:none}
    ESTRUCTURA Y BARRA LATERAL
 ===================================================== */
 
-.contenedor{
+.contenedor {
   display:flex;
   min-height:calc(100vh - 84px);
   align-items:stretch;
 }
 
-.sidebar{
+.sidebar {
   width:258px;
   flex:0 0 258px;
   padding:20px 13px;
@@ -168,9 +188,11 @@ a{color:inherit;text-decoration:none}
   overflow-y:auto;
 }
 
-.sidebar.oculto{margin-left:-258px}
+.sidebar.oculto {
+  margin-left:-258px;
+}
 
-.menu-inicio{
+.menu-inicio {
   display:flex;
   align-items:center;
   gap:12px;
@@ -182,11 +204,15 @@ a{color:inherit;text-decoration:none}
   transition:background .2s;
 }
 
-.menu-inicio:hover{background:var(--gris)}
+.menu-inicio:hover {
+  background:var(--gris);
+}
 
-.grupo-menu{margin-bottom:8px}
+.grupo-menu {
+  margin-bottom:8px;
+}
 
-.titulo-grupo{
+.titulo-grupo {
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -201,9 +227,11 @@ a{color:inherit;text-decoration:none}
   user-select:none;
 }
 
-.titulo-grupo:hover{background:#f8f8f8}
+.titulo-grupo:hover {
+  background:#f8f8f8;
+}
 
-.flecha{
+.flecha {
   display:inline-block;
   font-size:16px;
   font-weight:700;
@@ -211,19 +239,26 @@ a{color:inherit;text-decoration:none}
   transition:transform .2s;
 }
 
-.grupo-menu.cerrado .flecha{transform:rotate(0deg)}
-.grupo-menu:not(.cerrado) .flecha{transform:rotate(90deg)}
+.grupo-menu.cerrado .flecha {
+  transform:rotate(0deg);
+}
 
-.submenu{
+.grupo-menu:not(.cerrado) .flecha {
+  transform:rotate(90deg);
+}
+
+.submenu {
   display:flex;
   flex-direction:column;
   gap:3px;
   padding:0 0 5px;
 }
 
-.grupo-menu.cerrado .submenu{display:none}
+.grupo-menu.cerrado .submenu {
+  display:none;
+}
 
-.submenu a{
+.submenu a {
   display:flex;
   align-items:center;
   gap:10px;
@@ -234,18 +269,18 @@ a{color:inherit;text-decoration:none}
   transition:background .15s,color .15s;
 }
 
-.submenu a:hover{
+.submenu a:hover {
   background:#f6f6f6;
   color:#181818;
 }
 
-.submenu a.activo{
+.submenu a.activo {
   background:var(--naranja-claro);
   color:var(--naranja-oscuro);
   font-weight:800;
 }
 
-.nav-punto{
+.nav-punto {
   width:6px;
   height:6px;
   flex-shrink:0;
@@ -253,15 +288,17 @@ a{color:inherit;text-decoration:none}
   border-radius:50%;
 }
 
-.submenu a.activo .nav-punto{background:var(--naranja)}
+.submenu a.activo .nav-punto {
+  background:var(--naranja);
+}
 
-.separador-sesion{
+.separador-sesion {
   margin:19px 0 0;
   padding-top:12px;
   border-top:1px solid #e8e8e8;
 }
 
-.enlace-cerrar-sesion{
+.enlace-cerrar-sesion {
   display:flex;
   align-items:center;
   gap:10px;
@@ -272,22 +309,26 @@ a{color:inherit;text-decoration:none}
   font-weight:700;
 }
 
-.enlace-cerrar-sesion:hover{background:#fff2f1}
+.enlace-cerrar-sesion:hover {
+  background:#fff2f1;
+}
 
-.capa-sidebar{display:none}
+.capa-sidebar {
+  display:none;
+}
 
 /* =====================================================
    CONTENIDO GENERAL
 ===================================================== */
 
-.contenido{
+.contenido {
   flex:1;
   min-width:0;
   max-width:100%;
   padding:10px clamp(12px,1.6vw,22px) 30px;
 }
 
-.encabezado-seccion{
+.encabezado-seccion {
   display:flex;
   align-items:flex-start;
   justify-content:space-between;
@@ -296,7 +337,7 @@ a{color:inherit;text-decoration:none}
   flex-wrap:wrap;
 }
 
-.sobretitulo-seccion{
+.sobretitulo-seccion {
   margin-bottom:7px;
   color:var(--naranja-oscuro);
   font-size:9px;
@@ -304,21 +345,21 @@ a{color:inherit;text-decoration:none}
   letter-spacing:1.35px;
 }
 
-.encabezado-seccion h2{
+.encabezado-seccion h2 {
   margin:0 0 7px;
   font-size:27px;
   font-weight:900;
   letter-spacing:-.55px;
 }
 
-.encabezado-seccion p{
+.encabezado-seccion p {
   margin:0;
   color:#777;
   font-size:11px;
   line-height:1.5;
 }
 
-.panel{
+.panel {
   margin-bottom:16px;
   padding:19px;
   background:#fff;
@@ -327,7 +368,7 @@ a{color:inherit;text-decoration:none}
   box-shadow:var(--sombra);
 }
 
-.btn-principal{
+.btn-principal {
   min-height:40px;
   padding:10px 14px;
   border:0;
@@ -340,9 +381,16 @@ a{color:inherit;text-decoration:none}
   transition:background .15s;
 }
 
-.btn-principal:hover{background:var(--naranja-oscuro)}
+.btn-principal:hover {
+  background:var(--naranja-oscuro);
+}
 
-.btn-secundario{
+.btn-principal:disabled {
+  opacity:.6;
+  cursor:not-allowed;
+}
+
+.btn-secundario {
   min-height:40px;
   padding:10px 14px;
   border:1px solid var(--borde);
@@ -353,9 +401,11 @@ a{color:inherit;text-decoration:none}
   font-weight:bold;
 }
 
-.btn-secundario:hover{background:var(--gris)}
+.btn-secundario:hover {
+  background:var(--gris);
+}
 
-.btn-peligro{
+.btn-peligro {
   min-height:40px;
   padding:10px 14px;
   border:1px solid #fecdd3;
@@ -366,7 +416,7 @@ a{color:inherit;text-decoration:none}
   font-weight:bold;
 }
 
-.acciones-columnas{
+.acciones-columnas {
   display:flex;
   flex-wrap:wrap;
   gap:8px;
@@ -376,7 +426,7 @@ a{color:inherit;text-decoration:none}
    SELECTOR DE CATEGORÍA
 ===================================================== */
 
-.selector-categoria-panel{
+.selector-categoria-panel {
   display:grid;
   grid-template-columns:42px minmax(0,1fr) minmax(230px,264px);
   align-items:center;
@@ -391,7 +441,7 @@ a{color:inherit;text-decoration:none}
   box-shadow:0 3px 12px rgba(23,23,23,.025);
 }
 
-.selector-categoria-icono{
+.selector-categoria-icono {
   width:42px;
   height:42px;
   display:grid;
@@ -403,9 +453,11 @@ a{color:inherit;text-decoration:none}
   font-weight:800;
 }
 
-.selector-categoria-texto{min-width:0}
+.selector-categoria-texto {
+  min-width:0;
+}
 
-.selector-categoria-texto span{
+.selector-categoria-texto span {
   display:block;
   margin-bottom:4px;
   color:var(--naranja-oscuro);
@@ -414,7 +466,7 @@ a{color:inherit;text-decoration:none}
   letter-spacing:1px;
 }
 
-.selector-categoria-texto strong{
+.selector-categoria-texto strong {
   display:block;
   margin-bottom:4px;
   color:#171717;
@@ -422,14 +474,14 @@ a{color:inherit;text-decoration:none}
   font-weight:900;
 }
 
-.selector-categoria-texto p{
+.selector-categoria-texto p {
   margin:0;
   color:#858585;
   font-size:10px;
   line-height:1.35;
 }
 
-.selector-categoria-control select{
+.selector-categoria-control select {
   width:100%;
   height:40px;
   padding:0 13px;
@@ -442,16 +494,11 @@ a{color:inherit;text-decoration:none}
   font-weight:800;
 }
 
-.selector-categoria-control select:focus{
-  border-color:var(--naranja);
-  box-shadow:0 0 0 3px rgba(244,119,33,.1);
-}
-
 /* =====================================================
    IDENTIFICACIÓN DEL PERÍODO
 ===================================================== */
 
-.panel-periodo{
+.panel-periodo {
   display:grid;
   grid-template-columns:minmax(220px,1fr) minmax(260px,390px) auto;
   align-items:center;
@@ -460,7 +507,7 @@ a{color:inherit;text-decoration:none}
   border-left:4px solid var(--naranja);
 }
 
-.seccion-kicker{
+.seccion-kicker {
   display:block;
   margin-bottom:6px;
   color:var(--naranja-oscuro);
@@ -469,13 +516,13 @@ a{color:inherit;text-decoration:none}
   letter-spacing:1px;
 }
 
-.periodo-info h3{
+.periodo-info h3 {
   margin:0 0 5px;
   font-size:16px;
   font-weight:900;
 }
 
-.periodo-info p{
+.periodo-info p {
   max-width:520px;
   margin:0;
   color:#858585;
@@ -483,7 +530,7 @@ a{color:inherit;text-decoration:none}
   line-height:1.5;
 }
 
-.periodo-campo label{
+.periodo-campo label {
   display:block;
   margin-bottom:6px;
   color:#666;
@@ -491,7 +538,7 @@ a{color:inherit;text-decoration:none}
   font-weight:800;
 }
 
-.periodo-campo input{
+.periodo-campo input {
   width:100%;
   height:40px;
   padding:0 12px;
@@ -504,12 +551,12 @@ a{color:inherit;text-decoration:none}
   font-weight:700;
 }
 
-.periodo-campo input:focus{
+.periodo-campo input:focus {
   border-color:var(--naranja);
   box-shadow:0 0 0 3px rgba(244,119,33,.1);
 }
 
-.periodo-campo small{
+.periodo-campo small {
   display:block;
   margin-top:5px;
   color:#989898;
@@ -517,19 +564,19 @@ a{color:inherit;text-decoration:none}
   line-height:1.35;
 }
 
-.periodo-acciones{
+.periodo-acciones {
   display:flex;
   align-items:center;
   flex-direction:column;
   gap:6px;
 }
 
-.periodo-acciones .btn-principal{
+.periodo-acciones .btn-principal {
   min-width:145px;
   white-space:nowrap;
 }
 
-.estado-guardado-planilla{
+.estado-guardado-planilla {
   min-height:12px;
   color:#287b47;
   font-size:9px;
@@ -538,21 +585,78 @@ a{color:inherit;text-decoration:none}
 }
 
 /* =====================================================
-   TÍTULOS DE SECCIÓN
+   PESTAÑAS PRINCIPALES
+===================================================== */
+
+.pestanas-principales {
+  display:flex;
+  align-items:center;
+  gap:5px;
+  margin:19px 0 15px;
+  padding:5px;
+  border:1px solid #e6e8eb;
+  border-radius:11px;
+  background:#fff;
+  width:max-content;
+  max-width:100%;
+}
+
+.pestana-principal {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  min-height:39px;
+  padding:9px 16px;
+  border:0;
+  border-radius:8px;
+  background:transparent;
+  color:#777;
+  font-size:11px;
+  font-weight:850;
+  transition:background .15s,color .15s;
+}
+
+.pestana-principal:hover {
+  background:#f7f7f7;
+  color:#333;
+}
+
+.pestana-principal.activa {
+  background:var(--naranja-claro);
+  color:var(--naranja-oscuro);
+}
+
+.pestana-principal .pestana-icono {
+  font-size:15px;
+}
+
+.vista-principal {
+  display:none;
+}
+
+.vista-principal.activa {
+  display:block;
+}
+
+/* =====================================================
+   CABECERAS DE PANELES
 ===================================================== */
 
 .panel-cabecera-planilla,
-.panel-titulo-fila{
+.panel-titulo-fila {
   display:flex;
   align-items:flex-start;
   justify-content:space-between;
   gap:15px;
 }
 
-.panel-carga-grupos-cabecera{margin-bottom:15px}
+.panel-carga-grupos-cabecera {
+  margin-bottom:17px;
+}
 
 .panel-cabecera-planilla h3,
-.panel-titulo-fila h3{
+.panel-titulo-fila h3 {
   margin:0 0 5px;
   color:#202020;
   font-size:17px;
@@ -561,7 +665,7 @@ a{color:inherit;text-decoration:none}
 }
 
 .panel-cabecera-planilla p,
-.panel-titulo-fila p{
+.panel-titulo-fila p {
   margin:0;
   color:#858585;
   font-size:10px;
@@ -569,25 +673,27 @@ a{color:inherit;text-decoration:none}
 }
 
 /* =====================================================
-   CARGA GUIADA DE TESTEOS · PASOS
+   CARGA DE TESTEOS
 ===================================================== */
 
-.panel-grupos{padding:19px}
-
-.flujo-carga-test{
-  display:flex;
-  flex-direction:column;
-  gap:13px;
+.panel-grupos {
+  padding:19px;
 }
 
-.paso-carga-test{
+.flujo-carga-test {
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.paso-carga-test {
   display:flex;
   align-items:center;
   gap:10px;
   margin:2px 0 0;
 }
 
-.numero-paso{
+.numero-paso {
   width:25px;
   height:25px;
   flex:0 0 25px;
@@ -600,14 +706,14 @@ a{color:inherit;text-decoration:none}
   font-weight:900;
 }
 
-.paso-carga-test strong{
+.paso-carga-test strong {
   display:block;
   color:#292929;
   font-size:11px;
   font-weight:900;
 }
 
-.paso-carga-test small{
+.paso-carga-test small {
   display:block;
   margin-top:3px;
   color:#898989;
@@ -615,16 +721,16 @@ a{color:inherit;text-decoration:none}
 }
 
 /* =====================================================
-   PASO 1 · SELECCIÓN DE ÁREAS
+   GRUPOS DE TESTEO
 ===================================================== */
 
-.navegacion-grupos{
+.navegacion-grupos {
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
   gap:9px;
 }
 
-.area-selector-card{
+.area-selector-card {
   position:relative;
   display:flex;
   align-items:center;
@@ -640,18 +746,18 @@ a{color:inherit;text-decoration:none}
   transition:border-color .18s,background .18s,box-shadow .18s;
 }
 
-.area-selector-card:hover{
+.area-selector-card:hover {
   border-color:#edc2a9;
   background:#fffdfa;
 }
 
-.area-selector-card.seleccionada{
+.area-selector-card.seleccionada {
   border-color:var(--naranja);
   background:#fff8f3;
   box-shadow:0 0 0 2px rgba(244,119,33,.08);
 }
 
-.area-selector-icono{
+.area-selector-icono {
   width:35px;
   height:35px;
   flex:0 0 35px;
@@ -664,18 +770,18 @@ a{color:inherit;text-decoration:none}
   font-weight:900;
 }
 
-.area-selector-card.seleccionada .area-selector-icono{
+.area-selector-card.seleccionada .area-selector-icono {
   background:var(--naranja-claro);
   color:var(--naranja-oscuro);
 }
 
-.area-selector-contenido{
+.area-selector-contenido {
   display:block;
   flex:1;
   min-width:0;
 }
 
-.area-selector-contenido strong{
+.area-selector-contenido strong {
   display:block;
   color:#2d2d2d;
   font-size:10px;
@@ -683,14 +789,14 @@ a{color:inherit;text-decoration:none}
   letter-spacing:.35px;
 }
 
-.area-selector-contenido small{
+.area-selector-contenido small {
   display:block;
   margin-top:4px;
   color:#888;
   font-size:8px;
 }
 
-.area-selector-marca{
+.area-selector-marca {
   width:7px;
   height:7px;
   flex:0 0 7px;
@@ -698,16 +804,16 @@ a{color:inherit;text-decoration:none}
   background:#d7dbe0;
 }
 
-.area-selector-card.seleccionada .area-selector-marca{
+.area-selector-card.seleccionada .area-selector-marca {
   background:var(--naranja);
   box-shadow:0 0 0 3px rgba(244,119,33,.13);
 }
 
 /* =====================================================
-   PASO 2 · SELECTOR DE PRUEBAS
+   EDITOR DE PRUEBAS
 ===================================================== */
 
-.editor-prueba{
+.editor-prueba {
   min-width:0;
   overflow:hidden;
   border:1px solid #e7e8eb;
@@ -715,7 +821,7 @@ a{color:inherit;text-decoration:none}
   background:#fff;
 }
 
-.editor-inicial{
+.editor-inicial {
   display:flex;
   flex-direction:column;
   align-items:center;
@@ -725,7 +831,7 @@ a{color:inherit;text-decoration:none}
   text-align:center;
 }
 
-.editor-inicial-icono{
+.editor-inicial-icono {
   width:42px;
   height:42px;
   display:grid;
@@ -737,12 +843,12 @@ a{color:inherit;text-decoration:none}
   font-size:21px;
 }
 
-.editor-inicial strong{
+.editor-inicial strong {
   color:#333;
   font-size:12px;
 }
 
-.editor-inicial p{
+.editor-inicial p {
   max-width:340px;
   margin:6px 0 0;
   color:#888;
@@ -750,20 +856,20 @@ a{color:inherit;text-decoration:none}
   line-height:1.5;
 }
 
-.editor-prueba-cabecera{
+.editor-prueba-cabecera {
   padding:15px 16px 12px;
   background:#fcfcfd;
   border-bottom:1px solid #eceef1;
 }
 
-.editor-prueba-cabecera-superior{
+.editor-prueba-cabecera-superior {
   display:flex;
   align-items:flex-start;
   justify-content:space-between;
   gap:12px;
 }
 
-.editor-prueba-kicker{
+.editor-prueba-kicker {
   display:block;
   margin-bottom:5px;
   color:var(--naranja-oscuro);
@@ -772,21 +878,21 @@ a{color:inherit;text-decoration:none}
   letter-spacing:.9px;
 }
 
-.editor-prueba-titulo{
+.editor-prueba-titulo {
   margin:0;
   color:#222;
   font-size:15px;
   font-weight:900;
 }
 
-.editor-prueba-descripcion{
+.editor-prueba-descripcion {
   margin:5px 0 0;
   color:#888;
   font-size:9px;
   line-height:1.4;
 }
 
-.editor-progreso-texto{
+.editor-progreso-texto {
   flex:0 0 auto;
   padding:7px 9px;
   border-radius:8px;
@@ -797,7 +903,7 @@ a{color:inherit;text-decoration:none}
   white-space:nowrap;
 }
 
-.editor-progreso-barra{
+.editor-progreso-barra {
   width:100%;
   height:5px;
   margin-top:12px;
@@ -806,7 +912,7 @@ a{color:inherit;text-decoration:none}
   background:#e9ebee;
 }
 
-.editor-progreso-barra span{
+.editor-progreso-barra span {
   display:block;
   width:0;
   height:100%;
@@ -815,14 +921,18 @@ a{color:inherit;text-decoration:none}
   transition:width .2s ease;
 }
 
-.selector-pruebas-wrap{
-  padding:12px 14px 11px;
+/* =====================================================
+   SUBGRUPOS / PRUEBAS EN FILA HORIZONTAL
+===================================================== */
+
+.selector-pruebas-wrap {
+  padding:12px 14px 13px;
   border-bottom:1px solid #f0f0f0;
 }
 
-.selector-pruebas-label{
+.selector-pruebas-label {
   display:block;
-  margin-bottom:8px;
+  margin-bottom:9px;
   color:#858585;
   font-size:8px;
   font-weight:900;
@@ -830,16 +940,19 @@ a{color:inherit;text-decoration:none}
   text-transform:uppercase;
 }
 
-.selector-pruebas{
+.selector-pruebas {
   display:flex;
   align-items:center;
-  flex-wrap:wrap;
+  flex-wrap:nowrap;
   gap:7px;
+  overflow-x:auto;
+  padding-bottom:5px;
 }
 
-.prueba-selector-item{
+.prueba-selector-item {
   display:inline-flex;
   align-items:center;
+  flex:0 0 auto;
   gap:3px;
   padding:3px;
   border:1px solid #e7e8eb;
@@ -847,12 +960,12 @@ a{color:inherit;text-decoration:none}
   background:#fff;
 }
 
-.prueba-selector-item.activa{
+.prueba-selector-item.activa {
   border-color:#f0b38f;
   background:#fff7f1;
 }
 
-.prueba-selector-boton{
+.prueba-selector-boton {
   min-height:29px;
   padding:5px 9px;
   border:0;
@@ -863,11 +976,11 @@ a{color:inherit;text-decoration:none}
   font-weight:800;
 }
 
-.prueba-selector-item.activa .prueba-selector-boton{
+.prueba-selector-item.activa .prueba-selector-boton {
   color:var(--naranja-oscuro);
 }
 
-.prueba-selector-cantidad{
+.prueba-selector-cantidad {
   display:inline-block;
   margin-left:4px;
   color:#999;
@@ -875,7 +988,7 @@ a{color:inherit;text-decoration:none}
   font-weight:800;
 }
 
-.prueba-selector-eliminar{
+.prueba-selector-eliminar {
   width:22px;
   height:22px;
   border:0;
@@ -886,17 +999,19 @@ a{color:inherit;text-decoration:none}
   font-weight:900;
 }
 
-.prueba-selector-eliminar:hover{background:#ffe0e0}
+.prueba-selector-eliminar:hover {
+  background:#ffe0e0;
+}
 
 /* =====================================================
-   PASO 3 · CARGA POR JUGADORA
+   LISTA VERTICAL DE JUGADORAS
 ===================================================== */
 
-.paso-completar-test{
+.paso-completar-test {
   margin:13px 14px 10px;
 }
 
-.herramientas-jugadoras-test{
+.herramientas-jugadoras-test {
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -905,7 +1020,7 @@ a{color:inherit;text-decoration:none}
   background:#fff;
 }
 
-.busqueda-jugadoras-test{
+.busqueda-jugadoras-test {
   width:min(290px,100%);
   height:34px;
   padding:0 10px;
@@ -916,12 +1031,12 @@ a{color:inherit;text-decoration:none}
   font-size:10px;
 }
 
-.busqueda-jugadoras-test:focus{
+.busqueda-jugadoras-test:focus {
   border-color:var(--naranja);
   box-shadow:0 0 0 2px rgba(244,119,33,.09);
 }
 
-.filtros-estado-test{
+.filtros-estado-test {
   display:flex;
   align-items:center;
   gap:4px;
@@ -931,7 +1046,7 @@ a{color:inherit;text-decoration:none}
   background:#f7f8f9;
 }
 
-.filtro-estado-test{
+.filtro-estado-test {
   min-height:26px;
   padding:5px 8px;
   border:0;
@@ -942,45 +1057,56 @@ a{color:inherit;text-decoration:none}
   font-weight:800;
 }
 
-.filtro-estado-test.activo{
+.filtro-estado-test.activo {
   background:#fff;
   color:var(--naranja-oscuro);
   box-shadow:0 1px 3px rgba(0,0,0,.07);
 }
 
-.lista-jugadoras-test{
+.lista-jugadoras-test {
+  display:flex;
+  flex-direction:column;
+  gap:0;
+  padding:0 14px 10px;
+}
+
+/* Cada jugadora ocupa una fila horizontal */
+
+.jugadora-test-card {
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(245px,1fr));
-  gap:9px;
-  padding:0 14px 14px;
-}
-
-.jugadora-test-card{
+  grid-template-columns:minmax(190px,1.25fr) minmax(160px,.8fr) minmax(140px,.7fr);
+  align-items:center;
+  gap:12px;
   min-width:0;
-  padding:11px;
-  border:1px solid #e9eaed;
-  border-radius:10px;
+  padding:10px 8px;
+  border-bottom:1px solid #eceef0;
   background:#fff;
-  transition:border-color .15s,background .15s;
+  transition:background .15s;
 }
 
-.jugadora-test-card.completada{
-  border-color:#d7eadc;
+.jugadora-test-card:last-child {
+  border-bottom:0;
+}
+
+.jugadora-test-card:hover {
+  background:#fcfcfc;
+}
+
+.jugadora-test-card.completada {
   background:#fcfffd;
 }
 
-.jugadora-test-cabecera{
+.jugadora-test-identidad {
   display:flex;
   align-items:center;
-  gap:8px;
+  gap:9px;
   min-width:0;
-  margin-bottom:10px;
 }
 
-.jugadora-test-numero{
-  width:27px;
-  height:27px;
-  flex:0 0 27px;
+.jugadora-test-numero {
+  width:29px;
+  height:29px;
+  flex:0 0 29px;
   display:grid;
   place-items:center;
   border-radius:8px;
@@ -990,23 +1116,37 @@ a{color:inherit;text-decoration:none}
   font-weight:900;
 }
 
-.jugadora-test-card.completada .jugadora-test-numero{
+.jugadora-test-card.completada .jugadora-test-numero {
   background:#e5f4e9;
   color:#287a43;
 }
 
-.jugadora-test-nombre{
+.jugadora-test-datos-nombre {
   flex:1;
   min-width:0;
-  color:#333;
-  font-size:10px;
-  font-weight:900;
-  line-height:1.3;
 }
 
-.jugadora-test-estado{
+.jugadora-test-nombre {
+  display:block;
+  overflow:hidden;
+  color:#303030;
+  font-size:10px;
+  font-weight:900;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.jugadora-test-puesto {
+  display:block;
+  margin-top:4px;
+  color:#909090;
+  font-size:8px;
+  font-weight:600;
+}
+
+.jugadora-test-estado {
   flex:0 0 auto;
-  padding:4px 6px;
+  padding:5px 7px;
   border-radius:20px;
   background:#f1f2f4;
   color:#858585;
@@ -1015,22 +1155,27 @@ a{color:inherit;text-decoration:none}
   text-transform:uppercase;
 }
 
-.jugadora-test-card.completada .jugadora-test-estado{
+.jugadora-test-card.completada .jugadora-test-estado {
   background:#e8f5eb;
   color:#287a43;
 }
 
-.jugadora-test-campos{
+.jugadora-test-campos {
   display:grid;
   grid-template-columns:1fr;
   gap:7px;
+  min-width:0;
 }
 
-.jugadora-test-campos.con-comp{
+.jugadora-test-campos.con-comp {
   grid-template-columns:1fr 1fr;
 }
 
-.campo-resultado-test label{
+.campo-resultado-test {
+  min-width:0;
+}
+
+.campo-resultado-test label {
   display:block;
   margin-bottom:4px;
   color:#858585;
@@ -1040,7 +1185,7 @@ a{color:inherit;text-decoration:none}
   text-transform:uppercase;
 }
 
-.campo-resultado-test input{
+.campo-resultado-test input {
   width:100%;
   height:35px;
   padding:0 9px;
@@ -1051,25 +1196,24 @@ a{color:inherit;text-decoration:none}
   color:#292929;
   font-size:11px;
   font-weight:700;
-  text-align:left;
 }
 
-.campo-resultado-test input::placeholder{
+.campo-resultado-test input::placeholder {
   color:#b7bbc1;
   font-weight:400;
 }
 
-.campo-resultado-test input:focus{
+.campo-resultado-test input:focus {
   border-color:var(--naranja);
   box-shadow:0 0 0 2px rgba(244,119,33,.1);
 }
 
-.campo-resultado-test input:disabled{
+.campo-resultado-test input:disabled {
   background:#f7f8f9;
   color:#888;
 }
 
-.resultado-imc-test{
+.jugadora-test-resultado-simple {
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -1082,21 +1226,20 @@ a{color:inherit;text-decoration:none}
   font-weight:900;
 }
 
-.resultado-imc-test small{
+.jugadora-test-resultado-simple small {
   color:#8b949e;
   font-size:8px;
   font-weight:700;
 }
 
-.lista-jugadoras-vacia{
-  grid-column:1/-1;
+.lista-jugadoras-vacia {
   padding:26px 14px;
   color:#858585;
   font-size:10px;
   text-align:center;
 }
 
-.ayuda-resultado-test{
+.ayuda-resultado-test {
   margin:0 14px 14px;
   padding:9px 11px;
   border-radius:8px;
@@ -1106,56 +1249,20 @@ a{color:inherit;text-decoration:none}
   line-height:1.5;
 }
 
-.ayuda-grupos{
-  display:flex;
-  align-items:flex-start;
-  gap:8px;
-  margin-top:13px;
-  padding-top:11px;
-  border-top:1px solid #f0f0f0;
-}
-
-.ayuda-registro-icono{
-  width:15px;
-  height:15px;
-  flex:0 0 15px;
-  display:grid;
-  place-items:center;
-  border-radius:50%;
-  background:#f0f1f3;
-  color:#777;
-  font-size:9px;
-  font-weight:900;
-}
-
-.ayuda-grupos p{
-  margin:0;
-  color:#858585;
-  font-size:9px;
-  line-height:1.5;
-}
-
-.estado-vacio-grupos{
-  padding:25px 15px;
-  border:1px dashed #ddd;
-  border-radius:10px;
-  color:#888;
-  font-size:11px;
-  text-align:center;
-}
-
 /* =====================================================
    BIBLIOTECA TEST
 ===================================================== */
 
-.panel-biblioteca{padding:19px}
+.panel-biblioteca {
+  padding:19px;
+}
 
-.cabecera-biblioteca-test{
+.cabecera-biblioteca-test {
   align-items:center;
   margin-bottom:15px;
 }
 
-.contador-biblioteca{
+.contador-biblioteca {
   flex:0 0 auto;
   padding:7px 10px;
   border-radius:20px;
@@ -1165,13 +1272,13 @@ a{color:inherit;text-decoration:none}
   font-weight:800;
 }
 
-.biblioteca-test-grid{
+.biblioteca-test-grid {
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
   gap:11px;
 }
 
-.biblioteca-vacia{
+.biblioteca-vacia {
   grid-column:1/-1;
   padding:25px 15px;
   border:1px dashed #dedfe3;
@@ -1182,14 +1289,14 @@ a{color:inherit;text-decoration:none}
   line-height:1.5;
 }
 
-.biblioteca-vacia span{
+.biblioteca-vacia span {
   display:block;
   margin-top:5px;
   color:#999;
   font-size:9px;
 }
 
-.tarjeta-biblioteca{
+.tarjeta-biblioteca {
   display:flex;
   flex-direction:column;
   min-width:0;
@@ -1201,13 +1308,13 @@ a{color:inherit;text-decoration:none}
   transition:border-color .15s,box-shadow .15s,transform .15s;
 }
 
-.tarjeta-biblioteca:hover{
+.tarjeta-biblioteca:hover {
   border-color:#f0b18b;
   box-shadow:0 5px 16px rgba(23,23,23,.07);
   transform:translateY(-2px);
 }
 
-.biblioteca-tarjeta-arriba{
+.biblioteca-tarjeta-arriba {
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -1215,7 +1322,7 @@ a{color:inherit;text-decoration:none}
   margin-bottom:10px;
 }
 
-.biblioteca-chip{
+.biblioteca-chip {
   display:inline-flex;
   align-items:center;
   padding:5px 7px;
@@ -1227,13 +1334,13 @@ a{color:inherit;text-decoration:none}
   letter-spacing:.35px;
 }
 
-.biblioteca-fecha{
+.biblioteca-fecha {
   color:#999;
   font-size:8px;
   white-space:nowrap;
 }
 
-.tarjeta-biblioteca h4{
+.tarjeta-biblioteca h4 {
   margin:0 0 5px;
   color:#252525;
   font-size:14px;
@@ -1242,20 +1349,20 @@ a{color:inherit;text-decoration:none}
   overflow-wrap:anywhere;
 }
 
-.tarjeta-biblioteca p{
+.tarjeta-biblioteca p {
   margin:0;
   color:#888;
   font-size:9px;
 }
 
-.biblioteca-mini-datos{
+.biblioteca-mini-datos {
   display:flex;
   gap:6px;
   flex-wrap:wrap;
   margin:12px 0;
 }
 
-.biblioteca-mini-datos span{
+.biblioteca-mini-datos span {
   padding:5px 7px;
   border:1px solid #ededed;
   border-radius:6px;
@@ -1264,14 +1371,14 @@ a{color:inherit;text-decoration:none}
   font-weight:700;
 }
 
-.biblioteca-grupos{
+.biblioteca-grupos {
   display:flex;
   flex-wrap:wrap;
   gap:5px;
   margin:auto 0 12px;
 }
 
-.biblioteca-grupos span{
+.biblioteca-grupos span {
   padding:4px 6px;
   border-radius:5px;
   background:#f4f5f7;
@@ -1280,7 +1387,7 @@ a{color:inherit;text-decoration:none}
   font-weight:800;
 }
 
-.biblioteca-abrir{
+.biblioteca-abrir {
   width:100%;
   min-height:32px;
   border:1px solid #f1c4a9;
@@ -1291,13 +1398,360 @@ a{color:inherit;text-decoration:none}
   font-weight:900;
 }
 
-.biblioteca-abrir:hover{background:#fff0e6}
+.biblioteca-abrir:hover {
+  background:#fff0e6;
+}
 
 /* =====================================================
-   PLANILLA FINAL / VISTA AMPLIADA
+   ESTADÍSTICAS · RESUMEN
 ===================================================== */
 
-.planilla-cabecera{
+.panel-estadisticas {
+  padding:19px;
+}
+
+.estadisticas-intro {
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:15px;
+  margin-bottom:18px;
+  flex-wrap:wrap;
+}
+
+.estadisticas-intro h3 {
+  margin:0 0 5px;
+  font-size:18px;
+  font-weight:900;
+}
+
+.estadisticas-intro p {
+  margin:0;
+  color:#858585;
+  font-size:10px;
+  line-height:1.5;
+}
+
+.etiqueta-estadistica {
+  padding:7px 10px;
+  border:1px solid #e8e8e8;
+  border-radius:8px;
+  color:#777;
+  background:#fff;
+  font-size:9px;
+  font-weight:800;
+}
+
+.filtros-estadisticas {
+  display:grid;
+  grid-template-columns:minmax(180px,260px) minmax(200px,300px);
+  gap:12px;
+  margin-bottom:17px;
+  padding:13px;
+  border:1px solid #eceef0;
+  border-radius:10px;
+  background:#fafbfc;
+}
+
+.campo-estadistica label {
+  display:block;
+  margin-bottom:6px;
+  color:#777;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.4px;
+  text-transform:uppercase;
+}
+
+.campo-estadistica select {
+  width:100%;
+  height:38px;
+  padding:0 10px;
+  border:1px solid #e0e3e6;
+  border-radius:8px;
+  background:#fff;
+  color:#333;
+  outline:none;
+  font-size:10px;
+  font-weight:700;
+}
+
+.campo-estadistica select:focus {
+  border-color:var(--naranja);
+}
+
+.resumen-estadisticas {
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+  margin-bottom:18px;
+}
+
+.estadistica-resumen-card {
+  min-width:0;
+  padding:14px;
+  border:1px solid #e8e9ec;
+  border-radius:10px;
+  background:#fff;
+}
+
+.estadistica-resumen-card span {
+  display:block;
+  margin-bottom:7px;
+  color:#858585;
+  font-size:9px;
+  font-weight:800;
+}
+
+.estadistica-resumen-card strong {
+  display:block;
+  color:#242424;
+  font-size:22px;
+  font-weight:900;
+}
+
+.estadistica-resumen-card small {
+  display:block;
+  margin-top:4px;
+  color:#999;
+  font-size:8px;
+}
+
+/* =====================================================
+   BLOQUES DE ESTADÍSTICAS
+===================================================== */
+
+.bloque-estadistica {
+  margin-top:18px;
+  border:1px solid #e8e9ec;
+  border-radius:11px;
+  background:#fff;
+  overflow:hidden;
+}
+
+.bloque-estadistica-cabecera {
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  padding:14px 15px;
+  border-bottom:1px solid #eceef0;
+  background:#fcfcfd;
+}
+
+.bloque-estadistica-cabecera h4 {
+  margin:0 0 5px;
+  color:#292929;
+  font-size:13px;
+  font-weight:900;
+}
+
+.bloque-estadistica-cabecera p {
+  margin:0;
+  color:#888;
+  font-size:9px;
+  line-height:1.4;
+}
+
+.bloque-estadistica-contenido {
+  padding:13px 15px;
+}
+
+.tabla-estadistica-wrapper {
+  width:100%;
+  overflow-x:auto;
+}
+
+.tabla-estadistica {
+  width:100%;
+  border-collapse:collapse;
+  font-size:10px;
+  text-align:left;
+  white-space:nowrap;
+}
+
+.tabla-estadistica th {
+  padding:10px 9px;
+  border-bottom:1px solid #e5e7eb;
+  background:#fafafa;
+  color:#777;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.35px;
+  text-transform:uppercase;
+}
+
+.tabla-estadistica td {
+  padding:10px 9px;
+  border-bottom:1px solid #f0f0f0;
+  color:#444;
+}
+
+.tabla-estadistica tr:last-child td {
+  border-bottom:0;
+}
+
+.tabla-estadistica .nombre-fuerte {
+  color:#252525;
+  font-weight:900;
+}
+
+.valor-fuerte {
+  color:#252525;
+  font-weight:900;
+}
+
+.estado-mejora {
+  color:#21834a !important;
+  font-weight:900;
+}
+
+.estado-retroceso {
+  color:#c43e3e !important;
+  font-weight:900;
+}
+
+.estado-igual {
+  color:#777 !important;
+  font-weight:800;
+}
+
+.estado-sin-datos {
+  color:#999 !important;
+  font-size:9px;
+}
+
+.indicador-puesto {
+  display:inline-flex;
+  align-items:center;
+  padding:4px 7px;
+  border-radius:6px;
+  background:#f1f2f4;
+  color:#666;
+  font-size:8px;
+  font-weight:800;
+}
+
+.estadistica-vacia {
+  padding:23px 12px;
+  color:#858585;
+  font-size:10px;
+  line-height:1.5;
+  text-align:center;
+}
+
+.barra-completitud {
+  width:100%;
+  min-width:70px;
+  height:6px;
+  overflow:hidden;
+  border-radius:10px;
+  background:#eceef0;
+}
+
+.barra-completitud span {
+  display:block;
+  height:100%;
+  border-radius:inherit;
+  background:var(--naranja);
+}
+
+/* =====================================================
+   ESTADÍSTICAS POR GRUPO / PUESTO
+===================================================== */
+
+.grilla-estadisticas-grupos {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:10px;
+}
+
+.tarjeta-estadistica-grupo {
+  padding:13px;
+  border:1px solid #e8e9ec;
+  border-radius:9px;
+  background:#fff;
+}
+
+.tarjeta-estadistica-grupo strong {
+  display:block;
+  margin-bottom:5px;
+  color:#303030;
+  font-size:10px;
+  font-weight:900;
+}
+
+.tarjeta-estadistica-grupo p {
+  margin:0 0 10px;
+  color:#888;
+  font-size:9px;
+}
+
+.tarjeta-estadistica-grupo .barra-completitud {
+  margin-top:8px;
+}
+
+.tarjeta-estadistica-grupo small {
+  display:block;
+  margin-top:5px;
+  color:#929292;
+  font-size:8px;
+}
+
+.estadistica-ranking {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:9px 0;
+  border-bottom:1px solid #f0f0f0;
+}
+
+.estadistica-ranking:last-child {
+  border-bottom:0;
+}
+
+.ranking-numero {
+  width:25px;
+  height:25px;
+  flex:0 0 25px;
+  display:grid;
+  place-items:center;
+  border-radius:7px;
+  background:#f1f2f4;
+  color:#777;
+  font-size:9px;
+  font-weight:900;
+}
+
+.ranking-datos {
+  flex:1;
+  min-width:0;
+}
+
+.ranking-datos strong {
+  display:block;
+  color:#333;
+  font-size:10px;
+}
+
+.ranking-datos small {
+  display:block;
+  margin-top:3px;
+  color:#999;
+  font-size:8px;
+}
+
+.ranking-valor {
+  color:#303030;
+  font-size:12px;
+  font-weight:900;
+}
+
+/* =====================================================
+   VISTA AMPLIADA DE BIBLIOTECA TEST
+===================================================== */
+
+.planilla-cabecera {
   position:relative;
   display:flex;
   align-items:center;
@@ -1309,7 +1763,7 @@ a{color:inherit;text-decoration:none}
   text-align:center;
 }
 
-.planilla-cabecera img{
+.planilla-cabecera img {
   position:absolute;
   top:50%;
   left:17%;
@@ -1319,25 +1773,25 @@ a{color:inherit;text-decoration:none}
   transform:translateY(-50%);
 }
 
-.planilla-cabecera-texto{
+.planilla-cabecera-texto {
   width:100%;
   text-align:center;
 }
 
-.planilla-cabecera-texto strong{
+.planilla-cabecera-texto strong {
   display:block;
   font-size:17px;
   font-weight:900;
 }
 
-.planilla-cabecera-texto span{
+.planilla-cabecera-texto span {
   display:block;
   margin-top:4px;
   font-size:12px;
   font-weight:900;
 }
 
-.planilla-cabecera-texto small{
+.planilla-cabecera-texto small {
   display:block;
   margin-top:4px;
   color:#555;
@@ -1346,7 +1800,7 @@ a{color:inherit;text-decoration:none}
   letter-spacing:.5px;
 }
 
-.planilla-print-titulo{
+.planilla-print-titulo {
   margin:12px 0 0;
   padding:7px 9px;
   background:#303030;
@@ -1356,14 +1810,14 @@ a{color:inherit;text-decoration:none}
   letter-spacing:.6px;
 }
 
-.planilla-print-scroll{
+.planilla-print-scroll {
   width:100%;
   overflow-x:auto;
   border:1px solid #999;
   border-top:0;
 }
 
-.tabla-print{
+.tabla-print {
   width:100%;
   min-width:800px;
   border-collapse:collapse;
@@ -1376,37 +1830,39 @@ a{color:inherit;text-decoration:none}
 }
 
 .tabla-print th,
-.tabla-print td{
+.tabla-print td {
   padding:5px 6px;
   border:1px solid #888;
 }
 
-.tabla-print thead th{font-weight:900}
+.tabla-print thead th {
+  font-weight:900;
+}
 
-.tabla-print .print-num{
+.tabla-print .print-num {
   width:28px;
   background:#fff0e6;
 }
 
-.tabla-print .print-nombre{
+.tabla-print .print-nombre {
   min-width:160px;
   text-align:left;
   padding-left:8px;
   background:#f4f5f7;
 }
 
-.tabla-print .print-subtest{
+.tabla-print .print-subtest {
   background:#fafafa;
   color:#333;
   font-size:8px;
 }
 
-.tabla-print .print-promedios td{
+.tabla-print .print-promedios td {
   background:#edf0f4;
   font-weight:900;
 }
 
-.planilla-print-pie{
+.planilla-print-pie {
   display:flex;
   justify-content:space-between;
   gap:10px;
@@ -1415,13 +1871,15 @@ a{color:inherit;text-decoration:none}
   font-size:8px;
 }
 
-#printRoutine{display:none}
+#printRoutine {
+  display:none;
+}
 
 /* =====================================================
    MODALES
 ===================================================== */
 
-.modal{
+.modal {
   display:none;
   position:fixed;
   inset:0;
@@ -1433,9 +1891,11 @@ a{color:inherit;text-decoration:none}
   backdrop-filter:blur(3px);
 }
 
-.modal.activo{display:flex}
+.modal.activo {
+  display:flex;
+}
 
-.modal-contenido{
+.modal-contenido {
   width:100%;
   max-width:460px;
   max-height:90vh;
@@ -1447,7 +1907,7 @@ a{color:inherit;text-decoration:none}
   box-shadow:0 18px 55px rgba(0,0,0,.18);
 }
 
-.modal-header{
+.modal-header {
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -1455,13 +1915,13 @@ a{color:inherit;text-decoration:none}
   margin-bottom:18px;
 }
 
-.modal-header h3{
+.modal-header h3 {
   margin:0;
   font-size:19px;
   letter-spacing:-.3px;
 }
 
-.btn-cerrar-modal{
+.btn-cerrar-modal {
   width:32px;
   height:32px;
   border:0;
@@ -1471,11 +1931,15 @@ a{color:inherit;text-decoration:none}
   font-size:22px;
 }
 
-.btn-cerrar-modal:hover{background:#f2f2f2}
+.btn-cerrar-modal:hover {
+  background:#f2f2f2;
+}
 
-.form-group{margin-bottom:14px}
+.form-group {
+  margin-bottom:14px;
+}
 
-.form-group label{
+.form-group label {
   display:block;
   margin-bottom:6px;
   color:#555;
@@ -1484,7 +1948,7 @@ a{color:inherit;text-decoration:none}
 }
 
 .form-group input,
-.form-group select{
+.form-group select {
   width:100%;
   min-height:42px;
   padding:10px;
@@ -1495,21 +1959,23 @@ a{color:inherit;text-decoration:none}
 }
 
 .form-group input:focus,
-.form-group select:focus{
+.form-group select:focus {
   border-color:var(--naranja);
   box-shadow:0 0 0 3px rgba(244,119,33,.1);
 }
 
-.modal-footer{
+.modal-footer {
   display:flex;
   justify-content:flex-end;
   gap:10px;
   margin-top:20px;
 }
 
-.modal-biblioteca{z-index:250}
+.modal-biblioteca {
+  z-index:250;
+}
 
-.modal-contenido-biblioteca{
+.modal-contenido-biblioteca {
   display:flex;
   flex-direction:column;
   width:min(1180px,96vw);
@@ -1518,17 +1984,17 @@ a{color:inherit;text-decoration:none}
   padding:20px;
 }
 
-.modal-contenido-biblioteca .modal-header{
+.modal-contenido-biblioteca .modal-header {
   flex:0 0 auto;
 }
 
-.modal-subtitulo-biblioteca{
+.modal-subtitulo-biblioteca {
   margin:5px 0 0;
   color:#858585;
   font-size:10px;
 }
 
-.modal-planilla-cuerpo{
+.modal-planilla-cuerpo {
   min-height:100px;
   flex:1 1 auto;
   overflow:auto;
@@ -1538,45 +2004,61 @@ a{color:inherit;text-decoration:none}
   background:#f4f5f7;
 }
 
-.modal-planilla-cuerpo .planilla-cabecera{background:#fff}
-.modal-planilla-cuerpo .planilla-print-scroll{background:#fff}
-.modal-planilla-cuerpo .tabla-print{min-width:900px}
+.modal-planilla-cuerpo .planilla-cabecera {
+  background:#fff;
+}
+
+.modal-planilla-cuerpo .planilla-print-scroll {
+  background:#fff;
+}
+
+.modal-planilla-cuerpo .tabla-print {
+  min-width:900px;
+}
 
 /* =====================================================
    RESPONSIVE
 ===================================================== */
 
-@media(max-width:1100px){
-  .panel-periodo{
+@media(max-width:1100px) {
+  .panel-periodo {
     grid-template-columns:1fr minmax(240px,1fr);
   }
 
-  .periodo-acciones{
+  .periodo-acciones {
     grid-column:1/-1;
     align-items:flex-end;
     flex-direction:row;
     justify-content:flex-end;
   }
+
+  .jugadora-test-card {
+    grid-template-columns:minmax(160px,1fr) minmax(140px,.9fr) minmax(130px,.8fr);
+  }
 }
 
-@media(max-width:760px){
-
-  .barra-superior{
+@media(max-width:760px) {
+  .barra-superior {
     min-height:72px;
     padding:9px 12px;
     gap:9px;
   }
 
-  .logo-superior{width:43px;height:43px}
+  .logo-superior {
+    width:43px;
+    height:43px;
+  }
 
-  .titulo-superior h1{
+  .titulo-superior h1 {
     font-size:15px;
     margin-bottom:3px;
   }
 
-  .titulo-superior p{font-size:10px}
+  .titulo-superior p {
+    font-size:10px;
+  }
 
-  .estado-nube{
+  .estado-nube {
     width:30px;
     height:30px;
     justify-content:center;
@@ -1585,17 +2067,25 @@ a{color:inherit;text-decoration:none}
     font-size:0;
   }
 
-  .perfil{gap:6px}
-  .avatar{width:36px;height:36px}
+  .perfil {
+    gap:6px;
+  }
 
-  .nombre-perfil{
+  .avatar {
+    width:36px;
+    height:36px;
+  }
+
+  .nombre-perfil {
     max-width:80px;
     font-size:11px;
   }
 
-  .rol-perfil{display:none}
+  .rol-perfil {
+    display:none;
+  }
 
-  .sidebar{
+  .sidebar {
     position:fixed;
     top:72px;
     bottom:0;
@@ -1608,10 +2098,15 @@ a{color:inherit;text-decoration:none}
     box-shadow:5px 0 25px rgba(0,0,0,.1);
   }
 
-  .sidebar:not(.oculto){transform:translateX(0)}
-  .sidebar.oculto{margin-left:0}
+  .sidebar:not(.oculto) {
+    transform:translateX(0);
+  }
 
-  .capa-sidebar.visible{
+  .sidebar.oculto {
+    margin-left:0;
+  }
+
+  .capa-sidebar.visible {
     display:block;
     position:fixed;
     inset:72px 0 0;
@@ -1619,162 +2114,242 @@ a{color:inherit;text-decoration:none}
     background:rgba(0,0,0,.3);
   }
 
-  .contenido{padding:14px 12px 24px}
+  .contenido {
+    padding:14px 12px 24px;
+  }
 
-  .encabezado-seccion{gap:10px}
-  .encabezado-seccion h2{font-size:23px}
-  .encabezado-seccion p{font-size:10px}
+  .encabezado-seccion {
+    gap:10px;
+  }
 
-  .selector-categoria-panel{
+  .encabezado-seccion h2 {
+    font-size:23px;
+  }
+
+  .encabezado-seccion p {
+    font-size:10px;
+  }
+
+  .selector-categoria-panel {
     grid-template-columns:38px minmax(0,1fr);
     gap:10px;
     padding:12px;
   }
 
-  .selector-categoria-icono{
+  .selector-categoria-icono {
     width:38px;
     height:38px;
   }
 
-  .selector-categoria-texto p{font-size:9px}
-  .selector-categoria-control{grid-column:1/-1}
-  .selector-categoria-control select{height:39px}
+  .selector-categoria-texto p {
+    font-size:9px;
+  }
 
-  .panel-periodo{
+  .selector-categoria-control {
+    grid-column:1/-1;
+  }
+
+  .selector-categoria-control select {
+    height:39px;
+  }
+
+  .panel-periodo {
     grid-template-columns:1fr;
     gap:12px;
     padding:15px;
   }
 
-  .periodo-acciones{
+  .periodo-acciones {
     grid-column:auto;
     align-items:stretch;
   }
 
-  .periodo-acciones .btn-principal{width:100%}
+  .periodo-acciones .btn-principal {
+    width:100%;
+  }
 
-  .panel-grupos,.panel-biblioteca{padding:14px 11px}
+  .panel-grupos,
+  .panel-biblioteca,
+  .panel-estadisticas {
+    padding:14px 11px;
+  }
 
-  .panel-carga-grupos-cabecera{
+  .panel-carga-grupos-cabecera {
     align-items:flex-start;
     flex-direction:column;
   }
 
-  .panel-carga-grupos-cabecera .acciones-columnas{width:100%}
-  .panel-carga-grupos-cabecera .acciones-columnas button{flex:1}
+  .panel-carga-grupos-cabecera .acciones-columnas {
+    width:100%;
+  }
 
-  .navegacion-grupos{
+  .panel-carga-grupos-cabecera .acciones-columnas button {
+    flex:1;
+  }
+
+  .pestanas-principales {
+    width:100%;
+  }
+
+  .pestana-principal {
+    flex:1;
+    padding:9px 7px;
+    font-size:9px;
+  }
+
+  .navegacion-grupos {
     grid-template-columns:repeat(2,minmax(0,1fr));
   }
 
-  .area-selector-card{
+  .area-selector-card {
     min-height:60px;
     padding:9px;
     gap:7px;
   }
 
-  .area-selector-icono{
+  .area-selector-icono {
     width:31px;
     height:31px;
     flex-basis:31px;
     font-size:14px;
   }
 
-  .herramientas-jugadoras-test{
+  .herramientas-jugadoras-test {
     align-items:stretch;
     flex-direction:column;
   }
 
-  .busqueda-jugadoras-test{width:100%}
-  .filtros-estado-test{align-self:flex-start}
+  .busqueda-jugadoras-test {
+    width:100%;
+  }
 
-  .lista-jugadoras-test{
-    grid-template-columns:1fr;
+  .filtros-estado-test {
+    align-self:flex-start;
+  }
+
+  .jugadora-test-card {
+    grid-template-columns:minmax(0,1fr);
+    gap:9px;
+    padding:12px 5px;
+  }
+
+  .jugadora-test-identidad {
+    width:100%;
+  }
+
+  .jugadora-test-campos {
+    padding-left:36px;
+  }
+
+  .jugadora-test-campos.con-comp {
+    grid-template-columns:1fr 1fr;
+  }
+
+  .lista-jugadoras-test {
     padding:0 10px 11px;
   }
 
   .editor-prueba-cabecera,
-  .selector-pruebas-wrap{
+  .selector-pruebas-wrap {
     padding-left:11px;
     padding-right:11px;
   }
 
-  .resultado-jugadora-item{
-    grid-template-columns:minmax(100px,1fr) minmax(85px,110px);
-    gap:7px;
-  }
-
-  .jugadora-test-campos.con-comp{grid-template-columns:1fr 1fr}
-
-  .biblioteca-test-grid{
+  .biblioteca-test-grid {
     grid-template-columns:repeat(auto-fill,minmax(190px,1fr));
   }
 
-  .modal-contenido-biblioteca{
+  .filtros-estadisticas {
+    grid-template-columns:1fr;
+  }
+
+  .resumen-estadisticas {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .modal-contenido-biblioteca {
     width:98vw;
     max-height:95vh;
     padding:12px;
   }
 
-  .modal-contenido-biblioteca .modal-footer{
+  .modal-contenido-biblioteca .modal-footer {
     flex-direction:column-reverse;
   }
 
-  .modal-contenido-biblioteca .modal-footer button{width:100%}
+  .modal-contenido-biblioteca .modal-footer button {
+    width:100%;
+  }
 }
 
-@media(max-width:420px){
-  .biblioteca-test-grid{grid-template-columns:1fr}
-  .grupo-resumen-derecha{gap:5px}
-  .grupo-cantidad{font-size:8px}
+@media(max-width:420px) {
+  .biblioteca-test-grid {
+    grid-template-columns:1fr;
+  }
+
+  .area-selector-card {
+    min-width:0;
+  }
+
+  .grupo-resumen-derecha {
+    gap:5px;
+  }
+
+  .grupo-cantidad {
+    font-size:8px;
+  }
+
+  .pestana-principal {
+    gap:4px;
+    font-size:8px;
+  }
 }
 
 /* =====================================================
    IMPRESIÓN / PDF
 ===================================================== */
 
-@media print{
-
-  @page{
+@media print {
+  @page {
     size:A4 landscape;
     margin:8mm;
   }
 
-  body.imprimir-solo-testeos{
+  body.imprimir-solo-testeos {
     background:#fff !important;
     color:#111 !important;
     print-color-adjust:exact;
     -webkit-print-color-adjust:exact;
   }
 
-  body.imprimir-solo-testeos > *:not(#printRoutine){
+  body.imprimir-solo-testeos > *:not(#printRoutine) {
     display:none !important;
   }
 
-  body.imprimir-solo-testeos #printRoutine{
+  body.imprimir-solo-testeos #printRoutine {
     display:block !important;
     width:100%;
     color:#111;
     background:#fff;
   }
 
-  #printRoutine .planilla-cabecera{
+  #printRoutine .planilla-cabecera {
     min-height:82px;
     page-break-inside:avoid;
   }
 
-  #printRoutine .planilla-cabecera img{
+  #printRoutine .planilla-cabecera img {
     left:17%;
     width:65px;
     height:65px;
   }
 
-  #printRoutine .planilla-print-scroll{
+  #printRoutine .planilla-print-scroll {
     overflow:visible;
     border:0;
   }
 
-  #printRoutine .tabla-print{
+  #printRoutine .tabla-print {
     width:100%;
     min-width:0;
     table-layout:fixed;
@@ -1782,13 +2357,13 @@ a{color:inherit;text-decoration:none}
   }
 
   #printRoutine .tabla-print th,
-  #printRoutine .tabla-print td{
+  #printRoutine .tabla-print td {
     padding:3px 2px;
     font-size:7px;
     overflow-wrap:anywhere;
   }
 
-  #printRoutine .tabla-print .print-nombre{
+  #printRoutine .tabla-print .print-nombre {
     width:135px;
     min-width:135px;
     max-width:135px;
@@ -1804,7 +2379,12 @@ a{color:inherit;text-decoration:none}
 ===================================================== -->
 
 <header class="barra-superior">
-  <button class="boton-menu" id="botonMenu" aria-label="Abrir menú" onclick="alternarSidebar()">☰</button>
+  <button
+    class="boton-menu"
+    id="botonMenu"
+    aria-label="Abrir menú"
+    onclick="alternarSidebar()"
+  >☰</button>
 
   <img
     class="logo-superior"
@@ -1818,10 +2398,13 @@ a{color:inherit;text-decoration:none}
     <p>Rendimientos · Testeos y evaluaciones físicas</p>
   </div>
 
-  <div id="badgeNube" class="estado-nube">☁️ Conectando...</div>
+  <div id="badgeNube" class="estado-nube">
+    ☁️ Conectando...
+  </div>
 
   <div class="perfil">
     <div class="avatar" id="avatarUsuario">U</div>
+
     <div>
       <div class="nombre-perfil" id="nombreUsuario">Usuario</div>
       <div class="rol-perfil" id="rolUsuario">Club ADIUR</div>
@@ -1829,97 +2412,151 @@ a{color:inherit;text-decoration:none}
   </div>
 </header>
 
-<div class="capa-sidebar" id="capaSidebar" onclick="alternarSidebar()"></div>
+<div
+  class="capa-sidebar"
+  id="capaSidebar"
+  onclick="alternarSidebar()"
+></div>
 
 <div class="contenedor">
 
-  <!-- BARRA LATERAL -->
+  <!-- ===================================================
+       BARRA LATERAL
+  ==================================================== -->
 
   <aside class="sidebar" id="sidebar">
 
     <a class="menu-inicio" href="Pagina Principal.html">
-      <span class="icono-inicio">⌂</span> INICIO
+      <span>⌂</span> INICIO
     </a>
 
     <div class="grupo-menu cerrado" id="grupoPlantel">
       <div class="titulo-grupo" onclick="toggleGrupo('grupoPlantel')">
-        <span>PLANTEL</span><span class="flecha">›</span>
+        <span>PLANTEL</span>
+        <span class="flecha">›</span>
       </div>
 
       <div class="submenu">
-        <a href="jugadoras.html"><span class="nav-punto"></span>Jugadoras</a>
-        <a href="asistencia.html"><span class="nav-punto"></span>Asistencia</a>
+        <a href="jugadoras.html">
+          <span class="nav-punto"></span>Jugadoras
+        </a>
+        <a href="asistencia.html">
+          <span class="nav-punto"></span>Asistencia
+        </a>
       </div>
     </div>
 
     <div class="grupo-menu cerrado" id="grupoEntrenamiento">
       <div class="titulo-grupo" onclick="toggleGrupo('grupoEntrenamiento')">
-        <span>ENTRENAMIENTO</span><span class="flecha">›</span>
+        <span>ENTRENAMIENTO</span>
+        <span class="flecha">›</span>
       </div>
 
       <div class="submenu">
-        <a href="calendario.html"><span class="nav-punto"></span>Calendario</a>
-        <a href="planificacion.html"><span class="nav-punto"></span>Planificación</a>
-        <a href="gimnasio.html"><span class="nav-punto"></span>Gimnasio</a>
+        <a href="calendario.html">
+          <span class="nav-punto"></span>Calendario
+        </a>
+        <a href="planificacion.html">
+          <span class="nav-punto"></span>Planificación
+        </a>
+        <a href="gimnasio.html">
+          <span class="nav-punto"></span>Gimnasio
+        </a>
       </div>
     </div>
 
     <div class="grupo-menu cerrado" id="grupoCompetencia">
       <div class="titulo-grupo" onclick="toggleGrupo('grupoCompetencia')">
-        <span>COMPETENCIA</span><span class="flecha">›</span>
+        <span>COMPETENCIA</span>
+        <span class="flecha">›</span>
       </div>
 
       <div class="submenu">
-        <a href="Partidos.html"><span class="nav-punto"></span>Partidos</a>
-        <a href="estadisticas.html"><span class="nav-punto"></span>Estadísticas</a>
-        <a href="pizarra.html"><span class="nav-punto"></span>Pizarra táctica</a>
+        <a href="Partidos.html">
+          <span class="nav-punto"></span>Partidos
+        </a>
+        <a href="estadisticas.html">
+          <span class="nav-punto"></span>Estadísticas
+        </a>
+        <a href="pizarra.html">
+          <span class="nav-punto"></span>Pizarra táctica
+        </a>
       </div>
     </div>
 
     <div class="grupo-menu" id="grupoRendimientos">
       <div class="titulo-grupo" onclick="toggleGrupo('grupoRendimientos')">
-        <span>RENDIMIENTOS</span><span class="flecha">›</span>
+        <span>RENDIMIENTOS</span>
+        <span class="flecha">›</span>
       </div>
 
       <div class="submenu">
-        <a href="testeos.html" class="activo"><span class="nav-punto"></span>Planilla de testeos</a>
-        <a href="tiempos.html"><span class="nav-punto"></span>Tiempos</a>
-        <a href="multimedia.html"><span class="nav-punto"></span>Multimedia</a>
-        <a href="encuestas.html"><span class="nav-punto"></span>Encuestas</a>
-        <a href="lesiones.html"><span class="nav-punto"></span>Lesiones</a>
+        <a href="testeos.html" class="activo">
+          <span class="nav-punto"></span>Planilla de testeos
+        </a>
+        <a href="tiempos.html">
+          <span class="nav-punto"></span>Tiempos
+        </a>
+        <a href="multimedia.html">
+          <span class="nav-punto"></span>Multimedia
+        </a>
+        <a href="encuestas.html">
+          <span class="nav-punto"></span>Encuestas
+        </a>
+        <a href="lesiones.html">
+          <span class="nav-punto"></span>Lesiones
+        </a>
       </div>
     </div>
 
     <div class="separador-sesion">
-      <a class="enlace-cerrar-sesion" href="#" onclick="cerrarSesion(event)">
-        <span class="icono-salir">↪</span> Cerrar sesión
+      <a
+        class="enlace-cerrar-sesion"
+        href="#"
+        onclick="cerrarSesion(event)"
+      >
+        <span>↪</span> Cerrar sesión
       </a>
     </div>
 
   </aside>
 
-  <!-- CONTENIDO PRINCIPAL -->
+  <!-- ===================================================
+       CONTENIDO PRINCIPAL
+  ==================================================== -->
 
   <main class="contenido">
 
     <div class="encabezado-seccion">
       <div>
-        <div class="sobretitulo-seccion">RENDIMIENTOS · TESTEOS</div>
+        <div class="sobretitulo-seccion">
+          RENDIMIENTOS · TESTEOS
+        </div>
+
         <h2>Testeos y evaluaciones físicas</h2>
-        <p>Registrá resultados, compará evaluaciones y seguí la evolución física de cada jugadora.</p>
+
+        <p>
+          Registrá resultados, compará evaluaciones y seguí la evolución física de cada jugadora.
+        </p>
       </div>
     </div>
 
-    <!-- SELECTOR PRINCIPAL DE CATEGORÍA -->
+    <!-- SELECTOR DE CATEGORÍA -->
 
-    <section class="selector-categoria-panel" aria-label="Selección de categoría">
+    <section
+      class="selector-categoria-panel"
+      aria-label="Selección de categoría"
+    >
 
       <div class="selector-categoria-icono">◎</div>
 
       <div class="selector-categoria-texto">
         <span>SELECCIÓN PRINCIPAL</span>
         <strong>Categoría del plantel</strong>
-        <p>Antes de cargar o consultar datos, seleccioná la categoría del plantel con la que vas a trabajar.</p>
+
+        <p>
+          Seleccioná la división con la que vas a trabajar.
+        </p>
       </div>
 
       <div class="selector-categoria-control">
@@ -1943,29 +2580,39 @@ a{color:inherit;text-decoration:none}
     <section class="panel panel-periodo">
 
       <div class="periodo-info">
-        <span class="seccion-kicker">IDENTIFICACIÓN DE LA EVALUACIÓN</span>
+        <span class="seccion-kicker">
+          IDENTIFICACIÓN DE LA EVALUACIÓN
+        </span>
+
         <h3>Período de pruebas</h3>
-        <p>Escribí un nombre para identificar esta tanda de testeos. Ese nombre se usará para guardar y recuperar la planilla.</p>
+
+        <p>
+          Escribí un nombre para identificar esta tanda de testeos.
+          Ese nombre se utilizará para guardar y recuperar la planilla.
+        </p>
       </div>
 
       <div class="periodo-campo">
         <label for="selectMes">Nombre del período</label>
+
         <input
           type="text"
           id="selectMes"
           value="Noviembre"
           maxlength="80"
-          pattern="[^/]+"
           placeholder="Ej. Evaluación inicial · Marzo 2027"
           autocomplete="off"
           required
           onchange="cambiarFiltroPlanilla()"
-          aria-label="Nombre del período de pruebas"
         >
-        <small>Usá un nombre diferente para cada evaluación que quieras conservar en la Biblioteca Test.</small>
+
+        <small>
+          Utilizá un nombre diferente para cada evaluación que quieras conservar en Biblioteca Test.
+        </small>
       </div>
 
       <div class="periodo-acciones" id="accionesPeriodo">
+
         <button
           class="btn-principal"
           id="btnGuardarPlanilla"
@@ -1981,117 +2628,394 @@ a{color:inherit;text-decoration:none}
           role="status"
           aria-live="polite"
         ></span>
+
       </div>
 
     </section>
 
-    <!-- CARGA POR SUBGRUPOS -->
+    <!-- PESTAÑAS PRINCIPALES -->
 
-    <section class="panel panel-grupos">
+    <div class="pestanas-principales">
 
-      <div class="panel-cabecera-planilla panel-carga-grupos-cabecera">
-        <div>
-          <span class="seccion-kicker">CARGA DE RESULTADOS POR ÁREA</span>
-          <h3>Evaluaciones por grupo</h3>
-          <p>Los testeos están separados por tipo de evaluación. Abrí un grupo y después la prueba que quieras completar.</p>
-        </div>
+      <button
+        type="button"
+        class="pestana-principal activa"
+        id="btnTabCarga"
+        onclick="cambiarPestanaPrincipal('carga')"
+      >
+        <span class="pestana-icono">▤</span>
+        Carga de testeos
+      </button>
 
-        <div class="acciones-columnas" id="accionesTecnico">
-          <button class="btn-principal" type="button" onclick="abrirModalAgregarTest()">
-            + Nueva prueba
-          </button>
+      <button
+        type="button"
+        class="pestana-principal"
+        id="btnTabEstadisticas"
+        onclick="cambiarPestanaPrincipal('estadisticas')"
+      >
+        <span class="pestana-icono">▥</span>
+        Estadísticas
+      </button>
 
-          <button
-            class="btn-secundario"
-            type="button"
-            id="btnModoEliminar"
-            onclick="alternarModoEliminar()"
-          >
-            Gestionar pruebas
-          </button>
-        </div>
-      </div>
+    </div>
 
-      <div class="flujo-carga-test">
+    <!-- =================================================
+         VISTA 1 · CARGA DE TESTEOS
+    ================================================== -->
 
-        <div class="paso-carga-test">
-          <span class="numero-paso">1</span>
+    <section
+      class="vista-principal activa"
+      id="vistaCarga"
+    >
+
+      <section class="panel panel-grupos">
+
+        <div class="panel-cabecera-planilla panel-carga-grupos-cabecera">
+
           <div>
-            <strong>Elegí el área de evaluación</strong>
-            <small>Primero seleccioná el grupo de pruebas que vas a completar.</small>
+            <span class="seccion-kicker">
+              CARGA DE RESULTADOS POR ÁREA
+            </span>
+
+            <h3>Evaluaciones por grupo</h3>
+
+            <p>
+              Seleccioná un área, después la prueba y finalmente completá los resultados de las jugadoras.
+            </p>
           </div>
+
+          <div class="acciones-columnas" id="accionesTecnico">
+
+            <button
+              class="btn-principal"
+              type="button"
+              onclick="abrirModalAgregarTest()"
+            >
+              + Nueva prueba
+            </button>
+
+            <button
+              class="btn-secundario"
+              type="button"
+              id="btnModoEliminar"
+              onclick="alternarModoEliminar()"
+            >
+              Gestionar pruebas
+            </button>
+
+          </div>
+
         </div>
 
-        <div id="navegacionGrupos" class="navegacion-grupos" aria-label="Áreas de evaluación"></div>
+        <div class="flujo-carga-test">
 
-        <div id="editorPrueba" class="editor-prueba">
-          <div class="editor-inicial">
-            <span class="editor-inicial-icono">◎</span>
-            <strong>Seleccioná un área para comenzar</strong>
-            <p>Después vas a elegir la prueba y completar los resultados de cada jugadora.</p>
+          <!-- PASO 1 -->
+
+          <div class="paso-carga-test">
+            <span class="numero-paso">1</span>
+
+            <div>
+              <strong>Elegí el área de evaluación</strong>
+
+              <small>
+                Primero seleccioná el grupo de pruebas que vas a completar.
+              </small>
+            </div>
           </div>
+
+          <div
+            id="navegacionGrupos"
+            class="navegacion-grupos"
+            aria-label="Áreas de evaluación"
+          ></div>
+
+          <!-- PASOS 2 Y 3 -->
+
+          <div id="editorPrueba" class="editor-prueba">
+
+            <div class="editor-inicial">
+
+              <span class="editor-inicial-icono">◎</span>
+
+              <strong>Seleccioná un área para comenzar</strong>
+
+              <p>
+                Después vas a elegir la prueba y completar los resultados de cada jugadora.
+              </p>
+
+            </div>
+
+          </div>
+
         </div>
 
-      </div>
+        <div class="ayuda-grupos">
 
-      <div class="ayuda-grupos">
-        <span class="ayuda-registro-icono">i</span>
-        <p>
-          Los resultados se guardan automáticamente al salir de cada campo.
-          Podés completar una prueba, pasar a otra y continuar cuando quieras.
-          Al finalizar el período, presioná <strong>Guardar planilla</strong>
-          para crear una ficha en Biblioteca Test.
-        </p>
-      </div>
+          <span class="ayuda-registro-icono">i</span>
+
+          <p>
+            Los resultados se guardan automáticamente al salir de cada campo.
+            Podés completar una prueba, pasar a otra y continuar cuando quieras.
+            Al finalizar el período, presioná <strong>Guardar planilla</strong>
+            para conservar una versión en Biblioteca Test.
+          </p>
+
+        </div>
+
+      </section>
 
     </section>
 
-    <!-- BIBLIOTECA TEST -->
+    <!-- =================================================
+         VISTA 2 · ESTADÍSTICAS
+    ================================================== -->
 
-    <section class="panel panel-biblioteca" id="panelBibliotecaTest">
+    <section
+      class="vista-principal"
+      id="vistaEstadisticas"
+    >
+
+      <section class="panel panel-estadisticas">
+
+        <div class="estadisticas-intro">
+
+          <div>
+            <span class="seccion-kicker">
+              ANÁLISIS DEL RENDIMIENTO
+            </span>
+
+            <h3>Estadísticas de evaluaciones</h3>
+
+            <p>
+              Analizá los resultados de la categoría, compará períodos
+              y consultá la evolución individual, por puesto y grupal.
+            </p>
+          </div>
+
+          <span class="etiqueta-estadistica" id="etiquetaPeriodoEstadisticas">
+            Período actual
+          </span>
+
+        </div>
+
+        <!-- FILTROS -->
+
+        <div class="filtros-estadisticas">
+
+          <div class="campo-estadistica">
+            <label for="selectPruebaEstadisticas">
+              Prueba que querés analizar
+            </label>
+
+            <select
+              id="selectPruebaEstadisticas"
+              onchange="renderizarEstadisticas()"
+            >
+              <option value="">Seleccioná una prueba</option>
+            </select>
+          </div>
+
+          <div class="campo-estadistica">
+            <label for="selectPeriodoComparacion">
+              Comparar con otra evaluación guardada
+            </label>
+
+            <select
+              id="selectPeriodoComparacion"
+              onchange="renderizarEstadisticas()"
+            >
+              <option value="">Sin comparación</option>
+            </select>
+          </div>
+
+        </div>
+
+        <!-- RESUMEN GENERAL -->
+
+        <div
+          class="resumen-estadisticas"
+          id="resumenEstadisticas"
+        ></div>
+
+        <!-- COMPARACIÓN INDIVIDUAL -->
+
+        <section class="bloque-estadistica">
+
+          <div class="bloque-estadistica-cabecera">
+
+            <div>
+              <h4>Comparación individual</h4>
+
+              <p>
+                Compará a cada jugadora con los resultados de otra planilla guardada.
+              </p>
+            </div>
+
+          </div>
+
+          <div
+            class="bloque-estadistica-contenido"
+            id="estadisticaIndividual"
+          ></div>
+
+        </section>
+
+        <!-- PUESTOS -->
+
+        <section class="bloque-estadistica">
+
+          <div class="bloque-estadistica-cabecera">
+
+            <div>
+              <h4>Estadísticas por puesto</h4>
+
+              <p>
+                Consultá promedios, cantidad de resultados y mejores marcas según la posición de cada jugadora.
+              </p>
+            </div>
+
+          </div>
+
+          <div
+            class="bloque-estadistica-contenido"
+            id="estadisticaPuestos"
+          ></div>
+
+        </section>
+
+        <!-- ESTADÍSTICAS GRUPALES -->
+
+        <section class="bloque-estadistica">
+
+          <div class="bloque-estadistica-cabecera">
+
+            <div>
+              <h4>Estadísticas grupales</h4>
+
+              <p>
+                Seguimiento de la carga y completitud de cada área y de cada prueba.
+              </p>
+            </div>
+
+          </div>
+
+          <div
+            class="bloque-estadistica-contenido"
+            id="estadisticaGrupal"
+          ></div>
+
+        </section>
+
+        <!-- EVOLUCIÓN HISTÓRICA -->
+
+        <section class="bloque-estadistica">
+
+          <div class="bloque-estadistica-cabecera">
+
+            <div>
+              <h4>Evolución entre períodos</h4>
+
+              <p>
+                Compará los promedios de la prueba seleccionada en las diferentes evaluaciones guardadas.
+              </p>
+            </div>
+
+          </div>
+
+          <div
+            class="bloque-estadistica-contenido"
+            id="estadisticaHistorica"
+          ></div>
+
+        </section>
+
+      </section>
+
+    </section>
+
+    <!-- =================================================
+         BIBLIOTECA TEST
+    ================================================== -->
+
+    <section
+      class="panel panel-biblioteca"
+      id="panelBibliotecaTest"
+    >
 
       <div class="panel-cabecera-planilla cabecera-biblioteca-test">
+
         <div>
-          <span class="seccion-kicker">EVALUACIONES GUARDADAS</span>
+          <span class="seccion-kicker">
+            EVALUACIONES GUARDADAS
+          </span>
+
           <h3>Biblioteca Test</h3>
-          <p>Cada período guardado queda disponible como una ficha. Seleccioná una para abrir la evaluación completa.</p>
+
+          <p>
+            Cada período guardado queda disponible como una ficha.
+            Seleccioná una para abrir la evaluación completa.
+          </p>
         </div>
 
-        <span class="contador-biblioteca" id="contadorBiblioteca">
+        <span
+          class="contador-biblioteca"
+          id="contadorBiblioteca"
+        >
           0 planillas guardadas
         </span>
+
       </div>
 
-      <div id="bibliotecaTestGrid" class="biblioteca-test-grid">
+      <div
+        id="bibliotecaTestGrid"
+        class="biblioteca-test-grid"
+      >
+
         <div class="biblioteca-vacia">
           Todavía no hay planillas guardadas para esta categoría.
-          <span>Cuando termines de cargar una evaluación, presioná “Guardar planilla”.</span>
+
+          <span>
+            Cuando termines de cargar una evaluación, presioná “Guardar planilla”.
+          </span>
         </div>
+
       </div>
 
     </section>
 
   </main>
+
 </div>
 
-<!-- MODAL PARA AGREGAR UNA NUEVA PRUEBA -->
+<!-- =====================================================
+     MODAL · AGREGAR NUEVA PRUEBA
+===================================================== -->
 
 <div class="modal" id="modalAgregarTest">
 
   <div class="modal-contenido">
 
     <div class="modal-header">
+
       <h3>Crear una prueba</h3>
+
       <button
         class="btn-cerrar-modal"
         onclick="cerrarModal('modalAgregarTest')"
       >&times;</button>
+
     </div>
 
-    <form id="formAgregarTest" onsubmit="agregarNuevaColumnaTest(event)">
+    <form
+      id="formAgregarTest"
+      onsubmit="agregarNuevaColumnaTest(event)"
+    >
 
       <div class="form-group">
-        <label for="categoriaTest">Categoría / Grupo</label>
+        <label for="categoriaTest">
+          Categoría / Grupo
+        </label>
+
         <select id="categoriaTest" required>
           <option value="SALTOS">SALTOS</option>
           <option value="VELOCIDAD">VELOCIDAD</option>
@@ -2104,7 +3028,10 @@ a{color:inherit;text-decoration:none}
       </div>
 
       <div class="form-group">
-        <label for="nombreTest">Nombre de la prueba</label>
+        <label for="nombreTest">
+          Nombre de la prueba
+        </label>
+
         <input
           type="text"
           id="nombreTest"
@@ -2114,22 +3041,40 @@ a{color:inherit;text-decoration:none}
       </div>
 
       <div class="form-group">
-        <label for="criterioTest">Criterio de Mejora (para colores vs. COMP)</label>
+        <label for="criterioTest">
+          Criterio de mejora
+        </label>
+
         <select id="criterioTest" required>
-          <option value="mayor">Mayor valor es mejor (ej: Saltos, Vo2 máx)</option>
-          <option value="menor">Menor valor/tiempo es mejor (ej: Velocidad, Agilidad)</option>
-          <option value="ninguno">Sin comparación automática</option>
+          <option value="mayor">
+            Mayor valor es mejor
+          </option>
+
+          <option value="menor">
+            Menor valor/tiempo es mejor
+          </option>
+
+          <option value="ninguno">
+            Sin comparación automática
+          </option>
         </select>
       </div>
 
       <div class="form-group">
         <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
-          <input type="checkbox" id="incluirComp" checked style="width:auto;">
-          Incluir columna de comparación (COMP) al lado
+          <input
+            type="checkbox"
+            id="incluirComp"
+            checked
+            style="width:auto;"
+          >
+
+          Incluir columna de comparación (COMP)
         </label>
       </div>
 
       <div class="modal-footer">
+
         <button
           type="button"
           class="btn-secundario"
@@ -2141,14 +3086,18 @@ a{color:inherit;text-decoration:none}
         <button type="submit" class="btn-principal">
           Crear prueba
         </button>
+
       </div>
 
     </form>
 
   </div>
+
 </div>
 
-<!-- MODAL DE VISTA AMPLIADA DE BIBLIOTECA TEST -->
+<!-- =====================================================
+     MODAL · BIBLIOTECA TEST
+===================================================== -->
 
 <div
   class="modal modal-biblioteca"
@@ -2157,13 +3106,22 @@ a{color:inherit;text-decoration:none}
   aria-modal="true"
   aria-labelledby="tituloModalBiblioteca"
 >
+
   <div class="modal-contenido modal-contenido-biblioteca">
 
     <div class="modal-header">
+
       <div>
         <span class="seccion-kicker">BIBLIOTECA TEST</span>
-        <h3 id="tituloModalBiblioteca">Evaluación guardada</h3>
-        <p class="modal-subtitulo-biblioteca" id="subtituloModalBiblioteca"></p>
+
+        <h3 id="tituloModalBiblioteca">
+          Evaluación guardada
+        </h3>
+
+        <p
+          class="modal-subtitulo-biblioteca"
+          id="subtituloModalBiblioteca"
+        ></p>
       </div>
 
       <button
@@ -2172,27 +3130,45 @@ a{color:inherit;text-decoration:none}
         onclick="cerrarVistaBiblioteca()"
         aria-label="Cerrar"
       >&times;</button>
+
     </div>
 
-    <div class="modal-planilla-cuerpo" id="modalPlanillaBiblioteca"></div>
+    <div
+      class="modal-planilla-cuerpo"
+      id="modalPlanillaBiblioteca"
+    ></div>
 
     <div class="modal-footer">
-      <button class="btn-secundario" type="button" onclick="cerrarVistaBiblioteca()">
+
+      <button
+        class="btn-secundario"
+        type="button"
+        onclick="cerrarVistaBiblioteca()"
+      >
         Cerrar
       </button>
 
-      <button class="btn-principal" type="button" onclick="imprimirPlanillaBiblioteca()">
+      <button
+        class="btn-principal"
+        type="button"
+        onclick="imprimirPlanillaBiblioteca()"
+      >
         Imprimir / Guardar PDF
       </button>
+
     </div>
 
   </div>
+
 </div>
 
 <div id="printRoutine" aria-hidden="true"></div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
 import {
   getFirestore,
   doc,
@@ -2203,7 +3179,9 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 /* =====================================================
-   CONFIGURACIÓN DE FIREBASE CLOUD FIRESTORE (adiur-b1913)
+   CONFIGURACIÓN FIREBASE
+
+   SE CONSERVA LA CONFIGURACIÓN ORIGINAL.
 ===================================================== */
 
 const firebaseConfig = {
@@ -2228,13 +3206,15 @@ try {
    USUARIO Y PERMISOS
 ===================================================== */
 
-const usuarioGuardado = (localStorage.getItem("usuarioADIUR") || "").trim();
+const usuarioGuardado =
+  (localStorage.getItem("usuarioADIUR") || "").trim();
 
 if (!usuarioGuardado) {
   window.location.href = "Loing.html";
 }
 
-const usuarioNormalizado = usuarioGuardado.toLowerCase();
+const usuarioNormalizado =
+  usuarioGuardado.toLowerCase();
 
 const esFran = [
   "fran",
@@ -2242,14 +3222,16 @@ const esFran = [
   "francisco perez basla"
 ].includes(usuarioNormalizado);
 
-const esToto = usuarioNormalizado === "toto";
+const esToto =
+  usuarioNormalizado === "toto";
 
 const esBianca = [
   "biancadominguez",
   "bianca"
 ].includes(usuarioNormalizado);
 
-const puedeEditar = esFran || esToto;
+const puedeEditar =
+  esFran || esToto;
 
 document.getElementById("nombreUsuario").textContent =
   usuarioGuardado;
@@ -2268,7 +3250,36 @@ document.getElementById("rolUsuario").textContent =
 
 if (!puedeEditar) {
   document.getElementById("accionesTecnico").style.display = "none";
+  document.getElementById("accionesPeriodo").style.display = "none";
 }
+
+/* =====================================================
+   VARIABLES GENERALES
+===================================================== */
+
+let columnasActuales = [];
+let valoresActuales = {};
+
+let jugadorasDivision = [];
+let datosJugadorasDivision = [];
+let posicionesPorJugadora = {};
+
+let modoEliminar = false;
+let timeoutGuardado = null;
+let promesaCargaPlanilla = Promise.resolve();
+
+let grupoSeleccionadoTest = "";
+let pruebaSeleccionadaTest = "";
+
+let filtroJugadorasTest = "todas";
+let busquedaJugadorasTest = "";
+
+let planillasBiblioteca = [];
+let planillaBibliotecaActiva = null;
+let jugadoresBibliotecaActiva = [];
+
+let pestañaActual = "carga";
+let versionCarga = 0;
 
 /* =====================================================
    NAVEGACIÓN
@@ -2276,7 +3287,9 @@ if (!puedeEditar) {
 
 window.cerrarSesion = function(event) {
   event.preventDefault();
+
   localStorage.removeItem("usuarioADIUR");
+
   window.location.href = "Loing.html";
 };
 
@@ -2291,12 +3304,56 @@ window.toggleGrupo = function(id) {
 
 function actualizarEstadoNube(estado, texto) {
   const badge = document.getElementById("badgeNube");
+
   badge.className = "estado-nube " + estado;
   badge.textContent = texto;
 }
 
 /* =====================================================
-   ESTRUCTURA BASE DE COLUMNAS
+   CAMBIAR PESTAÑAS PRINCIPALES
+===================================================== */
+
+window.cambiarPestanaPrincipal = function(tipo) {
+
+  pestañaActual = tipo;
+
+  const carga =
+    document.getElementById("vistaCarga");
+
+  const estadisticas =
+    document.getElementById("vistaEstadisticas");
+
+  const botonCarga =
+    document.getElementById("btnTabCarga");
+
+  const botonEstadisticas =
+    document.getElementById("btnTabEstadisticas");
+
+  carga.classList.toggle("activa", tipo === "carga");
+
+  estadisticas.classList.toggle(
+    "activa",
+    tipo === "estadisticas"
+  );
+
+  botonCarga.classList.toggle(
+    "activa",
+    tipo === "carga"
+  );
+
+  botonEstadisticas.classList.toggle(
+    "activa",
+    tipo === "estadisticas"
+  );
+
+  if (tipo === "estadisticas") {
+    actualizarSelectoresEstadisticas();
+    renderizarEstadisticas();
+  }
+};
+
+/* =====================================================
+   COLUMNAS ORIGINALES
 ===================================================== */
 
 const COLUMNAS_POR_DEFECTO = [
@@ -2309,6 +3366,7 @@ const COLUMNAS_POR_DEFECTO = [
     criterio:"mayor",
     compId:"salto_sin_comp"
   },
+
   {
     id:"salto_sin_comp",
     grupo:"SALTOS",
@@ -2325,6 +3383,7 @@ const COLUMNAS_POR_DEFECTO = [
     criterio:"mayor",
     compId:"salto_con_comp"
   },
+
   {
     id:"salto_con_comp",
     grupo:"SALTOS",
@@ -2341,6 +3400,7 @@ const COLUMNAS_POR_DEFECTO = [
     criterio:"menor",
     compId:"vel_30_comp"
   },
+
   {
     id:"vel_30_comp",
     grupo:"VELOCIDAD",
@@ -2381,6 +3441,7 @@ const COLUMNAS_POR_DEFECTO = [
     criterio:"menor",
     compId:"illinois_mod_comp"
   },
+
   {
     id:"illinois_mod_comp",
     grupo:"AGILIDAD",
@@ -2397,6 +3458,7 @@ const COLUMNAS_POR_DEFECTO = [
     criterio:"menor",
     compId:"illinois_norm_comp"
   },
+
   {
     id:"illinois_norm_comp",
     grupo:"AGILIDAD",
@@ -2412,6 +3474,7 @@ const COLUMNAS_POR_DEFECTO = [
     label:"PESO",
     criterio:"ninguno"
   },
+
   {
     id:"altura",
     grupo:"INDICES",
@@ -2419,6 +3482,7 @@ const COLUMNAS_POR_DEFECTO = [
     label:"ALTURA",
     criterio:"ninguno"
   },
+
   {
     id:"imc",
     grupo:"INDICES",
@@ -2429,20 +3493,155 @@ const COLUMNAS_POR_DEFECTO = [
 
 ];
 
-let columnasActuales = [];
-let valoresActuales = {};
-let jugadorasDivision = [];
-let modoEliminar = false;
-let timeoutGuardado = null;
-let promesaCargaPlanilla = Promise.resolve();
+/* =====================================================
+   FUNCIONES GENERALES
+===================================================== */
 
-let grupoSeleccionadoTest = "";
-let pruebaSeleccionadaTest = "";
-let filtroJugadorasTest = "todas";
-let busquedaJugadorasTest = "";
+function escaparHTML(valor) {
+  return String(valor ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+function normalizarTexto(valor) {
+  return String(valor ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g,"")
+    .toLowerCase()
+    .trim();
+}
+
+function parsearNumero(valor) {
+
+  if (
+    valor === undefined ||
+    valor === null ||
+    valor === ""
+  ) {
+    return NaN;
+  }
+
+  const limpio =
+    String(valor)
+      .replace(",", ".")
+      .trim();
+
+  const numero = parseFloat(limpio);
+
+  return Number.isNaN(numero)
+    ? NaN
+    : numero;
+}
+
+function formatearNumero(valor, decimales=2) {
+
+  if (
+    valor === null ||
+    valor === undefined ||
+    !Number.isFinite(valor)
+  ) {
+    return "—";
+  }
+
+  return valor.toLocaleString("es-AR", {
+    minimumFractionDigits:decimales,
+    maximumFractionDigits:decimales
+  });
+}
+
+function calcularIMC(pesoRaw, alturaRaw) {
+
+  const peso = parsearNumero(pesoRaw);
+  let altura = parsearNumero(alturaRaw);
+
+  if (
+    Number.isNaN(peso) ||
+    Number.isNaN(altura) ||
+    altura <= 0
+  ) {
+    return null;
+  }
+
+  if (altura > 3) {
+    altura = altura / 100;
+  }
+
+  return peso / (altura * altura);
+}
 
 /* =====================================================
-   OBTENER JUGADORAS DESDE FIREBASE O LOCALSTORAGE
+   OBTENER DATOS DE POSICIONES
+
+   Se contemplan distintos nombres de campo para poder
+   recuperar el puesto almacenado en jugadoras.html.
+===================================================== */
+
+function obtenerNombreJugador(objeto) {
+
+  if (!objeto || typeof objeto !== "object") {
+    return "";
+  }
+
+  if (objeto.nombre && objeto.apellido) {
+    return `${objeto.nombre} ${objeto.apellido}`.trim();
+  }
+
+  return String(
+    objeto.nombreCompleto ||
+    objeto.nombre ||
+    objeto.apellido ||
+    ""
+  ).trim();
+}
+
+function obtenerPuestoJugador(objeto) {
+
+  if (!objeto || typeof objeto !== "object") {
+    return "Sin puesto asignado";
+  }
+
+  const candidatos = [
+    objeto.posicion,
+    objeto.puesto,
+    objeto.demarcacion,
+    objeto.posicionCancha,
+    objeto.posicion_cancha,
+    objeto.rol,
+    objeto.position,
+    objeto.categoriaPosicion,
+    objeto.datos?.posicion,
+    objeto.datos?.puesto
+  ];
+
+  for (const candidato of candidatos) {
+
+    if (Array.isArray(candidato)) {
+
+      const texto = candidato
+        .map(x => String(x || "").trim())
+        .filter(Boolean)
+        .join(" / ");
+
+      if (texto) return texto;
+    }
+
+    if (
+      candidato !== undefined &&
+      candidato !== null &&
+      String(candidato).trim() !== ""
+    ) {
+      return String(candidato).trim();
+    }
+  }
+
+  return "Sin puesto asignado";
+}
+
+/* =====================================================
+   OBTENER JUGADORAS DE FIREBASE / LOCALSTORAGE
 ===================================================== */
 
 async function cargarJugadorasPorDivision(division) {
@@ -2450,15 +3649,20 @@ async function cargarJugadorasPorDivision(division) {
   let listaTotal = [];
 
   if (nubeActiva && db) {
+
     try {
 
-      const snapCol = await getDocs(collection(db, "jugadoras"));
+      const snapCol = await getDocs(
+        collection(db, "jugadoras")
+      );
 
       snapCol.forEach(docSnap => {
+
         listaTotal.push({
           id:docSnap.id,
           ...docSnap.data()
         });
+
       });
 
       if (listaTotal.length === 0) {
@@ -2476,7 +3680,11 @@ async function cargarJugadorasPorDivision(division) {
       }
 
     } catch (err) {
-      console.warn("Leyendo jugadoras desde respaldo local:", err);
+
+      console.warn(
+        "Leyendo jugadoras desde respaldo local:",
+        err
+      );
     }
   }
 
@@ -2487,6 +3695,7 @@ async function cargarJugadorasPorDivision(division) {
       localStorage.getItem("plantelADIUR");
 
     if (rawLocal) {
+
       try {
         listaTotal = JSON.parse(rawLocal);
       } catch (e) {}
@@ -2494,60 +3703,91 @@ async function cargarJugadorasPorDivision(division) {
   }
 
   const divNormalizada =
-    division.toLowerCase().replace(/\s+/g, "");
+    normalizarTexto(division).replace(/\s+/g,"");
 
-  return listaTotal
-    .filter(j => {
+  const filtradas = listaTotal.filter(j => {
 
-      const cat = (j.categoria || j.division || "")
-        .toLowerCase()
-        .replace(/\s+/g, "");
+    const categoria = normalizarTexto(
+      j.categoria || j.division || ""
+    ).replace(/\s+/g,"");
 
-      return cat === divNormalizada;
-    })
+    return categoria === divNormalizada;
+  });
+
+  datosJugadorasDivision = filtradas;
+
+  posicionesPorJugadora = {};
+
+  const nombres = filtradas
     .map(j => {
 
-      if (j.nombre && j.apellido) {
-        return `${j.nombre.trim()} ${j.apellido.trim()}`;
+      const nombre = obtenerNombreJugador(j);
+
+      const puesto = obtenerPuestoJugador(j);
+
+      if (nombre) {
+        posicionesPorJugadora[nombre] = puesto;
       }
 
-      return (j.nombre || j.nombreCompleto || "Sin nombre").trim();
+      return nombre;
     })
+    .filter(Boolean)
     .sort((a,b) => a.localeCompare(b));
+
+  return nombres;
 }
 
 /* =====================================================
-   CARGAR Y GUARDAR PLANILLA EN LA NUBE (FIRESTORE)
+   CARGAR Y GUARDAR PLANILLA OPERATIVA
 
-   SE CONSERVAN LAS CLAVES Y ESTRUCTURA ORIGINALES.
+   Se conserva la colección y la estructura original.
 ===================================================== */
 
 function obtenerClavePlanilla(division, mes) {
-  return `${division.replace(/\s+/g, "_")}_${mes}`;
+  return `${division.replace(/\s+/g,"_")}_${mes}`;
 }
 
 async function cargarDatosPlanilla(division, mes) {
 
-  actualizarEstadoNube("guardando", "☁️ Sincronizando...");
+  const version = ++versionCarga;
+
+  actualizarEstadoNube(
+    "guardando",
+    "☁️ Sincronizando..."
+  );
 
   const clave = obtenerClavePlanilla(division, mes);
 
-  jugadorasDivision = await cargarJugadorasPorDivision(division);
+  const jugadorasCargadas =
+    await cargarJugadorasPorDivision(division);
+
+  if (version !== versionCarga) return;
+
+  jugadorasDivision = jugadorasCargadas;
 
   let cargadoDeNube = false;
 
   if (nubeActiva && db) {
+
     try {
 
-      const refDoc = doc(db, "testeos_adiur", clave);
+      const refDoc = doc(
+        db,
+        "testeos_adiur",
+        clave
+      );
+
       const snap = await getDoc(refDoc);
+
+      if (version !== versionCarga) return;
 
       if (snap.exists()) {
 
         const data = snap.data();
 
         columnasActuales =
-          Array.isArray(data.columnas) && data.columnas.length > 0
+          Array.isArray(data.columnas) &&
+          data.columnas.length > 0
             ? data.columnas
             : JSON.parse(JSON.stringify(COLUMNAS_POR_DEFECTO));
 
@@ -2557,7 +3797,8 @@ async function cargarDatosPlanilla(division, mes) {
       }
 
     } catch (e) {
-      console.warn("Error leyendo Firestore:", e);
+
+      console.warn("Error leyendo Firestore:",e);
     }
   }
 
@@ -2595,18 +3836,40 @@ async function cargarDatosPlanilla(division, mes) {
     }
   }
 
-  actualizarEstadoNube("", "☁️ Nube sincronizada");
+  if (version !== versionCarga) return;
+
+  // La selección de área debe comenzar nuevamente
+  // cuando se cambia de período o categoría.
+
+  grupoSeleccionadoTest = "";
+  pruebaSeleccionadaTest = "";
+
+  filtroJugadorasTest = "todas";
+  busquedaJugadorasTest = "";
+
+  actualizarEstadoNube(
+    "",
+    "☁️ Nube sincronizada"
+  );
 
   renderizarTablaPlanilla();
 
   await cargarBibliotecaTest();
+
+  if (version !== versionCarga) return;
+
+  actualizarSelectoresEstadisticas();
+
+  if (pestañaActual === "estadisticas") {
+    renderizarEstadisticas();
+  }
 }
 
 /* =====================================================
    GUARDADO AUTOMÁTICO ORIGINAL
 
-   MANTIENE EL MISMO PAYLOAD, COLECCIÓN, CLAVE DE DOCUMENTO,
-   RESPALDO LOCAL Y DEBOUNCE DE 600 MS.
+   NO SE CAMBIA EL PAYLOAD, LA COLECCIÓN, LA CLAVE,
+   EL RESPALDO LOCAL, EL DEBOUNCE NI EL setDoc.
 ===================================================== */
 
 function programarGuardadoNube() {
@@ -2617,7 +3880,8 @@ function programarGuardadoNube() {
   const mes =
     document.getElementById("selectMes").value;
 
-  const clave = obtenerClavePlanilla(division, mes);
+  const clave =
+    obtenerClavePlanilla(division, mes);
 
   const payload = {
     division,
@@ -2633,7 +3897,10 @@ function programarGuardadoNube() {
     JSON.stringify(payload)
   );
 
-  actualizarEstadoNube("guardando", "☁️ Guardando...");
+  actualizarEstadoNube(
+    "guardando",
+    "☁️ Guardando..."
+  );
 
   if (timeoutGuardado) {
     clearTimeout(timeoutGuardado);
@@ -2650,11 +3917,17 @@ function programarGuardadoNube() {
           payload
         );
 
-        actualizarEstadoNube("", "☁️ Guardado en la nube");
+        actualizarEstadoNube(
+          "",
+          "☁️ Guardado en la nube"
+        );
 
       } catch (err) {
 
-        console.error("Error guardando en Firestore:", err);
+        console.error(
+          "Error guardando en Firestore:",
+          err
+        );
 
         actualizarEstadoNube(
           "error",
@@ -2664,60 +3937,28 @@ function programarGuardadoNube() {
 
     } else {
 
-      actualizarEstadoNube("", "💾 Guardado localmente");
+      actualizarEstadoNube(
+        "",
+        "💾 Guardado localmente"
+      );
     }
 
-  }, 600);
+  },600);
 }
 
 /* =====================================================
-   FUNCIONES GENERALES Y CÁLCULOS
+   CÁLCULO Y COMPARACIONES
 ===================================================== */
-
-function escaparHTML(valor) {
-  return String(valor ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-}
-
-function parsearNumero(val) {
-
-  if (val === undefined || val === null || val === "") {
-    return NaN;
-  }
-
-  const limpio = String(val).replace(",", ".").trim();
-  const num = parseFloat(limpio);
-
-  return isNaN(num) ? NaN : num;
-}
-
-function calcularIMC(pesoRaw, alturaRaw) {
-
-  const peso = parsearNumero(pesoRaw);
-  let altura = parsearNumero(alturaRaw);
-
-  if (isNaN(peso) || isNaN(altura) || altura <= 0) {
-    return null;
-  }
-
-  if (altura > 3) {
-    altura = altura / 100;
-  }
-
-  return peso / (altura * altura);
-}
 
 function obtenerClaseColorCelda(jugadora, col, valorRaw) {
 
   if (col.esCalculadoIMC) {
 
+    const fila = valoresActuales[jugadora] || {};
+
     const imc = calcularIMC(
-      valoresActuales[jugadora]?.["peso"],
-      valoresActuales[jugadora]?.["altura"]
+      fila.peso,
+      fila.altura
     );
 
     if (imc === null) return "";
@@ -2727,7 +3968,11 @@ function obtenerClaseColorCelda(jugadora, col, valorRaw) {
     return "imc-alto";
   }
 
-  if (!col.compId || !col.criterio || col.criterio === "ninguno") {
+  if (
+    !col.compId ||
+    !col.criterio ||
+    col.criterio === "ninguno"
+  ) {
     return "";
   }
 
@@ -2737,7 +3982,10 @@ function obtenerClaseColorCelda(jugadora, col, valorRaw) {
     valoresActuales[jugadora]?.[col.compId]
   );
 
-  if (isNaN(valActual) || isNaN(valComp)) {
+  if (
+    Number.isNaN(valActual) ||
+    Number.isNaN(valComp)
+  ) {
     return "";
   }
 
@@ -2756,42 +4004,51 @@ function obtenerClaseColorCelda(jugadora, col, valorRaw) {
   return "";
 }
 
-/* =====================================================
-   CARGA DE TESTEOS ORGANIZADA POR GRUPOS
-===================================================== */
+function obtenerValorColumna(datos, jugadora, columna) {
 
-function contarResultadosPrueba(
-  columna,
-  datos = valoresActuales,
-  jugadoras = jugadorasDivision
-) {
+  const fila = datos?.[jugadora] || {};
 
-  let total = 0;
+  if (columna.esCalculadoIMC) {
+    return calcularIMC(fila.peso, fila.altura);
+  }
 
-  jugadoras.forEach(jugadora => {
+  const valor = fila[columna.id];
 
-    const fila = datos[jugadora] || {};
-
-    if (columna.esCalculadoIMC) {
-
-      if (calcularIMC(fila.peso, fila.altura) !== null) {
-        total++;
-      }
-
-    } else if (
-      fila[columna.id] !== undefined &&
-      String(fila[columna.id]).trim() !== ""
-    ) {
-      total++;
-    }
-  });
-
-  return total;
+  return valor === undefined || valor === ""
+    ? null
+    : valor;
 }
+
+function obtenerValorNumerico(datos, jugadora, columna) {
+
+  const valor = obtenerValorColumna(
+    datos,
+    jugadora,
+    columna
+  );
+
+  if (
+    valor === null ||
+    valor === undefined ||
+    valor === ""
+  ) {
+    return null;
+  }
+
+  const numero = parsearNumero(valor);
+
+  return Number.isNaN(numero)
+    ? null
+    : numero;
+}
+
+/* =====================================================
+   ORGANIZACIÓN DE LOS GRUPOS
+===================================================== */
 
 function obtenerGruposActuales() {
 
-  const ordenPreferido = [
+  const orden = [
     "SALTOS",
     "VELOCIDAD",
     "AGILIDAD",
@@ -2801,14 +4058,16 @@ function obtenerGruposActuales() {
     "OTRO TEST"
   ];
 
-  const nombres = [
-    ...new Set(columnasActuales.map(c => c.grupo))
+  const grupos = [
+    ...new Set(
+      columnasActuales.map(c => c.grupo)
+    )
   ];
 
-  nombres.sort((a,b) => {
+  grupos.sort((a,b) => {
 
-    const ia = ordenPreferido.indexOf(a);
-    const ib = ordenPreferido.indexOf(b);
+    const ia = orden.indexOf(a);
+    const ib = orden.indexOf(b);
 
     if (ia === -1 && ib === -1) {
       return a.localeCompare(b);
@@ -2820,32 +4079,7 @@ function obtenerGruposActuales() {
     return ia - ib;
   });
 
-  return nombres;
-}
-
-function obtenerEstadisticaGrupo(grupo) {
-
-  const pruebas = columnasActuales.filter(
-    col => col.grupo === grupo && !col.esComp
-  );
-
-  let completos = 0;
-
-  const posibles =
-    pruebas.length * jugadorasDivision.length;
-
-  pruebas.forEach(prueba => {
-    completos += contarResultadosPrueba(prueba);
-  });
-
-  return {
-    pruebas,
-    completos,
-    posibles,
-    porcentaje:posibles
-      ? Math.round(completos / posibles * 100)
-      : 0
-  };
+  return grupos;
 }
 
 function obtenerIconoGrupo(grupo) {
@@ -2863,8 +4097,75 @@ function obtenerIconoGrupo(grupo) {
   return iconos[grupo] || "▦";
 }
 
+function obtenerColumnasPrueba(grupo) {
+
+  return columnasActuales
+    .map((col,indice) => ({
+      ...col,
+      indiceOriginal:indice
+    }))
+    .filter(col =>
+      col.grupo === grupo &&
+      !col.esComp
+    );
+}
+
+function contarResultadosPrueba(
+  columna,
+  datos=valoresActuales,
+  jugadoras=jugadorasDivision
+) {
+
+  let total = 0;
+
+  jugadoras.forEach(jugadora => {
+
+    const fila = datos[jugadora] || {};
+
+    if (columna.esCalculadoIMC) {
+
+      if (calcularIMC(fila.peso,fila.altura) !== null) {
+        total++;
+      }
+
+    } else if (
+      fila[columna.id] !== undefined &&
+      String(fila[columna.id]).trim() !== ""
+    ) {
+      total++;
+    }
+
+  });
+
+  return total;
+}
+
+function obtenerEstadisticaGrupo(grupo) {
+
+  const pruebas =
+    obtenerColumnasPrueba(grupo);
+
+  let completos = 0;
+
+  const posibles =
+    pruebas.length * jugadorasDivision.length;
+
+  pruebas.forEach(prueba => {
+    completos += contarResultadosPrueba(prueba);
+  });
+
+  return {
+    pruebas,
+    completos,
+    posibles,
+    porcentaje:posibles
+      ? Math.round(completos/posibles*100)
+      : 0
+  };
+}
+
 /* =====================================================
-   RENDERIZAR SELECTOR DE ÁREAS
+   PASO 1 · SELECTOR DE GRUPOS
 ===================================================== */
 
 function renderizarGruposTesteos() {
@@ -2874,8 +4175,6 @@ function renderizarGruposTesteos() {
 
   const editor =
     document.getElementById("editorPrueba");
-
-  if (!navegacion || !editor) return;
 
   const grupos = obtenerGruposActuales();
 
@@ -2889,66 +4188,98 @@ function renderizarGruposTesteos() {
     editor.innerHTML = `
       <div class="editor-inicial">
         <span class="editor-inicial-icono">＋</span>
+
         <strong>Todavía no hay pruebas configuradas</strong>
-        <p>Usá el botón “Nueva prueba” para agregar los testeos que necesitás registrar.</p>
+
+        <p>
+          Utilizá el botón “Nueva prueba” para crear los testeos que necesitás.
+        </p>
       </div>
     `;
 
     return;
   }
 
-  if (!grupos.includes(grupoSeleccionadoTest)) {
-    grupoSeleccionadoTest = grupos[0];
-  }
-
-  const pruebasDelGrupo = columnasActuales.filter(
-    col => col.grupo === grupoSeleccionadoTest && !col.esComp
-  );
-
-  if (!pruebasDelGrupo.some(col => col.id === pruebaSeleccionadaTest)) {
-    pruebaSeleccionadaTest = pruebasDelGrupo[0]?.id || "";
+  if (
+    grupoSeleccionadoTest &&
+    !grupos.includes(grupoSeleccionadoTest)
+  ) {
+    grupoSeleccionadoTest = "";
+    pruebaSeleccionadaTest = "";
   }
 
   navegacion.innerHTML = grupos.map(grupo => {
 
-    const resumen = obtenerEstadisticaGrupo(grupo);
-    const activa = grupo === grupoSeleccionadoTest;
+    const resumen =
+      obtenerEstadisticaGrupo(grupo);
 
     const claseGrupo =
       resumen.pruebas[0]?.claseGrupo || "cat-custom";
 
+    const seleccionada =
+      grupo === grupoSeleccionadoTest;
+
     return `
       <button
         type="button"
-        class="area-selector-card ${activa ? "seleccionada" : ""}"
+        class="area-selector-card ${seleccionada ? "seleccionada" : ""}"
         data-grupo-test="${escaparHTML(grupo)}"
-        aria-pressed="${activa}"
+        aria-pressed="${seleccionada}"
       >
+
         <span class="area-selector-icono ${escaparHTML(claseGrupo)}">
           ${obtenerIconoGrupo(grupo)}
         </span>
 
         <span class="area-selector-contenido">
+
           <strong>${escaparHTML(grupo.toUpperCase())}</strong>
-          <small data-grupo-resumen="${escaparHTML(grupo)}">
-            ${resumen.pruebas.length}
-            ${resumen.pruebas.length === 1 ? "prueba" : "pruebas"}
+
+          <small>
+            ${resumen.pruebas.length} pruebas
             · ${resumen.completos}/${resumen.posibles} datos
           </small>
+
         </span>
 
         <span class="area-selector-marca"></span>
+
       </button>
     `;
+
   }).join("");
 
-  navegacion.querySelectorAll("[data-grupo-test]").forEach(boton => {
+  navegacion
+    .querySelectorAll("[data-grupo-test]")
+    .forEach(boton => {
 
-    boton.addEventListener("click", () => {
-      seleccionarGrupoTest(boton.dataset.grupoTest);
+      boton.addEventListener("click",() => {
+
+        seleccionarGrupoTest(
+          boton.dataset.grupoTest
+        );
+
+      });
+
     });
 
-  });
+  if (!grupoSeleccionadoTest) {
+
+    editor.innerHTML = `
+      <div class="editor-inicial">
+        <span class="editor-inicial-icono">◎</span>
+
+        <strong>Elegí el grupo que querés evaluar</strong>
+
+        <p>
+          Al seleccionar un área aparecerán sus pruebas en una fila horizontal.
+          Después podrás elegir una y completar los resultados de cada jugadora.
+        </p>
+      </div>
+    `;
+
+    return;
+  }
 
   renderizarEditorPrueba();
 }
@@ -2957,11 +4288,11 @@ function seleccionarGrupoTest(grupo) {
 
   grupoSeleccionadoTest = grupo;
 
-  const primeraPrueba = columnasActuales.find(
-    col => col.grupo === grupo && !col.esComp
-  );
+  const pruebas =
+    obtenerColumnasPrueba(grupo);
 
-  pruebaSeleccionadaTest = primeraPrueba?.id || "";
+  pruebaSeleccionadaTest =
+    pruebas[0]?.id || "";
 
   filtroJugadorasTest = "todas";
   busquedaJugadorasTest = "";
@@ -2980,40 +4311,34 @@ function seleccionarPruebaTest(id) {
 }
 
 /* =====================================================
-   ESTADO DE CADA JUGADORA
+   PASO 2 Y 3 · PRUEBAS Y LISTA DE JUGADORAS
 ===================================================== */
 
-function calcularEstadoJugadora(prueba, jugadora) {
+function calcularEstadoJugadora(prueba,jugadora) {
 
   const fila = valoresActuales[jugadora] || {};
 
   if (prueba.esCalculadoIMC) {
-    return calcularIMC(fila.peso, fila.altura) !== null;
+
+    return calcularIMC(
+      fila.peso,
+      fila.altura
+    ) !== null;
   }
 
-  return fila[prueba.id] !== undefined &&
-    String(fila[prueba.id]).trim() !== "";
+  return (
+    fila[prueba.id] !== undefined &&
+    String(fila[prueba.id]).trim() !== ""
+  );
 }
-
-/* =====================================================
-   PASO 2 Y PASO 3 · EDITOR DE PRUEBA
-===================================================== */
 
 function renderizarEditorPrueba() {
 
-  const editor = document.getElementById("editorPrueba");
+  const editor =
+    document.getElementById("editorPrueba");
 
-  if (!editor) return;
-
-  const pruebas = columnasActuales
-    .map((col, indice) => ({
-      ...col,
-      indiceOriginal:indice
-    }))
-    .filter(col =>
-      col.grupo === grupoSeleccionadoTest &&
-      !col.esComp
-    );
+  const pruebas =
+    obtenerColumnasPrueba(grupoSeleccionadoTest);
 
   if (!pruebas.length) {
 
@@ -3032,23 +4357,31 @@ function renderizarEditorPrueba() {
   );
 
   if (!prueba) {
+
     prueba = pruebas[0];
+
     pruebaSeleccionadaTest = prueba.id;
   }
 
-  const completados = contarResultadosPrueba(prueba);
-  const total = jugadorasDivision.length;
+  const total =
+    jugadorasDivision.length;
+
+  const completados =
+    contarResultadosPrueba(prueba);
 
   const porcentaje = total
-    ? Math.round(completados / total * 100)
+    ? Math.round(completados/total*100)
     : 0;
 
-  // Pestañas de pruebas del grupo.
+  // Pestañas horizontales de pruebas.
 
-  const selectores = pruebas.map(col => {
+  const pestañas = pruebas.map(col => {
 
-    const cantidad = contarResultadosPrueba(col);
-    const activa = col.id === prueba.id;
+    const cantidad =
+      contarResultadosPrueba(col);
+
+    const activa =
+      col.id === prueba.id;
 
     return `
       <div class="prueba-selector-item ${activa ? "activa" : ""}">
@@ -3059,57 +4392,86 @@ function renderizarEditorPrueba() {
           data-prueba-test="${escaparHTML(col.id)}"
           aria-pressed="${activa}"
         >
+
           ${escaparHTML(col.label)}
-          <span class="prueba-selector-cantidad">${cantidad}/${total}</span>
+
+          <span class="prueba-selector-cantidad">
+            ${cantidad}/${total}
+          </span>
+
         </button>
 
-        ${modoEliminar && puedeEditar ? `
-          <button
-            type="button"
-            class="prueba-selector-eliminar"
-            data-eliminar-prueba="${col.indiceOriginal}"
-            title="Eliminar prueba"
-            aria-label="Eliminar ${escaparHTML(col.label)}"
-          >×</button>
-        ` : ""}
+        ${
+          modoEliminar && puedeEditar
+            ? `<button
+                 type="button"
+                 class="prueba-selector-eliminar"
+                 data-eliminar-prueba="${col.indiceOriginal}"
+                 title="Eliminar prueba"
+               >×</button>`
+            : ""
+        }
 
       </div>
     `;
   }).join("");
 
-  // Tarjetas individuales de jugadoras.
+  // Lista vertical de jugadoras.
 
-  const tarjetas = jugadorasDivision.map((jugadora, indice) => {
+  const tarjetas = jugadorasDivision.map((jugadora,indice) => {
 
     const fila = valoresActuales[jugadora] || {};
 
-    const completada =
-      calcularEstadoJugadora(prueba, jugadora);
+    const completa =
+      calcularEstadoJugadora(prueba,jugadora);
+
+    const puesto =
+      posicionesPorJugadora[jugadora] ||
+      "Sin puesto asignado";
 
     if (prueba.esCalculadoIMC) {
 
-      const imc = calcularIMC(fila.peso, fila.altura);
+      const imc = calcularIMC(
+        fila.peso,
+        fila.altura
+      );
 
       const textoIMC = imc === null
         ? "Pendiente"
-        : imc.toFixed(2).replace(".", ",");
+        : formatearNumero(imc,2);
 
       return `
         <article
-          class="jugadora-test-card ${completada ? "completada" : ""}"
+          class="jugadora-test-card ${completa ? "completada" : ""}"
           data-card-jugadora="${escaparHTML(jugadora)}"
-          data-completada="${completada ? "si" : "no"}"
+          data-completada="${completa ? "si" : "no"}"
         >
 
-          <div class="jugadora-test-cabecera">
-            <span class="jugadora-test-numero">${indice + 1}</span>
-            <strong class="jugadora-test-nombre">${escaparHTML(jugadora)}</strong>
-            <span class="jugadora-test-estado">
-              ${completada ? "Calculado" : "Pendiente"}
+          <div class="jugadora-test-identidad">
+
+            <span class="jugadora-test-numero">
+              ${indice+1}
             </span>
+
+            <div class="jugadora-test-datos-nombre">
+
+              <strong class="jugadora-test-nombre">
+                ${escaparHTML(jugadora)}
+              </strong>
+
+              <small class="jugadora-test-puesto">
+                ${escaparHTML(puesto)}
+              </small>
+
+            </div>
+
+            <span class="jugadora-test-estado">
+              ${completa ? "Calculado" : "Pendiente"}
+            </span>
+
           </div>
 
-          <div class="resultado-imc-test">
+          <div class="jugadora-test-resultado-simple">
             <small>I.M.C. automático</small>
             <strong>${textoIMC}</strong>
           </div>
@@ -3118,7 +4480,8 @@ function renderizarEditorPrueba() {
       `;
     }
 
-    const resultado = fila[prueba.id] ?? "";
+    const resultado =
+      fila[prueba.id] ?? "";
 
     const comparacion = prueba.compId
       ? (fila[prueba.compId] ?? "")
@@ -3126,26 +4489,39 @@ function renderizarEditorPrueba() {
 
     return `
       <article
-        class="jugadora-test-card ${completada ? "completada" : ""}"
+        class="jugadora-test-card ${completa ? "completada" : ""}"
         data-card-jugadora="${escaparHTML(jugadora)}"
-        data-completada="${completada ? "si" : "no"}"
+        data-completada="${completa ? "si" : "no"}"
       >
 
-        <div class="jugadora-test-cabecera">
-          <span class="jugadora-test-numero">${indice + 1}</span>
+        <div class="jugadora-test-identidad">
 
-          <strong class="jugadora-test-nombre">
-            ${escaparHTML(jugadora)}
-          </strong>
+          <span class="jugadora-test-numero">
+            ${indice+1}
+          </span>
+
+          <div class="jugadora-test-datos-nombre">
+
+            <strong class="jugadora-test-nombre">
+              ${escaparHTML(jugadora)}
+            </strong>
+
+            <small class="jugadora-test-puesto">
+              ${escaparHTML(puesto)}
+            </small>
+
+          </div>
 
           <span class="jugadora-test-estado">
-            ${completada ? "Completado" : "Pendiente"}
+            ${completa ? "Completado" : "Pendiente"}
           </span>
+
         </div>
 
         <div class="jugadora-test-campos ${prueba.compId ? "con-comp" : ""}">
 
           <div class="campo-resultado-test">
+
             <label>Resultado</label>
 
             <input
@@ -3158,39 +4534,45 @@ function renderizarEditorPrueba() {
               data-prueba-principal="${escaparHTML(prueba.id)}"
               onchange="actualizarCeldaDesdeGrupo(this)"
               ${!puedeEditar ? "disabled" : ""}
-              aria-label="Resultado de ${escaparHTML(prueba.label)} para ${escaparHTML(jugadora)}"
+              aria-label="Resultado ${escaparHTML(prueba.label)} de ${escaparHTML(jugadora)}"
             >
+
           </div>
 
-          ${prueba.compId ? `
-            <div class="campo-resultado-test">
-              <label>COMP · Anterior</label>
+          ${
+            prueba.compId
+              ? `<div class="campo-resultado-test">
 
-              <input
-                type="text"
-                inputmode="${prueba.grupo === "POSTURAL" ? "text" : "decimal"}"
-                value="${escaparHTML(comparacion)}"
-                placeholder="Comparación"
-                data-jugadora="${escaparHTML(jugadora)}"
-                data-columna="${escaparHTML(prueba.compId)}"
-                data-prueba-principal="${escaparHTML(prueba.id)}"
-                onchange="actualizarCeldaDesdeGrupo(this)"
-                ${!puedeEditar ? "disabled" : ""}
-                aria-label="Comparación anterior para ${escaparHTML(jugadora)}"
-              >
-            </div>
-          ` : ""}
+                  <label>COMP · Anterior</label>
+
+                  <input
+                    type="text"
+                    inputmode="decimal"
+                    value="${escaparHTML(comparacion)}"
+                    placeholder="Comparación"
+                    data-jugadora="${escaparHTML(jugadora)}"
+                    data-columna="${escaparHTML(prueba.compId)}"
+                    data-prueba-principal="${escaparHTML(prueba.id)}"
+                    onchange="actualizarCeldaDesdeGrupo(this)"
+                    ${!puedeEditar ? "disabled" : ""}
+                    aria-label="Comparación anterior de ${escaparHTML(jugadora)}"
+                  >
+
+                </div>`
+              : ""
+          }
 
         </div>
+
       </article>
     `;
   }).join("");
 
   const descripcion = prueba.esCalculadoIMC
-    ? "Este indicador se obtiene automáticamente al completar peso y altura en el grupo Índices."
+    ? "El IMC se calcula automáticamente con los datos de peso y altura."
     : prueba.compId
-      ? "Cargá el resultado actual y, cuando corresponda, el valor anterior en COMP."
-      : "Ingresá el resultado de cada jugadora. Los datos se guardan automáticamente al salir del campo.";
+      ? "Ingresá el resultado actual y, si corresponde, el valor anterior en COMP."
+      : "Ingresá el resultado de cada jugadora. Se guarda automáticamente al salir del campo.";
 
   editor.innerHTML = `
 
@@ -3199,8 +4581,10 @@ function renderizarEditorPrueba() {
       <div class="editor-prueba-cabecera-superior">
 
         <div>
+
           <span class="editor-prueba-kicker">
-            ${escaparHTML(grupoSeleccionadoTest.toUpperCase())} · PRUEBA SELECCIONADA
+            ${escaparHTML(grupoSeleccionadoTest.toUpperCase())}
+            · PRUEBA SELECCIONADA
           </span>
 
           <h4 class="editor-prueba-titulo">
@@ -3210,16 +4594,23 @@ function renderizarEditorPrueba() {
           <p class="editor-prueba-descripcion">
             ${descripcion}
           </p>
+
         </div>
 
-        <span class="editor-progreso-texto" id="progresoTextoPrueba">
+        <span
+          class="editor-progreso-texto"
+          id="progresoTextoPrueba"
+        >
           ${completados} de ${total}
         </span>
 
       </div>
 
       <div class="editor-progreso-barra">
-        <span id="progresoBarraPrueba" style="width:${porcentaje}%"></span>
+        <span
+          id="progresoBarraPrueba"
+          style="width:${porcentaje}%"
+        ></span>
       </div>
 
     </div>
@@ -3231,18 +4622,25 @@ function renderizarEditorPrueba() {
       </span>
 
       <div class="selector-pruebas">
-        ${selectores}
+        ${pestañas}
       </div>
 
     </div>
 
     <div class="paso-carga-test paso-completar-test">
+
       <span class="numero-paso">3</span>
 
       <div>
-        <strong>Completá los resultados por jugadora</strong>
-        <small>Ingresá el valor de la prueba en cada tarjeta. Los datos se guardan automáticamente.</small>
+
+        <strong>Resultados por jugadora</strong>
+
+        <small>
+          Las jugadoras aparecen en una lista individual, una debajo de la otra.
+        </small>
+
       </div>
+
     </div>
 
     <div class="herramientas-jugadoras-test">
@@ -3253,10 +4651,10 @@ function renderizarEditorPrueba() {
         id="buscarJugadorasEnPrueba"
         placeholder="Buscar jugadora..."
         value="${escaparHTML(busquedaJugadorasTest)}"
-        aria-label="Buscar jugadora dentro de esta prueba"
+        aria-label="Buscar jugadora"
       >
 
-      <div class="filtros-estado-test" role="group" aria-label="Filtrar jugadoras">
+      <div class="filtros-estado-test">
 
         <button
           type="button"
@@ -3286,67 +4684,84 @@ function renderizarEditorPrueba() {
 
     </div>
 
-    <div class="lista-jugadoras-test" id="listaJugadorasTest">
+    <div
+      class="lista-jugadoras-test"
+      id="listaJugadorasTest"
+    >
 
       ${
         jugadorasDivision.length
           ? tarjetas
-          : `<div class="lista-jugadoras-vacia">No hay jugadoras cargadas para esta categoría.</div>`
+          : `<div class="lista-jugadoras-vacia">
+               No hay jugadoras cargadas para esta categoría.
+             </div>`
       }
 
     </div>
 
     <div class="ayuda-resultado-test">
-      Consejo: podés filtrar por “Pendientes” para completar primero a las jugadoras que todavía no tienen un resultado registrado.
+      Consejo: podés filtrar por “Pendientes” para encontrar rápidamente las jugadoras que todavía no tienen un resultado registrado.
     </div>
 
   `;
 
-  // Selección de otra prueba.
+  // Elegir otra prueba.
 
   editor.querySelectorAll("[data-prueba-test]").forEach(boton => {
 
-    boton.addEventListener("click", () => {
-      seleccionarPruebaTest(boton.dataset.pruebaTest);
+    boton.addEventListener("click",() => {
+      seleccionarPruebaTest(
+        boton.dataset.pruebaTest
+      );
     });
 
   });
 
-  // Eliminación de pruebas.
+  // Eliminar pruebas.
 
   editor.querySelectorAll("[data-eliminar-prueba]").forEach(boton => {
 
-    boton.addEventListener("click", event => {
+    boton.addEventListener("click",event => {
+
       event.stopPropagation();
-      eliminarColumna(Number(boton.dataset.eliminarPrueba));
+
+      eliminarColumna(
+        Number(boton.dataset.eliminarPrueba)
+      );
+
     });
 
   });
 
-  // Filtros de estado.
+  // Filtros.
 
   editor.querySelectorAll("[data-filtro-test]").forEach(boton => {
 
-    boton.addEventListener("click", () => {
-      cambiarFiltroJugadorasTest(boton.dataset.filtroTest);
+    boton.addEventListener("click",() => {
+
+      cambiarFiltroJugadorasTest(
+        boton.dataset.filtroTest
+      );
+
     });
 
   });
 
-  // Búsqueda por nombre.
+  // Buscador.
 
   const buscador =
     document.getElementById("buscarJugadorasEnPrueba");
 
   if (buscador) {
 
-    buscador.addEventListener("input", () => {
+    buscador.addEventListener("input",() => {
 
       busquedaJugadorasTest = buscador.value;
 
       aplicarFiltrosJugadorasTest();
     });
   }
+
 }
 
 /* =====================================================
@@ -3362,35 +4777,45 @@ function cambiarFiltroJugadorasTest(filtro) {
 
 function aplicarFiltrosJugadorasTest() {
 
-  const termino = String(busquedaJugadorasTest || "")
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .trim();
+  const termino = normalizarTexto(
+    busquedaJugadorasTest
+  );
 
-  document.querySelectorAll(".jugadora-test-card").forEach(card => {
+  document.querySelectorAll(
+    ".jugadora-test-card"
+  ).forEach(card => {
 
-    const nombre = String(card.dataset.cardJugadora || "")
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toLowerCase();
+    const nombre = normalizarTexto(
+      card.dataset.cardJugadora
+    );
 
-    const coincideNombre = nombre.includes(termino);
+    const coincideNombre =
+      nombre.includes(termino);
 
-    const completada = card.dataset.completada === "si";
+    const completada =
+      card.dataset.completada === "si";
 
     const coincideEstado =
       filtroJugadorasTest === "todas" ||
-      (filtroJugadorasTest === "pendientes" && !completada) ||
-      (filtroJugadorasTest === "completadas" && completada);
+      (
+        filtroJugadorasTest === "pendientes" &&
+        !completada
+      ) ||
+      (
+        filtroJugadorasTest === "completadas" &&
+        completada
+      );
 
     card.style.display =
-      coincideNombre && coincideEstado ? "" : "none";
+      coincideNombre && coincideEstado
+        ? ""
+        : "none";
   });
+
 }
 
 /* =====================================================
-   ACTUALIZAR PROGRESOS
+   ACTUALIZACIÓN DE PROGRESO
 ===================================================== */
 
 function actualizarProgresosTest() {
@@ -3399,82 +4824,80 @@ function actualizarProgresosTest() {
     col => col.id === pruebaSeleccionadaTest
   );
 
-  if (prueba) {
+  if (!prueba) return;
 
-    const completados = contarResultadosPrueba(prueba);
-    const total = jugadorasDivision.length;
+  const completados =
+    contarResultadosPrueba(prueba);
 
-    const porcentaje = total
-      ? Math.round(completados / total * 100)
-      : 0;
+  const total = jugadorasDivision.length;
 
-    const texto =
-      document.getElementById("progresoTextoPrueba");
+  const porcentaje = total
+    ? Math.round(completados/total*100)
+    : 0;
 
-    const barra =
-      document.getElementById("progresoBarraPrueba");
+  const texto =
+    document.getElementById("progresoTextoPrueba");
 
-    if (texto) {
-      texto.textContent = `${completados} de ${total}`;
-    }
+  const barra =
+    document.getElementById("progresoBarraPrueba");
 
-    if (barra) {
-      barra.style.width = porcentaje + "%";
-    }
-
-    const botonPrueba = [
-      ...document.querySelectorAll("[data-prueba-test]")
-    ].find(elemento =>
-      elemento.dataset.pruebaTest === prueba.id
-    );
-
-    const selector =
-      botonPrueba?.querySelector(".prueba-selector-cantidad");
-
-    if (selector) {
-      selector.textContent = `${completados}/${total}`;
-    }
+  if (texto) {
+    texto.textContent =
+      `${completados} de ${total}`;
   }
 
-  document.querySelectorAll("[data-grupo-test]").forEach(boton => {
+  if (barra) {
+    barra.style.width =
+      porcentaje + "%";
+  }
 
-    const grupo = boton.dataset.grupoTest;
-    const resumen = obtenerEstadisticaGrupo(grupo);
+  document.querySelectorAll(
+    "[data-prueba-test]"
+  ).forEach(boton => {
 
-    const texto = [
-      ...boton.querySelectorAll("[data-grupo-resumen]")
-    ].find(elemento =>
-      elemento.dataset.grupoResumen === grupo
-    );
+    if (boton.dataset.pruebaTest !== prueba.id) {
+      return;
+    }
 
-    if (texto) {
-      texto.textContent =
-        `${resumen.pruebas.length} ` +
-        `${resumen.pruebas.length === 1 ? "prueba" : "pruebas"} · ` +
-        `${resumen.completos}/${resumen.posibles} datos`;
+    const cantidad =
+      boton.querySelector(".prueba-selector-cantidad");
+
+    if (cantidad) {
+      cantidad.textContent =
+        `${completados}/${total}`;
     }
 
   });
+
 }
 
 function actualizarEstadoTarjetaJugadora(input) {
 
-  const jugadora = input.dataset.jugadora;
-  const idPrueba = input.dataset.pruebaPrincipal;
+  const jugadora =
+    input.dataset.jugadora;
+
+  const idPrueba =
+    input.dataset.pruebaPrincipal;
 
   const prueba = columnasActuales.find(
     col => col.id === idPrueba
   );
 
-  const card = input.closest(".jugadora-test-card");
+  const card =
+    input.closest(".jugadora-test-card");
 
   if (!prueba || !card) return;
 
-  const completa = calcularEstadoJugadora(prueba, jugadora);
+  const completa =
+    calcularEstadoJugadora(prueba,jugadora);
 
-  card.dataset.completada = completa ? "si" : "no";
+  card.dataset.completada =
+    completa ? "si" : "no";
 
-  card.classList.toggle("completada", completa);
+  card.classList.toggle(
+    "completada",
+    completa
+  );
 
   const estado =
     card.querySelector(".jugadora-test-estado");
@@ -3483,25 +4906,32 @@ function actualizarEstadoTarjetaJugadora(input) {
     estado.textContent =
       completa ? "Completado" : "Pendiente";
   }
+
 }
 
 /* =====================================================
-   GUARDAR RESULTADOS DE CADA JUGADORA
+   GUARDAR CADA RESULTADO
 ===================================================== */
 
 window.actualizarCeldaDesdeGrupo = function(input) {
 
   if (!puedeEditar) return;
 
-  const jugadora = input.dataset.jugadora;
-  const colId = input.dataset.columna;
-  const valor = input.value.trim();
+  const jugadora =
+    input.dataset.jugadora;
+
+  const colId =
+    input.dataset.columna;
+
+  const valor =
+    input.value.trim();
 
   if (!valoresActuales[jugadora]) {
     valoresActuales[jugadora] = {};
   }
 
-  valoresActuales[jugadora][colId] = valor;
+  valoresActuales[jugadora][colId] =
+    valor;
 
   actualizarEstadoTarjetaJugadora(input);
 
@@ -3510,19 +4940,186 @@ window.actualizarCeldaDesdeGrupo = function(input) {
   aplicarFiltrosJugadorasTest();
 
   programarGuardadoNube();
+
+  if (pestañaActual === "estadisticas") {
+    renderizarEstadisticas();
+  }
+
 };
 
-function renderizarTablaPlanilla() {
+/* =====================================================
+   AGREGAR PRUEBA
+===================================================== */
+
+window.abrirModalAgregarTest = function() {
+
+  document.getElementById("formAgregarTest").reset();
+
+  document
+    .getElementById("modalAgregarTest")
+    .classList.add("activo");
+};
+
+window.cerrarModal = function(id) {
+
+  document
+    .getElementById(id)
+    .classList.remove("activo");
+};
+
+window.agregarNuevaColumnaTest = function(event) {
+
+  event.preventDefault();
+
+  if (!puedeEditar) return;
+
+  const grupo =
+    document.getElementById("categoriaTest").value;
+
+  const nombre =
+    document.getElementById("nombreTest").value.trim();
+
+  const criterio =
+    document.getElementById("criterioTest").value;
+
+  const incluirComp =
+    document.getElementById("incluirComp").checked;
+
+  if (!nombre) return;
+
+  const mapaClases = {
+    "SALTOS":"cat-saltos",
+    "VELOCIDAD":"cat-velocidad",
+    "Vo2 máx":"cat-vo2",
+    "POSTURAL":"cat-postural",
+    "AGILIDAD":"cat-agilidad",
+    "INDICES":"cat-indices",
+    "OTRO TEST":"cat-custom"
+  };
+
+  const baseId =
+    "test_" + Date.now();
+
+  const compId = incluirComp
+    ? baseId + "_comp"
+    : null;
+
+  columnasActuales.push({
+
+    id:baseId,
+    grupo:grupo,
+    claseGrupo:mapaClases[grupo] || "cat-custom",
+    label:nombre,
+    criterio:criterio,
+    compId:compId
+
+  });
+
+  if (incluirComp) {
+
+    columnasActuales.push({
+
+      id:compId,
+      grupo:grupo,
+      claseGrupo:mapaClases[grupo] || "cat-custom",
+      label:"COMP",
+      esComp:true
+
+    });
+
+  }
+
+  grupoSeleccionadoTest = grupo;
+  pruebaSeleccionadaTest = baseId;
+
+  filtroJugadorasTest = "todas";
+  busquedaJugadorasTest = "";
+
+  cerrarModal("modalAgregarTest");
+
+  renderizarTablaPlanilla();
+
+  programarGuardadoNube();
+};
+
+/* =====================================================
+   GESTIONAR Y ELIMINAR COLUMNAS
+===================================================== */
+
+window.alternarModoEliminar = function() {
+
+  modoEliminar = !modoEliminar;
+
+  const boton =
+    document.getElementById("btnModoEliminar");
+
+  boton.textContent = modoEliminar
+    ? "Finalizar gestión"
+    : "Gestionar pruebas";
+
+  boton.classList.toggle(
+    "modo-activo",
+    modoEliminar
+  );
+
   renderizarGruposTesteos();
+};
+
+window.eliminarColumna = function(indice) {
+
+  if (!puedeEditar) return;
+
+  const col = columnasActuales[indice];
+
+  if (!col) return;
+
+  if (!confirm(
+    `¿Quitar la prueba "${col.label}" del grupo ${col.grupo}?`
+  )) {
+    return;
+  }
+
+  const idEliminado = col.id;
+
+  columnasActuales.splice(indice,1);
+
+  if (col.compId) {
+
+    columnasActuales = columnasActuales.filter(
+      item => item.id !== col.compId
+    );
+  }
+
+  if (pruebaSeleccionadaTest === idEliminado) {
+    pruebaSeleccionadaTest = "";
+  }
+
+  renderizarTablaPlanilla();
+
+  actualizarSelectoresEstadisticas();
+
+  programarGuardadoNube();
+};
+
+/* =====================================================
+   FUNCIÓN DE RENDERIZADO PRINCIPAL
+===================================================== */
+
+function renderizarTablaPlanilla() {
+
+  renderizarGruposTesteos();
+
+  actualizarSelectoresEstadisticas();
+
+  if (pestañaActual === "estadisticas") {
+    renderizarEstadisticas();
+  }
+
 }
 
 /* =====================================================
-   BIBLIOTECA TEST · PLANILLAS GUARDADAS
+   BIBLIOTECA TEST
 ===================================================== */
-
-let planillasBiblioteca = [];
-let planillaBibliotecaActiva = null;
-let jugadoresBibliotecaActiva = [];
 
 function leerBibliotecaLocal() {
 
@@ -3532,11 +5129,15 @@ function leerBibliotecaLocal() {
       localStorage.getItem("bibliotecaTesteosADIUR") || "[]"
     );
 
-    return Array.isArray(datos) ? datos : [];
+    return Array.isArray(datos)
+      ? datos
+      : [];
 
   } catch (e) {
+
     return [];
   }
+
 }
 
 function escribirBibliotecaLocal(lista) {
@@ -3545,21 +5146,26 @@ function escribirBibliotecaLocal(lista) {
     "bibliotecaTesteosADIUR",
     JSON.stringify(lista)
   );
+
 }
 
 function resumirPlanilla(datos) {
 
-  const columnas = Array.isArray(datos.columnas)
-    ? datos.columnas
-    : [];
+  const columnas =
+    Array.isArray(datos.columnas)
+      ? datos.columnas
+      : [];
 
-  const valores = datos.valores || {};
+  const valores =
+    datos.valores || {};
 
-  const jugadoras = Array.isArray(datos.jugadoras)
-    ? datos.jugadoras
-    : Object.keys(valores).sort((a,b) => a.localeCompare(b));
+  const jugadoras =
+    Array.isArray(datos.jugadoras)
+      ? datos.jugadoras
+      : Object.keys(valores).sort((a,b) => a.localeCompare(b));
 
-  const pruebas = columnas.filter(c => !c.esComp);
+  const pruebas =
+    columnas.filter(c => !c.esComp);
 
   let registros = 0;
 
@@ -3571,7 +5177,9 @@ function resumirPlanilla(datos) {
 
       if (col.esCalculadoIMC) {
 
-        if (calcularIMC(fila.peso, fila.altura) !== null) {
+        if (
+          calcularIMC(fila.peso,fila.altura) !== null
+        ) {
           registros++;
         }
 
@@ -3583,18 +5191,27 @@ function resumirPlanilla(datos) {
       }
 
     });
+
   });
 
   return {
+
     jugadoras:jugadoras.length,
     pruebas:pruebas.length,
     registros,
-    grupos:[...new Set(pruebas.map(c => c.grupo))]
+
+    grupos:[
+      ...new Set(
+        pruebas.map(c => c.grupo)
+      )
+    ]
+
   };
+
 }
 
 /* =====================================================
-   RECUPERAR BIBLIOTECA TEST
+   CARGAR BIBLIOTECA TEST
 ===================================================== */
 
 async function cargarBibliotecaTest() {
@@ -3604,7 +5221,7 @@ async function cargarBibliotecaTest() {
 
   const mapa = new Map();
 
-  // Respaldo local.
+  // Recuperación local.
 
   leerBibliotecaLocal().forEach(item => {
 
@@ -3612,19 +5229,19 @@ async function cargarBibliotecaTest() {
       item.division === division &&
       item.tipo === "biblioteca_testeos"
     ) {
-      mapa.set(item.clave, item);
+      mapa.set(item.clave,item);
     }
 
   });
 
-  // Recuperación desde la misma colección Firestore.
+  // Recuperación desde Firestore.
 
   if (nubeActiva && db) {
 
     try {
 
       const snap = await getDocs(
-        collection(db, "testeos_adiur")
+        collection(db,"testeos_adiur")
       );
 
       snap.forEach(docSnap => {
@@ -3638,20 +5255,22 @@ async function cargarBibliotecaTest() {
           data.clave
         ) {
 
-          mapa.set(data.clave, {
-            ...data,
-            idBiblioteca:docSnap.id
-          });
+          mapa.set(
+            data.clave,
+            {
+              ...data,
+              idBiblioteca:docSnap.id
+            }
+          );
+
         }
 
       });
 
-      // Actualizar el respaldo local sin borrar otras categorías.
-
       const todos = leerBibliotecaLocal()
         .filter(item => item.division !== division);
 
-      todos.push(...[...mapa.values()]);
+      todos.push(...mapa.values());
 
       escribirBibliotecaLocal(todos);
 
@@ -3666,17 +5285,23 @@ async function cargarBibliotecaTest() {
 
   planillasBiblioteca = [...mapa.values()].sort((a,b) => {
 
-    const fa = new Date(a.fechaGuardado || 0).getTime();
-    const fb = new Date(b.fechaGuardado || 0).getTime();
+    const fa =
+      new Date(a.fechaGuardado || 0).getTime();
 
-    return fb - fa;
+    const fb =
+      new Date(b.fechaGuardado || 0).getTime();
+
+    return fb-fa;
   });
 
   renderizarBibliotecaTest();
+
+  actualizarSelectoresEstadisticas();
+
 }
 
 /* =====================================================
-   RENDERIZAR LAS TARJETAS DE BIBLIOTECA TEST
+   RENDERIZAR FICHAS DE BIBLIOTECA
 ===================================================== */
 
 function renderizarBibliotecaTest() {
@@ -3702,6 +5327,7 @@ function renderizarBibliotecaTest() {
     contenedor.innerHTML = `
       <div class="biblioteca-vacia">
         Todavía no hay planillas guardadas para esta categoría.
+
         <span>
           Cuando termines de cargar una evaluación,
           presioná “Guardar planilla”.
@@ -3712,94 +5338,110 @@ function renderizarBibliotecaTest() {
     return;
   }
 
-  contenedor.innerHTML = planillasBiblioteca.map((item, indice) => {
+  contenedor.innerHTML =
+    planillasBiblioteca.map((item,indice) => {
 
-    const resumen = resumirPlanilla(item);
+      const resumen =
+        resumirPlanilla(item);
 
-    const fecha = item.fechaGuardado
-      ? new Date(item.fechaGuardado).toLocaleDateString("es-AR")
-      : "Sin fecha";
+      const fecha =
+        item.fechaGuardado
+          ? new Date(item.fechaGuardado).toLocaleDateString("es-AR")
+          : "Sin fecha";
 
-    const chips = resumen.grupos.slice(0,5).map(grupo =>
-      `<span>${escaparHTML(grupo)}</span>`
-    ).join("");
+      const chips =
+        resumen.grupos.slice(0,5).map(grupo =>
+          `<span>${escaparHTML(grupo)}</span>`
+        ).join("");
 
-    return `
-      <article
-        class="tarjeta-biblioteca"
-        data-abrir-planilla="${indice}"
-        tabindex="0"
-        role="button"
-        aria-label="Abrir planilla ${escaparHTML(item.mes)}"
-      >
-
-        <div class="biblioteca-tarjeta-arriba">
-          <span class="biblioteca-chip">
-            ${escaparHTML(item.division)}
-          </span>
-
-          <span class="biblioteca-fecha">
-            ${escaparHTML(fecha)}
-          </span>
-        </div>
-
-        <h4>${escaparHTML(item.mes || "Período sin nombre")}</h4>
-
-        <p>Evaluación física · ADIUR FEMENINO</p>
-
-        <div class="biblioteca-mini-datos">
-          <span>${resumen.jugadoras} jugadoras</span>
-          <span>${resumen.pruebas} pruebas</span>
-          <span>${resumen.registros} resultados</span>
-        </div>
-
-        <div class="biblioteca-grupos">
-          ${chips}
-        </div>
-
-        <button
-          class="biblioteca-abrir"
-          type="button"
+      return `
+        <article
+          class="tarjeta-biblioteca"
           data-abrir-planilla="${indice}"
+          tabindex="0"
+          role="button"
+          aria-label="Abrir planilla ${escaparHTML(item.mes)}"
         >
-          Abrir evaluación completa ↗
-        </button>
 
-      </article>
-    `;
-  }).join("");
+          <div class="biblioteca-tarjeta-arriba">
 
-  // Abrir la ficha seleccionada.
+            <span class="biblioteca-chip">
+              ${escaparHTML(item.division)}
+            </span>
 
-  contenedor.querySelectorAll(".tarjeta-biblioteca").forEach(elemento => {
+            <span class="biblioteca-fecha">
+              ${escaparHTML(fecha)}
+            </span>
 
-    const abrir = () => {
+          </div>
 
-      const indice =
-        Number(elemento.dataset.abrirPlanilla);
+          <h4>
+            ${escaparHTML(item.mes || "Período sin nombre")}
+          </h4>
 
-      if (Number.isInteger(indice)) {
-        abrirPlanillaBiblioteca(indice);
-      }
-    };
+          <p>Evaluación física · ADIUR FEMENINO</p>
 
-    elemento.addEventListener("click", abrir);
+          <div class="biblioteca-mini-datos">
 
-    elemento.addEventListener("keydown", event => {
+            <span>${resumen.jugadoras} jugadoras</span>
+            <span>${resumen.pruebas} pruebas</span>
+            <span>${resumen.registros} resultados</span>
 
-      if (event.key === "Enter" || event.key === " ") {
+          </div>
 
-        event.preventDefault();
+          <div class="biblioteca-grupos">
+            ${chips}
+          </div>
 
-        abrir();
-      }
+          <button
+            class="biblioteca-abrir"
+            type="button"
+            tabindex="-1"
+          >
+            Abrir evaluación completa ↗
+          </button>
+
+        </article>
+      `;
+
+    }).join("");
+
+  contenedor
+    .querySelectorAll(".tarjeta-biblioteca")
+    .forEach(elemento => {
+
+      const abrir = () => {
+
+        const indice =
+          Number(elemento.dataset.abrirPlanilla);
+
+        if (Number.isInteger(indice)) {
+          abrirPlanillaBiblioteca(indice);
+        }
+      };
+
+      elemento.addEventListener("click",abrir);
+
+      elemento.addEventListener("keydown",event => {
+
+        if (
+          event.key === "Enter" ||
+          event.key === " "
+        ) {
+          event.preventDefault();
+          abrir();
+        }
+
+      });
 
     });
-  });
+
 }
 
 /* =====================================================
    GUARDAR PLANILLA EN BIBLIOTECA TEST
+
+   EL DOCUMENTO OPERATIVO ORIGINAL MANTIENE SU PAYLOAD.
 ===================================================== */
 
 window.guardarPlanillaEnBiblioteca = async function() {
@@ -3848,44 +5490,66 @@ window.guardarPlanillaEnBiblioteca = async function() {
     return;
   }
 
-  const clave = obtenerClavePlanilla(division, periodo);
+  const clave =
+    obtenerClavePlanilla(division,periodo);
 
-  const ahora = new Date().toISOString();
+  const ahora =
+    new Date().toISOString();
 
-  // Payload de trabajo con la estructura original.
+  // Payload original de la planilla operativa.
 
   const payload = {
+
     division,
     mes:periodo,
     columnas:columnasActuales,
     valores:valoresActuales,
     actualizadoPor:usuarioGuardado,
     ultimaActualizacion:ahora
+
   };
 
-  // Snapshot independiente de Biblioteca Test.
+  // Snapshot independiente para Biblioteca Test.
 
   const snapshot = {
+
     tipo:"biblioteca_testeos",
     clave,
     division,
     mes:periodo,
-    columnas:JSON.parse(JSON.stringify(columnasActuales)),
-    valores:JSON.parse(JSON.stringify(valoresActuales)),
+
+    columnas:JSON.parse(
+      JSON.stringify(columnasActuales)
+    ),
+
+    valores:JSON.parse(
+      JSON.stringify(valoresActuales)
+    ),
+
     jugadoras:[...jugadorasDivision],
+
+    posiciones:{
+      ...posicionesPorJugadora
+    },
+
     actualizadoPor:usuarioGuardado,
     fechaGuardado:ahora
+
   };
 
-  const marcadoresLocales = leerBibliotecaLocal().filter(
-    item => item.clave !== clave || item.division !== division
-  );
+  // Guardado local de Biblioteca.
+
+  const marcadoresLocales =
+    leerBibliotecaLocal().filter(item =>
+      item.clave !== clave ||
+      item.division !== division
+    );
 
   marcadoresLocales.push(snapshot);
 
   escribirBibliotecaLocal(marcadoresLocales);
 
-  // Guardar también el documento de trabajo original.
+  // Se conserva el documento operativo original.
 
   localStorage.setItem(
     "testeos_adiur_" + clave,
@@ -3902,24 +5566,34 @@ window.guardarPlanillaEnBiblioteca = async function() {
 
     if (nubeActiva && db) {
 
+      // Documento operativo original.
+
       await setDoc(
-        doc(db, "testeos_adiur", clave),
+        doc(db,"testeos_adiur",clave),
         payload
       );
 
+      // Documento independiente de Biblioteca Test.
+
       await setDoc(
-        doc(db, "testeos_adiur", "__biblioteca__" + clave),
+        doc(db,"testeos_adiur","__biblioteca__"+clave),
         snapshot
       );
 
-      actualizarEstadoNube("", "☁️ Guardado en la nube");
+      actualizarEstadoNube(
+        "",
+        "☁️ Guardado en la nube"
+      );
 
       estado.textContent =
         "Planilla guardada en la nube y agregada a Biblioteca Test.";
 
     } else {
 
-      actualizarEstadoNube("", "💾 Guardado localmente");
+      actualizarEstadoNube(
+        "",
+        "💾 Guardado localmente"
+      );
 
       estado.textContent =
         "Planilla guardada localmente y agregada a Biblioteca Test.";
@@ -3927,10 +5601,10 @@ window.guardarPlanillaEnBiblioteca = async function() {
 
     await cargarBibliotecaTest();
 
-  } catch (error) {
+  } catch(error) {
 
     console.error(
-      "Error guardando la planilla en Biblioteca Test:",
+      "Error guardando planilla en Biblioteca Test:",
       error
     );
 
@@ -3944,26 +5618,30 @@ window.guardarPlanillaEnBiblioteca = async function() {
     boton.disabled = false;
     boton.textContent = "Guardar planilla";
   }
+
 };
 
 /* =====================================================
-   CONSTRUIR PLANILLA PARA VISTA AMPLIADA Y PDF
+   CONSTRUIR DOCUMENTO DE PLANILLA
 ===================================================== */
 
-function construirDocumentoPlanilla(datos, listaJugadoras) {
+function construirDocumentoPlanilla(datos,listaJugadoras) {
 
   const division = datos.division || "";
   const periodo = datos.mes || "";
 
-  const columnas = Array.isArray(datos.columnas)
-    ? datos.columnas
-    : [];
+  const columnas =
+    Array.isArray(datos.columnas)
+      ? datos.columnas
+      : [];
 
-  const valores = datos.valores || {};
+  const valores =
+    datos.valores || {};
 
-  const jugadoras = Array.isArray(listaJugadoras)
-    ? listaJugadoras
-    : [];
+  const jugadoras =
+    Array.isArray(listaJugadoras)
+      ? listaJugadoras
+      : [];
 
   const fecha = datos.fechaGuardado
     ? new Date(datos.fechaGuardado).toLocaleDateString("es-AR")
@@ -3972,7 +5650,7 @@ function construirDocumentoPlanilla(datos, listaJugadoras) {
   if (!jugadoras.length) {
 
     return `
-      <div class="preview-vacio">
+      <div class="estadistica-vacia">
         Esta evaluación no contiene jugadoras para mostrar.
       </div>
     `;
@@ -3982,9 +5660,11 @@ function construirDocumentoPlanilla(datos, listaJugadoras) {
 
   columnas.forEach(col => {
 
-    const ultimo = grupos[grupos.length - 1];
+    const ultimo =
+      grupos[grupos.length-1];
 
     if (ultimo && ultimo.nombre === col.grupo) {
+
       ultimo.span++;
 
     } else {
@@ -3994,6 +5674,7 @@ function construirDocumentoPlanilla(datos, listaJugadoras) {
         clase:col.claseGrupo || "cat-custom",
         span:1
       });
+
     }
 
   });
@@ -4010,9 +5691,10 @@ function construirDocumentoPlanilla(datos, listaJugadoras) {
     </th>
   `).join("");
 
-  const htmlFilas = jugadoras.map((jugadora, indice) => {
+  const htmlFilas = jugadoras.map((jugadora,indice) => {
 
-    const fila = valores[jugadora] || {};
+    const fila =
+      valores[jugadora] || {};
 
     const celdas = columnas.map(col => {
 
@@ -4020,16 +5702,20 @@ function construirDocumentoPlanilla(datos, listaJugadoras) {
 
       if (col.esCalculadoIMC) {
 
-        const imc = calcularIMC(fila.peso, fila.altura);
+        const imc = calcularIMC(
+          fila.peso,
+          fila.altura
+        );
 
         valor = imc === null
           ? "—"
-          : imc.toFixed(2).replace(".", ",");
+          : imc.toFixed(2).replace(".",",");
 
       } else {
 
         valor =
-          fila[col.id] === undefined || fila[col.id] === ""
+          fila[col.id] === undefined ||
+          fila[col.id] === ""
             ? "—"
             : fila[col.id];
       }
@@ -4040,7 +5726,7 @@ function construirDocumentoPlanilla(datos, listaJugadoras) {
 
     return `
       <tr>
-        <td class="print-num">${indice + 1}</td>
+        <td class="print-num">${indice+1}</td>
         <td class="print-nombre">${escaparHTML(jugadora)}</td>
         ${celdas}
       </tr>
@@ -4055,12 +5741,17 @@ function construirDocumentoPlanilla(datos, listaJugadoras) {
 
     jugadoras.forEach(jugadora => {
 
-      const fila = valores[jugadora] || {};
+      const fila =
+        valores[jugadora] || {};
+
       let numero = NaN;
 
       if (col.esCalculadoIMC) {
 
-        const imc = calcularIMC(fila.peso, fila.altura);
+        const imc = calcularIMC(
+          fila.peso,
+          fila.altura
+        );
 
         if (imc !== null) {
           numero = imc;
@@ -4082,7 +5773,7 @@ function construirDocumentoPlanilla(datos, listaJugadoras) {
       <td>
         ${
           cantidad
-            ? (suma / cantidad).toFixed(2).replace(".", ",")
+            ? (suma/cantidad).toFixed(2).replace(".",",")
             : "—"
         }
       </td>
@@ -4101,12 +5792,20 @@ function construirDocumentoPlanilla(datos, listaJugadoras) {
       >
 
       <div class="planilla-cabecera-texto">
-        <strong>ADIUR FEMENINO · ${escaparHTML(division.toUpperCase())}</strong>
-        <span>TESTEOS Y EVALUACIONES FÍSICAS</span>
+
+        <strong>
+          ADIUR FEMENINO · ${escaparHTML(division.toUpperCase())}
+        </strong>
+
+        <span>
+          TESTEOS Y EVALUACIONES FÍSICAS
+        </span>
+
         <small>
           ${escaparHTML(periodo.toUpperCase())}
           · REGISTRO DE RESULTADOS · ${fecha}
         </small>
+
       </div>
 
     </div>
@@ -4120,6 +5819,7 @@ function construirDocumentoPlanilla(datos, listaJugadoras) {
       <table class="tabla-print">
 
         <thead>
+
           <tr>
             <th rowspan="2" class="print-num">N°</th>
             <th rowspan="2" class="print-nombre">JUGADORA</th>
@@ -4129,6 +5829,7 @@ function construirDocumentoPlanilla(datos, listaJugadoras) {
           <tr>
             ${htmlSubtests}
           </tr>
+
         </thead>
 
         <tbody>
@@ -4136,11 +5837,13 @@ function construirDocumentoPlanilla(datos, listaJugadoras) {
         </tbody>
 
         <tfoot>
+
           <tr class="print-promedios">
             <td></td>
             <td class="print-nombre">PROMEDIOS</td>
             ${promedios}
           </tr>
+
         </tfoot>
 
       </table>
@@ -4149,6 +5852,7 @@ function construirDocumentoPlanilla(datos, listaJugadoras) {
 
     <div class="planilla-print-pie">
       <span>ADIUR FEMENINO · ÁREA DE RENDIMIENTOS</span>
+
       <span>
         División: ${escaparHTML(division)}
         · Período: ${escaparHTML(periodo)}
@@ -4159,48 +5863,59 @@ function construirDocumentoPlanilla(datos, listaJugadoras) {
 }
 
 /* =====================================================
-   ABRIR Y CERRAR UNA EVALUACIÓN DE LA BIBLIOTECA
+   ABRIR PLANILLA DE BIBLIOTECA
 ===================================================== */
 
 window.abrirPlanillaBiblioteca = function(indice) {
 
-  const item = planillasBiblioteca[indice];
+  const item =
+    planillasBiblioteca[indice];
 
   if (!item) return;
 
   planillaBibliotecaActiva = item;
 
-  const jugadoras = Array.isArray(item.jugadoras)
-    ? item.jugadoras
-    : Object.keys(item.valores || {}).sort((a,b) => a.localeCompare(b));
+  const jugadoras =
+    Array.isArray(item.jugadoras)
+      ? item.jugadoras
+      : Object.keys(item.valores || {}).sort(
+          (a,b) => a.localeCompare(b)
+        );
 
-  jugadoresBibliotecaActiva = jugadoras;
+  jugadoresBibliotecaActiva =
+    jugadoras;
 
-  document.getElementById("tituloModalBiblioteca").textContent =
+  document.getElementById(
+    "tituloModalBiblioteca"
+  ).textContent =
     item.mes || "Evaluación guardada";
 
-  document.getElementById("subtituloModalBiblioteca").textContent =
+  document.getElementById(
+    "subtituloModalBiblioteca"
+  ).textContent =
     `${item.division} · Guardada el ${
       item.fechaGuardado
         ? new Date(item.fechaGuardado).toLocaleString("es-AR")
         : "sin fecha"
     }`;
 
-  document.getElementById("modalPlanillaBiblioteca").innerHTML =
-    construirDocumentoPlanilla(item, jugadoras);
+  document.getElementById(
+    "modalPlanillaBiblioteca"
+  ).innerHTML =
+    construirDocumentoPlanilla(item,jugadoras);
 
-  document
-    .getElementById("modalVistaBiblioteca")
-    .classList.add("activo");
+  document.getElementById(
+    "modalVistaBiblioteca"
+  ).classList.add("activo");
 
   document.body.style.overflow = "hidden";
 };
 
 window.cerrarVistaBiblioteca = function() {
 
-  document
-    .getElementById("modalVistaBiblioteca")
-    .classList.remove("activo");
+  document.getElementById(
+    "modalVistaBiblioteca"
+  ).classList.remove("activo");
 
   document.body.style.overflow = "";
 };
@@ -4216,19 +5931,24 @@ window.imprimirPlanillaBiblioteca = function() {
   const destino =
     document.getElementById("printRoutine");
 
-  const tituloOriginal = document.title;
+  const tituloOriginal =
+    document.title;
 
-  const item = planillaBibliotecaActiva;
+  const item =
+    planillaBibliotecaActiva;
 
-  destino.innerHTML = construirDocumentoPlanilla(
-    item,
-    jugadoresBibliotecaActiva
-  );
+  destino.innerHTML =
+    construirDocumentoPlanilla(
+      item,
+      jugadoresBibliotecaActiva
+    );
 
   document.title =
     `ADIUR FEMENINO - ${item.division} - ${item.mes}`;
 
-  document.body.classList.add("imprimir-solo-testeos");
+  document.body.classList.add(
+    "imprimir-solo-testeos"
+  );
 
   let limpiado = false;
 
@@ -4238,16 +5958,25 @@ window.imprimirPlanillaBiblioteca = function() {
 
     limpiado = true;
 
-    document.body.classList.remove("imprimir-solo-testeos");
+    document.body.classList.remove(
+      "imprimir-solo-testeos"
+    );
 
     destino.innerHTML = "";
 
     document.title = tituloOriginal;
 
-    window.removeEventListener("afterprint", limpiar);
+    window.removeEventListener(
+      "afterprint",
+      limpiar
+    );
   }
 
-  window.addEventListener("afterprint", limpiar, { once:true });
+  window.addEventListener(
+    "afterprint",
+    limpiar,
+    { once:true }
+  );
 
   window.print();
 
@@ -4259,90 +5988,1050 @@ window.imprimirPlanillaBiblioteca = function() {
       limpiar();
     }
 
-  }, 1800);
+  },1800);
+
 };
 
 /* =====================================================
-   EXPORTACIÓN CSV
+   ESTADÍSTICAS · IDENTIFICAR PRUEBAS EQUIVALENTES
 ===================================================== */
 
-window.exportarPlanillaCSV = function() {
+function obtenerColumnaEquivalente(snapshot,pruebaActual) {
+
+  const columnas =
+    Array.isArray(snapshot.columnas)
+      ? snapshot.columnas
+      : [];
+
+  // Primero se busca el identificador original.
+
+  let equivalente = columnas.find(col =>
+    col.id === pruebaActual.id &&
+    !col.esComp
+  );
+
+  if (equivalente) return equivalente;
+
+  // En pruebas personalizadas se utiliza grupo + nombre,
+  // ya que cada período puede tener su propio identificador.
+
+  const etiqueta = normalizarTexto(
+    pruebaActual.label
+  );
+
+  const grupo = normalizarTexto(
+    pruebaActual.grupo
+  );
+
+  equivalente = columnas.find(col =>
+    !col.esComp &&
+    normalizarTexto(col.label) === etiqueta &&
+    normalizarTexto(col.grupo) === grupo
+  );
+
+  return equivalente || null;
+}
+
+/* =====================================================
+   ESTADÍSTICAS · SELECTORES
+===================================================== */
+
+function actualizarSelectoresEstadisticas() {
+
+  const selectPrueba =
+    document.getElementById("selectPruebaEstadisticas");
+
+  const selectPeriodo =
+    document.getElementById("selectPeriodoComparacion");
+
+  if (!selectPrueba || !selectPeriodo) return;
+
+  const valorAnteriorPrueba =
+    selectPrueba.value;
+
+  const pruebas = columnasActuales.filter(
+    col => !col.esComp
+  );
+
+  selectPrueba.innerHTML = `
+    <option value="">Seleccioná una prueba</option>
+
+    ${pruebas.map(col => `
+      <option value="${escaparHTML(col.id)}">
+        ${escaparHTML(col.grupo)} · ${escaparHTML(col.label)}
+      </option>
+    `).join("")}
+  `;
+
+  if (
+    pruebas.some(col => col.id === valorAnteriorPrueba)
+  ) {
+    selectPrueba.value = valorAnteriorPrueba;
+
+  } else if (pruebas.length) {
+
+    selectPrueba.value = pruebas[0].id;
+  }
 
   const division =
     document.getElementById("selectDivision").value;
 
-  const mes =
-    document.getElementById("selectMes").value;
+  const periodoActual =
+    document.getElementById("selectMes").value.trim();
 
-  const escapar = valor =>
-    '"' + String(valor ?? "").replace(/"/g, '""') + '"';
+  const claveActual =
+    obtenerClavePlanilla(division,periodoActual);
 
-  const encabezados = [
-    "N°",
-    "Jugadora",
-    ...columnasActuales.map(c => c.label)
-  ];
-
-  const filas = [
-    encabezados.map(escapar).join(";")
-  ];
-
-  jugadorasDivision.forEach((jugadora, i) => {
-
-    const valores = valoresActuales[jugadora] || {};
-
-    const celdas = [
-      i + 1,
-      jugadora,
-
-      ...columnasActuales.map(col => {
-
-        if (col.esCalculadoIMC) {
-
-          const imc = calcularIMC(
-            valores.peso,
-            valores.altura
-          );
-
-          return imc === null
-            ? ""
-            : imc.toFixed(2).replace(".", ",");
-        }
-
-        return valores[col.id] ?? "";
-      })
-    ];
-
-    filas.push(
-      celdas.map(escapar).join(";")
+  const comparables =
+    planillasBiblioteca.filter(item =>
+      item.division === division &&
+      item.clave !== claveActual
     );
+
+  const valorAnteriorPeriodo =
+    selectPeriodo.value;
+
+  selectPeriodo.innerHTML = `
+    <option value="">Sin comparación</option>
+
+    ${comparables.map(item => `
+      <option value="${escaparHTML(item.clave)}">
+        ${escaparHTML(item.mes)}
+      </option>
+    `).join("")}
+  `;
+
+  if (
+    comparables.some(item =>
+      item.clave === valorAnteriorPeriodo
+    )
+  ) {
+    selectPeriodo.value =
+      valorAnteriorPeriodo;
+  }
+}
+
+/* =====================================================
+   ESTADÍSTICAS · POSICIÓN DE CADA JUGADORA
+===================================================== */
+
+function obtenerPuestoDeSnapshot(
+  snapshot,
+  jugadora
+) {
+
+  const puestoGuardado =
+    snapshot?.posiciones?.[jugadora];
+
+  if (
+    puestoGuardado &&
+    String(puestoGuardado).trim()
+  ) {
+    return String(puestoGuardado).trim();
+  }
+
+  return posicionesPorJugadora[jugadora] ||
+    "Sin puesto asignado";
+}
+
+/* =====================================================
+   ESTADÍSTICAS · PROMEDIOS
+===================================================== */
+
+function obtenerPromedioPrueba(
+  prueba,
+  datos,
+  jugadoras
+) {
+
+  let suma = 0;
+  let cantidad = 0;
+
+  jugadoras.forEach(jugadora => {
+
+    const numero = obtenerValorNumerico(
+      datos,
+      jugadora,
+      prueba
+    );
+
+    if (numero !== null) {
+
+      suma += numero;
+      cantidad++;
+    }
+
   });
 
-  const contenido =
-    "\ufeff" + filas.join("\r\n");
+  return {
 
-  const blob = new Blob(
-    [contenido],
-    { type:"text/csv;charset=utf-8;" }
+    promedio:cantidad
+      ? suma/cantidad
+      : null,
+
+    cantidad
+  };
+}
+
+/* =====================================================
+   ESTADÍSTICAS · ESTADO DE COMPARACIÓN
+===================================================== */
+
+function obtenerEstadoComparacion(
+  actual,
+  anterior,
+  criterio
+) {
+
+  if (
+    actual === null ||
+    anterior === null
+  ) {
+    return {
+      texto:"Sin datos comparables",
+      clase:"estado-sin-datos",
+      diferencia:null
+    };
+  }
+
+  const diferencia =
+    actual-anterior;
+
+  if (Math.abs(diferencia) < 0.000001) {
+
+    return {
+      texto:"Sin cambios",
+      clase:"estado-igual",
+      diferencia:0
+    };
+  }
+
+  if (criterio === "mayor") {
+
+    return diferencia > 0
+      ? {
+          texto:"Mejoró",
+          clase:"estado-mejora",
+          diferencia
+        }
+      : {
+          texto:"Disminuyó",
+          clase:"estado-retroceso",
+          diferencia
+        };
+  }
+
+  if (criterio === "menor") {
+
+    return diferencia < 0
+      ? {
+          texto:"Mejoró",
+          clase:"estado-mejora",
+          diferencia
+        }
+      : {
+          texto:"Empeoró",
+          clase:"estado-retroceso",
+          diferencia
+        };
+  }
+
+  return {
+    texto:"Diferencia registrada",
+    clase:"estado-igual",
+    diferencia
+  };
+}
+
+/* =====================================================
+   ESTADÍSTICAS · RESUMEN GENERAL
+===================================================== */
+
+function renderizarResumenEstadisticas(prueba) {
+
+  const contenedor =
+    document.getElementById("resumenEstadisticas");
+
+  const pruebas =
+    columnasActuales.filter(col => !col.esComp);
+
+  let resultados = 0;
+
+  pruebas.forEach(col => {
+    resultados += contarResultadosPrueba(col);
+  });
+
+  const posibles =
+    pruebas.length * jugadorasDivision.length;
+
+  const porcentaje = posibles
+    ? Math.round(resultados/posibles*100)
+    : 0;
+
+  const datosSeleccionados = prueba
+    ? obtenerPromedioPrueba(
+        prueba,
+        valoresActuales,
+        jugadorasDivision
+      )
+    : { promedio:null,cantidad:0 };
+
+  contenedor.innerHTML = `
+
+    <article class="estadistica-resumen-card">
+      <span>JUGADORAS</span>
+      <strong>${jugadorasDivision.length}</strong>
+      <small>En la división seleccionada</small>
+    </article>
+
+    <article class="estadistica-resumen-card">
+      <span>PRUEBAS</span>
+      <strong>${pruebas.length}</strong>
+      <small>Indicadores disponibles</small>
+    </article>
+
+    <article class="estadistica-resumen-card">
+      <span>RESULTADOS CARGADOS</span>
+      <strong>${resultados}</strong>
+      <small>Sobre ${posibles} registros posibles</small>
+    </article>
+
+    <article class="estadistica-resumen-card">
+      <span>COMPLETITUD</span>
+      <strong>${porcentaje}%</strong>
+      <small>De las evaluaciones previstas</small>
+    </article>
+
+  `;
+}
+
+/* =====================================================
+   ESTADÍSTICAS · COMPARACIÓN INDIVIDUAL
+===================================================== */
+
+function renderizarEstadisticaIndividual(
+  prueba,
+  snapshotComparacion
+) {
+
+  const contenedor =
+    document.getElementById("estadisticaIndividual");
+
+  if (!prueba) {
+
+    contenedor.innerHTML = `
+      <div class="estadistica-vacia">
+        No hay pruebas disponibles para analizar.
+      </div>
+    `;
+
+    return;
+  }
+
+  if (!snapshotComparacion) {
+
+    contenedor.innerHTML = `
+      <div class="estadistica-vacia">
+        Seleccioná otro período guardado en el filtro superior
+        para comparar los resultados individuales.
+
+        <br><br>
+
+        Las planillas de Biblioteca Test de esta categoría
+        aparecerán disponibles para elegir.
+      </div>
+    `;
+
+    return;
+  }
+
+  const pruebaAnterior =
+    obtenerColumnaEquivalente(
+      snapshotComparacion,
+      prueba
+    );
+
+  if (!pruebaAnterior) {
+
+    contenedor.innerHTML = `
+      <div class="estadistica-vacia">
+        La planilla seleccionada no contiene una prueba
+        equivalente a ${escaparHTML(prueba.label)}.
+      </div>
+    `;
+
+    return;
+  }
+
+  const jugadorasAnteriores =
+    Array.isArray(snapshotComparacion.jugadoras)
+      ? snapshotComparacion.jugadoras
+      : Object.keys(snapshotComparacion.valores || {});
+
+  const filas = jugadorasDivision.map(jugadora => {
+
+    const valorActual = obtenerValorColumna(
+      valoresActuales,
+      jugadora,
+      prueba
+    );
+
+    const valorAnterior = obtenerValorColumna(
+      snapshotComparacion.valores || {},
+      jugadora,
+      pruebaAnterior
+    );
+
+    const textoActual =
+      valorActual === null
+        ? "—"
+        : String(valorActual);
+
+    const textoAnterior =
+      valorAnterior === null
+        ? "—"
+        : String(valorAnterior);
+
+    const numeroActual =
+      parsearNumero(valorActual);
+
+    const numeroAnterior =
+      parsearNumero(valorAnterior);
+
+    const actualNumero = Number.isNaN(numeroActual)
+      ? null
+      : numeroActual;
+
+    const anteriorNumero = Number.isNaN(numeroAnterior)
+      ? null
+      : numeroAnterior;
+
+    const estado = obtenerEstadoComparacion(
+      actualNumero,
+      anteriorNumero,
+      prueba.criterio
+    );
+
+    const puesto = posicionesPorJugadora[jugadora] ||
+      "Sin puesto asignado";
+
+    const existeAnterior =
+      jugadorasAnteriores.includes(jugadora);
+
+    return `
+
+      <tr>
+
+        <td class="nombre-fuerte">
+          ${escaparHTML(jugadora)}
+
+          <br>
+
+          <span class="indicador-puesto">
+            ${escaparHTML(puesto)}
+          </span>
+        </td>
+
+        <td>${escaparHTML(textoActual)}</td>
+
+        <td>
+          ${existeAnterior ? escaparHTML(textoAnterior) : "—"}
+        </td>
+
+        <td class="valor-fuerte">
+          ${
+            estado.diferencia === null
+              ? "—"
+              : formatearNumero(estado.diferencia,2)
+          }
+        </td>
+
+        <td class="${estado.clase}">
+          ${estado.texto}
+        </td>
+
+      </tr>
+
+    `;
+
+  }).join("");
+
+  contenedor.innerHTML = `
+
+    <div style="margin-bottom:12px;color:#777;font-size:9px;">
+      Comparación de <strong>${escaparHTML(prueba.label)}</strong>
+      entre el período actual
+      <strong>${escaparHTML(document.getElementById("selectMes").value)}</strong>
+      y
+      <strong>${escaparHTML(snapshotComparacion.mes)}</strong>.
+    </div>
+
+    <div class="tabla-estadistica-wrapper">
+
+      <table class="tabla-estadistica">
+
+        <thead>
+          <tr>
+            <th>Jugadora / puesto</th>
+            <th>Resultado actual</th>
+            <th>Resultado anterior</th>
+            <th>Diferencia</th>
+            <th>Evolución</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          ${filas}
+        </tbody>
+
+      </table>
+
+    </div>
+
+  `;
+}
+
+/* =====================================================
+   ESTADÍSTICAS POR PUESTO
+===================================================== */
+
+function renderizarEstadisticaPuestos(prueba) {
+
+  const contenedor =
+    document.getElementById("estadisticaPuestos");
+
+  if (!prueba) {
+
+    contenedor.innerHTML = `
+      <div class="estadistica-vacia">
+        No hay pruebas disponibles para analizar.
+      </div>
+    `;
+
+    return;
+  }
+
+  const grupos = new Map();
+
+  jugadorasDivision.forEach(jugadora => {
+
+    const puesto =
+      posicionesPorJugadora[jugadora] ||
+      "Sin puesto asignado";
+
+    if (!grupos.has(puesto)) {
+      grupos.set(puesto,[]);
+    }
+
+    grupos.get(puesto).push(jugadora);
+  });
+
+  if (!grupos.size) {
+
+    contenedor.innerHTML = `
+      <div class="estadistica-vacia">
+        No hay jugadoras para analizar por puesto.
+      </div>
+    `;
+
+    return;
+  }
+
+  const filas = [];
+
+  grupos.forEach((jugadoras,puesto) => {
+
+    let suma = 0;
+    let cantidad = 0;
+    let mejor = null;
+
+    jugadoras.forEach(jugadora => {
+
+      const numero = obtenerValorNumerico(
+        valoresActuales,
+        jugadora,
+        prueba
+      );
+
+      if (numero === null) return;
+
+      suma += numero;
+      cantidad++;
+
+      if (mejor === null) {
+
+        mejor = numero;
+
+      } else if (prueba.criterio === "mayor") {
+
+        mejor = Math.max(mejor,numero);
+
+      } else if (prueba.criterio === "menor") {
+
+        mejor = Math.min(mejor,numero);
+      }
+
+    });
+
+    filas.push({
+
+      puesto,
+      jugadoras:jugadoras.length,
+      resultados:cantidad,
+
+      promedio:cantidad
+        ? suma/cantidad
+        : null,
+
+      mejor
+
+    });
+
+  });
+
+  filas.sort((a,b) => {
+    return a.puesto.localeCompare(b.puesto);
+  });
+
+  contenedor.innerHTML = `
+
+    <div style="margin-bottom:11px;color:#777;font-size:9px;">
+      Prueba analizada:
+      <strong>${escaparHTML(prueba.grupo)} · ${escaparHTML(prueba.label)}</strong>
+    </div>
+
+    <div class="tabla-estadistica-wrapper">
+
+      <table class="tabla-estadistica">
+
+        <thead>
+          <tr>
+            <th>Puesto</th>
+            <th>Jugadoras</th>
+            <th>Resultados registrados</th>
+            <th>Promedio</th>
+            <th>Mejor resultado</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          ${filas.map(fila => `
+
+            <tr>
+
+              <td class="nombre-fuerte">
+                ${escaparHTML(fila.puesto)}
+              </td>
+
+              <td>${fila.jugadoras}</td>
+
+              <td>${fila.resultados}/${fila.jugadoras}</td>
+
+              <td class="valor-fuerte">
+                ${formatearNumero(fila.promedio,2)}
+              </td>
+
+              <td class="valor-fuerte">
+                ${formatearNumero(fila.mejor,2)}
+              </td>
+
+            </tr>
+
+          `).join("")}
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <div style="margin-top:10px;color:#999;font-size:8px;">
+      El promedio y la mejor marca se calculan únicamente con resultados numéricos registrados.
+    </div>
+
+  `;
+}
+
+/* =====================================================
+   ESTADÍSTICAS GRUPALES
+===================================================== */
+
+function renderizarEstadisticaGrupal() {
+
+  const contenedor =
+    document.getElementById("estadisticaGrupal");
+
+  const grupos =
+    obtenerGruposActuales();
+
+  if (!grupos.length) {
+
+    contenedor.innerHTML = `
+      <div class="estadistica-vacia">
+        Todavía no hay grupos de pruebas configurados.
+      </div>
+    `;
+
+    return;
+  }
+
+  const tarjetas = grupos.map(grupo => {
+
+    const resumen =
+      obtenerEstadisticaGrupo(grupo);
+
+    return `
+
+      <article class="tarjeta-estadistica-grupo">
+
+        <strong>
+          ${escaparHTML(grupo.toUpperCase())}
+        </strong>
+
+        <p>
+          ${resumen.pruebas.length}
+          ${resumen.pruebas.length === 1 ? "prueba" : "pruebas"}
+          · ${resumen.completos} resultados
+        </p>
+
+        <div class="barra-completitud">
+          <span style="width:${resumen.porcentaje}%"></span>
+        </div>
+
+        <small>
+          ${resumen.porcentaje}% de completitud
+          (${resumen.completos}/${resumen.posibles})
+        </small>
+
+      </article>
+
+    `;
+
+  }).join("");
+
+  const filas = [];
+
+  grupos.forEach(grupo => {
+
+    const pruebas =
+      obtenerColumnasPrueba(grupo);
+
+    pruebas.forEach(prueba => {
+
+      const cantidad =
+        contarResultadosPrueba(prueba);
+
+      const total =
+        jugadorasDivision.length;
+
+      const porcentaje = total
+        ? Math.round(cantidad/total*100)
+        : 0;
+
+      const promedio =
+        obtenerPromedioPrueba(
+          prueba,
+          valoresActuales,
+          jugadorasDivision
+        );
+
+      filas.push({
+
+        grupo,
+        prueba:prueba.label,
+        cantidad,
+        total,
+        porcentaje,
+        promedio:promedio.promedio
+
+      });
+
+    });
+
+  });
+
+  contenedor.innerHTML = `
+
+    <div class="grilla-estadisticas-grupos">
+      ${tarjetas}
+    </div>
+
+    <div style="margin-top:17px;">
+
+      <div style="margin-bottom:9px;color:#777;font-size:9px;font-weight:800;">
+        DETALLE POR PRUEBA
+      </div>
+
+      <div class="tabla-estadistica-wrapper">
+
+        <table class="tabla-estadistica">
+
+          <thead>
+            <tr>
+              <th>Grupo</th>
+              <th>Prueba</th>
+              <th>Resultados</th>
+              <th>Completitud</th>
+              <th>Promedio numérico</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            ${filas.map(fila => `
+
+              <tr>
+
+                <td>
+                  ${escaparHTML(fila.grupo)}
+                </td>
+
+                <td class="nombre-fuerte">
+                  ${escaparHTML(fila.prueba)}
+                </td>
+
+                <td>
+                  ${fila.cantidad}/${fila.total}
+                </td>
+
+                <td>
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <div class="barra-completitud">
+                      <span style="width:${fila.porcentaje}%"></span>
+                    </div>
+
+                    <strong>${fila.porcentaje}%</strong>
+                  </div>
+                </td>
+
+                <td class="valor-fuerte">
+                  ${formatearNumero(fila.promedio,2)}
+                </td>
+
+              </tr>
+
+            `).join("")}
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+    <div style="margin-top:10px;color:#999;font-size:8px;">
+      Los promedios se muestran individualmente por prueba: no se mezclan unidades de medición diferentes.
+    </div>
+
+  `;
+}
+
+/* =====================================================
+   ESTADÍSTICAS HISTÓRICAS
+===================================================== */
+
+function renderizarEstadisticaHistorica(prueba) {
+
+  const contenedor =
+    document.getElementById("estadisticaHistorica");
+
+  if (!prueba) {
+
+    contenedor.innerHTML = `
+      <div class="estadistica-vacia">
+        Seleccioná una prueba para consultar su evolución.
+      </div>
+    `;
+
+    return;
+  }
+
+  const periodos =
+    [...planillasBiblioteca].sort((a,b) => {
+
+      return new Date(a.fechaGuardado || 0).getTime() -
+        new Date(b.fechaGuardado || 0).getTime();
+
+    });
+
+  const filas = [];
+
+  periodos.forEach(snapshot => {
+
+    const equivalente =
+      obtenerColumnaEquivalente(
+        snapshot,
+        prueba
+      );
+
+    if (!equivalente) return;
+
+    const jugadoras =
+      Array.isArray(snapshot.jugadoras)
+        ? snapshot.jugadoras
+        : Object.keys(snapshot.valores || {});
+
+    const promedio =
+      obtenerPromedioPrueba(
+        equivalente,
+        snapshot.valores || {},
+        jugadoras
+      );
+
+    filas.push({
+
+      periodo:snapshot.mes,
+      fecha:snapshot.fechaGuardado
+        ? new Date(snapshot.fechaGuardado).toLocaleDateString("es-AR")
+        : "Sin fecha",
+
+      promedio:promedio.promedio,
+      cantidad:promedio.cantidad
+
+    });
+
+  });
+
+  // Agregar el estado actual si todavía no se guardó
+  // o si hay cambios posteriores al último snapshot.
+
+  const periodoActual =
+    document.getElementById("selectMes").value.trim();
+
+  const actualYaGuardado =
+    filas.some(fila => fila.periodo === periodoActual);
+
+  if (!actualYaGuardado) {
+
+    const promedioActual =
+      obtenerPromedioPrueba(
+        prueba,
+        valoresActuales,
+        jugadorasDivision
+      );
+
+    filas.push({
+
+      periodo:periodoActual + " · Actual",
+      fecha:"En edición",
+      promedio:promedioActual.promedio,
+      cantidad:promedioActual.cantidad
+
+    });
+
+  }
+
+  if (!filas.length) {
+
+    contenedor.innerHTML = `
+      <div class="estadistica-vacia">
+        No hay períodos guardados con esta prueba.
+        Cuando guardes distintas evaluaciones en Biblioteca Test,
+        aparecerá acá la evolución de sus promedios.
+      </div>
+    `;
+
+    return;
+  }
+
+  contenedor.innerHTML = `
+
+    <div style="margin-bottom:11px;color:#777;font-size:9px;">
+      Evolución de:
+      <strong>${escaparHTML(prueba.grupo)} · ${escaparHTML(prueba.label)}</strong>
+    </div>
+
+    <div class="tabla-estadistica-wrapper">
+
+      <table class="tabla-estadistica">
+
+        <thead>
+          <tr>
+            <th>Período</th>
+            <th>Fecha</th>
+            <th>Resultados registrados</th>
+            <th>Promedio</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          ${filas.map(fila => `
+
+            <tr>
+
+              <td class="nombre-fuerte">
+                ${escaparHTML(fila.periodo)}
+              </td>
+
+              <td>${escaparHTML(fila.fecha)}</td>
+
+              <td>${fila.cantidad}</td>
+
+              <td class="valor-fuerte">
+                ${formatearNumero(fila.promedio,2)}
+              </td>
+
+            </tr>
+
+          `).join("")}
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  `;
+}
+
+/* =====================================================
+   ESTADÍSTICAS · RENDERIZADO GENERAL
+===================================================== */
+
+function renderizarEstadisticas() {
+
+  const etiqueta =
+    document.getElementById("etiquetaPeriodoEstadisticas");
+
+  const periodo =
+    document.getElementById("selectMes").value;
+
+  etiqueta.textContent =
+    `${document.getElementById("selectDivision").value} · ${periodo}`;
+
+  const idPrueba =
+    document.getElementById("selectPruebaEstadisticas").value;
+
+  const prueba =
+    columnasActuales.find(col =>
+      col.id === idPrueba &&
+      !col.esComp
+    ) || null;
+
+  const claveComparacion =
+    document.getElementById("selectPeriodoComparacion").value;
+
+  const comparacion =
+    planillasBiblioteca.find(item =>
+      item.clave === claveComparacion
+    ) || null;
+
+  renderizarResumenEstadisticas(prueba);
+
+  renderizarEstadisticaIndividual(
+    prueba,
+    comparacion
   );
 
-  const url = URL.createObjectURL(blob);
+  renderizarEstadisticaPuestos(prueba);
 
-  const enlace = document.createElement("a");
+  renderizarEstadisticaGrupal();
 
-  enlace.href = url;
-
-  enlace.download =
-    `ADIUR_Testeos_${division.replace(/\s+/g,"_")}_${mes}.csv`;
-
-  document.body.appendChild(enlace);
-
-  enlace.click();
-
-  enlace.remove();
-
-  URL.revokeObjectURL(url);
-};
+  renderizarEstadisticaHistorica(prueba);
+}
 
 /* =====================================================
    CAMBIO DE CATEGORÍA Y PERÍODO
@@ -4358,218 +7047,91 @@ window.cambiarFiltroPlanilla = function() {
 
   if (!periodo) {
 
-    document.getElementById("gruposTesteos").innerHTML = `
-      <div class="estado-vacio-grupos">
-        Escribí el nombre del período para cargar o crear su evaluación.
+    document.getElementById("navegacionGrupos").innerHTML = "";
+
+    document.getElementById("editorPrueba").innerHTML = `
+      <div class="editor-inicial">
+        <strong>Escribí el nombre del período</strong>
+        <p>Necesitás identificar la evaluación antes de cargar los resultados.</p>
       </div>
     `;
 
-    return;
+    return Promise.resolve();
   }
 
   if (periodo.includes("/")) {
 
-    document.getElementById("gruposTesteos").innerHTML = `
-      <div class="estado-vacio-grupos">
-        El nombre del período no puede contener barras (/).
+    document.getElementById("editorPrueba").innerHTML = `
+      <div class="editor-inicial">
+        <strong>Nombre de período no válido</strong>
+        <p>El nombre no puede contener barras (/).</p>
       </div>
     `;
 
-    return;
+    return Promise.resolve();
   }
 
   promesaCargaPlanilla =
-    cargarDatosPlanilla(division, periodo);
+    cargarDatosPlanilla(division,periodo);
 
   return promesaCargaPlanilla;
-};
-
-/* =====================================================
-   MODAL PARA AGREGAR NUEVA PRUEBA
-===================================================== */
-
-window.abrirModalAgregarTest = function() {
-
-  document.getElementById("formAgregarTest").reset();
-
-  document
-    .getElementById("modalAgregarTest")
-    .classList.add("activo");
-};
-
-window.cerrarModal = function(id) {
-
-  document
-    .getElementById(id)
-    .classList.remove("activo");
-};
-
-/* =====================================================
-   CREAR NUEVA PRUEBA Y ASIGNARLA A SU GRUPO
-===================================================== */
-
-window.agregarNuevaColumnaTest = function(event) {
-
-  event.preventDefault();
-
-  if (!puedeEditar) return;
-
-  const grupo =
-    document.getElementById("categoriaTest").value;
-
-  const nombre =
-    document.getElementById("nombreTest").value.trim();
-
-  const criterio =
-    document.getElementById("criterioTest").value;
-
-  const incluirComp =
-    document.getElementById("incluirComp").checked;
-
-  const mapaClases = {
-    "SALTOS":"cat-saltos",
-    "VELOCIDAD":"cat-velocidad",
-    "Vo2 máx":"cat-vo2",
-    "POSTURAL":"cat-postural",
-    "AGILIDAD":"cat-agilidad",
-    "INDICES":"cat-indices",
-    "OTRO TEST":"cat-custom"
-  };
-
-  const baseId = "test_" + Date.now();
-
-  const compId = incluirComp
-    ? baseId + "_comp"
-    : null;
-
-  columnasActuales.push({
-    id:baseId,
-    grupo:grupo,
-    claseGrupo:mapaClases[grupo] || "cat-custom",
-    label:nombre,
-    criterio:criterio,
-    compId:compId
-  });
-
-  if (incluirComp) {
-
-    columnasActuales.push({
-      id:compId,
-      grupo:grupo,
-      claseGrupo:mapaClases[grupo] || "cat-custom",
-      label:"COMP",
-      esComp:true
-    });
-  }
-
-  grupoSeleccionadoTest = grupo;
-  pruebaSeleccionadaTest = baseId;
-
-  filtroJugadorasTest = "todas";
-  busquedaJugadorasTest = "";
-
-  cerrarModal("modalAgregarTest");
-
-  renderizarTablaPlanilla();
-
-  programarGuardadoNube();
-};
-
-/* =====================================================
-   GESTIÓN Y ELIMINACIÓN DE PRUEBAS
-===================================================== */
-
-window.alternarModoEliminar = function() {
-
-  modoEliminar = !modoEliminar;
-
-  const boton =
-    document.getElementById("btnModoEliminar");
-
-  boton.textContent =
-    modoEliminar
-      ? "Finalizar gestión"
-      : "Gestionar pruebas";
-
-  boton.classList.toggle("modo-activo", modoEliminar);
-
-  renderizarGruposTesteos();
-};
-
-window.eliminarColumna = function(indice) {
-
-  if (!puedeEditar) return;
-
-  const col = columnasActuales[indice];
-
-  if (!confirm(
-    `¿Quitar la columna "${col.label}" (${col.grupo}) de esta planilla?`
-  )) {
-    return;
-  }
-
-  columnasActuales.splice(indice, 1);
-
-  renderizarTablaPlanilla();
-
-  programarGuardadoNube();
 };
 
 /* =====================================================
    INICIALIZACIÓN
 ===================================================== */
 
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded",() => {
 
   const campoPeriodo =
     document.getElementById("selectMes");
 
-  campoPeriodo.addEventListener("keydown", event => {
+  campoPeriodo.addEventListener("keydown",event => {
 
     if (event.key === "Enter") {
+
       event.preventDefault();
+
       cambiarFiltroPlanilla();
     }
+
   });
-
-  // Los usuarios sin permisos técnicos pueden consultar,
-  // pero no crear pruebas ni guardar nuevas planillas.
-
-  if (!puedeEditar) {
-
-    document.getElementById("accionesTecnico").style.display = "none";
-
-    document.getElementById("accionesPeriodo").style.display = "none";
-  }
 
   if (esBianca) {
     document.getElementById("selectDivision").value = "Sub 14";
   }
 
-  // En móvil, la barra lateral inicia cerrada.
-
   if (window.matchMedia("(max-width:760px)").matches) {
     document.getElementById("sidebar").classList.add("oculto");
   }
 
+  // Cargar categoría y período inicial.
+
   cambiarFiltroPlanilla();
 
-  document
-    .getElementById("modalVistaBiblioteca")
-    .addEventListener("click", event => {
+  // Cerrar modal de Biblioteca al tocar el fondo.
 
-      if (event.target.id === "modalVistaBiblioteca") {
-        cerrarVistaBiblioteca();
-      }
-    });
+  document.getElementById(
+    "modalVistaBiblioteca"
+  ).addEventListener("click",event => {
 
-  document.addEventListener("keydown", event => {
+    if (event.target.id === "modalVistaBiblioteca") {
+      cerrarVistaBiblioteca();
+    }
+
+  });
+
+  document.addEventListener("keydown",event => {
 
     if (event.key === "Escape") {
+
       cerrarVistaBiblioteca();
+
       cerrarModal("modalAgregarTest");
     }
+
   });
+
 });
 
 </script>
