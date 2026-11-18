@@ -2842,14 +2842,6 @@ svgDibujos.addEventListener("pointerdown",iniciarDibujo);svgDibujos.addEventList
 svgDibujos.addEventListener("dblclick",e=>{if(herramientaDibujo==="polyline"){e.preventDefault();finalizarLinea();}});
 const defs=svgEl("defs",{}),mk=svgEl("marker",{id:"puntaFlecha",markerWidth:8,markerHeight:8,refX:6,refY:3,orient:"auto",markerUnits:"strokeWidth"});mk.appendChild(svgEl("path",{d:"M0,0 L0,6 L6,3 z",fill:"context-stroke"}));defs.appendChild(mk);svgDibujos.appendChild(defs);
 async function alternarPantallaCompleta(){const el=document.getElementById("main");try{if(document.fullscreenElement)await document.exitFullscreen();else if(el.requestFullscreen)await el.requestFullscreen();else establecerEstadoGuardado("Este navegador no permite pantalla completa.","error");}catch(err){console.error(err);establecerEstadoGuardado("No se pudo activar pantalla completa. Revisá los permisos del navegador.","error");}}
-function alternarPanelDibujo(){
-  const panel=document.getElementById("drawingDrawer");
-  const boton=document.getElementById("toggleDrawingPanel");
-  if(!panel||!boton)return;
-  const abierto=panel.classList.toggle("open");
-  boton.setAttribute("aria-expanded",String(abierto));
-  boton.textContent=abierto?"✕ Cerrar herramientas":"☰ Herramientas de dibujo";
-}
 document.addEventListener("fullscreenchange",()=>{const b=document.getElementById("pantallaCompletaBtn");if(b)b.textContent=document.fullscreenElement?"✕ Salir de pantalla completa":"⛶ Pantalla completa";});
 
 /* =========================
@@ -3215,7 +3207,7 @@ function limpiarPizarra(
 
     if(
       !confirm(
-        "¿Querés borrar todos los jugadores y la pelota?"
+        "¿Querés borrar todos los jugadores, la pelota y los dibujos?"
       )
     )
       return;
