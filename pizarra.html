@@ -1925,8 +1925,8 @@ if(!usuario){
   window.location.replace("Loing.html");
 }
 
-const usuarioNormalizado = usuario.toLowerCase().replace(/\\s+/g," ").trim();
-const usuarioCompacto = usuarioNormalizado.replace(/\\s+/g,"");
+const usuarioNormalizado = usuario.toLowerCase().replace(/\s+/g," ").trim();
+const usuarioCompacto = usuarioNormalizado.replace(/\s+/g,"");
 const esFran = ["fran","francisco","francisco perez basla","franciscoperezbasla"].includes(usuarioNormalizado) || usuarioCompacto==="franciscoperezbasla";
 const esToto = usuarioNormalizado==="toto";
 const esBianca = ["bianca","biancadominguez"].includes(usuarioCompacto);
