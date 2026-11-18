@@ -3424,14 +3424,6 @@ function guardarDB() {
   }
 }
 
-        return true;
-
-    } catch (error) {
-        console.error("Error al guardar:", error);
-        mostrarEstado("No se pudieron guardar los cambios.");
-        return false;
-    }
-}
 
 function asegurarRutinasGenerales(division) {
   const clave = claveGeneral(division);
