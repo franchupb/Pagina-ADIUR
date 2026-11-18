@@ -814,6 +814,116 @@ body{
 @media(min-width:761px) and (max-width:800px){
   .main{margin-left:258px;padding:98px 12px 20px}
 }
+
+/* =====================================================
+   DISEÑO DE TRABAJO — USO RÁPIDO EN BANCO Y CHARLA TÁCTICA
+   Capa visual: conserva los IDs y las funciones existentes.
+===================================================== */
+:root{
+  --coach-ink:#17212b;--coach-muted:#687582;--coach-line:#e3e8ed;
+  --coach-surface:#fff;--coach-soft:#f6f8fa;--coach-dark:#202a35;
+}
+body{background:#f2f4f6;color:var(--coach-ink)}
+.main{max-width:1800px;padding:96px 22px 28px}
+.page-header{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin:0 auto 14px;max-width:1600px}
+.page-header h2{font-size:23px;font-weight:800;letter-spacing:-.45px;color:var(--coach-ink)}
+.page-header p{font-size:12px;color:var(--coach-muted);margin-top:4px}
+.match-controls{max-width:1600px;margin:0 auto 14px;padding:13px 14px;display:grid;grid-template-columns:repeat(4,minmax(125px,1fr));gap:10px 12px;align-items:end;border:1px solid var(--coach-line);border-radius:12px;background:var(--coach-surface);box-shadow:0 2px 8px rgba(23,33,43,.035)}
+.match-controls .control{min-width:0;gap:5px}
+.match-controls .control label{font-size:10px;letter-spacing:.55px;color:#687582}
+.match-controls .control select{width:100%;min-width:0;height:38px;padding:8px 32px 8px 10px;border:1px solid #dce2e8;border-radius:8px;background:#fff;color:#202a35;font-size:12px;font-weight:650}
+.match-controls .control select:focus-visible,.match-controls button:focus-visible,.drawing-tools button:focus-visible,.drawing-options button:focus-visible{outline:3px solid rgba(244,119,33,.25);outline-offset:2px}
+.quick-actions{grid-column:1/-1;display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding-top:10px;border-top:1px solid #edf0f3}
+.quick-actions .btn{min-height:37px;padding:9px 13px;border-radius:8px;font-size:11px;font-weight:750;letter-spacing:.05px}
+.quick-actions .btn-orange{background:#f47721}.quick-actions .btn-blue{background:#285b85}.quick-actions .btn-dark{background:#202a35}
+.quick-actions .btn-light{background:#f1f4f6;color:#344252;border:1px solid #e1e6eb}.quick-actions .btn-red{background:#b83b3b}
+.quick-actions .btn:hover{filter:brightness(.97);transform:translateY(-1px)}
+.save-status{margin-left:auto;min-height:34px;border:1px solid #e7ebef;background:#f7f9fa;color:#56616d}
+.save-status.ok{border-color:#ccebd9;background:#effaf3;color:#187744}
+.save-status.error{border-color:#f3d1d1;background:#fff4f4;color:#a52c2c}
+.save-status.loading{border-color:#f0dfc5;background:#fff8ed;color:#88540d}
+.board-wrapper{max-width:1600px;margin:0 auto;padding:14px;border:1px solid var(--coach-line);border-radius:14px;background:#fff;box-shadow:0 3px 12px rgba(23,33,43,.045)}
+.board-top{align-items:center;margin:0 0 12px;padding:0 2px 10px;border-bottom:1px solid #edf0f3}
+.board-heading{display:flex;flex-direction:column;gap:3px}
+.board-kicker{font-size:9px;font-weight:850;letter-spacing:1.1px;color:#8a949e}
+.board-title{font-size:16px;font-weight:800;letter-spacing:-.2px;color:#1c2732}
+.board-help{font-size:11px;color:#77838e;line-height:1.45}
+.pitch-workspace{grid-template-columns:142px minmax(0,1fr);gap:12px;align-items:stretch}
+.drawing-tools{gap:5px;padding:9px;border:1px solid #e8edf1;border-radius:10px;background:#f7f9fa;align-self:stretch}
+.drawing-tools strong{padding:3px 4px 7px;font-size:9px;letter-spacing:1px;color:#75818c}
+.drawing-tools .tool-btn{min-height:37px;padding:8px 9px;border:1px solid transparent;border-radius:7px;background:transparent;color:#43515e;font-size:11px;font-weight:700;text-align:left;transition:background .15s,border-color .15s,color .15s}
+.drawing-tools .tool-btn:hover{background:#fff;border-color:#e2e7eb}
+.drawing-tools .tool-btn.active{background:#fff0e6;border-color:#f6c6a5;color:#bd520d;box-shadow:inset 3px 0 0 #f47721}
+.pitch-area{min-width:0;min-height:300px;padding:8px;border-radius:10px;background:#edf1f3;border:1px solid #e4e9ed}
+.pitch{width:min(100%,1160px);border-radius:6px;box-shadow:0 5px 20px rgba(20,35,45,.18)}
+.drawing-options{margin:10px 0 0;padding:9px 11px;gap:9px;border:1px solid #e7ebef;border-radius:9px;background:#f8fafb}
+.drawing-options label{font-size:10px;font-weight:750;color:#52606d}
+.drawing-options .tool-btn{min-height:32px;padding:7px 10px;border-radius:7px;border-color:#e0e5e9;background:#fff;color:#44515d;font-size:10px}
+.drawing-options .tool-btn:hover{border-color:#f0b58e;background:#fffaf6}
+.drawing-options #ayudaDibujo{flex:1 1 240px;min-width:180px;color:#78838d;font-size:10px}
+.legend{margin-top:10px;padding-top:10px;gap:13px}
+.legend-item{font-size:10px;color:#64717c}
+.player{width:43px;height:43px;font-size:13px;box-shadow:0 2px 7px rgba(0,0,0,.28)}
+.player-name{font-size:9px;padding:3px 5px}.ball{width:26px;height:26px}
+.btn:focus-visible,.menu-btn:focus-visible,.titulo-grupo:focus-visible{outline:3px solid rgba(244,119,33,.3);outline-offset:2px}
+
+/* Presentación: barra de control arriba, herramientas a la izquierda y cancha dominante. */
+.main:fullscreen{gap:8px;padding:10px 12px;background:#e9edf0}
+.main:fullscreen .controls{display:grid;grid-template-columns:repeat(4,minmax(110px,1fr));gap:7px 9px;padding:8px 10px}
+.main:fullscreen .quick-actions{padding-top:7px;gap:6px}
+.main:fullscreen .quick-actions .btn{min-height:32px;padding:7px 10px}
+.main:fullscreen .save-status{min-height:29px}
+.main:fullscreen .board-wrapper{padding:10px;border-radius:10px;gap:0}
+.main:fullscreen .board-top{padding-bottom:7px;margin-bottom:7px}
+.main:fullscreen .pitch-workspace{grid-template-columns:132px minmax(0,1fr);gap:8px}
+.main:fullscreen .pitch-area{display:flex;flex:1 1 auto;min-height:0;height:100%;padding:4px}
+.main:fullscreen .pitch{width:auto;height:100%;max-width:100%;max-height:100%;aspect-ratio:1470/980;flex:0 1 auto}
+.main:fullscreen .drawing-tools{overflow-y:auto;align-content:center;padding:7px}
+.main:fullscreen .drawing-tools .tool-btn{min-height:33px;padding:6px 7px;font-size:10px}
+.main:fullscreen .drawing-options{margin-top:6px;padding:6px 8px;gap:7px}
+.main:fullscreen .drawing-options #ayudaDibujo{flex-basis:180px}
+.main:fullscreen .legend{display:none}
+
+/* Adaptación táctil para tablets y celulares. */
+@media(max-width:1050px){
+ .main{padding-left:14px;padding-right:14px}
+ .match-controls{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .pitch-workspace{grid-template-columns:118px minmax(0,1fr);gap:8px}
+ .drawing-tools{padding:7px}
+ .drawing-tools .tool-btn{white-space:normal;font-size:10px;padding:7px}
+}
+@media(max-width:700px){
+ .main{padding:88px 9px 16px}
+ .page-header{margin-bottom:10px}
+ .page-header h2{font-size:20px}
+ .page-header p{font-size:11px;line-height:1.4}
+ .match-controls{padding:10px;gap:8px;grid-template-columns:repeat(2,minmax(0,1fr))}
+ .match-controls .control select{height:40px;font-size:11px}
+ .quick-actions{gap:6px}
+ .quick-actions .btn{flex:1 1 calc(50% - 6px);min-width:0;padding:9px 7px;font-size:10px}
+ .save-status{flex:1 1 100%;margin:0}
+ .board-wrapper{padding:9px;border-radius:10px}
+ .board-top{align-items:flex-start;flex-direction:column;gap:4px}
+ .pitch-workspace{grid-template-columns:92px minmax(0,1fr);gap:6px}
+ .drawing-tools{gap:4px;padding:5px}
+ .drawing-tools strong{font-size:8px}
+ .drawing-tools .tool-btn{min-height:34px;font-size:9px;padding:6px 4px}
+ .pitch-area{min-height:190px;padding:3px}
+ .drawing-options{gap:6px;padding:7px}
+ .drawing-options label{font-size:9px}
+ .drawing-options #ayudaDibujo{flex-basis:100%;min-width:0}
+ .legend{gap:8px}.legend-item{font-size:9px}
+}
+@media(max-width:700px) and (orientation:landscape){
+ .main:fullscreen{padding:4px;gap:4px}
+ .main:fullscreen .controls{grid-template-columns:repeat(4,minmax(90px,1fr));max-height:22vh;overflow:auto}
+ .main:fullscreen .quick-actions{flex-wrap:nowrap;overflow-x:auto}
+ .main:fullscreen .quick-actions .btn{flex:0 0 auto}
+ .main:fullscreen .board-top{display:none}
+ .main:fullscreen .pitch-workspace{grid-template-columns:94px minmax(0,1fr)}
+ .main:fullscreen .drawing-tools .tool-btn{min-height:27px;font-size:8px;padding:4px}
+ .main:fullscreen .drawing-options{padding:4px;margin-top:3px}
+}
 </style>
 </head>
 
@@ -979,7 +1089,7 @@ body{
 
   <!-- CONTROLES -->
 
-  <section class="controls">
+  <section class="controls match-controls" aria-label="Configuración y acciones de la pizarra">
 
 
     <div class="control">
@@ -1124,6 +1234,7 @@ body{
 
 
 
+    <div class="quick-actions" aria-label="Acciones rápidas">
     <button
       class="btn btn-orange"
       onclick="agregarRival()">
@@ -1154,7 +1265,7 @@ body{
 
 
 
-    <button class="btn btn-blue" id="pantallaCompletaBtn" type="button" onclick="alternarPantallaCompleta()">⛶ Pantalla completa</button>
+    <button class="btn btn-blue" id="pantallaCompletaBtn" type="button" onclick="alternarPantallaCompleta()">⛶ Presentar</button>
 
     <button
       class="btn btn-dark"
@@ -1182,6 +1293,7 @@ body{
       Limpiar
 
     </button>
+    </div>
 
 
   </section>
@@ -1195,17 +1307,13 @@ body{
 
     <div class="board-top">
 
-      <div class="board-title">
-
-        Pizarra táctica
-
+      <div class="board-heading">
+        <div class="board-kicker">ADIUR FEMENINO · ANÁLISIS DE JUEGO</div>
+        <div class="board-title">Pizarra de situación</div>
       </div>
 
-
       <div class="board-help">
-
-        Arrastrá jugadores y pelota con el mouse.
-
+        Arrastrá las piezas · Elegí una herramienta para marcar movimientos
       </div>
 
     </div>
@@ -1263,7 +1371,7 @@ body{
       <button type="button" class="tool-btn" onclick="finalizarLinea()">✓ Terminar línea</button>
       <button type="button" class="tool-btn" onclick="deshacerDibujo()">↶ Deshacer</button>
       <button type="button" class="tool-btn" onclick="limpiarDibujos()">Borrar dibujos</button>
-      <span class="board-help" id="ayudaDibujo" role="status" aria-live="polite">Elegí una herramienta para dibujar sobre la cancha.</span>
+      <span class="board-help" id="ayudaDibujo" role="status" aria-live="polite">Elegí una herramienta para marcar la jugada.</span>
     </div>
 
     <div class="legend">
@@ -2374,7 +2482,7 @@ const SVG_NS="http://www.w3.org/2000/svg";
 function svgEl(tag,attrs){const el=document.createElementNS(SVG_NS,tag);Object.keys(attrs).forEach(k=>el.setAttribute(k,String(attrs[k])));return el;}
 function puntoDibujo(e){const r=svgDibujos.getBoundingClientRect();return {x:Math.max(0,Math.min(1000,(e.clientX-r.left)/r.width*1000)),y:Math.max(0,Math.min(666.6667,(e.clientY-r.top)/r.height*666.6667))};}
 function estiloDibujo(){const c=document.getElementById("colorDibujo").value||"#f47721";return {stroke:c,"stroke-width":document.getElementById("grosorDibujo").value||"5","stroke-linecap":"round","stroke-linejoin":"round",fill:document.getElementById("rellenoDibujo").checked?c:"none","fill-opacity":"0.28"};}
-function seleccionarHerramienta(t){if(["select","arrow","circle","triangle","cross","square","freehand","polyline"].indexOf(t)<0)return;if(t!=="polyline"&&puntosLinea.length)finalizarLinea();herramientaDibujo=t;pitch.classList.toggle("drawing-active",t!=="select");document.querySelectorAll("[data-tool]").forEach(b=>b.classList.toggle("active",b.dataset.tool===t));document.getElementById("ayudaDibujo").textContent=t==="polyline"?"Marcá los vértices con clic y presioná Terminar línea.":t==="select"?"Modo selección: mové jugadoras y pelota.":"Dibujá sobre la cancha; el color, grosor y relleno se aplican a la figura nueva.";}
+function seleccionarHerramienta(t){if(["select","arrow","circle","triangle","cross","square","freehand","polyline"].indexOf(t)<0)return;if(t!=="polyline"&&puntosLinea.length)finalizarLinea();herramientaDibujo=t;pitch.classList.toggle("drawing-active",t!=="select");document.querySelectorAll("[data-tool]").forEach(b=>b.classList.toggle("active",b.dataset.tool===t));document.getElementById("ayudaDibujo").textContent=t==="polyline"?"Marcá los vértices con clic y presioná Terminar línea.":t==="select"?"Seleccionar: mové jugadoras y pelota sobre la cancha.":"Marcá recorridos, coberturas y espacios. El estilo se aplica al próximo trazo.";}
 function iniciarDibujo(e){if(herramientaDibujo==="select")return;e.preventDefault();const p=puntoDibujo(e),st=estiloDibujo();
  if(herramientaDibujo==="polyline"){puntosLinea.push(p);pintarPreviaLinea();return;}
  if(herramientaDibujo==="cross"){const z=13,g=svgEl("g",{});g.append(svgEl("line",{x1:p.x-z,y1:p.y-z,x2:p.x+z,y2:p.y+z,...st,fill:"none"}),svgEl("line",{x1:p.x+z,y1:p.y-z,x2:p.x-z,y2:p.y+z,...st,fill:"none"}));svgDibujos.appendChild(g);return;}
