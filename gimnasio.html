@@ -2762,6 +2762,9 @@ let esStaff = !esJugadora;
 
 let jugadoraSesion = null;
 let db = cargarDB();
+  // Solo se permite guardar en Firebase después de confirmar
+// que la carga inicial desde la nube terminó correctamente.
+let nubeListaParaGuardar = false;
 let indiceActual = 0;
 let rutinaActual = null;
 let indiceVistaModal = null;
@@ -3148,27 +3151,58 @@ function crearRutina() {
 function rutinaTieneDatos(rutina) {
   if (!rutina || typeof rutina !== "object") return false;
 
-  const nombre = String(rutina.nombre || "").trim();
+  if (
+    String(rutina.nombre || "").trim() &&
+    !/^(rutina|espacio)\s+\d+$/i.test(String(rutina.nombre).trim())
+  ) {
+    return true;
+  }
 
-  if (nombre && !/^(rutina|espacio)\s+\d+$/i.test(nombre)) return true;
+  if (
+    String(rutina.rmPotencia1 || "").trim() ||
+    String(rutina.rmPotencia2 || "").trim()
+  ) {
+    return true;
+  }
 
   const secciones = [
-    ...(rutina.potencia || []),
-    ...(rutina.principales || []),
-    ...(rutina.complementarios || [])
+    ...(Array.isArray(rutina.potencia) ? rutina.potencia : []),
+    ...(Array.isArray(rutina.principales) ? rutina.principales : []),
+    ...(Array.isArray(rutina.complementarios) ? rutina.complementarios : [])
   ];
 
-  return secciones.some(ejercicio =>
-    String(ejercicio.nombre || "").trim() !== ""
-  );
+  return secciones.some(ejercicio => {
+    if (!ejercicio) return false;
+
+    if (
+      String(ejercicio.nombre || "").trim() ||
+      String(ejercicio.tiempoBase || "").trim()
+    ) {
+      return true;
+    }
+
+    return Array.isArray(ejercicio.dias) &&
+      ejercicio.dias.some(dia =>
+        dia && (
+          String(dia.peso ?? "").trim() ||
+          String(dia.tiempo ?? "").trim() ||
+          String(dia.repeticiones ?? "").trim()
+        )
+      );
+  });
 }
 
 function normalizarSeccion(lista, cantidadPorDefecto = 1) {
   const arr = Array.isArray(lista) ? lista : [];
   const resultado = [];
 
-  for (let i = 0; i < Math.max(arr.length, cantidadPorDefecto); i++) {
+  for (
+    let i = 0;
+    i < Math.max(arr.length, cantidadPorDefecto);
+    i++
+  ) {
     const original = arr[i] || {};
+
     const valorBase = original.repeticionesBase ?? 10;
     const numeroBase = Number(valorBase);
 
@@ -3179,16 +3213,41 @@ function normalizarSeccion(lista, cantidadPorDefecto = 1) {
 
     const tiempoBase = String(original.tiempoBase || "");
 
+    // Recuperar los días existentes, sin borrarlos.
+    const diasOriginales = Array.isArray(original.dias)
+      ? original.dias
+      : [];
+
+    const dias = Array.from(
+      { length: 6 * DIAS_POR_SEMANA },
+      (_, indice) => {
+        const diaOriginal = diasOriginales[indice];
+
+        const dia = diaOriginal && typeof diaOriginal === "object"
+          ? diaOriginal
+          : {};
+
+        return {
+          ...crearDiaVacio(),
+          ...dia,
+          peso: String(dia.peso ?? ""),
+          tiempo: String(dia.tiempo ?? ""),
+          repeticiones: String(dia.repeticiones ?? "")
+        };
+      }
+    );
+
     resultado.push({
+      ...original,
       nombre: String(original.nombre || ""),
       repeticionesBase,
       tiempoBase,
-      dias: Array.from(
-        { length: 6 * DIAS_POR_SEMANA },
-        () => ({ peso: "", tiempo: "", repeticiones: "" })
-      )
+      dias
     });
   }
+
+  return resultado;
+}
 
   return resultado;
 }
@@ -3271,30 +3330,101 @@ function cargarDB() {
   }
 }
 
+function combinarBases(local, nube) {
+  const resultado = { ...(local || {}) };
+  const datosNube = nube && typeof nube === "object" ? nube : {};
 
+  Object.entries(datosNube).forEach(([clave, rutinasNube]) => {
 
-function guardarDB() {
-    try {
-        localStorage.setItem(KEY, JSON.stringify(db));
+    if (!Array.isArray(rutinasNube)) {
+      if (resultado[clave] === undefined) {
+        resultado[clave] = rutinasNube;
+      }
 
-        if (typeof window.guardarGimnasioEnNube !== "function") {
-            mostrarEstado("ERROR: Firebase todavía no está conectado.");
-            console.error("guardarGimnasioEnNube no está disponible.");
-            return false;
+      return;
+    }
+
+    const rutinasLocales = Array.isArray(resultado[clave])
+      ? resultado[clave]
+      : [];
+
+    const cantidad = Math.max(
+      rutinasLocales.length,
+      rutinasNube.length
+    );
+
+    resultado[clave] = Array.from(
+      { length: cantidad },
+      (_, indice) => {
+        const rutinaNube = rutinasNube[indice];
+        const rutinaLocal = rutinasLocales[indice];
+
+        // Si la nube tiene información, se prioriza.
+        if (rutinaNube && rutinaTieneDatos(rutinaNube)) {
+          return rutinaNube;
         }
 
-        window.guardarGimnasioEnNube(db)
-            .then(() => {
-                mostrarEstado("Rutina guardada correctamente en la nube.");
-                console.log("ADIUR: Rutina sincronizada con Firestore.");
-            })
-            .catch(error => {
-                console.error("ERROR AL GUARDAR EN FIREBASE:", error);
-                mostrarEstado(
-                    "ERROR al guardar en la nube: " +
-                    (error.code || error.message)
-                );
-            });
+        // Si la nube está vacía, se conserva la rutina local.
+        if (rutinaLocal && rutinaTieneDatos(rutinaLocal)) {
+          return rutinaLocal;
+        }
+
+        return rutinaNube || rutinaLocal || crearRutina();
+      }
+    );
+  });
+
+  return resultado;
+}
+
+function guardarDB() {
+  try {
+    // Siempre conservar una copia local.
+    localStorage.setItem(KEY, JSON.stringify(db));
+
+    // No sobrescribir Firebase si la carga inicial falló.
+    if (!nubeListaParaGuardar) {
+      console.warn(
+        "ADIUR: guardado local. Firebase todavía no está habilitado."
+      );
+
+      return true;
+    }
+
+    if (typeof window.guardarGimnasioEnNube !== "function") {
+      console.error("No está disponible guardarGimnasioEnNube.");
+      mostrarEstado("Guardado local. No se pudo conectar con la nube.");
+
+      return true;
+    }
+
+    window.guardarGimnasioEnNube(db)
+      .then(() => {
+        mostrarEstado("Rutina guardada correctamente en la nube.");
+
+        console.log("ADIUR: Rutinas sincronizadas con Firestore.");
+      })
+      .catch(error => {
+        nubeListaParaGuardar = false;
+
+        console.error("ERROR AL GUARDAR EN FIREBASE:", error);
+
+        mostrarEstado(
+          "Error al guardar en la nube: " +
+          (error.code || error.message)
+        );
+      });
+
+    return true;
+
+  } catch (error) {
+    console.error("Error al guardar:", error);
+
+    mostrarEstado("No se pudieron guardar los cambios.");
+
+    return false;
+  }
+}
 
         return true;
 
@@ -4784,24 +4914,40 @@ async function inicializar() {
   configurarMenu();
 
   try {
+    // Esperar a que Firebase termine de inicializarse.
     await window.firebaseGimnasioReady;
 
+    // Leer los datos de Firestore.
     const datosNube = await window.cargarGimnasioNube();
 
-    if (
-      datosNube &&
-      typeof datosNube === "object" &&
-      Object.keys(datosNube).length > 0
-    ) {
-      db = datosNube;
-      localStorage.setItem(KEY, JSON.stringify(db));
+    // Combinar los datos locales y los de la nube.
+    db = combinarBases(
+      db,
+      datosNube && typeof datosNube === "object"
+        ? datosNube
+        : {}
+    );
 
-    } else if (Object.keys(db).length > 0) {
-      await window.guardarGimnasioEnNube(db);
-    }
+    // Guardar la base combinada en el dispositivo.
+    localStorage.setItem(KEY, JSON.stringify(db));
+
+    // Habilitar los guardados en la nube solamente
+    // después de confirmar que la lectura terminó.
+    nubeListaParaGuardar = true;
+
+    console.log("ADIUR: carga inicial de Firebase completada.");
 
   } catch (error) {
-    console.warn("No se pudo cargar la base de datos desde la nube:", error);
+    nubeListaParaGuardar = false;
+
+    console.error(
+      "No se pudo cargar la base de datos desde Firebase:",
+      error
+    );
+
+    mostrarEstado(
+      "No se pudo conectar con la nube. Los cambios se conservarán localmente."
+    );
   }
 
   $("nombrePerfil").textContent = nombreSesion(usuario);
