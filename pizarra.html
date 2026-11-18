@@ -3026,3 +3026,42 @@ document
 
 </body>
 </html>
+
+
+/* Panel compacto: deja visible la mayor parte de la cancha y evita cubrir el arco. */
+.drawing-drawer{
+  width:min(310px,calc(100% - 28px));
+  grid-template-columns:minmax(96px,.78fr) minmax(150px,1.22fr);
+  gap:7px;
+  padding:9px;
+}
+.drawing-tools{padding:7px;gap:4px}
+.drawing-tools .tool-btn{min-height:31px;padding:6px 7px;font-size:10px}
+.drawing-options{gap:8px;padding:8px}
+.drawing-options label{gap:5px;font-size:10px}
+.drawing-options select{min-width:0;max-width:100%;padding:6px;font-size:10px}
+.drawing-options input[type=color]{width:40px;height:29px}
+.drawing-options .tool-btn{min-height:30px;padding:6px 7px}
+.drawing-options #ayudaDibujo{font-size:9px;line-height:1.35}
+.main:fullscreen .drawing-drawer{
+  width:min(310px,calc(100% - 24px));
+  grid-template-columns:minmax(92px,.78fr) minmax(145px,1.22fr);
+  gap:6px;
+  padding:8px;
+}
+.main:fullscreen .drawing-tools{padding:6px;gap:4px}
+.main:fullscreen .drawing-tools .tool-btn{min-height:29px;padding:5px 6px;font-size:9px}
+.main:fullscreen .drawing-options{padding:7px;gap:7px}
+.main:fullscreen .drawing-options label{font-size:10px}
+.main:fullscreen .drawing-options select{min-width:0;font-size:10px;padding:6px}
+.main:fullscreen .drawing-options input[type=color]{width:38px;height:28px}
+@media(max-width:700px){
+  .drawing-drawer{width:min(290px,calc(100% - 14px));left:7px;right:auto;grid-template-columns:minmax(88px,.78fr) minmax(135px,1.22fr);gap:5px;padding:7px}
+  .main:fullscreen .drawing-drawer{width:min(290px,calc(100% - 14px));left:7px;right:auto;grid-template-columns:minmax(84px,.78fr) minmax(130px,1.22fr);gap:5px;padding:6px}
+}
+@media(max-width:420px){
+  .drawing-drawer{grid-template-columns:1fr;max-width:270px}
+  .drawing-tools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .drawing-tools strong{grid-column:1/-1}
+  .main:fullscreen .drawing-drawer{grid-template-columns:1fr;max-width:270px}
+}
