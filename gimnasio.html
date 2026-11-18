@@ -2947,20 +2947,30 @@ function formatearTiempo(valor) {
 ===================================================== */
 
 function leerUsuario() {
-  try {
-    const valor = localStorage.getItem(SESSION_KEY);
-    if (!valor) return {};
+  const valor = localStorage.getItem(SESSION_KEY);
 
+  if (!valor) return {};
+
+  // El login actual guarda "Fran", "Toto" o "Bianca" como texto plano.
+  // También se admiten sesiones guardadas como objetos JSON.
+  try {
     const parseado = JSON.parse(valor);
 
     if (typeof parseado === "string") {
       return { usuario: parseado, nombre: parseado };
     }
 
-    return parseado || {};
-  } catch {
-    return { usuario: localStorage.getItem(SESSION_KEY) || "" };
+    if (parseado && typeof parseado === "object") {
+      return parseado;
+    }
+  } catch (error) {
+    // No es JSON: se interpreta como el nombre guardado por el login.
   }
+
+  return {
+    usuario: valor.trim(),
+    nombre: valor.trim()
+  };
 }
 
 function nombreSesion(obj) {
@@ -4900,48 +4910,69 @@ document.addEventListener("keydown", e => {
    INICIALIZACIÓN
 ===================================================== */
 
-async function inicializar() {
-  configurarMenu();
-
+async function sincronizarGimnasioConNube() {
   try {
-    // Esperar a que Firebase termine de inicializarse.
+    // La conexión a Firebase ocurre en segundo plano.
     await window.firebaseGimnasioReady;
 
-    // Leer los datos de Firestore.
+    if (typeof window.cargarGimnasioNube !== "function") {
+      throw new Error("No se inicializó la función de lectura de Firebase.");
+    }
+
     const datosNube = await window.cargarGimnasioNube();
 
-    // Combinar los datos locales y los de la nube.
+    // Se combina con la base local actual, incluyendo cambios hechos
+    // mientras Firebase estaba conectándose.
     db = combinarBases(
       db,
-      datosNube && typeof datosNube === "object"
-        ? datosNube
-        : {}
+      datosNube && typeof datosNube === "object" ? datosNube : {}
     );
 
-    // Guardar la base combinada en el dispositivo.
+    DIVISIONES.forEach(division => asegurarRutinasGenerales(division));
+
+    obtenerTodasLasJugadoras().forEach(jugadora => {
+      asegurarRutinasIndividuales(jugadora);
+    });
+
     localStorage.setItem(KEY, JSON.stringify(db));
 
-    // Habilitar los guardados en la nube solamente
-    // después de confirmar que la lectura terminó.
+    // Habilitar la nube recién después de terminar la lectura y combinación.
     nubeListaParaGuardar = true;
 
-    console.log("ADIUR: carga inicial de Firebase completada.");
+    // Subir la base combinada (también crea el documento si todavía no existe).
+    guardarDB();
+
+    rutinaActual = obtenerRutinaActual() || crearRutina();
+    tituloInput.value = rutinaActual.nombre || "";
+    semanasSelect.value = String(rutinaActual.semanas || 4);
+
+    renderizarEditor();
+    renderizarBiblioteca();
+
+    mostrarEstado("Datos del gimnasio sincronizados.");
+    console.log("ADIUR: sincronización inicial completada.");
 
   } catch (error) {
     nubeListaParaGuardar = false;
 
-    console.error(
-      "No se pudo cargar la base de datos desde Firebase:",
-      error
-    );
+    console.error("No se pudo sincronizar el gimnasio con Firebase:", error);
 
     mostrarEstado(
-      "No se pudo conectar con la nube. Los cambios se conservarán localmente."
+      "No se pudo conectar con la nube. La página sigue funcionando y guarda los cambios en este dispositivo."
     );
   }
+}
+
+function inicializar() {
+  // Primero se prepara toda la interfaz. No se espera a Firebase.
+  configurarMenu();
+
+  // Reconocer el perfil inmediatamente.
+  usuario = leerUsuario();
+  esJugadora = detectarRol(usuario) === "jugadora";
+  esStaff = !esJugadora;
 
   $("nombrePerfil").textContent = nombreSesion(usuario);
-
   $("avatarPerfil").textContent =
     nombreSesion(usuario).trim().charAt(0).toUpperCase() || "U";
 
@@ -4964,12 +4995,14 @@ async function inicializar() {
 
   poblarJugadoras();
 
+  // Preparar una base local para que la página sea utilizable sin esperar la nube.
   DIVISIONES.forEach(division => asegurarRutinasGenerales(division));
 
-  obtenerTodasLasJugadoras().forEach(j => {
-    asegurarRutinasIndividuales(j);
+  obtenerTodasLasJugadoras().forEach(jugadora => {
+    asegurarRutinasIndividuales(jugadora);
   });
 
+  // Registrar los eventos antes de iniciar la sincronización.
   divisionSelect.addEventListener("change", cambiarDivision);
   modoSelect.addEventListener("change", cambiarModo);
 
@@ -5011,8 +5044,10 @@ async function inicializar() {
   actualizarModoVisual();
   cambiarModo();
   renderizarBiblioteca();
-}
 
+  // Firebase se conecta en segundo plano; nunca bloquea botones ni perfil.
+  sincronizarGimnasioConNube();
+}
 document.addEventListener("DOMContentLoaded", inicializar);
 </script>
 
