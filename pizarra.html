@@ -2819,7 +2819,7 @@ function puntoDibujo(e){const r=svgDibujos.getBoundingClientRect();if(!r.width||
 function estiloDibujo(){const c=document.getElementById("colorDibujo").value||"#f47721";return {stroke:c,"stroke-width":document.getElementById("grosorDibujo").value||"5","stroke-linecap":"round","stroke-linejoin":"round",fill:document.getElementById("rellenoDibujo").checked?c:"none","fill-opacity":"0.28"};}
 function seleccionarHerramienta(t){if(["select","arrow","circle","triangle","cross","square","freehand","polyline"].indexOf(t)<0)return;if(t!=="polyline"&&puntosLinea.length)finalizarLinea();herramientaDibujo=t;pitch.classList.toggle("drawing-active",t!=="select");document.querySelectorAll("[data-tool]").forEach(b=>b.classList.toggle("active",b.dataset.tool===t));document.getElementById("ayudaDibujo").textContent=t==="polyline"?"Marcá los vértices con clic y presioná Terminar línea.":t==="select"?"Seleccionar: mové jugadoras y pelota sobre la cancha.":"Marcá recorridos, coberturas y espacios. El estilo se aplica al próximo trazo.";}
 function iniciarDibujo(e){if(herramientaDibujo==="select")return;e.preventDefault();const p=puntoDibujo(e),st=estiloDibujo();
- if(herramientaDibujo==="polyline"){puntosLinea.push(p);pintarPreviaLinea();return;}
+ if(herramientaDibujo==="polyline"){if(puntosLinea.length>=800){finalizarLinea();return;}puntosLinea.push(p);pintarPreviaLinea();return;}
  if(herramientaDibujo==="cross"){const z=13,g=svgEl("g",{});g.append(svgEl("line",{x1:p.x-z,y1:p.y-z,x2:p.x+z,y2:p.y+z,...st,fill:"none"}),svgEl("line",{x1:p.x+z,y1:p.y-z,x2:p.x-z,y2:p.y+z,...st,fill:"none"}));svgDibujos.appendChild(g);return;}
  let tag,el;if(herramientaDibujo==="arrow"){tag="line";el=svgEl("line",{...st,x1:p.x,y1:p.y,x2:p.x,y2:p.y,fill:"none"});el.setAttribute("marker-end","url(#puntaFlecha)");}
  else if(herramientaDibujo==="circle"){tag="ellipse";el=svgEl(tag,{...st,cx:p.x,cy:p.y,rx:0,ry:0});}
@@ -2832,7 +2832,7 @@ function moverDibujo(e){if(!dibujoActivo)return;const p=puntoDibujo(e),a=dibujoA
  else if(dibujoActivo.tag==="ellipse"){el.setAttribute("cx",(a.x+p.x)/2);el.setAttribute("cy",(a.y+p.y)/2);el.setAttribute("rx",Math.abs(dx)/2);el.setAttribute("ry",Math.abs(dy)/2);}
  else if(dibujoActivo.tag==="rect"){el.setAttribute("x",Math.min(a.x,p.x));el.setAttribute("y",Math.min(a.y,p.y));el.setAttribute("width",Math.abs(dx));el.setAttribute("height",Math.abs(dy));}
  else if(dibujoActivo.tag==="polygon"){el.setAttribute("points",a.x+","+a.y+" "+p.x+","+p.y+" "+(a.x-dx)+","+p.y);}
- else if(manoAlzada){const puntos=el.getAttribute("points")||"";if(puntos.split(" ").length<5000)el.setAttribute("points",puntos+" "+p.x+","+p.y);} }
+ else if(manoAlzada){const puntos=el.getAttribute("points")||"";if(puntos.split(" ").length<800)el.setAttribute("points",puntos+" "+p.x+","+p.y);} }
 function terminarDibujo(){dibujoActivo=null;manoAlzada=false;}
 function pintarPreviaLinea(){svgDibujos.querySelector("#lineaTemporal")?.remove();if(!puntosLinea.length)return;const el=svgEl("polyline",{id:"lineaTemporal",points:puntosLinea.map(p=>p.x+","+p.y).join(" "),...estiloDibujo(),fill:"none","stroke-dasharray":"8 5"});svgDibujos.appendChild(el);}
 function finalizarLinea(){if(!puntosLinea.length)return;svgDibujos.querySelector("#lineaTemporal")?.remove();if(puntosLinea.length>1)svgDibujos.appendChild(svgEl("polyline",{points:puntosLinea.map(p=>p.x+","+p.y).join(" "),...estiloDibujo(),fill:"none"}));puntosLinea=[];}
@@ -2922,7 +2922,7 @@ function idDocumentoPizarra(division){
 ===================================================== */
 
 window.firebasePizarraReady = (async()=>{
-  const [{initializeApp,getApp,getApps},{getFirestore,doc,getDoc,setDoc,serverTimestamp}] =
+  const [{initializeApp,getApps},{getFirestore,doc,getDoc,setDoc,serverTimestamp}] =
     await Promise.all([
       import("https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js"),
       import("https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js")
@@ -3096,7 +3096,7 @@ function aplicarDatosPizarra(datos){
     const destino=document.createElementNS(SVG_NS,etiqueta);
     Array.from(origen.attributes).forEach(attr=>{
       const nombre=attr.name.toLowerCase(),valor=attr.value;
-      if(!atributosSVG.has(nombre)||valor.length>2000)return;
+      if(!atributosSVG.has(nombre)||valor.length>((nombre==="points"||nombre==="d")?18000:2000))return;
       if(nombre==="marker-end"&&valor!=="url(#puntaFlecha)")return;
       if(["fill","stroke"].includes(nombre)&&!/^(none|#[0-9a-f]{3,8}|rgba?\([0-9.,%\s]+\)|[a-z]{1,20})$/i.test(valor))return;
       if(["points","d"].includes(nombre)&&!/^[\d\s.,+\-eEmMlLhHvVcCsSqQtTaAzZ]*$/.test(valor))return;
