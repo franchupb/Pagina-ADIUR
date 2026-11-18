@@ -475,6 +475,22 @@ window.obtenerRegistrosTiemposLocales = function(){
 
 window.mostrarToastTiempos = mostrarToast;
 
+    // Recibir las jugadoras desde Firebase
+window.aplicarJugadorasTiemposNube = function(lista){
+    baseJugadoras = Array.isArray(lista)
+        ? lista
+            .filter(j => j.nombre && j.categoria)
+            .map(j => ({
+                id: String(j.id),
+                nombre: String(j.nombre).trim(),
+                categoria: String(j.categoria).trim()
+            }))
+        : [];
+
+    cargarCategorias();
+    actualizarTodo();
+};
+    
 /* Obtiene las jugadoras guardadas por Jugadoras.html sin inventar nombres ni registros. */
 function leerBaseJugadoras(){
     const claves=["jugadorasADIUR","jugadoras","jugadorasADIUR_v1","plantelADIUR","baseJugadorasADIUR","adiurJugadoras"];
@@ -1009,5 +1025,54 @@ actualizarPerfil();
 ajustarMenu();
 actualizarTodo();
 </script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
+
+import {
+    getFirestore,
+    collection,
+    onSnapshot
+} from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyCc0dPIEkaKxbHoRC2CgZK412dXVGPOdTI",
+    authDomain: "adiur-b1913.firebaseapp.com",
+    projectId: "adiur-b1913",
+    storageBucket: "adiur-b1913.firebasestorage.app",
+    messagingSenderId: "884643321144",
+    appId: "1:884643321144:web:ba3c314de3a1c9e3545dcd",
+    measurementId: "G-58LL26YXPM"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+onSnapshot(
+    collection(db, "jugadoras"),
+    (snapshot) => {
+        const lista = snapshot.docs.map(docSnap => ({
+            id: docSnap.id,
+            nombre: docSnap.data().nombre || "",
+            categoria: docSnap.data().categoria || ""
+        }));
+
+        if (typeof window.aplicarJugadorasTiemposNube === "function") {
+            window.aplicarJugadorasTiemposNube(lista);
+        }
+    },
+    (error) => {
+        console.error("Error al cargar las jugadoras desde Firebase:", error);
+
+        if (typeof window.mostrarToastTiempos === "function") {
+            window.mostrarToastTiempos(
+                "No se pudieron cargar las categorías desde la nube.",
+                true
+            );
+        }
+    }
+);
+</script>
+    
 </body>
 </html>
