@@ -1772,9 +1772,9 @@ body.eliminando .btn-puntos {
 
         <img
             class="logo-club"
-            src="TORITO-Logo TORITO.png"
+            src="CLUBES/TORITO.png"
             alt="Logo TORITO"
-            onerror="if(!this.dataset.intento){this.dataset.intento='1';this.src='TORITO-Logo TORITO.png'}else{this.style.display='none'}"
+            onerror="if(!this.dataset.intento){this.dataset.intento='1';this.src='CLUBES/TORITO.png'}else{this.style.display='none'}"
         >
 
         <div class="textos-club">
@@ -2191,9 +2191,9 @@ body.eliminando .btn-puntos {
                         <img
                             id="previewtorito"
                             class="escudo-preview"
-                            src="TORITO-Logo TORITO.png"
+                            src="CLUBES/TORITO.png"
                             alt="Escudo de TORITO"
-                            onerror="this.onerror=null;this.src='TORITO-Logo TORITO.png';"
+                            onerror="this.onerror=null;this.src='CLUBES/TORITO.png';"
                         >
 
                         <p class="escudo-fijo-aviso">
@@ -2606,7 +2606,7 @@ const ORDEN_COMPETICIONES = [
 ];
 
 const CLAVE_FIXTURE = "fixtureTORITO";
-const LOGO_TORITO_FIJO = "TORITO-Logo TORITO.png";
+const LOGO_TORITO_FIJO = "CLUBES/TORITO.png";
 
 /* =====================================================
    CLUBES Y ESCUDOS
@@ -2664,7 +2664,7 @@ function rutaImagen(nombre) {
 
     if (
         minusculas === "torito" ||
-        minusculas === "TORITO-Logo TORITO.png" ||
+        minusculas === "CLUBES/TORITO.png" ||
         minusculas === "logo torito.png" ||
         minusculas === "logo torito.jpeg"
     ) {
@@ -3117,7 +3117,7 @@ function abrirModal(id = null) {
 
     previewtorito.onerror = function() {
         this.onerror = null;
-        this.src = "TORITO-Logo TORITO.png";
+        this.src = "CLUBES/TORITO.png";
     };
 
     previewtorito.src = LOGO_TORITO_FIJO;
@@ -3426,7 +3426,7 @@ function construirEscudo(src, nombre, estorito = false) {
                 class="escudo-mini"
                 src="${rutaSegura}"
                 alt="${altSeguro}"
-                onerror="this.onerror=null;this.src='TORITO-Logo TORITO.png';"
+                onerror="this.onerror=null;this.src='CLUBES/TORITO.png';"
             >
         `;
     }
