@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pàgina Principal - TORITO</title>
+<title>Página Principal - TORITO</title>
 
 <style>
 :root {
@@ -938,6 +938,7 @@ a {
   }
 }
 </style>
+
 <script src="TORITO-permisos.js?v=20261118-s16c"></script>
 </head>
 
@@ -956,9 +957,9 @@ a {
 
   <img
     class="logo-superior"
-    src="CLUBES/TORITO.png"
+    src="TORITO-Logo TORITO.png"
     alt="Logo TORITO"
-    onerror="if(!this.dataset.intento){this.dataset.intento='1';this.src='CLUBES/TORITO.png'}else{this.style.display='none'}"
+    onerror="if(!this.dataset.intento){this.dataset.intento='1';this.src='TORITO-Logo TORITO.png'}else{this.style.display='none'}"
   >
 
   <div class="titulo-superior">
@@ -1818,7 +1819,7 @@ function crearPartidoJugadoCard(partido) {
 
   local.append(
     construirEscudo(
-      "CLUBES/TORITO.png",
+      partido.escudotorito || "TORITO-Logo TORITO.png",
       nombreLocal
     )
   );
@@ -2622,8 +2623,6 @@ function obtenerClubPorNombre(nombre) {
   renderizarCumpleanos();
 })();
 </script>
-
-
 
 </body>
 </html>
