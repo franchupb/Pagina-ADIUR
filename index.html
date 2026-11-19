@@ -1,25 +1,53 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="refresh" content="0; url=./ADIUR/index.html">
-  <title>ADIUR Femenino</title>
-  <link rel="canonical" href="./ADIUR/index.html">
-  <script>
-    (function () {
-      var target = new URL("./ADIUR/index.html", window.location.href);
-      if (window.location.pathname !== target.pathname) {
-        window.location.replace(target.href);
-      }
-    })();
-  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#111827">
+  <meta name="description" content="Elegí el espacio al que querés ingresar: ADIUR o TORITO.">
+  <title>Seleccionar club | Gestión deportiva</title>
+  <style>
+    :root{color-scheme:dark;--fondo:#0b1220;--panel:#121d30;--borde:rgba(255,255,255,.13);--texto:#f7f8fb;--suave:#aeb9ca}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--texto);background:radial-gradient(ellipse at 50% -15%,#263650 0%,transparent 58%),linear-gradient(145deg,#0b1220,#101a2b 58%,#0a111d);display:flex;align-items:center;justify-content:center;padding:34px 20px}
+    main{width:min(100%,1000px);text-align:center}
+    .marca{display:inline-flex;align-items:center;gap:10px;color:#cbd5e1;font-size:.76rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;margin-bottom:20px}
+    .punto{width:8px;height:8px;border-radius:50%;background:#f47721;box-shadow:0 0 18px #f47721}
+    h1{font-size:clamp(2rem,5vw,3.35rem);letter-spacing:-.045em;margin:0;font-weight:850}
+    .intro{color:var(--suave);font-size:1.04rem;line-height:1.6;margin:13px auto 38px;max-width:560px}
+    .opciones{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;text-align:left}
+    .club{--acento:#f47721;display:flex;flex-direction:column;align-items:center;justify-content:space-between;min-height:330px;padding:30px 24px 25px;border:1px solid var(--borde);border-radius:24px;background:linear-gradient(155deg,rgba(255,255,255,.075),rgba(255,255,255,.025));color:inherit;text-decoration:none;transition:transform .2s ease,border-color .2s ease,background .2s ease;box-shadow:0 22px 60px rgba(0,0,0,.22)}
+    .club.torito{--acento:#f47721}
+    .club:hover,.club:focus-visible{transform:translateY(-5px);border-color:var(--acento);background:linear-gradient(155deg,rgba(255,255,255,.12),rgba(255,255,255,.035));outline:none}
+    .escudo{height:190px;width:100%;display:flex;align-items:center;justify-content:center}
+    .escudo img{max-width:85%;max-height:175px;object-fit:contain;filter:drop-shadow(0 12px 22px rgba(0,0,0,.3))}
+    .torito .escudo img{max-width:72%;max-height:180px}
+    .pie{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:18px;border-top:1px solid var(--borde)}
+    .nombre{font-size:1.18rem;font-weight:850;letter-spacing:.08em}
+    .accion{color:var(--suave);font-size:.86rem;display:flex;align-items:center;gap:8px}
+    .flecha{color:var(--acento);font-size:1.3rem;transition:transform .2s}
+    .club:hover .flecha{transform:translateX(4px)}
+    footer{margin-top:34px;color:#7f8da2;font-size:.78rem}
+    @media(max-width:650px){body{padding:28px 16px}.opciones{grid-template-columns:1fr;gap:15px}.club{min-height:270px;padding:22px}.escudo{height:155px}.escudo img{max-height:140px}.torito .escudo img{max-height:150px}.intro{margin-bottom:26px}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}}
+  </style>
 </head>
 <body>
   <main>
-    <h1>ADIUR Femenino</h1>
-    <p>Ingresando al sitio...</p>
-    <p><a href="./ADIUR/index.html">Si no se abre automáticamente, ingresá desde acá.</a></p>
+    <div class="marca"><span class="punto"></span> Plataforma de gestión deportiva</div>
+    <h1>¿A dónde querés ingresar?</h1>
+    <p class="intro">Seleccioná el club para acceder a su espacio de trabajo.</p>
+    <nav class="opciones" aria-label="Elegir club">
+      <a class="club adiur" href="ADIUR/Loing.html" aria-label="Ingresar a ADIUR">
+        <div class="escudo"><img src="ADIUR/Logo ADIUR.jpg" alt="Escudo de ADIUR"></div>
+        <div class="pie"><span class="nombre">ADIUR</span><span class="accion">Ingresar <span class="flecha" aria-hidden="true">→</span></span></div>
+      </a>
+      <a class="club torito" href="TORITO/Loing.html" aria-label="Ingresar a TORITO">
+        <div class="escudo"><img src="TORITO/Logo TORITO.png" alt="Escudo de TORITO"></div>
+        <div class="pie"><span class="nombre">TORITO</span><span class="accion">Ingresar <span class="flecha" aria-hidden="true">→</span></span></div>
+      </a>
+    </nav>
+    <footer>Elegí un club para continuar</footer>
   </main>
 </body>
 </html>
