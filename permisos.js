@@ -124,7 +124,7 @@
   }
 
   const PALABRAS_BORRADO = /eliminar|borrar|suprimir|quitar|dar de baja/i;
-  const PALABRAS_CAMBIO = /guardar|agregar|añadir|nuevo|crear|editar|modificar|actualizar|importar|cargar|registrar|duplicar|publicar/i;
+  const PALABRAS_CAMBIO = /guardar|agregar|añadir|nuevo|crear|editar|modificar|actualizar|importar|cargar|registrar|duplicar|publicar|save|submit|enviar|confirmar/i;
   const PALABRAS_NAVEGACION = /cerrar|cancelar|volver|abrir|ver|filtrar|buscar|siguiente|anterior|mes|semana|dia|día|imprimir|descargar|mostrar|ocultar|menu|menú|perfil|sesion|sesión|inicio|pizarra|calendario/i;
 
   function textoControl(el) {
@@ -170,6 +170,11 @@
 
   function bloquearAccion(event) {
     if (rol === "admin") return;
+    if (rol === "jugadora_s14" && event.type === "submit") {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      return;
+    }
     const target = event.target;
     const control = target.closest?.("button, input[type=submit], input[type=button]");
     if (!control) return;
@@ -181,10 +186,21 @@
     }
   }
 
+  function ocultarRegistrosDeOtrasJugadoras() {
+    if (rol !== "jugadora_s14" || !["gimnasio.html", "testeos.html"].includes(pagina)) return;
+    const nombres = Array.from(nombresAjeno).filter(n => n.length >= 4);
+    if (!nombres.length) return;
+    document.querySelectorAll("tr, [data-jugadora], .rutina-card, .jugadora-card, .registro-card, .tarjeta-jugadora").forEach(item => {
+      const texto = (item.innerText || item.textContent || "").toLocaleLowerCase("es-AR");
+      if (nombres.some(nombre => texto.includes(nombre))) item.hidden = true;
+    });
+  }
+
   function aplicarPermisos() {
     actualizarPerfil();
     fijarSelectoresDivision();
     filtrarSelectoresBianca();
+    ocultarRegistrosDeOtrasJugadoras();
     aplicarSoloLectura();
     if (rol === "ct_s16") {
       document.querySelectorAll("button, a, [role=button]").forEach(el => {
