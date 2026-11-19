@@ -80,7 +80,6 @@
   function fijarSelectoresDivision(root = document) {
     if (!divisionPermitida) return;
     root.querySelectorAll("select").forEach(select => {
-      if (select.dataset.adiurDivisionProcesada === "1" && !select.querySelector("option")) return;
       const options = Array.from(select.options || []);
       const categorias = options.map(o => ({ option: o, categoria: categoriaDeTexto(o.value) || categoriaDeTexto(o.textContent) }))
         .filter(x => x.categoria);
@@ -94,11 +93,12 @@
         const texto = (option.value + " " + option.textContent).toLowerCase();
         if (/todas las divisiones|todas las categorias|todas las categorías|^todas$/.test(texto.trim())) option.remove();
       });
+      const cambioNecesario = select.value !== divisionPermitida;
       select.value = divisionPermitida;
       select.disabled = true;
       select.setAttribute("aria-label", "División fijada por permisos: " + divisionPermitida);
       select.dataset.adiurDivisionProcesada = "1";
-      select.dispatchEvent(new Event("change", { bubbles: true }));
+      if (cambioNecesario) select.dispatchEvent(new Event("change", { bubbles: true }));
     });
   }
 
