@@ -59,15 +59,16 @@
     const nombre = rol === "jugadora_s14" ? "Bianca Domínguez" : usuario;
     ["nombreUsuario", "nombrePerfil", "saludoUsuario"].forEach(id => {
       const el = document.getElementById(id);
-      if (el) el.textContent = nombre;
+      if (el && el.textContent !== nombre) el.textContent = nombre;
     });
     ["avatarUsuario", "avatarPerfil"].forEach(id => {
       const el = document.getElementById(id);
-      if (el) el.textContent = (nombre.trim()[0] || "U").toUpperCase();
+      const inicial = (nombre.trim()[0] || "U").toUpperCase();
+      if (el && el.textContent !== inicial) el.textContent = inicial;
     });
     ["rolUsuario", "rolPerfil"].forEach(id => {
       const el = document.getElementById(id);
-      if (el) el.textContent = nombreRol;
+      if (el && el.textContent !== nombreRol) el.textContent = nombreRol;
     });
   }
 
