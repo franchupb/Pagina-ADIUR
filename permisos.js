@@ -187,7 +187,7 @@
   }
 
   function ocultarRegistrosDeOtrasJugadoras() {
-    if (rol !== "jugadora_s14" || !["gimnasio.html", "testeos.html"].includes(pagina)) return;
+    if (rol !== "jugadora_s14" || !["partidos.html", "gimnasio.html", "testeos.html"].includes(pagina)) return;
     const nombres = Array.from(nombresAjeno).filter(n => n.length >= 4);
     if (!nombres.length) return;
     document.querySelectorAll("tr, [data-jugadora], .rutina-card, .jugadora-card, .registro-card, .tarjeta-jugadora").forEach(item => {
