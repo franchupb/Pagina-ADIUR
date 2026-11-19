@@ -1687,29 +1687,21 @@ function listaDesdeDatosFixture(datos, divisionPadre = "") {
 }
 
 function leerTodosLosPartidos() {
+  // TORITO y ADIUR comparten el mismo origen de GitHub Pages y, por lo tanto,
+  // también comparten localStorage. Leer claves genéricas como "fixture" o
+  // recorrer todas las claves del navegador mezcla accidentalmente los clubes.
+  // Por eso acá solo se consultan claves identificadas explícitamente como TORITO.
   const combinados = [...cachePartidosNube];
 
-  const clavesPosibles = [
+  const clavesExclusivasTORITO = [
+    "fixtureTORITO",
     "partidosTORITO",
     "resultadosTORITO",
     "partidosJugadosTORITO",
-    "fixtureTORITO",
-    "partidosFixtureTORITO",
-    "partidosFixture",
-    "fixturePartidos",
-    "fixture"
+    "partidosFixtureTORITO"
   ];
 
-  const clavesDinamicas = [];
-
-  for (let i = 0; i < localStorage.length; i++) {
-    const clave = localStorage.key(i);
-    if (clave && /(fixture|partidos|encuentros|resultados)/i.test(clave)) {
-      clavesDinamicas.push(clave);
-    }
-  }
-
-  for (const clave of [...new Set([...clavesPosibles, ...clavesDinamicas])]) {
+  for (const clave of clavesExclusivasTORITO) {
     try {
       const texto = localStorage.getItem(clave);
       if (!texto) continue;
@@ -1718,11 +1710,11 @@ function leerTodosLosPartidos() {
       const partidos = listaDesdeDatosFixture(datos);
       if (partidos.length) combinados.push(...partidos);
     } catch (error) {
-      console.warn("No se pudo leer el registro guardado en", clave, error);
+      console.warn("No se pudo leer el registro propio de TORITO:", clave, error);
     }
   }
 
-  // Deduplicar por id o por combinación fecha + división + rival
+  // Deduplicar por id o por combinación fecha + división + rival.
   const vistos = new Set();
   return combinados.filter(p => {
     if (!p || typeof p !== "object") return false;
