@@ -8,7 +8,7 @@
 
   const SESSION_KEY = "usuarioADIUR";
   const LOGIN_URL = "Loing.html";
-  const DIVISION_FIJA = { toto: "Sub 16", bianca: "Sub 14" };
+  const DIVISION_FIJA = { ct_s16: "Sub 16", jugadora_s14: "Sub 14" };
   const PAGINAS_BIANCA = new Set([
     "pagina principal.html",
     "partidos.html",
