@@ -1774,7 +1774,7 @@ body.eliminando .btn-puntos {
             class="logo-club"
             src="Logo ADIUR.jpg"
             alt="Logo ADIUR"
-            onerror="if(!this.dataset.intento){this.dataset.intento='1';this.src='logo adiur.jpg'}else{this.style.display='none'}"
+            onerror="if(!this.dataset.intento){this.dataset.intento='1';this.src='Logo ADIUR.jpg'}else{this.style.display='none'}"
         >
 
         <div class="textos-club">
@@ -2193,7 +2193,7 @@ body.eliminando .btn-puntos {
                             class="escudo-preview"
                             src="Logo ADIUR.jpg"
                             alt="Escudo de ADIUR"
-                            onerror="this.onerror=null;this.src='logo adiur.jpg';"
+                            onerror="this.onerror=null;this.src='Logo ADIUR.jpg';"
                         >
 
                         <p class="escudo-fijo-aviso">
@@ -2661,7 +2661,7 @@ function rutaImagen(nombre) {
 
     if (
         minusculas === "adiur" ||
-        minusculas === "logo adiur.jpg" ||
+        minusculas === "Logo ADIUR.jpg" ||
         minusculas === "logo adiur.png" ||
         minusculas === "logo adiur.jpeg"
     ) {
@@ -3114,7 +3114,7 @@ function abrirModal(id = null) {
 
     previewAdiur.onerror = function() {
         this.onerror = null;
-        this.src = "logo adiur.jpg";
+        this.src = "Logo ADIUR.jpg";
     };
 
     previewAdiur.src = LOGO_ADIUR_FIJO;
@@ -3423,7 +3423,7 @@ function construirEscudo(src, nombre, esAdiur = false) {
                 class="escudo-mini"
                 src="${rutaSegura}"
                 alt="${altSeguro}"
-                onerror="this.onerror=null;this.src='logo adiur.jpg';"
+                onerror="this.onerror=null;this.src='Logo ADIUR.jpg';"
             >
         `;
     }
