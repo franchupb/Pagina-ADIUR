@@ -1277,9 +1277,9 @@ body{background:#f2f4f6;color:var(--coach-ink)}
 }
 
 
-/* CABECERA COMPARTIDA: mismos estilos que Pagina Principal.html */
+/* CABECERA COMPARTIDA: replica la jerarquía visual de Pagina Principal.html */
 .barra-superior{
-  position:sticky;top:0;z-index:1000;
+  position:sticky;top:0;z-index:100;
   display:flex;align-items:center;gap:15px;
   min-height:84px;padding:12px 25px;
   background:#fff;border-bottom:1px solid var(--borde);
@@ -1315,26 +1315,21 @@ body{background:#f2f4f6;color:var(--coach-ink)}
 .capa-sidebar.visible{inset:84px 0 0}
 .main{padding-top:28px}
 @media(max-width:760px){
-  .barra-superior{gap:9px;min-height:74px;padding:9px 12px}
+  .barra-superior{gap:9px;min-height:72px;padding:10px 13px}
+  .boton-menu{width:38px;height:38px;font-size:24px}
   .logo-superior{width:44px;height:44px}
-  .titulo-superior h1{font-size:17px}
+  .titulo-superior h1{font-size:16px}
   .titulo-superior p{font-size:11px}
-  .nombre-perfil{max-width:95px;font-size:12px}
-  .rol-perfil{font-size:10px}
+  .nombre-perfil{max-width:80px;font-size:12px}
+  .rol-perfil{display:none}
   .avatar{width:38px;height:38px}
-  .sidebar{top:74px}
-  .capa-sidebar.visible{inset:74px 0 0}
+  .sidebar{top:72px}
+  .capa-sidebar.visible{inset:72px 0 0}
   .main{padding-top:16px}
 }
-@media(max-width:420px){
-  .barra-superior{gap:7px;padding:8px}
-  .boton-menu{width:36px;height:38px;font-size:24px}
-  .logo-superior{width:39px;height:39px}
-  .titulo-superior h1{font-size:14px;letter-spacing:.2px}
-  .titulo-superior p{font-size:10px}
-  .nombre-perfil{max-width:72px;font-size:11px}
-  .rol-perfil{font-size:9px}
-  .avatar{width:34px;height:34px}
+@media(max-width:380px){
+  .titulo-superior h1{font-size:14px}
+  .nombre-perfil{max-width:60px}
 }
 
 </style>
@@ -1372,11 +1367,11 @@ body{background:#f2f4f6;color:var(--coach-ink)}
   </div>
 
   <div class="perfil">
+    <div class="avatar" id="avatarUsuario" aria-label="Usuario">U</div>
     <div>
       <div class="nombre-perfil" id="nombreUsuario">Usuario</div>
       <div class="rol-perfil" id="rolUsuario">Club ADIUR</div>
     </div>
-    <div class="avatar" id="avatarUsuario" aria-label="Usuario">U</div>
   </div>
 </header>
 
@@ -2013,7 +2008,6 @@ ajustarSidebarPorPantalla();
 window.addEventListener("resize", ajustarSidebarPorPantalla);
 
 /* Permisos de visualización: se mantienen los mismos criterios que en Inicio. */
-const esBianca = usuario.toLowerCase() === "bianca" || usuario.toLowerCase() === "biancadominguez";
 if(esBianca){
   document.getElementById("grupoPlantel")?.remove();
   document.getElementById("grupoRendimientos")?.remove();
@@ -2097,6 +2091,7 @@ function moverElemento(
   const rect =
     pitch.getBoundingClientRect();
 
+  if(!rect.width || !rect.height || !Number.isFinite(x) || !Number.isFinite(y)) return;
 
   const ancho =
     elemento.offsetWidth;
@@ -2146,14 +2141,12 @@ function iniciarArrastre(e){
   if(e.button !== undefined && e.button !== 0) return;
   e.preventDefault();
 
-  arrastrando =
-    e.currentTarget;
-  try{ arrastrando.setPointerCapture(e.pointerId); }catch(error){}
-
-
   const rect =
     pitch.getBoundingClientRect();
+  if(!rect.width || !rect.height) return;
 
+  arrastrando = e.currentTarget;
+  try{ arrastrando.setPointerCapture(e.pointerId); }catch(error){}
 
   const elementoRect =
     arrastrando.getBoundingClientRect();
@@ -2614,18 +2607,24 @@ function cargarFormacionRival(){
    RIVAL LIBRE
 ========================= */
 
+function validarNumeroJugador(valor){
+  const texto = String(valor ?? "").trim();
+  if(!/^[1-9]\d?$/.test(texto)) return null;
+  const numero = Number(texto);
+  return Number.isInteger(numero) && numero >= 1 && numero <= 99
+    ? String(numero)
+    : null;
+}
+
 function agregarRival(){
+  const entrada = prompt("Número de la jugadora rival (1 a 99):","10");
+  if(entrada === null) return;
 
-  const numero =
-    prompt(
-      "Número del jugador rival:",
-      "10"
-    );
-
-
-  if(!numero)
+  const numero = validarNumeroJugador(entrada);
+  if(!numero){
+    alert("Ingresá un número entero entre 1 y 99.");
     return;
-
+  }
 
   crearJugador(
     numero,
@@ -2778,19 +2777,19 @@ function crearJugadorManual(){
     ).value;
 
 
-  if(!numero){
-
-    alert(
-      "Ingresá un número."
-    );
-
+  const numeroValidado = validarNumeroJugador(numero);
+  if(!numeroValidado){
+    alert("Ingresá un número entero entre 1 y 99.");
     return;
-
   }
 
+  if(!["own","opponent"].includes(equipo)){
+    alert("Seleccioná un equipo válido.");
+    return;
+  }
 
   crearJugador(
-    numero,
+    numeroValidado,
     50,
     50,
     equipo,
@@ -3048,6 +3047,11 @@ function aplicarDatosPizarra(datos){
   if(jugadores.length > 60 || dibujos.length > 250){
     throw new Error("La pizarra contiene demasiados elementos y no se cargó.");
   }
+  const pesoDibujos = dibujos.reduce((total,dibujo)=>
+    total + (typeof dibujo === "string" ? dibujo.length : 0),0);
+  if(pesoDibujos > 700000){
+    throw new Error("Los dibujos guardados superan el tamaño permitido y no se cargaron.");
+  }
 
   const cancha = ["completa","mitad"].includes(datos.cancha) ? datos.cancha : "completa";
   const opcionesPropias = Array.from(document.getElementById("formacionPropia").options).map(o=>o.value);
@@ -3083,7 +3087,10 @@ function aplicarDatosPizarra(datos){
   // Restauración con lista permitida de etiquetas y atributos SVG.
   const etiquetasSVG=new Set(["path","polyline","ellipse","rect","polygon","line","g"]);
   const atributosSVG=new Set(["d","points","cx","cy","rx","ry","x","y","width","height","x1","y1","x2","y2","fill","fill-opacity","stroke","stroke-width","stroke-linecap","stroke-linejoin","stroke-dasharray","marker-end","opacity"]);
-  function copiarNodoSVG(origen){
+  let cantidadNodosSVG = 0;
+  function copiarNodoSVG(origen,profundidad=0){
+    cantidadNodosSVG++;
+    if(cantidadNodosSVG > 2000 || profundidad > 8) return null;
     const etiqueta=origen.localName;
     if(!etiquetasSVG.has(etiqueta))return null;
     const destino=document.createElementNS(SVG_NS,etiqueta);
@@ -3097,7 +3104,7 @@ function aplicarDatosPizarra(datos){
       destino.setAttribute(nombre,valor);
     });
     Array.from(origen.children).forEach(hijo=>{
-      const copia=copiarNodoSVG(hijo);
+      const copia=copiarNodoSVG(hijo,profundidad+1);
       if(copia)destino.appendChild(copia);
     });
     return destino;
@@ -3126,6 +3133,15 @@ function aplicarDatosPizarra(datos){
   }
 }
 
+function restablecerPizarraVacia(){
+  limpiarPizarra(false);
+  document.getElementById("tipoCancha").value = "completa";
+  document.getElementById("formacionPropia").value = "433";
+  document.getElementById("formacionRival").value = "ninguna";
+  cambiarCancha();
+  cargarFormacionPropia();
+}
+
 async function cargarGuardada(){
   const division = document.getElementById("division").value;
   const miCarga = ++contadorCargaPizarra;
@@ -3151,8 +3167,7 @@ async function cargarGuardada(){
   }
 
   if(!datosLocales){
-    limpiarPizarra(false);
-    if(miCarga === contadorCargaPizarra) cargarFormacionPropia();
+    if(miCarga === contadorCargaPizarra) restablecerPizarraVacia();
     establecerEstadoGuardado("Buscando pizarra guardada...","loading");
   }
 
