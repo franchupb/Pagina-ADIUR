@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Planilla de Testeos - TORITO</title>
+
+<style>
+:root {
+  --naranja: #f47721;
+  --naranja-oscuro: #dc5e0b;
+  --naranja-claro: #fff0e6;
+  --negro: #171717;
+  --gris: #f4f5f7;
+  --gris-texto: #747474;
+  --borde: #e8e8e8;
+  --blanco: #fff;
+  --rojo: #ef4444;
+  --rojo-oscuro: #dc2626;
+  --verde: #18743b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: var(--gris);
+  color: var(--negro);
+}
+
+button, input, select, textarea {
+  font: inherit;
+}
+
+button, a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* =====================================================
+   BARRA SUPERIOR
+===================================================== */
+
+.barra-superior {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  min-height: 84px;
+  padding: 12px 25px;
+  background: #fff;
+  border-bottom: 1px solid var(--borde);
+}
+
+.boton-menu {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border: 0;
+  background: white;
+  border-radius: 9px;
+  font-size: 27px;
+  color: var(--negro);
+}
+
+.boton-menu:hover {
+  background: var(--gris);
+}
+
+.logo-superior {
+  width: 55px;
+  height: 55px;
+  flex-shrink: 0;
+  object-fit: contain;
+  border-radius: 50%;
+  padding: 2px;
+  background: white;
+}
+
+.titulo-superior {
+  flex: 1;
+  min-width: 0;
+}
+
+.titulo-superior h1 {
+  margin: 0 0 5px;
+  font-size: 23px;
+  font-weight: 900;
+  letter-spacing: .5px;
+}
+
+.titulo-superior p {
+  margin: 0;
+  color: var(--gris-texto);
+  font-size: 13px;
+}
+
+.estado-nube {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 20px;
+  background: #e0f5e7;
+  color: #18743b;
+}
+
+.estado-nube.guardando {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.estado-nube.error {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.perfil {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  background: var(--negro);
+  color: white;
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+.nombre-perfil {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.rol-perfil {
+  color: var(--gris-texto);
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+/* =====================================================
+   ESTRUCTURA GENERAL
+===================================================== */
+
+.contenedor {
+  display: flex;
+  min-height: calc(100vh - 84px);
+  align-items: stretch;
+}
+
+/* =====================================================
+   BARRA LATERAL
+===================================================== */
+
+.sidebar {
+  width: 258px;
+  flex: 0 0 258px;
+  padding: 20px 13px;
+  background: #fff;
+  border-right: 1px solid var(--borde);
+  transition: margin-left .25s ease;
+  overflow-y: auto;
+}
+
+.sidebar.oculto {
+  margin-left: -258px;
+}
+
+.menu-inicio {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 14px;
+  margin-bottom: 16px;
+  border-radius: 11px;
+  background: #fff;
+  color: var(--negro);
+  font-size: 13px;
+  font-weight: 850;
+  transition: background .2s;
+}
+
+.menu-inicio:hover {
+  background: var(--gris);
+}
+
+.grupo-menu {
+  margin-bottom: 8px;
+}
+
+.titulo-grupo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 13px;
+  min-height: 46px;
+  cursor: pointer;
+  border-radius: 8px;
+  color: #171717;
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: .8px;
+  user-select: none;
+}
+
+.titulo-grupo:hover {
+  background: #f8f8f8;
+}
+
+.flecha {
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+  transition: transform .2s;
+}
+
+.grupo-menu.cerrado .flecha {
+  transform: rotate(0deg);
+}
+
+.grupo-menu:not(.cerrado) .flecha {
+  transform: rotate(90deg);
+}
+
+.submenu {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 0 0 5px 0;
+}
+
+.grupo-menu.cerrado .submenu {
+  display: none;
+}
+
+.submenu a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 9px;
+  font-size: 13px;
+  color: #656872;
+  transition: background .15s, color .15s;
+}
+
+.submenu a:hover {
+  background: #f6f6f6;
+  color: #181818;
+}
+
+.submenu a.activo {
+  background: var(--naranja-claro);
+  color: var(--naranja-oscuro);
+  font-weight: 800;
+}
+
+.nav-punto {
+  width: 6px;
+  height: 6px;
+  flex-shrink: 0;
+  background: #d7d9de;
+  border-radius: 50%;
+}
+
+.submenu a.activo .nav-punto {
+  background: var(--naranja);
+}
+
+.separador-sesion {
+  border-top: 1px solid #e8e8e8;
+  margin: 19px 0 0;
+  padding-top: 12px;
+}
+
+.enlace-cerrar-sesion {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 9px;
+  color: #c0392b;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.enlace-cerrar-sesion:hover {
+  background: #fff2f1;
+  color: #a93226;
+}
+
+.capa-sidebar {
+  display: none;
+}
+
+/* =====================================================
+   CONTENIDO PRINCIPAL - PLANILLA DE TESTEOS
+===================================================== */
+
+.contenido {
+  flex: 1;
+  min-width: 0;
+  padding: 24px;
+  max-width: 100%;
+}
+
+.encabezado-seccion {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.encabezado-seccion h2 {
+  margin: 0 0 6px;
+  font-size: 25px;
+}
+
+.encabezado-seccion p {
+  margin: 0;
+  color: var(--gris-texto);
+  font-size: 13px;
+}
+
+.panel {
+  background: white;
+  border: 1px solid var(--borde);
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 22px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+}
+
+.controles-planilla {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.filtros-grupo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.campo-filtro {
+  min-width: 190px;
+}
+
+.campo-filtro label {
+  display: block;
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--gris-texto);
+  margin-bottom: 6px;
+}
+
+.campo-filtro select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  background: white;
+  font-size: 13px;
+  font-weight: bold;
+  outline: none;
+}
+
+.campo-filtro select:focus {
+  border-color: var(--naranja);
+}
+
+.acciones-columnas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.btn-principal {
+  background: var(--naranja);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 13px;
+  transition: background .15s;
+}
+
+.btn-principal:hover {
+  background: var(--naranja-oscuro);
+}
+
+.btn-secundario {
+  background: white;
+  border: 1px solid var(--borde);
+  color: var(--negro);
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.btn-secundario:hover {
+  background: var(--gris);
+}
+
+.btn-peligro {
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+  color: var(--rojo-oscuro);
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.btn-peligro:hover {
+  background: #ffe4e6;
+}
+
+/* =====================================================
+   TABLA ESTILO PLANILLA TORITO (COMO EN LA IMAGEN)
+===================================================== */
+
+.titulo-hoja-planilla {
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.titulo-hoja-planilla h3 {
+  margin: 0;
+  color: var(--naranja);
+  font-size: 19px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.titulo-hoja-planilla span {
+  font-size: 13px;
+  font-weight: bold;
+  color: var(--negro);
+}
+
+.tabla-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #999;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.tabla-testeos {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.tabla-testeos th,
+.tabla-testeos td {
+  border: 1px solid #777;
+  padding: 5px 7px;
+  height: 28px;
+}
+
+/* Columna fija izquierda (N° y Nombre) */
+.col-fija-num {
+  position: sticky;
+  left: 0;
+  z-index: 20;
+  background: #f47721;
+  color: #000;
+  font-weight: bold;
+  min-width: 34px;
+}
+
+.col-fija-nombre {
+  position: sticky;
+  left: 34px;
+  z-index: 20;
+  background: #fff;
+  text-align: left !important;
+  padding-left: 10px !important;
+  min-width: 185px;
+  font-weight: 600;
+  border-right: 2px solid #444 !important;
+}
+
+thead .col-fija-num {
+  z-index: 30;
+  background: var(--naranja);
+}
+
+thead .col-fija-nombre {
+  z-index: 30;
+  background: #e5e7eb;
+  text-align: center !important;
+  font-weight: 900;
+}
+
+.fila-mes-banner th {
+  background: #fff;
+  font-size: 13px;
+  font-weight: 900;
+  padding: 6px;
+  border-bottom: 2px solid #444;
+}
+
+/* Colores de Categorías (Idénticos a la imagen) */
+.cat-jugadoras { background: #e5e7eb; color: #000; font-weight: 900; }
+.cat-saltos    { background: #ffe599; color: #000; font-weight: 900; }
+.cat-velocidad { background: #f9cb9c; color: #000; font-weight: 900; }
+.cat-vo2       { background: #e06666; color: #000; font-weight: 900; }
+.cat-postural  { background: #b6d7a8; color: #000; font-weight: 900; }
+.cat-agilidad  { background: #6fa8dc; color: #000; font-weight: 900; }
+.cat-indices   { background: #b4a7d6; color: #000; font-weight: 900; }
+.cat-custom    { background: #a2c4c9; color: #000; font-weight: 900; }
+
+.th-subtest {
+  background: #f8fafc;
+  font-weight: 800;
+  font-size: 11px;
+  position: relative;
+}
+
+.btn-quitar-col {
+  display: inline-block;
+  margin-left: 5px;
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
+  border-radius: 4px;
+  font-size: 10px;
+  line-height: 1;
+  padding: 1px 4px;
+  cursor: pointer;
+}
+
+.btn-quitar-col:hover {
+  background: #ef4444;
+  color: #fff;
+}
+
+/* Inputs dentro de celdas */
+.celda-input {
+  width: 62px;
+  border: none;
+  background: transparent;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: #111;
+  outline: none;
+  padding: 2px;
+}
+
+.celda-input:focus {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: inset 0 0 0 2px var(--naranja);
+  border-radius: 3px;
+}
+
+.celda-input:disabled {
+  color: #111;
+  cursor: default;
+}
+
+/* Colores semáforo de rendimiento */
+.estado-mejor  { background-color: #b7e1cd !important; } /* Verde suave */
+.estado-peor   { background-color: #f4cccc !important; } /* Rojo suave */
+.imc-bajo      { background-color: #6d9eeb !important; font-weight: bold; }
+.imc-normal    { background-color: #93c47d !important; font-weight: bold; }
+.imc-alto      { background-color: #f6b26b !important; font-weight: bold; }
+
+/* Fila de Promedios */
+.fila-promedios td {
+  background: #f1f5f9;
+  font-weight: 900;
+  border-top: 2px solid #333;
+  color: #000;
+}
+
+.fila-promedios .col-fija-nombre {
+  background: #e2e8f0;
+  text-align: center !important;
+}
+
+/* =====================================================
+   MODALES
+===================================================== */
+
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal.activo {
+  display: flex;
+}
+
+.modal-contenido {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  width: 100%;
+  max-width: 460px;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.btn-cerrar-modal {
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: #777;
+}
+
+.form-group {
+  margin-bottom: 14px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 6px;
+  color: #444;
+}
+
+.form-group input, .form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  font-size: 13px;
+  outline: none;
+}
+
+.form-group input:focus, .form-group select:focus {
+  border-color: var(--naranja);
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+@media (max-width: 760px) {
+  .sidebar {
+    position: fixed;
+    top: 72px;
+    bottom: 0;
+    left: 0;
+    z-index: 150;
+    width: 258px;
+    max-width: 86vw;
+    box-shadow: 5px 0 25px rgba(0,0,0,0.1);
+    transform: translateX(-110%);
+    transition: transform .25s ease;
+  }
+  .sidebar:not(.oculto) {
+    transform: translateX(0);
+  }
+  .capa-sidebar.visible {
+    display: block;
+    position: fixed;
+    inset: 72px 0 0;
+    background: rgba(0,0,0,0.3);
+    z-index: 140;
+  }
+  .contenido {
+    padding: 14px;
+  }
+}
+</style>
+<script src="TORITO-permisos.js?v=20261118-s16c"></script>
+</head>
+
+<body>
+
+<!-- BARRA SUPERIOR -->
+<header class="barra-superior">
+  <button class="boton-menu" id="botonMenu" aria-label="Abrir menú" onclick="alternarSidebar()">☰</button>
+  <img class="logo-superior" src="TORITO-Logo TORITO.png" alt="Logo TORITO" onerror="this.style.display='none'">
+  <div class="titulo-superior">
+    <h1>TORITO</h1>
+    <p>Planilla de Testeos y Evaluaciones Físicas</p>
+  </div>
+  <div id="badgeNube" class="estado-nube">☁️ Conectando...</div>
+  <div class="perfil">
+    <div class="avatar" id="avatarUsuario">U</div>
+    <div>
+      <div class="nombre-perfil" id="nombreUsuario">Usuario</div>
+      <div class="rol-perfil" id="rolUsuario">Club Torito</div>
+    </div>
+  </div>
+</header>
+
+<div class="capa-sidebar" id="capaSidebar" onclick="alternarSidebar()"></div>
+
+<div class="contenedor">
+  <!-- BARRA LATERAL -->
+  <aside class="sidebar" id="sidebar">
+    <a class="menu-inicio" href="TORITO-Pagina Principal.html">
+      <span class="icono-inicio">⌂</span> INICIO
+    </a>
+    <div class="grupo-menu cerrado" id="grupoPlantel">
+      <div class="titulo-grupo" onclick="toggleGrupo('grupoPlantel')">
+        <span>PLANTEL</span><span class="flecha">›</span>
+      </div>
+      <div class="submenu">
+        <a href="TORITO-jugadoras.html"><span class="nav-punto"></span>Jugadoras</a>
+        <a href="TORITO-asistencia.html"><span class="nav-punto"></span>Asistencia</a>
+      </div>
+    </div>
+    <div class="grupo-menu cerrado" id="grupoEntrenamiento">
+      <div class="titulo-grupo" onclick="toggleGrupo('grupoEntrenamiento')">
+        <span>ENTRENAMIENTO</span><span class="flecha">›</span>
+      </div>
+      <div class="submenu">
+        <a href="TORITO-calendario.html"><span class="nav-punto"></span>Calendario</a>
+        <a href="TORITO-planificacion.html"><span class="nav-punto"></span>Planificación</a>
+        <a href="TORITO-gimnasio.html"><span class="nav-punto"></span>Gimnasio</a>
+      </div>
+    </div>
+    <div class="grupo-menu cerrado" id="grupoCompetencia">
+      <div class="titulo-grupo" onclick="toggleGrupo('grupoCompetencia')">
+        <span>COMPETENCIA</span><span class="flecha">›</span>
+      </div>
+      <div class="submenu">
+        <a href="TORITO-Partidos.html"><span class="nav-punto"></span>Partidos</a>
+        <a href="TORITO-estadisticas.html"><span class="nav-punto"></span>Estadísticas</a>
+        <a href="TORITO-pizarra.html"><span class="nav-punto"></span>Pizarra táctica</a>
+      </div>
+    </div>
+    <div class="grupo-menu" id="grupoRendimientos">
+      <div class="titulo-grupo" onclick="toggleGrupo('grupoRendimientos')">
+        <span>RENDIMIENTOS</span><span class="flecha">›</span>
+      </div>
+      <div class="submenu">
+        <a href="TORITO-testeos.html" class="activo"><span class="nav-punto"></span>Planilla de testeos</a>
+        <a href="TORITO-tiempos.html"><span class="nav-punto"></span>Tiempos</a>
+        <a href="multimedia.html"><span class="nav-punto"></span>Multimedia</a>
+        <a href="TORITO-encuestas.html"><span class="nav-punto"></span>Encuestas</a>
+        <a href="lesiones.html"><span class="nav-punto"></span>Lesiones</a>
+      </div>
+    </div>
+    <div class="separador-sesion">
+      <a class="enlace-cerrar-sesion" href="#" onclick="cerrarSesion(event)">
+        <span class="icono-salir">↪</span> Cerrar sesión
+      </a>
+    </div>
+  </aside>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="contenido">
+    <div class="encabezado-seccion">
+      <div>
+        <h2>Planilla de Testeos Físicos</h2>
+        <p>Seleccioná la división y el mes para cargar o consultar resultados de evaluación.</p>
+      </div>
+    </div>
+
+    <div class="panel">
+      <!-- CONTROLES DE DIVISIÓN, MES Y COLUMNAS -->
+      <div class="controles-planilla">
+        <div class="filtros-grupo">
+          <div class="campo-filtro">
+            <label for="selectDivision">División</label>
+            <select id="selectDivision" onchange="cambiarFiltroPlanilla()">
+              <option value="Sub 10">Sub 10</option>
+              <option value="Sub 12">Sub 12</option>
+              <option value="Sub 14" selected>Sub 14</option>
+              <option value="Sub 16">Sub 16</option>
+              <option value="Primera">Primera</option>
+            </select>
+          </div>
+
+          <div class="campo-filtro">
+            <label for="selectMes">Mes</label>
+            <select id="selectMes" onchange="cambiarFiltroPlanilla()">
+              <option value="Enero">Enero</option>
+              <option value="Febrero">Febrero</option>
+              <option value="Marzo">Marzo</option>
+              <option value="Abril">Abril</option>
+              <option value="Mayo">Mayo</option>
+              <option value="Junio">Junio</option>
+              <option value="Julio">Julio</option>
+              <option value="Agosto">Agosto</option>
+              <option value="Septiembre">Septiembre</option>
+              <option value="Octubre">Octubre</option>
+              <option value="Noviembre" selected>Noviembre</option>
+              <option value="Diciembre">Diciembre</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="acciones-columnas" id="accionesTecnico">
+          <button class="btn-principal" onclick="abrirModalAgregarTest()">+ Agregar Testeo / Columna</button>
+          <button class="btn-secundario" onclick="alternarModoEliminar()">🗑️ Quitar Columnas</button>
+        </div>
+      </div>
+
+      <!-- ENCABEZADO VISUAL DE LA PLANILLA -->
+      <div class="titulo-hoja-planilla">
+        <h3 id="tituloPlanillaDivision">TORITO SUB 14</h3>
+        <span>Test - Pruebas</span>
+      </div>
+
+      <!-- TABLA DE TESTEOS -->
+      <div class="tabla-wrapper">
+        <table class="tabla-testeos" id="tablaTesteos">
+          <thead id="theadTesteos"></thead>
+          <tbody id="tbodyTesteos"></tbody>
+          <tfoot id="tfootTesteos"></tfoot>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- MODAL PARA AGREGAR UN NUEVO TEST / COLUMNA -->
+<div class="modal" id="modalAgregarTest">
+  <div class="modal-contenido">
+    <div class="modal-header">
+      <h3>Agregar Nuevo Testeo</h3>
+      <button class="btn-cerrar-modal" onclick="cerrarModal('modalAgregarTest')">&times;</button>
+    </div>
+    <form id="formAgregarTest" onsubmit="agregarNuevaColumnaTest(event)">
+      <div class="form-group">
+        <label for="categoriaTest">Categoría / Grupo</label>
+        <select id="categoriaTest" required>
+          <option value="SALTOS">SALTOS</option>
+          <option value="VELOCIDAD">VELOCIDAD</option>
+          <option value="Vo2 máx">Vo2 máx</option>
+          <option value="POSTURAL">POSTURAL</option>
+          <option value="AGILIDAD">AGILIDAD</option>
+          <option value="INDICES">INDICES</option>
+          <option value="OTRO TEST">OTRO TEST</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="nombreTest">Nombre de la Prueba / Columna</label>
+        <input type="text" id="nombreTest" required placeholder="Ej: Salto Horizontal, 40m, Yo-Yo Test...">
+      </div>
+
+      <div class="form-group">
+        <label for="criterioTest">Criterio de Mejora (para colores vs. COMP)</label>
+        <select id="criterioTest" required>
+          <option value="mayor">Mayor valor es mejor (ej: Saltos, Vo2 máx)</option>
+          <option value="menor">Menor valor/tiempo es mejor (ej: Velocidad, Agilidad)</option>
+          <option value="ninguno">Sin comparación automática</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+          <input type="checkbox" id="incluirComp" checked style="width:auto;">
+          Incluir columna de comparación (COMP) al lado
+        </label>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-secundario" onclick="cerrarModal('modalAgregarTest')">Cancelar</button>
+        <button type="submit" class="btn-principal">Agregar a la Planilla</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/* =====================================================
+   CONFIGURACIÓN DE FIREBASE CLOUD FIRESTORE (adiur-b1913)
+===================================================== */
+const firebaseConfig = {
+  projectId: "adiur-b1913",
+  appId: "1:1032379124859:web:adiur-fem-web",
+  authDomain: "adiur-b1913.firebaseapp.com",
+  storageBucket: "adiur-b1913.appspot.com"
+};
+
+let db = null;
+let nubeActiva = false;
+
+try {
+  const app = initializeApp(firebaseConfig);
+  db = getFirestore(app);
+  nubeActiva = true;
+} catch (e) {
+  console.warn("Modo offline/localStorage activado:", e);
+}
+
+/* =====================================================
+   USUARIO Y PERMISOS
+===================================================== */
+const usuarioGuardado = (localStorage.getItem("usuarioTORITO") || "").trim();
+if (!usuarioGuardado) {
+  window.location.href = "TORITO-Loing.html";
+}
+
+const usuarioNormalizado = usuarioGuardado.toLowerCase();
+const esFran = ["fran", "francisco", "francisco perez basla"].includes(usuarioNormalizado);
+const esToto = usuarioNormalizado === "toto";
+const esBianca = ["biancadominguez", "bianca"].includes(usuarioNormalizado);
+const puedeEditar = esFran || esToto;
+
+document.getElementById("nombreUsuario").textContent = usuarioGuardado;
+document.getElementById("avatarUsuario").textContent = usuarioGuardado.charAt(0).toUpperCase();
+document.getElementById("rolUsuario").textContent = esFran ? "Administrador" : esToto ? "Cuerpo técnico" : esBianca ? "Jugadora · Sub 14" : "Club Torito";
+
+if (!puedeEditar) {
+  document.getElementById("accionesTecnico").style.display = "none";
+}
+
+window.cerrarSesion = function(event) {
+  event.preventDefault();
+  localStorage.removeItem("usuarioTORITO");
+  window.location.href = "TORITO-Loing.html";
+};
+
+window.alternarSidebar = function() {
+  document.getElementById("sidebar").classList.toggle("oculto");
+  document.getElementById("capaSidebar").classList.toggle("visible");
+};
+
+window.toggleGrupo = function(id) {
+  document.getElementById(id).classList.toggle("cerrado");
+};
+
+function actualizarEstadoNube(estado, texto) {
+  const badge = document.getElementById("badgeNube");
+  badge.className = "estado-nube " + estado;
+  badge.textContent = texto;
+}
+
+/* =====================================================
+   ESTRUCTURA BASE DE COLUMNAS (IGUAL A LA IMAGEN)
+===================================================== */
+const COLUMNAS_POR_DEFECTO = [
+  { id: "salto_sin", grupo: "SALTOS", claseGrupo: "cat-saltos", label: "Sin Impulso", criterio: "mayor", compId: "salto_sin_comp" },
+  { id: "salto_sin_comp", grupo: "SALTOS", claseGrupo: "cat-saltos", label: "COMP", esComp: true },
+  { id: "salto_con", grupo: "SALTOS", claseGrupo: "cat-saltos", label: "Con Impulso", criterio: "mayor", compId: "salto_con_comp" },
+  { id: "salto_con_comp", grupo: "SALTOS", claseGrupo: "cat-saltos", label: "COMP", esComp: true },
+
+  { id: "vel_30", grupo: "VELOCIDAD", claseGrupo: "cat-velocidad", label: "30", criterio: "menor", compId: "vel_30_comp" },
+  { id: "vel_30_comp", grupo: "VELOCIDAD", claseGrupo: "cat-velocidad", label: "COMP", esComp: true },
+  { id: "vel_15_15", grupo: "VELOCIDAD", claseGrupo: "cat-velocidad", label: "15-15", criterio: "menor" },
+
+  { id: "vo2_30_15", grupo: "Vo2 máx", claseGrupo: "cat-vo2", label: "30-15", criterio: "mayor" },
+
+  { id: "postural_apecs", grupo: "POSTURAL", claseGrupo: "cat-postural", label: "A.P.E.C.S", criterio: "ninguno" },
+
+  { id: "illinois_mod", grupo: "AGILIDAD", claseGrupo: "cat-agilidad", label: "Illinois Mod", criterio: "menor", compId: "illinois_mod_comp" },
+  { id: "illinois_mod_comp", grupo: "AGILIDAD", claseGrupo: "cat-agilidad", label: "COMP", esComp: true },
+  { id: "illinois_norm", grupo: "AGILIDAD", claseGrupo: "cat-agilidad", label: "Illinois Norm", criterio: "menor", compId: "illinois_norm_comp" },
+  { id: "illinois_norm_comp", grupo: "AGILIDAD", claseGrupo: "cat-agilidad", label: "COMP", esComp: true },
+
+  { id: "peso", grupo: "INDICES", claseGrupo: "cat-indices", label: "PESO", criterio: "ninguno" },
+  { id: "altura", grupo: "INDICES", claseGrupo: "cat-indices", label: "ALTURA", criterio: "ninguno" },
+  { id: "imc", grupo: "INDICES", claseGrupo: "cat-indices", label: "I.M.C", esCalculadoIMC: true }
+];
+
+let columnasActuales = [];
+let valoresActuales = {}; // { [nombreJugadora]: { [colId]: valor } }
+let jugadorasDivision = [];
+let modoEliminar = false;
+let timeoutGuardado = null;
+
+/* =====================================================
+   OBTENER JUGADORAS DESDE LA NUBE O LOCALSTORAGE
+===================================================== */
+async function cargarJugadorasPorDivision(division) {
+  let listaTotal = [];
+
+  // 1. Intentar leer desde Firestore (colección "jugadoras" o documento "plantel/jugadoras")
+  if (nubeActiva && db) {
+    try {
+      const snapCol = await getDocs(collection(db,"torito_jugadoras"));
+      snapCol.forEach(docSnap => {
+        listaTotal.push({ id: docSnap.id, ...docSnap.data() });
+      });
+
+      if (listaTotal.length === 0) {
+        const docPlantel = await getDoc(doc(db,"torito_plantel", "jugadoras"));
+        if (docPlantel.exists() && Array.isArray(docPlantel.data().lista)) {
+          listaTotal = docPlantel.data().lista;
+        }
+      }
+    } catch (err) {
+      console.warn("Leyendo jugadoras desde respaldo local:", err);
+    }
+  }
+
+  // 2. Respaldo / fusión con localStorage de TORITO-jugadoras.html
+  if (listaTotal.length === 0) {
+    const rawLocal = localStorage.getItem("jugadorasTORITO") || localStorage.getItem("plantelTORITO");
+    if (rawLocal) {
+      try { listaTotal = JSON.parse(rawLocal); } catch (e) {}
+    }
+  }
+
+  // Filtrar por la división elegida
+  const divNormalizada = division.toLowerCase().replace(/\s+/g, "");
+  return listaTotal
+    .filter(j => {
+      const cat = (j.categoria || j.division || "").toLowerCase().replace(/\s+/g, "");
+      return cat === divNormalizada;
+    })
+    .map(j => {
+      if (j.nombre && j.apellido) return `${j.nombre.trim()} ${j.apellido.trim()}`;
+      return (j.nombre || j.nombreCompleto || "Sin nombre").trim();
+    })
+    .sort((a, b) => a.localeCompare(b));
+}
+
+/* =====================================================
+   CARGAR Y GUARDAR PLANILLA EN LA NUBE (FIRESTORE)
+===================================================== */
+function obtenerClavePlanilla(division, mes) {
+  return `${division.replace(/\s+/g, "_")}_${mes}`;
+}
+
+async function cargarDatosPlanilla(division, mes) {
+  actualizarEstadoNube("guardando", "☁️ Sincronizando...");
+  const clave = obtenerClavePlanilla(division, mes);
+
+  // Cargar jugadoras de la división
+  jugadorasDivision = await cargarJugadorasPorDivision(division);
+
+  let cargadoDeNube = false;
+  if (nubeActiva && db) {
+    try {
+      const refDoc = doc(db,"torito_testeos_torito", clave);
+      const snap = await getDoc(refDoc);
+      if (snap.exists()) {
+        const data = snap.data();
+        columnasActuales = Array.isArray(data.columnas) && data.columnas.length > 0 ? data.columnas : JSON.parse(JSON.stringify(COLUMNAS_POR_DEFECTO));
+        valoresActuales = data.valores || {};
+        cargadoDeNube = true;
+      }
+    } catch (e) {
+      console.warn("Error leyendo Firestore:", e);
+    }
+  }
+
+  if (!cargadoDeNube) {
+    const localRaw = localStorage.getItem("torito_testeos_torito_" + clave);
+    if (localRaw) {
+      try {
+        const parsed = JSON.parse(localRaw);
+        columnasActuales = parsed.columnas || JSON.parse(JSON.stringify(COLUMNAS_POR_DEFECTO));
+        valoresActuales = parsed.valores || {};
+      } catch (e) {
+        columnasActuales = JSON.parse(JSON.stringify(COLUMNAS_POR_DEFECTO));
+        valoresActuales = {};
+      }
+    } else {
+      columnasActuales = JSON.parse(JSON.stringify(COLUMNAS_POR_DEFECTO));
+      valoresActuales = {};
+    }
+  }
+
+  actualizarEstadoNube("", "☁️ Nube sincronizada");
+  renderizarTablaPlanilla();
+}
+
+function programarGuardadoNube() {
+  const division = document.getElementById("selectDivision").value;
+  const mes = document.getElementById("selectMes").value;
+  const clave = obtenerClavePlanilla(division, mes);
+
+  // Guardar inmediatamente en respaldo local
+  const payload = {
+    division,
+    mes,
+    columnas: columnasActuales,
+    valores: valoresActuales,
+    actualizadoPor: usuarioGuardado,
+    ultimaActualizacion: new Date().toISOString()
+  };
+  localStorage.setItem("torito_testeos_torito_" + clave, JSON.stringify(payload));
+
+  actualizarEstadoNube("guardando", "☁️ Guardando...");
+
+  if (timeoutGuardado) clearTimeout(timeoutGuardado);
+  timeoutGuardado = setTimeout(async () => {
+    if (nubeActiva && db) {
+      try {
+        await setDoc(doc(db,"torito_testeos_torito", clave), payload);
+        actualizarEstadoNube("", "☁️ Guardado en la nube");
+      } catch (err) {
+        console.error("Error guardando en Firestore:", err);
+        actualizarEstadoNube("error", "⚠️ Guardado local (sin conexión nube)");
+      }
+    } else {
+      actualizarEstadoNube("", "💾 Guardado localmente");
+    }
+  }, 600);
+}
+
+/* =====================================================
+   RENDERIZADO DE LA PLANILLA Y CÁLCULOS
+===================================================== */
+function parsearNumero(val) {
+  if (val === undefined || val === null || val === "") return NaN;
+  const limpio = String(val).replace(",", ".").trim();
+  const num = parseFloat(limpio);
+  return isNaN(num) ? NaN : num;
+}
+
+function calcularIMC(pesoRaw, alturaRaw) {
+  const peso = parsearNumero(pesoRaw);
+  let altura = parsearNumero(alturaRaw);
+  if (isNaN(peso) || isNaN(altura) || altura <= 0) return null;
+  if (altura > 3) altura = altura / 100; // Por si cargan 160 en lugar de 1.60
+  return peso / (altura * altura);
+}
+
+function obtenerClaseColorCelda(jugadora, col, valorRaw) {
+  if (col.esCalculadoIMC) {
+    const imc = calcularIMC(valoresActuales[jugadora]?.["peso"], valoresActuales[jugadora]?.["altura"]);
+    if (imc === null) return "";
+    if (imc < 18.5) return "imc-bajo";
+    if (imc <= 24.9) return "imc-normal";
+    return "imc-alto";
+  }
+
+  if (!col.compId || !col.criterio || col.criterio === "ninguno") return "";
+
+  const valActual = parsearNumero(valorRaw);
+  const valComp = parsearNumero(valoresActuales[jugadora]?.[col.compId]);
+
+  if (isNaN(valActual) || isNaN(valComp)) return "";
+
+  if (col.criterio === "mayor") {
+    return valActual >= valComp ? "estado-mejor" : "estado-peor";
+  } else if (col.criterio === "menor") {
+    return valActual <= valComp ? "estado-mejor" : "estado-peor";
+  }
+  return "";
+}
+
+function renderizarTablaPlanilla() {
+  const division = document.getElementById("selectDivision").value;
+  const mes = document.getElementById("selectMes").value;
+
+  document.getElementById("tituloPlanillaDivision").textContent = `TORITO ${division.toUpperCase()}`;
+
+  const thead = document.getElementById("theadTesteos");
+  const tbody = document.getElementById("tbodyTesteos");
+  const tfoot = document.getElementById("tfootTesteos");
+
+  // 1. FILA DE MES Y GRUPOS DE CATEGORÍAS
+  let grupos = [];
+  columnasActuales.forEach(col => {
+    const ultimo = grupos[grupos.length - 1];
+    if (ultimo && ultimo.nombre === col.grupo) {
+      ultimo.span++;
+    } else {
+      grupos.push({ nombre: col.grupo, clase: col.claseGrupo || "cat-custom", span: 1 });
+    }
+  });
+
+  const totalColumnas = 2 + columnasActuales.length;
+
+  let htmlHead = `
+    <tr class="fila-mes-banner">
+      <th colspan="${totalColumnas}">${mes}</th>
+    </tr>
+    <tr>
+      <th class="col-fija-num" rowspan="2">#</th>
+      <th class="col-fija-nombre">JUGADORAS</th>
+      ${grupos.map(g => `<th colspan="${g.span}" class="${g.clase}">${g.nombre}</th>`).join("")}
+    </tr>
+    <tr>
+      <th class="col-fija-nombre">Nombre y Apellido</th>
+      ${columnasActuales.map((col, idx) => `
+        <th class="th-subtest">
+          ${col.label}
+          ${(modoEliminar && puedeEditar) ? `<button class="btn-quitar-col" title="Eliminar columna" onclick="eliminarColumna(${idx})">&times;</button>` : ""}
+        </th>
+      `).join("")}
+    </tr>
+  `;
+  thead.innerHTML = htmlHead;
+
+  // 2. FILAS DE JUGADORAS
+  if (jugadorasDivision.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="${totalColumnas}" style="padding: 30px; color: #666; font-weight: bold;">
+          No hay jugadoras cargadas en la división <strong>${division}</strong> dentro de "Jugadoras".
+        </td>
+      </tr>
+    `;
+    tfoot.innerHTML = "";
+    return;
+  }
+
+  let htmlBody = "";
+  jugadorasDivision.forEach((jugadora, idxJug) => {
+    const filaDatos = valoresActuales[jugadora] || {};
+
+    htmlBody += `<tr>
+      <td class="col-fija-num">${idxJug + 1}</td>
+      <td class="col-fija-nombre">${jugadora}</td>
+    `;
+
+    columnasActuales.forEach(col => {
+      if (col.esCalculadoIMC) {
+        const imcVal = calcularIMC(filaDatos["peso"], filaDatos["altura"]);
+        const claseIMC = obtenerClaseColorCelda(jugadora, col, null);
+        htmlBody += `<td class="${claseIMC}">${imcVal !== null ? imcVal.toFixed(2).replace(".", ",") : "-"}</td>`;
+      } else {
+        const val = filaDatos[col.id] !== undefined ? filaDatos[col.id] : "";
+        const claseColor = obtenerClaseColorCelda(jugadora, col, val);
+        const jugEscapada = jugadora.replace(/'/g, "\\'");
+        htmlBody += `
+          <td class="${claseColor}">
+            <input 
+              type="text" 
+              class="celda-input" 
+              value="${val}" 
+              ${!puedeEditar ? "disabled" : ""}
+              onchange="actualizarCelda('${jugEscapada}', '${col.id}', this.value)"
+            >
+          </td>
+        `;
+      }
+    });
+
+    htmlBody += `</tr>`;
+  });
+  tbody.innerHTML = htmlBody;
+
+  // 3. FILA DE PROMEDIOS INFERIOR
+  renderizarFilaPromedios();
+}
+
+function renderizarFilaPromedios() {
+  const tfoot = document.getElementById("tfootTesteos");
+  if (jugadorasDivision.length === 0) {
+    tfoot.innerHTML = "";
+    return;
+  }
+
+  let htmlFoot = `<tr class="fila-promedios">
+    <td class="col-fija-num"></td>
+    <td class="col-fija-nombre">PROMEDIOS</td>
+  `;
+
+  columnasActuales.forEach(col => {
+    let suma = 0;
+    let contador = 0;
+
+    jugadorasDivision.forEach(jug => {
+      const fila = valoresActuales[jug] || {};
+      let num = NaN;
+
+      if (col.esCalculadoIMC) {
+        const imc = calcularIMC(fila["peso"], fila["altura"]);
+        if (imc !== null) num = imc;
+      } else {
+        num = parsearNumero(fila[col.id]);
+      }
+
+      if (!isNaN(num)) {
+        suma += num;
+        contador++;
+      }
+    });
+
+    const promedio = contador > 0 ? (suma / contador).toFixed(2).replace(".", ",") : "";
+    htmlFoot += `<td>${promedio}</td>`;
+  });
+
+  htmlFoot += `</tr>`;
+  tfoot.innerHTML = htmlFoot;
+}
+
+/* =====================================================
+   INTERACCIONES DEL USUARIO (EDICIÓN, AGREGAR, QUITAR)
+===================================================== */
+window.actualizarCelda = function(jugadora, colId, nuevoValor) {
+  if (!puedeEditar) return;
+  if (!valoresActuales[jugadora]) valoresActuales[jugadora] = {};
+  valoresActuales[jugadora][colId] = nuevoValor.trim();
+
+  renderizarTablaPlanilla();
+  programarGuardadoNube();
+};
+
+window.cambiarFiltroPlanilla = function() {
+  const div = document.getElementById("selectDivision").value;
+  const mes = document.getElementById("selectMes").value;
+  cargarDatosPlanilla(div, mes);
+};
+
+window.abrirModalAgregarTest = function() {
+  document.getElementById("formAgregarTest").reset();
+  document.getElementById("modalAgregarTest").classList.add("activo");
+};
+
+window.cerrarModal = function(id) {
+  document.getElementById(id).classList.remove("activo");
+};
+
+window.agregarNuevaColumnaTest = function(event) {
+  event.preventDefault();
+  if (!puedeEditar) return;
+
+  const grupo = document.getElementById("categoriaTest").value;
+  const nombre = document.getElementById("nombreTest").value.trim();
+  const criterio = document.getElementById("criterioTest").value;
+  const incluirComp = document.getElementById("incluirComp").checked;
+
+  const mapaClases = {
+    "SALTOS": "cat-saltos",
+    "VELOCIDAD": "cat-velocidad",
+    "Vo2 máx": "cat-vo2",
+    "POSTURAL": "cat-postural",
+    "AGILIDAD": "cat-agilidad",
+    "INDICES": "cat-indices",
+    "OTRO TEST": "cat-custom"
+  };
+
+  const baseId = "test_" + Date.now();
+  const compId = incluirComp ? baseId + "_comp" : null;
+
+  columnasActuales.push({
+    id: baseId,
+    grupo: grupo,
+    claseGrupo: mapaClases[grupo] || "cat-custom",
+    label: nombre,
+    criterio: criterio,
+    compId: compId
+  });
+
+  if (incluirComp) {
+    columnasActuales.push({
+      id: compId,
+      grupo: grupo,
+      claseGrupo: mapaClases[grupo] || "cat-custom",
+      label: "COMP",
+      esComp: true
+    });
+  }
+
+  cerrarModal("modalAgregarTest");
+  renderizarTablaPlanilla();
+  programarGuardadoNube();
+};
+
+window.alternarModoEliminar = function() {
+  modoEliminar = !modoEliminar;
+  renderizarTablaPlanilla();
+};
+
+window.eliminarColumna = function(indice) {
+  if (!puedeEditar) return;
+  const col = columnasActuales[indice];
+  if (!confirm(`¿Quitar la columna "${col.label}" (${col.grupo}) de esta planilla?`)) return;
+
+  columnasActuales.splice(indice, 1);
+  renderizarTablaPlanilla();
+  programarGuardadoNube();
+};
+
+// Inicialización
+window.addEventListener("DOMContentLoaded", () => {
+  if (esBianca) {
+    document.getElementById("selectDivision").value = "Sub 14";
+  }
+  cambiarFiltroPlanilla();
+});
+</script>
+
+
+
+</body>
+</html>

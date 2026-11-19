@@ -1,0 +1,3719 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calendario - TORITO</title>
+
+<style>
+:root {
+    --naranja: #f47721;
+    --naranja-oscuro: #dc5e0b;
+    --naranja-claro: #fff0e6;
+    --negro: #171717;
+    --rojo: #a00000;
+    --borde: #e8e8e8;
+    --gris: #f4f5f7;
+    --gris-texto: #747474;
+    --blanco: #fff;
+    --fondo-pagina: #f7f8fa;
+    --borde-suave: #edf0f3;
+    --sombra-tarjeta: 0 4px 22px rgba(23,23,23,.045);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 100px;
+}
+
+body {
+    min-height: 100vh;
+    background: var(--fondo-pagina);
+    color: var(--negro);
+    -webkit-font-smoothing: antialiased;
+}
+
+button, select, textarea, input {
+    font: inherit;
+}
+
+button, a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button {
+    cursor: pointer;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button:focus-visible,
+a:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+input:focus-visible {
+    outline: 3px solid rgba(244,119,33,.35);
+    outline-offset: 3px;
+}
+
+/* =====================================================
+   BARRA SUPERIOR
+===================================================== */
+
+.barra-superior {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    min-height: 84px;
+    padding: 12px 25px;
+    background: rgba(255,255,255,.97);
+    border-bottom: 1px solid var(--borde);
+    box-shadow: 0 2px 12px rgba(0,0,0,.025);
+    backdrop-filter: blur(12px);
+}
+
+.boton-menu {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--negro);
+    font-size: 25px;
+    transition: background .2s;
+}
+
+.boton-menu:hover {
+    background: var(--gris);
+}
+
+.logo-superior {
+    width: 55px;
+    height: 55px;
+    flex-shrink: 0;
+    object-fit: contain;
+    border-radius: 50%;
+    padding: 2px;
+    background: #fff;
+}
+
+.titulo-superior {
+    flex: 1;
+    min-width: 0;
+}
+
+.titulo-superior h1 {
+    margin-bottom: 5px;
+    font-size: 23px;
+    font-weight: 900;
+    letter-spacing: .5px;
+}
+
+.titulo-superior p {
+    color: var(--gris-texto);
+    font-size: 13px;
+}
+
+/* PERFIL */
+
+.perfil {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    flex-shrink: 0;
+    margin-left: auto;
+    padding: 5px 8px 5px 5px;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    background: transparent;
+    text-align: left;
+    color: inherit;
+    transition: background .2s,border-color .2s;
+}
+
+.perfil:hover {
+    background: #fafafa;
+    border-color: var(--borde);
+}
+
+.avatar {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    background: var(--negro);
+    color: #fff;
+    border-radius: 50%;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.informacion-perfil {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.nombre-perfil {
+    display: block;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--negro);
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.rol-perfil {
+    display: block;
+    margin-top: 4px;
+    color: var(--gris-texto);
+    font-size: 11px;
+}
+
+/* =====================================================
+   ESTRUCTURA Y BARRA LATERAL
+===================================================== */
+
+.contenedor {
+    display: flex;
+    align-items: stretch;
+    min-height: calc(100vh - 84px);
+}
+
+.sidebar {
+    width: 258px;
+    flex: 0 0 258px;
+    padding: 20px 13px;
+    background: #fff;
+    border-right: 1px solid var(--borde);
+    transition: margin-left .25s ease;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.sidebar.oculto {
+    margin-left: -258px;
+}
+
+.menu-inicio {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 14px;
+    margin-bottom: 16px;
+    border-radius: 11px;
+    background: var(--naranja-claro);
+    color: var(--naranja-oscuro);
+    font-size: 13px;
+    font-weight: 850;
+    transition: background .2s;
+}
+
+.menu-inicio:hover {
+    background: #ffe7d6;
+}
+
+.menu-inicio .icono-inicio {
+    width: 15px;
+    flex-shrink: 0;
+    text-align: center;
+    font-size: 19px;
+    line-height: 1;
+}
+
+.grupo-menu {
+    margin-bottom: 7px;
+}
+
+.titulo-grupo {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px 13px;
+    min-height: 44px;
+    border: 0;
+    border-radius: 9px;
+    background: transparent;
+    color: var(--negro);
+    text-align: left;
+    font-size: 11px;
+    font-weight: 850;
+    letter-spacing: .8px;
+    user-select: none;
+    transition: background .2s;
+}
+
+.titulo-grupo:hover {
+    background: #f7f8fa;
+}
+
+.flecha {
+    display: inline-block;
+    flex-shrink: 0;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1;
+    transition: transform .2s;
+}
+
+.grupo-menu.cerrado .flecha {
+    transform: rotate(0deg);
+}
+
+.grupo-menu:not(.cerrado) .flecha {
+    transform: rotate(90deg);
+}
+
+.submenu {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 0 0 5px;
+}
+
+.grupo-menu.cerrado .submenu {
+    display: none;
+}
+
+.submenu a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 9px;
+    color: #656872;
+    font-size: 13px;
+    transition: background .15s,color .15s;
+}
+
+.submenu a:hover {
+    background: #f6f6f6;
+    color: #181818;
+}
+
+.submenu a.activo {
+    background: var(--naranja-claro);
+    color: var(--naranja-oscuro);
+    font-weight: 800;
+}
+
+.submenu a.activo:hover {
+    background: #ffe7d6;
+}
+
+.nav-punto {
+    width: 6px;
+    height: 6px;
+    flex-shrink: 0;
+    background: #d7d9de;
+    border-radius: 50%;
+}
+
+.submenu a.activo .nav-punto {
+    background: var(--naranja);
+}
+
+.separador-sesion {
+    border-top: 1px solid var(--borde);
+    margin-top: 19px;
+    padding-top: 12px;
+}
+
+.enlace-cerrar-sesion {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    border-radius: 9px;
+    color: #c0392b;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.enlace-cerrar-sesion:hover {
+    background: #fff2f1;
+    color: #a93226;
+}
+
+.icono-salir {
+    font-size: 17px;
+}
+
+.capa-sidebar {
+    display: none;
+}
+
+/* =====================================================
+   ENCABEZADO DE PÁGINA
+===================================================== */
+
+main {
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+    max-width: 1550px;
+    margin: 32px auto;
+    padding: 0 30px 40px;
+}
+
+.encabezado-calendario {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 22px;
+    margin-bottom: 27px;
+}
+
+.titulo-principal {
+    flex: 1;
+    min-width: 230px;
+}
+
+.etiqueta-pagina {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--naranja-oscuro);
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    line-height: 1.4;
+    text-transform: uppercase;
+}
+
+.titulo-principal h1 {
+    margin-bottom: 9px;
+    color: var(--negro);
+    font-size: 32px;
+    line-height: 1.18;
+    font-weight: 900;
+    letter-spacing: -.7px;
+}
+
+.titulo-principal p {
+    max-width: 680px;
+    color: var(--gris-texto);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.selector-categoria {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 11px 9px 15px;
+    background: #fff;
+    border: 1px solid var(--borde);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.025);
+}
+
+.selector-categoria label {
+    color: #5f626a;
+    font-size: 12px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.selector-categoria select {
+    min-width: 125px;
+    padding: 10px 30px 10px 12px;
+    border: 1px solid #f1d1bb;
+    border-radius: 8px;
+    background: var(--naranja-claro);
+    color: var(--naranja-oscuro);
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+/* =====================================================
+   CALENDARIO
+===================================================== */
+
+.tarjeta-calendario {
+    padding: 25px;
+    background: #fff;
+    border: 1px solid #e9ebef;
+    border-radius: 16px;
+    box-shadow: var(--sombra-tarjeta);
+}
+
+.navegacion-mes {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 24px;
+}
+
+.navegacion-mes h2 {
+    text-align: center;
+    font-size: 23px;
+    font-weight: 850;
+    letter-spacing: -.4px;
+    text-transform: capitalize;
+    color: var(--negro);
+}
+
+.boton-mes {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--borde);
+    border-radius: 11px;
+    background: #fff;
+    color: #343434;
+    font-size: 26px;
+    line-height: 1;
+    transition: background .2s,border-color .2s,color .2s;
+}
+
+.boton-mes:hover {
+    background: var(--naranja-claro);
+    border-color: #f5c9aa;
+    color: var(--naranja-oscuro);
+}
+
+.semana,
+.dias {
+    display: grid;
+    grid-template-columns: repeat(7,minmax(0,1fr));
+    gap: 8px;
+}
+
+.semana {
+    margin-bottom: 9px;
+}
+
+.semana div {
+    padding: 11px 3px;
+    text-align: center;
+    color: #858995;
+    font-size: 11px;
+    font-weight: 850;
+    letter-spacing: .5px;
+}
+
+/* DÍAS */
+
+.dia {
+    min-width: 0;
+    min-height: 112px;
+    position: relative;
+    overflow: hidden;
+    padding: 34px 6px 7px;
+    border: 1px solid #e9ebef;
+    border-radius: 12px;
+    background: #fff;
+    cursor: pointer;
+    transition: border-color .18s,box-shadow .18s;
+}
+
+.dia:hover {
+    border-color: #efc4a6;
+    box-shadow: 0 4px 12px rgba(244,119,33,.08);
+}
+
+.dia.otro-mes {
+    background: #f8f9fb;
+    color: #a6a9b1;
+}
+
+.dia.hoy {
+    border: 2px solid var(--naranja);
+}
+
+.dia.hoy .numero-dia {
+    color: var(--naranja-oscuro);
+    font-weight: 900;
+}
+
+.numero-dia {
+    position: absolute;
+    top: 9px;
+    left: 10px;
+    z-index: 3;
+    font-size: 13px;
+    font-weight: 750;
+    color: #41444c;
+    font-variant-numeric: tabular-nums;
+}
+
+/* BOTÓN AGREGAR / EDITAR */
+
+.boton-agregar {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    z-index: 5;
+    width: 27px;
+    height: 27px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: var(--naranja);
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    opacity: 0;
+    transform: scale(.88);
+    transition: opacity .15s,transform .15s,background .15s;
+}
+
+.dia:hover .boton-agregar,
+.boton-agregar:focus-visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.dia.con-actividad .boton-agregar {
+    background: rgba(255,255,255,.95);
+    color: var(--naranja-oscuro);
+    border-color: #f0c7a8;
+    box-shadow: 0 1px 4px #00000012;
+}
+
+.dia.con-actividad:hover .boton-agregar {
+    background: #fff1e6;
+}
+
+@media (hover:none) {
+    .boton-agregar {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* =====================================================
+   TARJETAS DE ACTIVIDAD
+===================================================== */
+
+.actividad-contenido {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    min-width: 0;
+}
+
+/* Base */
+
+.actividad-preview {
+    width: 100%;
+    min-width: 0;
+    border: 1px solid rgba(30,35,45,.08);
+    border-radius: 9px;
+    background: rgba(255,255,255,.95);
+    box-shadow: 0 2px 5px rgba(25,30,40,.035);
+    overflow: hidden;
+}
+
+/* ENTRENAMIENTOS: ÚNICAMENTE LA CARGA */
+
+.actividad-preview.tipo-entrenamiento {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 39px;
+    padding: 7px 4px;
+    border: 1px solid transparent;
+    box-shadow: none;
+}
+
+.entrenamiento-carga {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 100%;
+    min-width: 0;
+    font-size: 9px;
+    line-height: 1.25;
+    font-weight: 900;
+    letter-spacing: .35px;
+    text-align: center;
+    text-transform: uppercase;
+    overflow-wrap: anywhere;
+}
+
+.entrenamiento-carga::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.tipo-entrenamiento.estado-bajo {
+    background: #effaf0;
+    border-color: #d2efd6;
+    color: #21823b;
+}
+
+.tipo-entrenamiento.estado-medio {
+    background: #fff8dd;
+    border-color: #f5e9b7;
+    color: #896400;
+}
+
+.tipo-entrenamiento.estado-alto {
+    background: #fff0f0;
+    border-color: #f5d0d0;
+    color: #b42323;
+}
+
+.tipo-entrenamiento.estado-suspendido {
+    background: #f0f0f0;
+    border-color: #e1e1e1;
+    color: #555;
+}
+
+.tipo-entrenamiento.estado-libre {
+    background: #f4f5f7;
+    border-color: #e7e9ed;
+    color: #646975;
+}
+
+/* PARTIDOS: FECHA, TORNEO Y ESCUDO */
+
+.actividad-preview.tipo-partido {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px;
+    border-left: 3px solid var(--naranja);
+    background: rgba(255,255,255,.97);
+}
+
+.partido-escudo {
+    width: 34px;
+    min-width: 34px;
+    height: 39px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px;
+    border: 1px solid #f0f0f0;
+    border-radius: 7px;
+    background: #fff;
+}
+
+.partido-escudo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.partido-escudo.sin-escudo {
+    display: none;
+}
+
+.partido-informacion {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.partido-fecha {
+    color: var(--naranja-oscuro);
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: .45px;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+.partido-torneo {
+    color: #30333a;
+    font-size: 10px;
+    line-height: 1.3;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+}
+
+.partido-sin-torneo {
+    color: #8b8f98;
+    font-size: 9px;
+    line-height: 1.3;
+    font-weight: 600;
+    font-style: italic;
+}
+
+/* OTRAS ACTIVIDADES */
+
+.actividad-preview.tipo-otro {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 7px;
+    border-left: 3px solid #cbd0d8;
+}
+
+.actividad-preview.tipo-otro.estado-bajo {
+    border-left-color: #36a35b;
+}
+
+.actividad-preview.tipo-otro.estado-medio {
+    border-left-color: #d7a600;
+}
+
+.actividad-preview.tipo-otro.estado-alto {
+    border-left-color: #df5757;
+}
+
+.actividad-otro-titulo {
+    color: #343740;
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: .35px;
+    line-height: 1.3;
+    text-transform: uppercase;
+    overflow-wrap: anywhere;
+}
+
+.actividad-otro-descripcion {
+    color: #555b65;
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+}
+
+/* COLORES DE FONDO DE LOS DÍAS */
+
+.dia.color-libre {
+    background-color: #fff;
+}
+
+.dia.color-suspendido {
+    background-color: #e5e5e5;
+}
+
+.dia.color-bajo {
+    background-color: #d8f2d8;
+}
+
+.dia.color-medio {
+    background-color: #fff0ad;
+}
+
+.dia.color-alto {
+    background-color: #ffdada;
+}
+
+/* =====================================================
+   REFERENCIAS
+===================================================== */
+
+.referencias {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 23px;
+    padding-top: 19px;
+    border-top: 1px solid var(--borde-suave);
+}
+
+.referencia {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 11px;
+    color: #555b65;
+    font-size: 12px;
+    font-weight: 650;
+    background: #fafbfc;
+    border: 1px solid #eef0f3;
+    border-radius: 8px;
+}
+
+.muestra-color {
+    display: inline-block;
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+    border: 1px solid rgba(0,0,0,.12);
+    border-radius: 4px;
+}
+
+/* =====================================================
+   MODALES
+===================================================== */
+
+.fondo-modal,
+.fondo-perfil {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    padding: 18px;
+    background: rgba(18,20,24,.52);
+    backdrop-filter: blur(3px);
+    align-items: center;
+    justify-content: center;
+}
+
+.fondo-modal.visible,
+.fondo-perfil.visible {
+    display: flex;
+}
+
+.modal {
+    width: 100%;
+    max-width: 510px;
+    max-height: 92vh;
+    overflow-y: auto;
+    background: #fff;
+    border: 1px solid rgba(255,255,255,.65);
+    border-radius: 18px;
+    padding: 25px;
+    box-shadow: 0 18px 65px rgba(0,0,0,.19);
+    animation: aparecer-modal .18s ease-out;
+}
+
+@keyframes aparecer-modal {
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(.99);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-encabezado {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 17px;
+    border-bottom: 1px solid var(--borde-suave);
+}
+
+.modal-encabezado h2 {
+    margin-bottom: 6px;
+    color: var(--negro);
+    font-size: 21px;
+    font-weight: 850;
+    letter-spacing: -.3px;
+}
+
+.modal-encabezado p {
+    color: var(--gris-texto);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.cerrar-modal {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 10px;
+    background: #f4f5f7;
+    color: #4c4f56;
+    font-size: 22px;
+    transition: background .2s,color .2s;
+}
+
+.cerrar-modal:hover {
+    background: #ffe8d9;
+    color: var(--naranja-oscuro);
+}
+
+/* VISTA PREVIA EN EL MODAL */
+
+.bloque-vista-previa {
+    margin-bottom: 22px;
+    padding: 14px;
+    border: 1px solid #eceef2;
+    border-radius: 12px;
+    background: #fafbfc;
+}
+
+.encabezado-vista-previa {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 11px;
+}
+
+.titulo-vista-previa {
+    color: #373a42;
+    font-size: 12px;
+    font-weight: 850;
+}
+
+.subtitulo-vista-previa {
+    color: #898d97;
+    font-size: 10px;
+}
+
+.vista-previa-dia {
+    position: relative;
+    min-height: 95px;
+    overflow: hidden;
+    padding: 32px 9px 9px;
+    border: 1px solid #e3e6eb;
+    border-radius: 10px;
+    background: #fff;
+}
+
+.vista-previa-numero {
+    position: absolute;
+    top: 8px;
+    left: 10px;
+    color: #41444c;
+    font-size: 12px;
+    font-weight: 850;
+}
+
+.vista-previa-dia.color-libre {
+    background: #fff;
+}
+
+.vista-previa-dia.color-suspendido {
+    background: #e5e5e5;
+}
+
+.vista-previa-dia.color-bajo {
+    background: #d8f2d8;
+}
+
+.vista-previa-dia.color-medio {
+    background: #fff0ad;
+}
+
+.vista-previa-dia.color-alto {
+    background: #ffdada;
+}
+
+.vista-previa-contenido {
+    width: 100%;
+    min-width: 0;
+}
+
+.vista-previa-contenido .actividad-preview {
+    max-width: 100%;
+}
+
+.vista-previa-contenido .tipo-entrenamiento {
+    min-height: 42px;
+}
+
+.vista-previa-contenido .entrenamiento-carga {
+    font-size: 12px;
+}
+
+.vista-previa-contenido .tipo-partido {
+    gap: 10px;
+    padding: 10px;
+}
+
+.vista-previa-contenido .partido-escudo {
+    width: 44px;
+    min-width: 44px;
+    height: 48px;
+}
+
+.vista-previa-contenido .partido-fecha {
+    font-size: 11px;
+}
+
+.vista-previa-contenido .partido-torneo {
+    font-size: 12px;
+}
+
+.preview-vacio {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 10px;
+    border: 1px dashed #d8dce3;
+    border-radius: 8px;
+    color: #9196a1;
+    background: rgba(255,255,255,.65);
+    text-align: center;
+    font-size: 11px;
+}
+
+/* CAMPOS */
+
+.campo {
+    margin-bottom: 18px;
+}
+
+.campo label {
+    display: block;
+    margin-bottom: 8px;
+    color: #343740;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.campo select,
+.campo textarea,
+.campo input[type="number"] {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid #dfe2e7;
+    border-radius: 9px;
+    background: #fff;
+    color: #24262c;
+    font-size: 13px;
+    transition: border-color .2s,box-shadow .2s;
+}
+
+.campo select:hover,
+.campo textarea:hover,
+.campo input[type="number"]:hover {
+    border-color: #cbd0d8;
+}
+
+.campo select:focus,
+.campo textarea:focus,
+.campo input[type="number"]:focus {
+    border-color: var(--naranja);
+    box-shadow: 0 0 0 3px rgba(244,119,33,.10);
+    outline: none;
+}
+
+.campo textarea {
+    min-height: 85px;
+    resize: vertical;
+    line-height: 1.5;
+}
+
+.campo textarea::placeholder {
+    color: #a0a3ab;
+}
+
+.fila-campos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 13px;
+}
+
+.nota-imagenes {
+    margin-top: 8px;
+    color: #858995;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.vista-imagen {
+    display: none;
+    margin-top: 12px;
+    padding: 16px;
+    background: #fafbfc;
+    border: 1px solid var(--borde-suave);
+    border-radius: 11px;
+    text-align: center;
+}
+
+.vista-imagen.visible {
+    display: block;
+}
+
+.vista-imagen img {
+    object-fit: contain;
+    max-width: 100%;
+    max-height: 130px;
+}
+
+.nombre-vista-imagen {
+    margin-top: 8px;
+    color: #555b65;
+    font-size: 12px;
+    font-weight: 750;
+}
+
+.aviso-imagen {
+    display: none;
+    margin-top: 8px;
+    padding: 9px 10px;
+    color: #b42323;
+    background: #fff3f3;
+    border-radius: 7px;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.aviso-imagen.visible {
+    display: block;
+}
+
+/* BOTONES DEL MODAL */
+
+.acciones-modal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 24px;
+    padding-top: 17px;
+    border-top: 1px solid var(--borde-suave);
+}
+
+.boton-guardar,
+.boton-eliminar,
+.boton-cancelar {
+    flex: 1;
+    min-height: 44px;
+    padding: 11px 14px;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 800;
+    transition: background .2s,border-color .2s,transform .15s;
+}
+
+.boton-guardar {
+    background: var(--naranja);
+    color: #fff;
+}
+
+.boton-guardar:hover {
+    background: var(--naranja-oscuro);
+}
+
+.boton-eliminar {
+    background: #fff0f0;
+    border-color: #f5d2d2;
+    color: #a00000;
+}
+
+.boton-eliminar:hover {
+    background: #ffe1e1;
+}
+
+.boton-cancelar {
+    background: #f4f5f7;
+    border-color: #e8eaee;
+    color: #454851;
+}
+
+.boton-cancelar:hover {
+    background: #e9ebef;
+}
+
+/* PERFIL */
+
+.tarjeta-perfil {
+    width: 100%;
+    max-width: 360px;
+    padding: 28px;
+    background: #fff;
+    border: 1px solid rgba(255,255,255,.65);
+    border-radius: 18px;
+    box-shadow: 0 18px 60px rgba(0,0,0,.18);
+    text-align: center;
+    animation: aparecer-modal .18s ease-out;
+}
+
+.avatar-perfil {
+    width: 66px;
+    height: 66px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    border: 3px solid #fff;
+    border-radius: 50%;
+    background: var(--naranja-claro);
+    color: var(--naranja-oscuro);
+    box-shadow: 0 0 0 1px #f3d5c0;
+    font-size: 28px;
+    font-weight: 850;
+}
+
+.tarjeta-perfil h2 {
+    margin-bottom: 8px;
+    font-size: 21px;
+    font-weight: 850;
+}
+
+.tarjeta-perfil p {
+    margin-bottom: 22px;
+    color: var(--gris-texto);
+    font-size: 13px;
+}
+
+.boton-cerrar-perfil {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background: var(--naranja);
+    color: #fff;
+    font-weight: 800;
+}
+
+.boton-cerrar-perfil:hover {
+    background: var(--naranja-oscuro);
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width:1150px) {
+    .semana,
+    .dias {
+        gap: 5px;
+    }
+
+    .dia {
+        min-height: 105px;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+    main {
+        padding-left: 22px;
+        padding-right: 22px;
+    }
+
+    .tarjeta-calendario {
+        padding: 18px;
+    }
+
+    .actividad-preview.tipo-entrenamiento {
+        padding: 6px 3px;
+    }
+
+    .entrenamiento-carga {
+        font-size: 8px;
+    }
+}
+
+@media (max-width:760px) {
+    .barra-superior {
+        min-height: 72px;
+        padding: 10px 13px;
+        gap: 9px;
+    }
+
+    .boton-menu {
+        width: 38px;
+        height: 38px;
+        font-size: 24px;
+    }
+
+    .logo-superior {
+        width: 44px;
+        height: 44px;
+    }
+
+    .titulo-superior h1 {
+        font-size: 16px;
+        letter-spacing: .1px;
+    }
+
+    .titulo-superior p {
+        font-size: 11px;
+    }
+
+    .perfil {
+        gap: 6px;
+        padding: 4px;
+    }
+
+    .avatar {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+    }
+
+    .nombre-perfil {
+        max-width: 80px;
+        font-size: 12px;
+    }
+
+    .rol-perfil {
+        display: none;
+    }
+
+    .contenedor {
+        min-height: calc(100vh - 72px);
+    }
+
+    .sidebar {
+        position: fixed;
+        top: 72px;
+        bottom: 0;
+        left: 0;
+        z-index: 150;
+        display: block;
+        width: 258px;
+        max-width: 86vw;
+        height: auto;
+        flex: none;
+        padding: 20px 13px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        background: #fff;
+        border-right: 1px solid var(--borde);
+        box-shadow: 5px 0 25px #00000012;
+        margin-left: 0;
+        transform: translateX(0);
+        transition: transform .25s ease;
+    }
+
+    .sidebar.oculto {
+        margin-left: 0;
+        transform: translateX(-110%);
+    }
+
+    .capa-sidebar.visible {
+        display: block;
+        position: fixed;
+        inset: 72px 0 0;
+        z-index: 140;
+        background: rgba(0,0,0,.32);
+    }
+
+    main {
+        margin: 23px auto;
+        padding: 0 13px 28px;
+    }
+
+    .encabezado-calendario {
+        align-items: flex-start;
+        gap: 18px;
+        margin-bottom: 20px;
+    }
+
+    .titulo-principal {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .etiqueta-pagina {
+        margin-bottom: 8px;
+        font-size: 10px;
+        letter-spacing: 1.7px;
+    }
+
+    .titulo-principal h1 {
+        font-size: 27px;
+        letter-spacing: -.5px;
+    }
+
+    .titulo-principal p {
+        font-size: 13px;
+    }
+
+    .selector-categoria {
+        width: 100%;
+        justify-content: space-between;
+        padding: 8px 9px 8px 12px;
+    }
+
+    .selector-categoria select {
+        max-width: 68%;
+        min-width: 0;
+    }
+
+    .tarjeta-calendario {
+        padding: 10px;
+        border-radius: 13px;
+    }
+
+    .navegacion-mes {
+        gap: 9px;
+        margin-bottom: 15px;
+    }
+
+    .semana,
+    .dias {
+        gap: 3px;
+    }
+
+    .semana {
+        margin-bottom: 5px;
+    }
+
+    .semana div {
+        padding: 8px 0;
+        font-size: 10px;
+        letter-spacing: 0;
+    }
+
+    .dia {
+        min-height: 78px;
+        padding: 25px 2px 4px;
+        border-radius: 7px;
+    }
+
+    .dia:hover {
+        box-shadow: none;
+    }
+
+    .numero-dia {
+        top: 5px;
+        left: 5px;
+        font-size: 11px;
+    }
+
+    .boton-agregar {
+        top: 3px;
+        right: 3px;
+        width: 22px;
+        height: 22px;
+        border-radius: 6px;
+        font-size: 17px;
+    }
+
+    .actividad-preview.tipo-entrenamiento {
+        min-height: 35px;
+        padding: 5px 2px;
+        border-radius: 6px;
+    }
+
+    .entrenamiento-carga {
+        gap: 3px;
+        font-size: 7px;
+        letter-spacing: 0;
+        line-height: 1.15;
+    }
+
+    .entrenamiento-carga::before {
+        width: 4px;
+        height: 4px;
+    }
+
+    .actividad-preview.tipo-partido {
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 4px;
+        padding: 4px 2px;
+        border-left-width: 2px;
+        border-radius: 6px;
+    }
+
+    .partido-escudo {
+        width: 23px;
+        min-width: 23px;
+        height: 24px;
+        padding: 1px;
+        border-radius: 4px;
+    }
+
+    .partido-informacion {
+        width: 100%;
+        gap: 3px;
+        text-align: center;
+    }
+
+    .partido-fecha {
+        font-size: 7px;
+        letter-spacing: 0;
+    }
+
+    .partido-torneo {
+        font-size: 8px;
+        line-height: 1.15;
+        -webkit-line-clamp: 3;
+    }
+
+    .partido-sin-torneo {
+        font-size: 7px;
+    }
+
+    .actividad-preview.tipo-otro {
+        padding: 4px;
+        gap: 3px;
+    }
+
+    .actividad-otro-titulo {
+        font-size: 7px;
+    }
+
+    .actividad-otro-descripcion {
+        font-size: 8px;
+        line-height: 1.15;
+        -webkit-line-clamp: 2;
+    }
+
+    .navegacion-mes h2 {
+        font-size: 18px;
+    }
+
+    .boton-mes {
+        width: 34px;
+        height: 34px;
+        border-radius: 9px;
+        font-size: 23px;
+    }
+
+    .referencias {
+        gap: 6px;
+        margin-top: 16px;
+        padding-top: 14px;
+    }
+
+    .referencia {
+        gap: 5px;
+        padding: 6px 7px;
+        font-size: 10px;
+    }
+
+    .muestra-color {
+        width: 11px;
+        height: 11px;
+    }
+
+    .modal {
+        max-height: 90vh;
+        padding: 17px;
+        border-radius: 15px;
+    }
+
+    .modal-encabezado {
+        margin-bottom: 16px;
+        padding-bottom: 13px;
+    }
+
+    .fila-campos {
+        gap: 9px;
+    }
+
+    .bloque-vista-previa {
+        padding: 11px;
+        margin-bottom: 18px;
+    }
+
+    .acciones-modal {
+        gap: 7px;
+        margin-top: 20px;
+        padding-top: 15px;
+    }
+
+    .boton-guardar,
+    .boton-eliminar,
+    .boton-cancelar {
+        padding: 10px 8px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width:380px) {
+    .barra-superior {
+        padding: 8px;
+        gap: 6px;
+    }
+
+    .boton-menu {
+        width: 32px;
+        height: 36px;
+        font-size: 23px;
+    }
+
+    .logo-superior {
+        width: 34px;
+        height: 34px;
+    }
+
+    .titulo-superior h1 {
+        font-size: 14px;
+    }
+
+    .titulo-superior p {
+        font-size: 9px;
+    }
+
+    .avatar {
+        width: 32px;
+        height: 32px;
+    }
+
+    .nombre-perfil {
+        max-width: 60px;
+        font-size: 10px;
+    }
+
+    main {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    .titulo-principal h1 {
+        font-size: 24px;
+    }
+
+    .tarjeta-calendario {
+        padding: 7px;
+    }
+
+    .semana,
+    .dias {
+        gap: 2px;
+    }
+
+    .semana div {
+        font-size: 9px;
+    }
+
+    .dia {
+        min-height: 72px;
+        padding-left: 2px;
+        padding-right: 2px;
+    }
+
+    .numero-dia {
+        top: 4px;
+        left: 4px;
+        font-size: 10px;
+    }
+
+    .boton-agregar {
+        top: 2px;
+        right: 2px;
+        width: 19px;
+        height: 19px;
+        font-size: 15px;
+    }
+
+    .entrenamiento-carga {
+        font-size: 6px;
+    }
+
+    .partido-escudo {
+        width: 19px;
+        min-width: 19px;
+        height: 21px;
+    }
+
+    .partido-fecha {
+        font-size: 6px;
+    }
+
+    .partido-torneo {
+        font-size: 7px;
+    }
+
+    .referencias {
+        gap: 4px;
+    }
+
+    .referencia {
+        padding: 5px;
+        font-size: 9px;
+    }
+
+    .fila-campos {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+    }
+}
+</style>
+<script src="TORITO-permisos.js?v=20261118-s16c"></script>
+</head>
+
+<body>
+
+<!-- BARRA SUPERIOR -->
+
+<header class="barra-superior">
+
+    <button
+        class="boton-menu"
+        id="botonMenu"
+        type="button"
+        aria-label="Abrir menú"
+        aria-controls="sidebar"
+        aria-expanded="true"
+    >☰</button>
+
+    <img
+        class="logo-superior"
+        src="TORITO-Logo TORITO.png"
+        alt="Logo de TORITO"
+        onerror="if(!this.dataset.intento){this.dataset.intento='1';this.src='TORITO-Logo TORITO.png'}else{this.style.display='none'}"
+    >
+
+    <div class="titulo-superior">
+        <h1>TORITO</h1>
+        <p>Calendario</p>
+    </div>
+
+    <button
+        class="perfil"
+        id="botonPerfil"
+        type="button"
+        aria-label="Ver perfil de usuario"
+    >
+        <span class="avatar" id="avatarUsuario">U</span>
+        <span class="informacion-perfil">
+            <span class="nombre-perfil" id="nombreUsuario">Usuario</span>
+            <span class="rol-perfil" id="rolUsuario">Club Torito</span>
+        </span>
+    </button>
+
+</header>
+
+<div class="capa-sidebar" id="capaSidebar" aria-hidden="true"></div>
+
+<div class="contenedor">
+
+    <!-- BARRA LATERAL -->
+
+    <aside class="sidebar" id="sidebar">
+
+        <a href="TORITO-Pagina Principal.html" class="menu-inicio">
+            <span class="icono-inicio" aria-hidden="true">⌂</span>
+            INICIO
+        </a>
+
+        <div class="grupo-menu cerrado" id="grupoPlantel">
+
+            <button
+                class="titulo-grupo"
+                type="button"
+                data-grupo="grupoPlantel"
+                aria-expanded="false"
+            >
+                <span>PLANTEL</span>
+                <span class="flecha" aria-hidden="true">›</span>
+            </button>
+
+            <div class="submenu">
+                <a href="TORITO-jugadoras.html">
+                    <span class="nav-punto" aria-hidden="true"></span>
+                    Jugadoras
+                </a>
+
+                <a href="TORITO-asistencia.html">
+                    <span class="nav-punto" aria-hidden="true"></span>
+                    Asistencia
+                </a>
+            </div>
+        </div>
+
+        <div class="grupo-menu" id="grupoEntrenamiento">
+
+            <button
+                class="titulo-grupo"
+                type="button"
+                data-grupo="grupoEntrenamiento"
+                aria-expanded="true"
+            >
+                <span>ENTRENAMIENTO</span>
+                <span class="flecha" aria-hidden="true">›</span>
+            </button>
+
+            <div class="submenu">
+
+                <a href="TORITO-calendario.html" class="activo" aria-current="page">
+                    <span class="nav-punto" aria-hidden="true"></span>
+                    Calendario
+                </a>
+
+                <a href="TORITO-planificacion.html" data-ocultar-bianca>
+                    <span class="nav-punto" aria-hidden="true"></span>
+                    Planificación
+                </a>
+
+                <a href="biblioteca.html" data-ocultar-bianca>
+                    <span class="nav-punto" aria-hidden="true"></span>
+                    Biblioteca de ejercicios
+                </a>
+
+                <a href="TORITO-gimnasio.html">
+                    <span class="nav-punto" aria-hidden="true"></span>
+                    Gimnasio
+                </a>
+
+                <a href="TORITO-calculadora.html" data-ocultar-bianca>
+                    <span class="nav-punto" aria-hidden="true"></span>
+                    Calculadora
+                </a>
+
+            </div>
+        </div>
+
+        <div class="grupo-menu cerrado" id="grupoCompetencia">
+
+            <button
+                class="titulo-grupo"
+                type="button"
+                data-grupo="grupoCompetencia"
+                aria-expanded="false"
+            >
+                <span>COMPETENCIA</span>
+                <span class="flecha" aria-hidden="true">›</span>
+            </button>
+
+            <div class="submenu">
+
+                <a href="TORITO-Partidos.html">
+                    <span class="nav-punto" aria-hidden="true"></span>
+                    Partidos
+                </a>
+
+                <a href="TORITO-informes.html" data-ocultar-bianca>
+                    <span class="nav-punto" aria-hidden="true"></span>
+                    Informes
+                </a>
+
+                <a href="TORITO-estadisticas.html" data-ocultar-bianca>
+                    <span class="nav-punto" aria-hidden="true"></span>
+                    Estadísticas
+                </a>
+
+                <a href="TORITO-pizarra.html" data-ocultar-bianca>
+                    <span class="nav-punto" aria-hidden="true"></span>
+                    Pizarra táctica
+                </a>
+
+            </div>
+        </div>
+
+        <div class="grupo-menu cerrado" id="grupoRendimientos">
+
+            <button
+                class="titulo-grupo"
+                type="button"
+                data-grupo="grupoRendimientos"
+                aria-expanded="false"
+            >
+                <span>RENDIMIENTOS</span>
+                <span class="flecha" aria-hidden="true">›</span>
+            </button>
+
+            <div class="submenu">
+
+                <a href="TORITO-testeos.html">
+                    <span class="nav-punto" aria-hidden="true"></span>
+                    Planilla de testeos
+                </a>
+
+                <a href="TORITO-tiempos.html">
+                    <span class="nav-punto" aria-hidden="true"></span>
+                    Tiempos
+                </a>
+
+                <a href="multimedia.html">
+                    <span class="nav-punto" aria-hidden="true"></span>
+                    Multimedia
+                </a>
+
+                <a href="TORITO-encuestas.html">
+                    <span class="nav-punto" aria-hidden="true"></span>
+                    Encuestas
+                </a>
+
+                <a href="lesiones.html">
+                    <span class="nav-punto" aria-hidden="true"></span>
+                    Lesiones
+                </a>
+
+            </div>
+        </div>
+
+        <div class="separador-sesion">
+            <a href="#" class="enlace-cerrar-sesion" id="cerrarSesion">
+                <span class="icono-salir" aria-hidden="true">↪</span>
+                Cerrar sesión
+            </a>
+        </div>
+
+    </aside>
+
+    <!-- CONTENIDO PRINCIPAL -->
+
+    <main>
+
+        <section class="encabezado-calendario">
+
+            <div class="titulo-principal">
+
+                <span class="etiqueta-pagina">
+                    ENTRENAMIENTO · CALENDARIO
+                </span>
+
+                <h1>Calendario de actividades</h1>
+
+                <p>
+                    Organizá y consultá las actividades de cada categoría
+                    en un solo lugar.
+                </p>
+
+            </div>
+
+            <div class="selector-categoria">
+                <label for="categoria">Categoría</label>
+
+                <select id="categoria">
+                    <option value="Sub 10">Sub 10</option>
+                    <option value="Sub 12">Sub 12</option>
+                    <option value="Sub 14">Sub 14</option>
+                    <option value="Sub 16">Sub 16</option>
+                    <option value="Primera">Primera</option>
+                </select>
+            </div>
+
+        </section>
+
+        <section class="tarjeta-calendario">
+
+            <div class="navegacion-mes">
+
+                <button
+                    class="boton-mes"
+                    id="mesAnterior"
+                    type="button"
+                    aria-label="Mes anterior"
+                >‹</button>
+
+                <h2 id="nombreMes">Calendario</h2>
+
+                <button
+                    class="boton-mes"
+                    id="mesSiguiente"
+                    type="button"
+                    aria-label="Mes siguiente"
+                >›</button>
+
+            </div>
+
+            <div class="semana">
+                <div>LUN</div>
+                <div>MAR</div>
+                <div>MIÉ</div>
+                <div>JUE</div>
+                <div>VIE</div>
+                <div>SÁB</div>
+                <div>DOM</div>
+            </div>
+
+            <div class="dias" id="diasCalendario"></div>
+
+            <div class="referencias">
+
+                <div class="referencia">
+                    <span class="muestra-color" style="background:#fff"></span>
+                    Libre
+                </div>
+
+                <div class="referencia">
+                    <span class="muestra-color" style="background:#e5e5e5"></span>
+                    Suspendido
+                </div>
+
+                <div class="referencia">
+                    <span class="muestra-color" style="background:#d8f2d8"></span>
+                    Bajo
+                </div>
+
+                <div class="referencia">
+                    <span class="muestra-color" style="background:#fff0ad"></span>
+                    Medio
+                </div>
+
+                <div class="referencia">
+                    <span class="muestra-color" style="background:#ffdada"></span>
+                    Alto
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<!-- MODAL DE ACTIVIDADES -->
+
+<div class="fondo-modal" id="fondoModal">
+
+    <section class="modal">
+
+        <div class="modal-encabezado">
+            <div>
+                <h2 id="tituloModal">Agregar actividad</h2>
+                <p id="fechaModal"></p>
+            </div>
+
+            <button
+                class="cerrar-modal"
+                id="cerrarModal"
+                type="button"
+                aria-label="Cerrar"
+            >×</button>
+        </div>
+
+        <div class="bloque-vista-previa">
+
+            <div class="encabezado-vista-previa">
+                <span class="titulo-vista-previa">Vista previa</span>
+                <span class="subtitulo-vista-previa">
+                    Así se verá en el calendario
+                </span>
+            </div>
+
+            <div class="vista-previa-dia color-libre" id="vistaPreviaDia">
+
+                <span class="vista-previa-numero" id="vistaPreviaNumero">
+                    --
+                </span>
+
+                <div
+                    class="vista-previa-contenido"
+                    id="vistaPreviaContenido"
+                >
+                    <div class="preview-vacio">
+                        La actividad aparecerá acá.
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="campo">
+            <label for="estadoActividad">Estado / color del día</label>
+
+            <select id="estadoActividad">
+                <option value="libre">Blanco — Libre</option>
+                <option value="suspendido">Gris — Suspendido</option>
+                <option value="bajo">Verde — Bajo</option>
+                <option value="medio">Amarillo — Medio</option>
+                <option value="alto">Rojo — Alto</option>
+            </select>
+        </div>
+
+        <div class="campo">
+            <label for="imagenActividad">Club / escudo</label>
+
+            <select id="imagenActividad">
+                <option value="">Sin escudo</option>
+                <option value="TORITO-Logo TORITO.png">TORITO</option>
+                <option value="CLUBES/14 JUNIO.jpg">14 de Junio</option>
+                <option value="CLUBES/ALIANZA.png">Alianza</option>
+                <option value="CLUBES/ARGENTINO.png">Argentino</option>
+                <option value="CLUBES/BANCO.jpg">Banco</option>
+                <option value="CLUBES/BOTAFOGO.jpg">Botafogo</option>
+                <option value="CLUBES/CENTRAL.png">Central</option>
+                <option value="CLUBES/CGR.png">CGR</option>
+                <option value="CLUBES/CORONEL AGUIRRE.png">Coronel Aguirre</option>
+                <option value="CLUBES/GRAL PAZ.jpg">General Paz</option>
+                <option value="CLUBES/LAMADRID.jpg">Lamadrid</option>
+                <option value="CLUBES/LEONES.jpg">Leones</option>
+                <option value="CLUBES/MITRE.png">Mitre</option>
+                <option value="CLUBES/MORNING.jpg">Morning</option>
+                <option value="CLUBES/NEWELLS.png">Newell's Old Boys</option>
+                <option value="CLUBES/ORIENTAL.jpg">Oriental</option>
+                <option value="CLUBES/PABLO VI.jpg">Pablo VI</option>
+                <option value="CLUBES/PROVINCIAL.png">Provincial</option>
+                <option value="CLUBES/RENATO.jpg">Renato</option>
+                <option value="CLUBES/SAN JOSE.jpg">San José</option>
+                <option value="CLUBES/SAN ROQUE.jpg">San Roque</option>
+                <option value="CLUBES/SAN TELMO.png">San Telmo</option>
+                <option value="CLUBES/SOCIAL LUX.jpg">Social Lux</option>
+                <option value="CLUBES/SPARTA.jpg">Sparta</option>
+                <option value="CLUBES/TIRO FEDERAL.jpg">Tiro Federal</option>
+                <option value="CLUBES/TIRO SUIZO.jpg">Tiro Suizo</option>
+                <option value="CLUBES/TORITO.png">Torito</option>
+                <option value="CLUBES/UNION AMERICANA.png">Unión Americana</option>
+                <option value="CLUBES/VG GALVEZ.png">Villa Gobernador Gálvez</option>
+            </select>
+
+            <p class="nota-imagenes">
+                Seleccioná el nombre del club. Su escudo aparecerá automáticamente
+                desde la carpeta CLUBES.
+            </p>
+
+            <div class="vista-imagen" id="vistaImagen">
+                <img
+                    id="imagenPrevia"
+                    src=""
+                    alt="Escudo del club seleccionado"
+                >
+                <div class="nombre-vista-imagen" id="nombreVistaImagen"></div>
+            </div>
+
+            <p class="aviso-imagen" id="avisoImagen">
+                No se pudo cargar el escudo. Revisá el nombre del archivo dentro de CLUBES.
+            </p>
+        </div>
+
+        <div class="campo">
+            <label for="textoActividad">Texto de la actividad</label>
+
+            <textarea
+                id="textoActividad"
+                maxlength="300"
+                placeholder="Entrenamiento: intensidad y detalles. Partido: torneo o competición."
+            ></textarea>
+        </div>
+
+        <div class="fila-campos">
+
+            <div class="campo">
+                <label for="tamanoTexto">Tamaño del texto (px)</label>
+                <input
+                    type="number"
+                    id="tamanoTexto"
+                    min="8"
+                    max="32"
+                    value="12"
+                >
+            </div>
+
+            <div class="campo">
+                <label for="alineacionTexto">Posición del texto</label>
+
+                <select id="alineacionTexto">
+                    <option value="izquierda">Izquierda</option>
+                    <option value="centro">Centro</option>
+                    <option value="derecha">Derecha</option>
+                </select>
+            </div>
+
+        </div>
+
+        <div class="campo">
+            <label for="posicionImagen">Posición de la imagen</label>
+
+            <select id="posicionImagen">
+                <option value="centro">Centro</option>
+                <option value="izquierda">Izquierda</option>
+                <option value="derecha">Derecha</option>
+            </select>
+        </div>
+
+        <div class="fila-campos">
+
+            <div class="campo">
+                <label for="anchoImagen">Ancho de imagen (px)</label>
+                <input
+                    type="number"
+                    id="anchoImagen"
+                    min="20"
+                    max="200"
+                    value="70"
+                >
+            </div>
+
+            <div class="campo">
+                <label for="altoImagen">Alto de imagen (px)</label>
+                <input
+                    type="number"
+                    id="altoImagen"
+                    min="15"
+                    max="120"
+                    value="35"
+                >
+            </div>
+
+        </div>
+
+        <div class="acciones-modal">
+
+            <button
+                class="boton-cancelar"
+                id="cancelarModal"
+                type="button"
+            >Cancelar</button>
+
+            <button
+                class="boton-eliminar"
+                id="eliminarActividad"
+                type="button"
+                style="display:none"
+            >Eliminar</button>
+
+            <button
+                class="boton-guardar"
+                id="guardarActividad"
+                type="button"
+            >Guardar</button>
+
+        </div>
+
+    </section>
+
+</div>
+
+<!-- PERFIL DEL USUARIO -->
+
+<div class="fondo-perfil" id="fondoPerfil">
+
+    <section class="tarjeta-perfil">
+
+        <div class="avatar-perfil" id="avatarPerfil">U</div>
+
+        <h2 id="nombrePerfil">Usuario</h2>
+
+        <p id="rolPerfil">Club Torito</p>
+
+        <button
+            class="boton-cerrar-perfil"
+            id="cerrarPerfil"
+            type="button"
+        >Cerrar</button>
+
+    </section>
+
+</div>
+
+<script>
+"use strict";
+
+/* =====================================================
+   ALMACENAMIENTO
+===================================================== */
+
+const almacenamientoTemporal = {};
+
+function leerAlmacenamiento(clave) {
+    try {
+        const valor = localStorage.getItem(clave);
+        return valor === null ? null : valor;
+    } catch (error) {
+        return Object.prototype.hasOwnProperty.call(
+            almacenamientoTemporal,
+            clave
+        ) ? almacenamientoTemporal[clave] : null;
+    }
+}
+
+function guardarAlmacenamiento(clave, valor) {
+    almacenamientoTemporal[clave] = String(valor);
+
+    try {
+        localStorage.setItem(clave, String(valor));
+        return true;
+    } catch (error) {
+        console.warn("No se pudo guardar en localStorage:", error);
+        return false;
+    }
+}
+
+function eliminarAlmacenamiento(clave) {
+    delete almacenamientoTemporal[clave];
+
+    try {
+        localStorage.removeItem(clave);
+    } catch (error) {
+        console.warn("No se pudo eliminar la clave:", clave);
+    }
+}
+
+/* =====================================================
+   USUARIO CONECTADO
+===================================================== */
+
+function leerUsuarioActual() {
+    const valor = leerAlmacenamiento("usuarioTORITO");
+    return valor && valor.trim() ? valor.trim() : "";
+}
+
+const usuarioGuardado = leerUsuarioActual();
+
+function normalizarUsuario(valor) {
+    return String(valor || "")
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[\s._-]+/g, "");
+}
+
+const usuarioNormalizado = normalizarUsuario(usuarioGuardado);
+
+function esFran() {
+    return [
+        "fran",
+        "francisco",
+        "franciscoperezbasla"
+    ].includes(usuarioNormalizado);
+}
+
+function esToto() {
+    return usuarioNormalizado === "toto";
+}
+
+function esBianca() {
+    return [
+        "bianca",
+        "biancadominguez"
+    ].includes(usuarioNormalizado);
+}
+
+document.getElementById("nombreUsuario").textContent =
+    usuarioGuardado || "Usuario";
+
+document.getElementById("avatarUsuario").textContent =
+    usuarioGuardado
+        ? usuarioGuardado.charAt(0).toUpperCase()
+        : "U";
+
+document.getElementById("rolUsuario").textContent =
+    esFran() ? "Administrador" :
+    esToto() ? "Cuerpo técnico" :
+    esBianca() ? "Jugadora · Sub 14" :
+    "Club Torito";
+
+document.getElementById("nombrePerfil").textContent =
+    usuarioGuardado || "Usuario";
+
+document.getElementById("avatarPerfil").textContent =
+    usuarioGuardado
+        ? usuarioGuardado.charAt(0).toUpperCase()
+        : "U";
+
+document.getElementById("rolPerfil").textContent =
+    document.getElementById("rolUsuario").textContent;
+
+/* =====================================================
+   BARRA LATERAL
+===================================================== */
+
+const botonMenu = document.getElementById("botonMenu");
+const sidebar = document.getElementById("sidebar");
+const capaSidebar = document.getElementById("capaSidebar");
+
+function esPantallaMovil() {
+    return window.innerWidth <= 760;
+}
+
+function actualizarEstadoSidebar() {
+    const abierto = !sidebar.classList.contains("oculto");
+
+    botonMenu.setAttribute("aria-expanded", String(abierto));
+
+    botonMenu.setAttribute(
+        "aria-label",
+        abierto ? "Cerrar menú" : "Abrir menú"
+    );
+
+    if (esPantallaMovil()) {
+        capaSidebar.classList.toggle("visible", abierto);
+    } else {
+        capaSidebar.classList.remove("visible");
+    }
+}
+
+function alternarSidebar() {
+    sidebar.classList.toggle("oculto");
+    actualizarEstadoSidebar();
+}
+
+function cerrarSidebar() {
+    sidebar.classList.add("oculto");
+    capaSidebar.classList.remove("visible");
+    actualizarEstadoSidebar();
+}
+
+botonMenu.addEventListener("click", alternarSidebar);
+capaSidebar.addEventListener("click", cerrarSidebar);
+
+document.querySelectorAll(".titulo-grupo[data-grupo]").forEach(boton => {
+    boton.addEventListener("click", () => {
+        const grupo = document.getElementById(boton.dataset.grupo);
+
+        if (!grupo) return;
+
+        grupo.classList.toggle("cerrado");
+
+        boton.setAttribute(
+            "aria-expanded",
+            String(!grupo.classList.contains("cerrado"))
+        );
+    });
+});
+
+function ajustarSidebar() {
+    if (esPantallaMovil()) {
+        sidebar.classList.add("oculto");
+    } else {
+        sidebar.classList.remove("oculto");
+    }
+
+    actualizarEstadoSidebar();
+}
+
+window.addEventListener("resize", ajustarSidebar);
+ajustarSidebar();
+
+document.querySelectorAll(".sidebar a").forEach(enlace => {
+    enlace.addEventListener("click", () => {
+        if (esPantallaMovil()) cerrarSidebar();
+    });
+});
+
+/* PERMISOS DE BIANCA */
+
+if (esBianca()) {
+    document.getElementById("grupoPlantel")?.remove();
+    document.getElementById("grupoRendimientos")?.remove();
+
+    document.querySelectorAll("[data-ocultar-bianca]").forEach(enlace => {
+        enlace.style.display = "none";
+    });
+}
+
+/* =====================================================
+   PERFIL
+===================================================== */
+
+document.getElementById("botonPerfil").addEventListener("click", () => {
+    document.getElementById("fondoPerfil").classList.add("visible");
+});
+
+function cerrarPerfil() {
+    document.getElementById("fondoPerfil").classList.remove("visible");
+}
+
+document.getElementById("cerrarPerfil").addEventListener(
+    "click",
+    cerrarPerfil
+);
+
+document.getElementById("fondoPerfil").addEventListener("click", event => {
+    if (event.target.id === "fondoPerfil") cerrarPerfil();
+});
+
+/* =====================================================
+   CERRAR SESIÓN
+===================================================== */
+
+document.getElementById("cerrarSesion").addEventListener("click", event => {
+    event.preventDefault();
+    eliminarAlmacenamiento("usuarioTORITO");
+    window.location.href = "TORITO-Loing.html";
+});
+
+/* =====================================================
+   ELEMENTOS DEL CALENDARIO
+===================================================== */
+
+const categoria = document.getElementById("categoria");
+const diasCalendario = document.getElementById("diasCalendario");
+const nombreMes = document.getElementById("nombreMes");
+const fondoModal = document.getElementById("fondoModal");
+
+const textoActividad = document.getElementById("textoActividad");
+const imagenActividad = document.getElementById("imagenActividad");
+const estadoActividad = document.getElementById("estadoActividad");
+const alineacionTexto = document.getElementById("alineacionTexto");
+const tamanoTexto = document.getElementById("tamanoTexto");
+const posicionImagen = document.getElementById("posicionImagen");
+const anchoImagen = document.getElementById("anchoImagen");
+const altoImagen = document.getElementById("altoImagen");
+
+const vistaImagen = document.getElementById("vistaImagen");
+const imagenPrevia = document.getElementById("imagenPrevia");
+const nombreVistaImagen = document.getElementById("nombreVistaImagen");
+const avisoImagen = document.getElementById("avisoImagen");
+const eliminarActividad = document.getElementById("eliminarActividad");
+
+const vistaPreviaDia = document.getElementById("vistaPreviaDia");
+const vistaPreviaNumero = document.getElementById("vistaPreviaNumero");
+const vistaPreviaContenido = document.getElementById("vistaPreviaContenido");
+
+const nombresMeses = [
+    "enero", "febrero", "marzo", "abril", "mayo", "junio",
+    "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+];
+
+const mesesAbreviados = [
+    "ENE", "FEB", "MAR", "ABR", "MAY", "JUN",
+    "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"
+];
+
+let fechaActual = new Date();
+
+fechaActual = new Date(
+    fechaActual.getFullYear(),
+    fechaActual.getMonth(),
+    1
+);
+
+let fechaSeleccionada = "";
+
+/* =====================================================
+   PREFERENCIA DE CATEGORÍA
+===================================================== */
+
+if (usuarioNormalizado) {
+    const clavePreferencia =
+        "divisionPreferidaTORITO_" + usuarioNormalizado;
+
+    const preferida = leerAlmacenamiento(clavePreferencia);
+
+    const categoriasValidas = [
+        "Sub 10",
+        "Sub 12",
+        "Sub 14",
+        "Sub 16",
+        "Primera"
+    ];
+
+    if (esBianca()) {
+        categoria.value = "Sub 14";
+    } else if (categoriasValidas.includes(preferida)) {
+        categoria.value = preferida;
+    }
+}
+
+categoria.addEventListener("change", () => {
+    if (usuarioNormalizado) {
+        guardarAlmacenamiento(
+            "divisionPreferidaTORITO_" + usuarioNormalizado,
+            categoria.value
+        );
+    }
+
+    renderizarCalendario();
+});
+
+/* =====================================================
+   ESCUDOS DE LOS CLUBES
+===================================================== */
+
+const ESCUDOS_CLUBES = {
+    "14 de Junio": "CLUBES/14 JUNIO.jpg",
+    "Alianza": "CLUBES/ALIANZA.png",
+    "Argentino": "CLUBES/ARGENTINO.png",
+    "Banco": "CLUBES/BANCO.jpg",
+    "Botafogo": "CLUBES/BOTAFOGO.jpg",
+    "Central": "CLUBES/CENTRAL.png",
+    "CGR": "CLUBES/CGR.png",
+    "Coronel Aguirre": "CLUBES/CORONEL AGUIRRE.png",
+    "General Paz": "CLUBES/GRAL PAZ.jpg",
+    "Lamadrid": "CLUBES/LAMADRID.jpg",
+    "Leones": "CLUBES/LEONES.jpg",
+    "Mitre": "CLUBES/MITRE.png",
+    "Morning": "CLUBES/MORNING.jpg",
+    "Newell's Old Boys": "CLUBES/NEWELLS.png",
+    "Oriental": "CLUBES/ORIENTAL.jpg",
+    "Pablo VI": "CLUBES/PABLO VI.jpg",
+    "Provincial": "CLUBES/PROVINCIAL.png",
+    "Renato": "CLUBES/RENATO.jpg",
+    "San José": "CLUBES/SAN JOSE.jpg",
+    "San Roque": "CLUBES/SAN ROQUE.jpg",
+    "San Telmo": "CLUBES/SAN TELMO.png",
+    "Social Lux": "CLUBES/SOCIAL LUX.jpg",
+    "Sparta": "CLUBES/SPARTA.jpg",
+    "Tiro Federal": "CLUBES/TIRO FEDERAL.jpg",
+    "Tiro Suizo": "CLUBES/TIRO SUIZO.jpg",
+    "Torito": "CLUBES/TORITO.png",
+    "Unión Americana": "CLUBES/UNION AMERICANA.png",
+    "Villa Gobernador Gálvez": "CLUBES/VG GALVEZ.png"
+};
+
+const NOMBRES_POR_ARCHIVO = {
+    "14 JUNIO.jpg": "14 de Junio",
+    "ALIANZA.png": "Alianza",
+    "ARGENTINO.png": "Argentino",
+    "BANCO.jpg": "Banco",
+    "BOTAFOGO.jpg": "Botafogo",
+    "CENTRAL.png": "Central",
+    "CGR.png": "CGR",
+    "CORONEL AGUIRRE.png": "Coronel Aguirre",
+    "GRAL PAZ.jpg": "General Paz",
+    "LAMADRID.jpg": "Lamadrid",
+    "LEONES.jpg": "Leones",
+    "MITRE.png": "Mitre",
+    "MORNING.jpg": "Morning",
+    "NEWELLS.png": "Newell's Old Boys",
+    "ORIENTAL.jpg": "Oriental",
+    "PABLO VI.jpg": "Pablo VI",
+    "PROVINCIAL.png": "Provincial",
+    "RENATO.jpg": "Renato",
+    "SAN JOSE.jpg": "San José",
+    "SAN ROQUE.jpg": "San Roque",
+    "SAN TELMO.png": "San Telmo",
+    "SOCIAL LUX.jpg": "Social Lux",
+    "SPARTA.jpg": "Sparta",
+    "TIRO FEDERAL.jpg": "Tiro Federal",
+    "TIRO SUIZO.jpg": "Tiro Suizo",
+    "TORITO.png": "Torito",
+    "UNION AMERICANA.png": "Unión Americana",
+    "VG GALVEZ.png": "Villa Gobernador Gálvez"
+};
+
+function rutaImagen(nombre) {
+    if (!nombre) return "";
+
+    const archivo = String(nombre).trim();
+    const normalizado = archivo.toLowerCase();
+
+    if (
+        normalizado === "torito" ||
+        normalizado === "logo torito" ||
+        normalizado === "TORITO-Logo TORITO.png" ||
+        normalizado === "logo torito.png" ||
+        normalizado === "logo torito.jpeg"
+    ) {
+        return encodeURI("TORITO-Logo TORITO.png");
+    }
+
+    if (archivo.includes("/") || archivo.includes("\\")) {
+        return encodeURI(archivo.replace(/\\/g, "/"));
+    }
+
+    if (
+        normalizado === "nob.jpg" ||
+        normalizado === "newells.jpg"
+    ) {
+        return encodeURI(ESCUDOS_CLUBES["Newell's Old Boys"]);
+    }
+
+    const clubEncontrado = Object.keys(ESCUDOS_CLUBES).find(club => {
+        const archivoClub = ESCUDOS_CLUBES[club].split("/").pop();
+        return archivoClub.toLowerCase() === normalizado;
+    });
+
+    if (clubEncontrado) {
+        return encodeURI(ESCUDOS_CLUBES[clubEncontrado]);
+    }
+
+    return encodeURI(archivo);
+}
+
+function nombreClubDesdeRuta(ruta) {
+    if (!ruta) return "";
+
+    const archivo = String(ruta)
+        .replace(/\\/g, "/")
+        .split("/")
+        .pop();
+
+    if (archivo.toLowerCase().startsWith("logo torito")) {
+        return "TORITO";
+    }
+
+    const clave = Object.keys(NOMBRES_POR_ARCHIVO).find(nombre => {
+        return nombre.toLowerCase() === archivo.toLowerCase();
+    });
+
+    if (clave) return NOMBRES_POR_ARCHIVO[clave];
+
+    if (
+        archivo.toLowerCase() === "nob.jpg" ||
+        archivo.toLowerCase() === "newells.jpg"
+    ) {
+        return "Newell's Old Boys";
+    }
+
+    return archivo;
+}
+
+/* =====================================================
+   ANALIZAR ACTIVIDADES
+===================================================== */
+
+/*
+   ENTRENAMIENTO:
+   Se identifica la carga baja, media o alta.
+   La tarjeta no muestra el texto de ejercicios ni la categoría.
+
+   PARTIDO:
+   Se identifica el torneo y se combina con la fecha del calendario.
+   El escudo se toma de la imagen seleccionada en la actividad.
+*/
+
+function analizarActividad(textoOriginal, estadoGuardado = "libre") {
+    const texto = String(textoOriginal || "").trim();
+
+    const lineas = texto
+        .replace(/\r/g, "")
+        .split(/\n+/)
+        .map(linea => linea.trim())
+        .filter(Boolean);
+
+    const segmentos = [];
+
+    lineas.forEach(linea => {
+        linea
+            .split(/\s*[·•]\s*/)
+            .map(parte => parte.trim())
+            .filter(Boolean)
+            .forEach(parte => segmentos.push(parte));
+    });
+
+    const textoCompleto = segmentos.join(" ");
+
+    const categoriaEncontrada = textoCompleto.match(
+        /\b(Sub\s*\d{1,2}|Primera)\b/i
+    );
+
+    const categoriaTexto = categoriaEncontrada
+        ? categoriaEncontrada[1].replace(/\s+/g, " ")
+        : "";
+
+    const intensidadEncontrada = textoCompleto.match(
+        /\b(?:intensidad|carga)\s*:\s*(baja?|media?|alta?)\b/i
+    );
+
+    let estadoPorTexto = "";
+
+    if (intensidadEncontrada) {
+        const valor = intensidadEncontrada[1].toLowerCase();
+
+        if (valor.startsWith("baj")) estadoPorTexto = "bajo";
+        if (valor.startsWith("med")) estadoPorTexto = "medio";
+        if (valor.startsWith("alt")) estadoPorTexto = "alto";
+    }
+
+    if (!estadoPorTexto) {
+        if (/\bCarga\s+baja\b/i.test(textoCompleto)) {
+            estadoPorTexto = "bajo";
+        } else if (/\bCarga\s+media\b/i.test(textoCompleto)) {
+            estadoPorTexto = "medio";
+        } else if (/\bCarga\s+alta\b/i.test(textoCompleto)) {
+            estadoPorTexto = "alto";
+        }
+    }
+
+    const equivalenciasEstado = {
+        blanco: "libre",
+        gris: "suspendido",
+        verde: "bajo",
+        amarillo: "medio",
+        rojo: "alto"
+    };
+
+    let estado = String(estadoGuardado || "libre").toLowerCase();
+    estado = equivalenciasEstado[estado] || estado;
+
+    if (estadoPorTexto) {
+        estado = estadoPorTexto;
+    }
+
+    if (![
+        "libre",
+        "suspendido",
+        "bajo",
+        "medio",
+        "alto"
+    ].includes(estado)) {
+        estado = "libre";
+    }
+
+    const tipos = [
+        {
+            patron: /\bpartido\b/i,
+            nombre: "partido"
+        },
+        {
+            patron: /\bentrenamiento\b/i,
+            nombre: "entrenamiento"
+        },
+        {
+            patron: /\bgimnasio\b/i,
+            nombre: "otro"
+        },
+        {
+            patron: /\brecuperaci[oó]n\b/i,
+            nombre: "otro"
+        },
+        {
+            patron: /\bdescanso\b/i,
+            nombre: "otro"
+        },
+        {
+            patron: /\btesteos?\b/i,
+            nombre: "otro"
+        },
+        {
+            patron: /\bevaluaci[oó]n\b/i,
+            nombre: "otro"
+        },
+        {
+            patron: /\bamistoso\b/i,
+            nombre: "partido"
+        },
+        {
+            patron: /\bcompetencia\b/i,
+            nombre: "partido"
+        }
+    ];
+
+    let tipo = "otro";
+    let patronTipo = null;
+
+    for (const elemento of tipos) {
+        if (elemento.patron.test(textoCompleto)) {
+            tipo = elemento.nombre;
+            patronTipo = elemento.patron;
+            break;
+        }
+    }
+
+    /*
+       Construye el nombre del torneo o detalle quitando:
+       el tipo de actividad, la categoría y la intensidad.
+    */
+
+    let descripcion = textoCompleto;
+
+    if (patronTipo) {
+        descripcion = descripcion.replace(patronTipo, "");
+    }
+
+    descripcion = descripcion
+        .replace(/\b(Sub\s*\d{1,2}|Primera)\b/ig, "")
+        .replace(
+            /\b(?:intensidad|carga)\s*:\s*(baja?|media?|alta?)\b/ig,
+            ""
+        )
+        .replace(/\bCarga\s+(?:baja|media|alta)\b/ig, "")
+        .replace(/\s*[·•]\s*/g, " ")
+        .replace(/^[\s:–—\-|]+|[\s:–—\-|]+$/g, "")
+        .replace(/\s{2,}/g, " ")
+        .trim();
+
+    /*
+       Si el texto no se reconoce como una estructura con
+       metadatos, conserva la descripción original.
+    */
+
+    const habiaMetadatos = Boolean(
+        patronTipo ||
+        categoriaTexto ||
+        intensidadEncontrada ||
+        estadoPorTexto
+    );
+
+    if (!habiaMetadatos) {
+        descripcion = texto;
+    }
+
+    return {
+        tipo,
+        categoria: categoriaTexto,
+        descripcion,
+        estado
+    };
+}
+
+/* =====================================================
+   FORMATO DE FECHA DEL PARTIDO
+===================================================== */
+
+function fechaCortaPartido(fecha) {
+    if (!fecha) return "";
+
+    const partes = fecha.split("-");
+
+    if (partes.length !== 3) return "";
+
+    const anio = Number(partes[0]);
+    const mes = Number(partes[1]);
+    const dia = Number(partes[2]);
+
+    if (
+        !Number.isInteger(anio) ||
+        mes < 1 ||
+        mes > 12 ||
+        dia < 1 ||
+        dia > 31
+    ) {
+        return "";
+    }
+
+    return `${dia} ${mesesAbreviados[mes - 1]}`;
+}
+
+function nombreEstado(estado) {
+    const nombres = {
+        libre: "Carga no definida",
+        suspendido: "Suspendido",
+        bajo: "Carga baja",
+        medio: "Carga media",
+        alto: "Carga alta"
+    };
+
+    return nombres[estado] || "Carga no definida";
+}
+
+/* =====================================================
+   CREAR TARJETA DE ACTIVIDAD
+===================================================== */
+
+function crearVistaActividad(datos, fecha, esVistaPrevia = false) {
+    const analisis = analizarActividad(
+        datos.texto,
+        datos.estado
+    );
+
+    const estado = analisis.estado;
+
+    /*
+       CASO 1: ENTRENAMIENTO
+       En la grilla solo se muestra la carga.
+    */
+
+    if (analisis.tipo === "entrenamiento") {
+        const tarjeta = document.createElement("div");
+
+        tarjeta.className =
+            "actividad-preview tipo-entrenamiento estado-" + estado;
+
+        const carga = document.createElement("div");
+        carga.className = "entrenamiento-carga";
+        carga.textContent = nombreEstado(estado);
+
+        tarjeta.appendChild(carga);
+
+        return tarjeta;
+    }
+
+    /*
+       CASO 2: PARTIDO
+       Se muestra fecha, torneo y escudo.
+       No se repiten "Partido" ni la categoría.
+    */
+
+    if (analisis.tipo === "partido") {
+        const tarjeta = document.createElement("div");
+
+        tarjeta.className =
+            "actividad-preview tipo-partido estado-" + estado;
+
+        const escudo = document.createElement("div");
+        escudo.className = "partido-escudo";
+
+        if (datos.imagen) {
+            const img = document.createElement("img");
+
+            img.src = rutaImagen(datos.imagen);
+            img.alt = nombreClubDesdeRuta(datos.imagen) || "Escudo del equipo";
+
+            img.onerror = function() {
+                escudo.classList.add("sin-escudo");
+            };
+
+            escudo.appendChild(img);
+        } else {
+            escudo.classList.add("sin-escudo");
+        }
+
+        tarjeta.appendChild(escudo);
+
+        const informacion = document.createElement("div");
+        informacion.className = "partido-informacion";
+
+        const fechaEtiqueta = document.createElement("div");
+        fechaEtiqueta.className = "partido-fecha";
+        fechaEtiqueta.textContent = fechaCortaPartido(fecha) || "FECHA";
+
+        informacion.appendChild(fechaEtiqueta);
+
+        const torneo = document.createElement("div");
+        torneo.className = analisis.descripcion
+            ? "partido-torneo"
+            : "partido-sin-torneo";
+
+        torneo.textContent = analisis.descripcion || "Torneo a definir";
+        torneo.title = analisis.descripcion || "Torneo a definir";
+
+        informacion.appendChild(torneo);
+        tarjeta.appendChild(informacion);
+
+        return tarjeta;
+    }
+
+    /*
+       CASO 3: OTRAS ACTIVIDADES
+       Mantiene un formato informativo como alternativa.
+    */
+
+    const tarjeta = document.createElement("div");
+
+    tarjeta.className =
+        "actividad-preview tipo-otro estado-" + estado;
+
+    const titulo = document.createElement("div");
+    titulo.className = "actividad-otro-titulo";
+    titulo.textContent = analisis.categoria
+        ? analisis.categoria
+        : "Actividad";
+
+    tarjeta.appendChild(titulo);
+
+    if (datos.imagen) {
+        const escudo = document.createElement("div");
+        escudo.className = "partido-escudo";
+
+        const img = document.createElement("img");
+        img.src = rutaImagen(datos.imagen);
+        img.alt = nombreClubDesdeRuta(datos.imagen) || "Imagen de actividad";
+
+        img.onerror = function() {
+            escudo.style.display = "none";
+        };
+
+        escudo.appendChild(img);
+        tarjeta.appendChild(escudo);
+    }
+
+    if (analisis.descripcion) {
+        const descripcion = document.createElement("div");
+        descripcion.className = "actividad-otro-descripcion";
+        descripcion.textContent = analisis.descripcion;
+        tarjeta.appendChild(descripcion);
+    }
+
+    return tarjeta;
+}
+
+/* =====================================================
+   VISTA PREVIA EN VIVO
+===================================================== */
+
+function actualizarVistaPreviaCalendario() {
+    if (!vistaPreviaDia || !vistaPreviaContenido) return;
+
+    const texto = textoActividad.value.trim();
+    const imagen = imagenActividad.value;
+    const analisis = analizarActividad(
+        texto,
+        estadoActividad.value || "libre"
+    );
+
+    const estado = analisis.estado;
+
+    vistaPreviaDia.className = "vista-previa-dia color-" + estado;
+
+    if (fechaSeleccionada) {
+        const partes = fechaSeleccionada.split("-");
+        vistaPreviaNumero.textContent = String(Number(partes[2]));
+    } else {
+        vistaPreviaNumero.textContent = "--";
+    }
+
+    vistaPreviaContenido.replaceChildren();
+
+    const datos = {
+        texto,
+        imagen,
+        estado,
+        tamanoTexto: Number(tamanoTexto.value) || 12,
+        alineacionTexto: alineacionTexto.value || "izquierda",
+        posicionImagen: posicionImagen.value || "centro",
+        anchoImagen: Number(anchoImagen.value) || 70,
+        altoImagen: Number(altoImagen.value) || 35
+    };
+
+    if (!texto && !imagen && estado === "libre") {
+        const vacio = document.createElement("div");
+        vacio.className = "preview-vacio";
+        vacio.textContent = "La actividad aparecerá acá.";
+        vistaPreviaContenido.appendChild(vacio);
+        return;
+    }
+
+    vistaPreviaContenido.appendChild(
+        crearVistaActividad(
+            datos,
+            fechaSeleccionada,
+            true
+        )
+    );
+}
+
+/* =====================================================
+   VISTA PREVIA DEL ESCUDO
+===================================================== */
+
+function actualizarVistaImagen() {
+    const ruta = imagenActividad.value;
+    const club = nombreClubDesdeRuta(ruta);
+
+    vistaImagen.classList.remove("visible");
+    avisoImagen.classList.remove("visible");
+
+    if (!ruta) {
+        imagenPrevia.removeAttribute("src");
+        nombreVistaImagen.textContent = "";
+        actualizarVistaPreviaCalendario();
+        return;
+    }
+
+    nombreVistaImagen.textContent = club
+        ? "Escudo de " + club
+        : "";
+
+    imagenPrevia.onload = function() {
+        vistaImagen.classList.add("visible");
+        avisoImagen.classList.remove("visible");
+    };
+
+    imagenPrevia.onerror = function() {
+        vistaImagen.classList.remove("visible");
+        avisoImagen.classList.add("visible");
+    };
+
+    imagenPrevia.src = rutaImagen(ruta);
+
+    actualizarVistaPreviaCalendario();
+}
+
+imagenActividad.addEventListener("change", actualizarVistaImagen);
+
+/* Actualización en vivo */
+
+[
+    estadoActividad,
+    textoActividad,
+    tamanoTexto,
+    alineacionTexto,
+    posicionImagen,
+    anchoImagen,
+    altoImagen
+].forEach(elemento => {
+    elemento.addEventListener("input", actualizarVistaPreviaCalendario);
+    elemento.addEventListener("change", actualizarVistaPreviaCalendario);
+});
+
+/* =====================================================
+   FECHAS Y ALMACENAMIENTO
+===================================================== */
+
+function fechaEnFormato(fecha) {
+    const anio = fecha.getFullYear();
+    const mes = String(fecha.getMonth() + 1).padStart(2, "0");
+    const dia = String(fecha.getDate()).padStart(2, "0");
+
+    return `${anio}-${mes}-${dia}`;
+}
+
+function fechaLegible(fecha) {
+    const partes = fecha.split("-");
+    const indiceMes = Number(partes[1]) - 1;
+
+    if (
+        partes.length !== 3 ||
+        indiceMes < 0 ||
+        indiceMes > 11
+    ) {
+        return fecha;
+    }
+
+    return `${Number(partes[2])} de ${nombresMeses[indiceMes]} de ${partes[0]}`;
+}
+
+function leerDatos() {
+    try {
+        const texto = leerAlmacenamiento("actividadesTORITO");
+
+        if (!texto) return {};
+
+        const datos = JSON.parse(texto);
+
+        return datos &&
+            typeof datos === "object" &&
+            !Array.isArray(datos)
+            ? datos
+            : {};
+    } catch (error) {
+        console.error("No se pudieron leer las actividades:", error);
+        return {};
+    }
+}
+
+function guardarDatos(datos) {
+    guardarAlmacenamiento(
+        "actividadesTORITO",
+        JSON.stringify(datos)
+    );
+}
+
+function obtenerActividad(cat, fecha) {
+    const datos = leerDatos();
+    const original = datos[cat]?.[fecha];
+
+    if (original === undefined || original === null) {
+        return null;
+    }
+
+    if (
+        typeof original === "string" ||
+        typeof original === "number"
+    ) {
+        return {
+            texto: String(original),
+            estado: "libre",
+            imagen: "",
+            tamanoTexto: 12,
+            alineacionTexto: "izquierda",
+            posicionImagen: "centro",
+            anchoImagen: 70,
+            altoImagen: 35
+        };
+    }
+
+    const actividad = { ...original };
+
+    const equivalenciasEstado = {
+        blanco: "libre",
+        gris: "suspendido",
+        verde: "bajo",
+        amarillo: "medio",
+        rojo: "alto"
+    };
+
+    let estado = String(
+        actividad.estado ||
+        actividad.color ||
+        actividad.intensidad ||
+        "libre"
+    ).toLowerCase();
+
+    estado = equivalenciasEstado[estado] || estado;
+
+    if (![
+        "libre",
+        "suspendido",
+        "bajo",
+        "medio",
+        "alto"
+    ].includes(estado)) {
+        estado = "libre";
+    }
+
+    const alineacionesValidas = [
+        "izquierda",
+        "centro",
+        "derecha"
+    ];
+
+    let alineacion = actividad.alineacionTexto || "izquierda";
+    let posicion = actividad.posicionImagen || "centro";
+
+    if (!alineacionesValidas.includes(alineacion)) {
+        alineacion = "izquierda";
+    }
+
+    if (!alineacionesValidas.includes(posicion)) {
+        posicion = "centro";
+    }
+
+    return {
+        texto:
+            actividad.texto ||
+            actividad.descripcion ||
+            actividad.actividad ||
+            actividad.titulo ||
+            actividad.nombre ||
+            actividad.ejercicio ||
+            "",
+        estado,
+        imagen:
+            actividad.imagen ||
+            actividad.img ||
+            actividad.escudo ||
+            actividad.logo ||
+            "",
+        tamanoTexto: Number(actividad.tamanoTexto) || 12,
+        alineacionTexto: alineacion,
+        posicionImagen: posicion,
+        anchoImagen: Number(actividad.anchoImagen) || 70,
+        altoImagen: Number(actividad.altoImagen) || 35
+    };
+}
+
+/* =====================================================
+   EDITAR ACTIVIDADES
+===================================================== */
+
+function abrirEditor(fecha) {
+    fechaSeleccionada = fecha;
+
+    const actividad = obtenerActividad(categoria.value, fecha);
+
+    document.getElementById("tituloModal").textContent =
+        actividad ? "Modificar actividad" : "Agregar actividad";
+
+    document.getElementById("fechaModal").textContent =
+        fechaLegible(fecha);
+
+    textoActividad.value = actividad?.texto || "";
+    estadoActividad.value = actividad?.estado || "libre";
+
+    const rutaGuardada = actividad?.imagen
+        ? rutaImagen(actividad.imagen)
+        : "";
+
+    const opcionEscudo = Array.from(imagenActividad.options).find(
+        opcion => {
+            return opcion.value &&
+                rutaImagen(opcion.value) === rutaGuardada;
+        }
+    );
+
+    imagenActividad.value = opcionEscudo
+        ? opcionEscudo.value
+        : "";
+
+    tamanoTexto.value = actividad?.tamanoTexto || 12;
+    alineacionTexto.value = actividad?.alineacionTexto || "izquierda";
+    posicionImagen.value = actividad?.posicionImagen || "centro";
+    anchoImagen.value = actividad?.anchoImagen || 70;
+    altoImagen.value = actividad?.altoImagen || 35;
+
+    eliminarActividad.style.display =
+        actividad ? "block" : "none";
+
+    actualizarVistaImagen();
+    actualizarVistaPreviaCalendario();
+
+    fondoModal.classList.add("visible");
+}
+
+function cerrarEditor() {
+    fondoModal.classList.remove("visible");
+}
+
+document.getElementById("cerrarModal").addEventListener(
+    "click",
+    cerrarEditor
+);
+
+document.getElementById("cancelarModal").addEventListener(
+    "click",
+    cerrarEditor
+);
+
+fondoModal.addEventListener("click", event => {
+    if (event.target === fondoModal) cerrarEditor();
+});
+
+document.addEventListener("keydown", event => {
+    if (event.key === "Escape") {
+        cerrarEditor();
+        cerrarPerfil();
+    }
+});
+
+/* =====================================================
+   GUARDAR ACTIVIDAD
+===================================================== */
+
+document.getElementById("guardarActividad").addEventListener("click", () => {
+    if (!fechaSeleccionada) {
+        alert("Primero seleccioná un día del calendario.");
+        return;
+    }
+
+    const datos = leerDatos();
+    const cat = categoria.value;
+
+    if (!datos[cat] || typeof datos[cat] !== "object") {
+        datos[cat] = {};
+    }
+
+    const texto = textoActividad.value.trim();
+    const imagen = imagenActividad.value;
+    const estado = estadoActividad.value;
+
+    const tamano = Math.max(
+        8,
+        Math.min(32, Number(tamanoTexto.value) || 12)
+    );
+
+    const ancho = Math.max(
+        20,
+        Math.min(200, Number(anchoImagen.value) || 70)
+    );
+
+    const alto = Math.max(
+        15,
+        Math.min(120, Number(altoImagen.value) || 35)
+    );
+
+    if (!texto && !imagen && estado === "libre") {
+        delete datos[cat][fechaSeleccionada];
+    } else {
+        datos[cat][fechaSeleccionada] = {
+            texto,
+            estado,
+            imagen,
+            tamanoTexto: tamano,
+            alineacionTexto: alineacionTexto.value,
+            posicionImagen: posicionImagen.value,
+            anchoImagen: ancho,
+            altoImagen: alto
+        };
+    }
+
+    guardarDatos(datos);
+    cerrarEditor();
+    renderizarCalendario();
+});
+
+/* =====================================================
+   ELIMINAR ACTIVIDAD
+===================================================== */
+
+eliminarActividad.addEventListener("click", () => {
+    if (!fechaSeleccionada) return;
+
+    if (!confirm("¿Querés eliminar la actividad de este día?")) {
+        return;
+    }
+
+    const datos = leerDatos();
+    const cat = categoria.value;
+
+    if (datos[cat]) {
+        delete datos[cat][fechaSeleccionada];
+    }
+
+    guardarDatos(datos);
+    cerrarEditor();
+    renderizarCalendario();
+});
+
+/* =====================================================
+   DIBUJAR CALENDARIO
+===================================================== */
+
+function renderizarCalendario() {
+    const anio = fechaActual.getFullYear();
+    const mes = fechaActual.getMonth();
+
+    nombreMes.textContent = `${nombresMeses[mes]} ${anio}`;
+    diasCalendario.replaceChildren();
+
+    let desplazamiento = new Date(anio, mes, 1).getDay();
+
+    /* La semana comienza el lunes. */
+
+    desplazamiento = desplazamiento === 0
+        ? 6
+        : desplazamiento - 1;
+
+    const cantidadDias = new Date(anio, mes + 1, 0).getDate();
+    const diasMesAnterior = new Date(anio, mes, 0).getDate();
+
+    const totalCeldas =
+        Math.ceil((desplazamiento + cantidadDias) / 7) * 7;
+
+    const hoy = fechaEnFormato(new Date());
+
+    for (let i = 0; i < totalCeldas; i++) {
+        let numeroDia;
+        let fechaCelda;
+        let esOtroMes = false;
+
+        if (i < desplazamiento) {
+            numeroDia = diasMesAnterior - desplazamiento + i + 1;
+            fechaCelda = new Date(anio, mes - 1, numeroDia);
+            esOtroMes = true;
+        } else if (i >= desplazamiento + cantidadDias) {
+            numeroDia = i - desplazamiento - cantidadDias + 1;
+            fechaCelda = new Date(anio, mes + 1, numeroDia);
+            esOtroMes = true;
+        } else {
+            numeroDia = i - desplazamiento + 1;
+            fechaCelda = new Date(anio, mes, numeroDia);
+        }
+
+        const fecha = fechaEnFormato(fechaCelda);
+        const actividad = obtenerActividad(categoria.value, fecha);
+
+        const celda = document.createElement("div");
+        celda.className = "dia";
+
+        if (esOtroMes) {
+            celda.classList.add("otro-mes");
+        }
+
+        if (fecha === hoy) {
+            celda.classList.add("hoy");
+        }
+
+        if (actividad) {
+            const analisis = analizarActividad(
+                actividad.texto,
+                actividad.estado
+            );
+
+            celda.classList.add("con-actividad");
+            celda.classList.add("color-" + analisis.estado);
+        }
+
+        /* Número del día */
+
+        const numero = document.createElement("span");
+        numero.className = "numero-dia";
+        numero.textContent = numeroDia;
+        celda.appendChild(numero);
+
+        /* Botón para agregar o modificar */
+
+        const botonEvento = document.createElement("button");
+
+        botonEvento.type = "button";
+        botonEvento.className = "boton-agregar";
+        botonEvento.textContent = actividad ? "✎" : "+";
+        botonEvento.title = actividad
+            ? "Modificar evento"
+            : "Agregar evento";
+
+        botonEvento.setAttribute(
+            "aria-label",
+            actividad
+                ? "Modificar evento del " + fecha
+                : "Agregar evento el " + fecha
+        );
+
+        botonEvento.addEventListener("click", event => {
+            event.stopPropagation();
+            abrirEditor(fecha);
+        });
+
+        celda.appendChild(botonEvento);
+
+        /* Renderizar tarjeta correspondiente */
+
+        if (actividad) {
+            const contenido = document.createElement("div");
+            contenido.className = "actividad-contenido";
+
+            contenido.appendChild(
+                crearVistaActividad(actividad, fecha, false)
+            );
+
+            celda.appendChild(contenido);
+        }
+
+        /* Abrir el editor al seleccionar el día */
+
+        celda.addEventListener("click", event => {
+            if (
+                event.target === celda ||
+                event.target.classList.contains("numero-dia")
+            ) {
+                abrirEditor(fecha);
+            }
+        });
+
+        diasCalendario.appendChild(celda);
+    }
+}
+
+/* =====================================================
+   NAVEGACIÓN ENTRE MESES
+===================================================== */
+
+document.getElementById("mesAnterior").addEventListener("click", () => {
+    fechaActual = new Date(
+        fechaActual.getFullYear(),
+        fechaActual.getMonth() - 1,
+        1
+    );
+
+    renderizarCalendario();
+});
+
+document.getElementById("mesSiguiente").addEventListener("click", () => {
+    fechaActual = new Date(
+        fechaActual.getFullYear(),
+        fechaActual.getMonth() + 1,
+        1
+    );
+
+    renderizarCalendario();
+});
+
+/* =====================================================
+   SINCRONIZACIÓN ENTRE PESTAÑAS
+===================================================== */
+
+window.addEventListener("storage", event => {
+    if (event.key === "actividadesTORITO") {
+        renderizarCalendario();
+    }
+
+    if (event.key === "usuarioTORITO") {
+        if (!event.newValue) {
+            window.location.href = "TORITO-Loing.html";
+        } else {
+            window.location.reload();
+        }
+    }
+});
+
+/* =====================================================
+   INICIALIZACIÓN
+===================================================== */
+
+renderizarCalendario();
+actualizarVistaPreviaCalendario();
+
+</script>
+
+
+
+</body>
+</html>

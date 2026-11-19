@@ -1,0 +1,5058 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gimnasio y Rutinas | ADIUR FEMENINO</title>
+
+<style>
+:root {
+  --naranja: #f47721;
+  --naranja-oscuro: #dc5e0b;
+  --naranja-claro: #fff0e6;
+  --negro: #171717;
+  --gris: #f4f5f7;
+  --gris-texto: #747474;
+  --borde: #e8e8e8;
+  --blanco: #fff;
+  --texto: #242424;
+  --verde: #18864b;
+  --verde-fondo: #e3f7eb;
+  --rojo: #c62828;
+  --rojo-fondo: #fde9e9;
+  --radio: 14px;
+  --alto-topbar: 84px;
+  --sombra: 0 4px 18px rgba(23,23,23,.045);
+  --sombra-hover: 0 12px 28px rgba(23,23,23,.085);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px;
+}
+
+body {
+  margin: 0;
+  background: #f7f8fa;
+  color: var(--texto);
+  font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+button, input, select { font: inherit; }
+select, select option { font-family: Arial, Helvetica, sans-serif !important; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button { cursor: pointer; }
+button:disabled { opacity: .5; cursor: not-allowed; }
+a { color: inherit; text-decoration: none; }
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+a:focus-visible,
+.rutina-miniatura:focus-visible {
+  outline: 3px solid #f4772166;
+  outline-offset: 2px;
+}
+
+.oculto { display: none !important; }
+
+/* BARRA SUPERIOR */
+
+.barra-superior {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  min-height: var(--alto-topbar);
+  padding: 12px 25px;
+  background: rgba(255,255,255,.97);
+  border-bottom: 1px solid var(--borde);
+  box-shadow: 0 2px 12px #00000005;
+  backdrop-filter: blur(12px);
+}
+
+.boton-menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--negro);
+  font-size: 25px;
+  transition: background .2s, color .2s;
+}
+
+.boton-menu:hover {
+  background: var(--gris);
+  color: var(--naranja-oscuro);
+}
+
+.logo-superior {
+  width: 53px;
+  height: 53px;
+  flex-shrink: 0;
+  padding: 2px;
+  border-radius: 50%;
+  background: #fff;
+  object-fit: contain;
+}
+
+.titulo-superior { flex: 1; min-width: 0; }
+
+.titulo-superior h1 {
+  margin: 0 0 5px;
+  color: var(--negro);
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: .5px;
+}
+
+.titulo-superior p {
+  margin: 0;
+  color: var(--gris-texto);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.perfil {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  margin-left: auto;
+  padding: 5px 9px 5px 5px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  transition: background .2s, border-color .2s;
+}
+
+.perfil:hover {
+  background: #fafafa;
+  border-color: var(--borde);
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--negro);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.nombre-perfil {
+  display: block;
+  max-width: 155px;
+  overflow: hidden;
+  color: #252525;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+/* ESTRUCTURA Y BARRA LATERAL */
+
+.contenedor {
+  display: flex;
+  align-items: stretch;
+  min-height: calc(100vh - var(--alto-topbar));
+}
+
+.sidebar {
+  width: 258px;
+  flex: 0 0 258px;
+  padding: 20px 13px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: #fff;
+  border-right: 1px solid var(--borde);
+  transition: margin-left .25s ease, transform .25s ease;
+}
+
+.sidebar.oculto { margin-left: -258px; }
+
+.menu-inicio {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 14px;
+  margin-bottom: 16px;
+  border-radius: 11px;
+  background: var(--naranja-claro);
+  color: var(--naranja-oscuro);
+  font-size: 12px;
+  font-weight: 900;
+  transition: background .2s;
+}
+
+.menu-inicio:hover { background: #ffe7d6; }
+
+.icono-menu {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  flex: 0 0 20px;
+  text-align: center;
+  font-size: 18px;
+}
+
+.grupo-menu { margin-bottom: 7px; }
+
+.titulo-grupo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  min-height: 44px;
+  padding: 12px 13px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: #202020;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .7px;
+  cursor: pointer;
+  user-select: none;
+  transition: background .2s;
+}
+
+.titulo-grupo:hover { background: #f7f8fa; }
+
+.flecha {
+  display: inline-block;
+  flex-shrink: 0;
+  font-size: 17px;
+  line-height: 1;
+  transition: transform .2s;
+}
+
+.grupo-menu.cerrado .flecha { transform: rotate(0deg); }
+.grupo-menu:not(.cerrado) .flecha { transform: rotate(90deg); }
+
+.submenu {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 0 0 5px;
+}
+
+.grupo-menu.cerrado .submenu { display: none; }
+
+.submenu a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 9px;
+  color: #656872;
+  font-size: 12px;
+  line-height: 1.45;
+  transition: background .15s, color .15s;
+}
+
+.submenu a:hover {
+  background: #f6f6f6;
+  color: #181818;
+}
+
+.submenu a.activo {
+  background: var(--naranja-claro);
+  color: var(--naranja-oscuro);
+  font-weight: 850;
+}
+
+.nav-punto {
+  width: 6px;
+  height: 6px;
+  flex: 0 0 6px;
+  border-radius: 50%;
+  background: #d7d9de;
+}
+
+.submenu a.activo .nav-punto { background: var(--naranja); }
+
+.separador-sesion {
+  margin-top: 19px;
+  padding-top: 12px;
+  border-top: 1px solid var(--borde);
+}
+
+.enlace-cerrar-sesion {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 9px;
+  color: #c0392b;
+  font-size: 12px;
+  font-weight: 800;
+  transition: background .2s;
+}
+
+.enlace-cerrar-sesion:hover { background: #fff2f1; }
+.capa-sidebar { display: none; }
+
+/* CONTENIDO GENERAL */
+
+.contenido {
+  flex: 1;
+  width: 100%;
+  max-width: 1700px;
+  min-width: 0;
+  margin: 0 auto;
+  padding: 30px;
+}
+
+.cabecera-pagina {
+  position: relative;
+  margin-bottom: 22px;
+}
+
+.cabecera-pagina::before {
+  content: "ENTRENAMIENTO · PREPARACIÓN FÍSICA";
+  display: block;
+  margin-bottom: 10px;
+  color: var(--naranja-oscuro);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1.8px;
+  line-height: 1.4;
+}
+
+.cabecera-pagina h2 {
+  margin: 0 0 8px;
+  color: var(--negro);
+  font-size: 31px;
+  font-weight: 900;
+  letter-spacing: -.7px;
+  line-height: 1.2;
+}
+
+.cabecera-pagina p {
+  max-width: 720px;
+  margin: 0;
+  color: var(--gris-texto);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* SELECTOR DE CATEGORÍA */
+
+.selector-categoria-superior {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 25px;
+  padding: 16px 19px;
+  border: 1px solid #e5e8ec;
+  border-radius: 13px;
+  background: #fff;
+  box-shadow: var(--sombra);
+}
+
+.icono-categoria-superior {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 43px;
+  height: 43px;
+  flex: 0 0 43px;
+  border: 1px solid #f3d4c0;
+  border-radius: 11px;
+  background: var(--naranja-claro);
+  color: var(--naranja-oscuro);
+}
+
+.icono-categoria-superior svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.texto-categoria-superior { flex: 1; min-width: 0; }
+
+.texto-categoria-superior strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #222;
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 1.4;
+}
+
+.texto-categoria-superior span {
+  display: block;
+  color: var(--gris-texto);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.campo-categoria-superior {
+  width: 255px;
+  flex: 0 0 255px;
+  min-width: 0;
+}
+
+.campo-categoria-superior label {
+  display: block;
+  margin-bottom: 7px;
+  color: #59606b;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .6px;
+}
+
+.campo-categoria-superior select {
+  display: block;
+  width: 100%;
+  min-height: 43px;
+  padding: 10px 12px;
+  border: 1px solid #e0e3e8;
+  border-radius: 9px;
+  background: #fff;
+  color: var(--negro);
+  font-size: 12px;
+  font-weight: 800;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.campo-categoria-superior select:hover { border-color: #c8cdd4; }
+
+.campo-categoria-superior select:focus {
+  outline: none;
+  border-color: var(--naranja);
+  box-shadow: 0 0 0 3px #f4772114;
+}
+
+.campo-categoria-superior select:disabled {
+  background: #f5f6f8;
+  color: #777d86;
+  cursor: not-allowed;
+}
+
+/* TARJETAS GENERALES */
+
+.tarjeta {
+  min-width: 0;
+  margin-bottom: 23px;
+  padding: 23px;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  background: #fff;
+  box-shadow: var(--sombra);
+}
+
+.tarjeta > h3 {
+  margin: 0 0 8px;
+  color: #202020;
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: -.2px;
+  line-height: 1.35;
+}
+
+.descripcion {
+  margin: 0 0 21px;
+  color: var(--gris-texto);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.aviso {
+  margin-bottom: 17px;
+  padding: 13px 15px;
+  border: 1px solid #f7d8c2;
+  border-radius: 10px;
+  background: #fffaf6;
+  color: #845027;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+/* CONFIGURACIÓN DE RUTINA */
+
+.tarjeta-configuracion {
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+  border-color: #e5e8ec;
+  box-shadow: 0 4px 20px rgba(23,23,23,.04);
+}
+
+.tarjeta-configuracion::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg,var(--naranja) 0%,#ffbb8c 46%,#fff 100%);
+}
+
+.cabecera-configuracion {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 23px 24px 20px;
+}
+
+.icono-configuracion {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  flex: 0 0 45px;
+  border: 1px solid #f5d8c5;
+  border-radius: 12px;
+  background: var(--naranja-claro);
+  color: var(--naranja-oscuro);
+}
+
+.icono-configuracion svg {
+  width: 23px;
+  height: 23px;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.texto-cabecera-configuracion { flex: 1; min-width: 0; }
+
+.texto-cabecera-configuracion h3 {
+  margin: 0;
+  color: #202020;
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: -.3px;
+  line-height: 1.4;
+}
+
+.cuerpo-configuracion { padding: 0 24px 22px; }
+
+.filtros {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 18px 16px;
+}
+
+.filtros .campo { min-width: 0; }
+.campo-modo, .campo-titulo, .campo-semanas { grid-column: span 1; }
+
+.campo label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  color: #59606b;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .6px;
+  line-height: 1.45;
+}
+
+.punto-label {
+  width: 5px;
+  height: 5px;
+  flex: 0 0 5px;
+  border-radius: 50%;
+  background: #e6a77f;
+}
+
+.campo input, .campo select {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 11px 13px;
+  border: 1px solid #dfe3e8;
+  border-radius: 9px;
+  background: #fff;
+  color: var(--negro);
+  font-size: 12px;
+  transition: border-color .2s, box-shadow .2s, background .2s;
+}
+
+.campo input::placeholder {
+  color: #a0a4ad;
+  font-size: 11px;
+}
+
+.campo input:hover, .campo select:hover { border-color: #c8cdd4; }
+
+.campo input:focus, .campo select:focus {
+  outline: none;
+  border-color: var(--naranja);
+  box-shadow: 0 0 0 3px #f4772114;
+}
+
+.campo input:disabled, .campo select:disabled {
+  background: #f5f6f8;
+  color: #777d86;
+  cursor: not-allowed;
+}
+
+.campo-titulo input { font-weight: 700; }
+
+.separador-configuracion {
+  height: 1px;
+  margin: 21px 0 17px;
+  background: #eceef1;
+}
+
+.pie-configuracion {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.selector-jugadora-editor {
+  width: 100%;
+  max-width: 440px;
+  margin: 0 0 19px;
+  padding: 13px 15px;
+  border: 1px solid #e8eaee;
+  border-radius: 10px;
+  background: #fbfcfd;
+}
+
+.selector-jugadora-editor label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  color: #59606b;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .6px;
+}
+
+.selector-jugadora-editor select {
+  display: block;
+  width: 100%;
+  min-height: 42px;
+  padding: 10px 12px;
+  border: 1px solid #dfe3e8;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--negro);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.selector-jugadora-editor select:focus {
+  outline: none;
+  border-color: var(--naranja);
+  box-shadow: 0 0 0 3px #f4772114;
+}
+
+/* BOTONES */
+
+.botones {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin: 0;
+}
+
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 41px;
+  padding: 10px 15px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1.4;
+  white-space: nowrap;
+  transition: background .18s,border-color .18s,color .18s,transform .15s,box-shadow .18s;
+}
+
+.boton:hover { transform: translateY(-1px); }
+.boton:active { transform: translateY(0); }
+
+.boton-principal {
+  background: var(--naranja);
+  color: #fff;
+  box-shadow: 0 2px 5px #f4772120;
+}
+
+.boton-principal:hover {
+  background: var(--naranja-oscuro);
+  box-shadow: 0 4px 10px #f4772130;
+}
+
+.boton-secundario {
+  border-color: #e0e3e8;
+  background: #fff;
+  color: #353941;
+}
+
+.boton-secundario:hover {
+  border-color: #cbd0d8;
+  background: #f8f9fa;
+}
+
+.boton-peligro {
+  border-color: #f1cccc;
+  background: var(--rojo-fondo);
+  color: #ae2525;
+}
+
+.boton-peligro:hover {
+  border-color: #e9aaaa;
+  background: #fbdede;
+}
+
+.boton-pdf { background: #252525; color: #fff; }
+.boton-pdf:hover { background: #414141; }
+
+.boton-icono {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  border-radius: 6px;
+  background: #ffffff28;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.boton-secundario .boton-icono {
+  background: #f1f2f4;
+  color: #454951;
+}
+
+.boton-secundario:hover .boton-icono {
+  background: var(--naranja-claro);
+  color: var(--naranja-oscuro);
+}
+
+/* ESTADO DE RUTINA */
+
+.info-rutina {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px 12px;
+  margin-bottom: 22px;
+  padding: 13px 15px;
+  border: 1px solid #f0e2d8;
+  border-radius: 10px;
+  background: #fffaf6;
+}
+
+.info-rutina strong {
+  color: #39332f;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.info-rutina span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #747474;
+  font-size: 11px;
+}
+
+.info-rutina span::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  flex: 0 0 6px;
+  border-radius: 50%;
+  background: var(--naranja);
+}
+
+.estado {
+  min-height: 20px;
+  margin-top: 17px;
+  color: var(--verde);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.pie-tabla {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 17px;
+  padding-top: 13px;
+  border-top: 1px solid #f0f1f3;
+  color: #858991;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+/* EDITOR */
+
+.editor-ejercicios {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+}
+
+.grupo-editor {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid #e8eaee;
+  border-radius: 12px;
+  background: #fcfcfd;
+}
+
+.grupo-editor-cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 0 0 14px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #e9ebef;
+}
+
+.grupo-editor-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.numero-grupo-editor {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  border: 1px solid #f3d4c0;
+  border-radius: 11px;
+  background: var(--naranja-claro);
+  color: var(--naranja-oscuro);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.grupo-editor-cabecera h4 {
+  margin: 0;
+  color: #252525;
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1.4;
+}
+
+.acciones-grupo-editor {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.lista-ejercicios-editor {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 13px;
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  overflow: visible;
+}
+
+.ejercicio-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid #e5e8ec;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 2px 7px #00000003;
+  scroll-margin-top: 100px;
+  transition: border-color .2s,box-shadow .2s;
+}
+
+.ejercicio-card:hover {
+  border-color: #dedfe3;
+  box-shadow: 0 4px 14px #00000007;
+}
+
+.ejercicio-card:focus-within {
+  border-color: #f0bd9c;
+  box-shadow: 0 0 0 3px #f4772110;
+}
+
+.ejercicio-card-cabecera {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 15px 17px;
+  border-bottom: 1px solid #eceef1;
+  background: #fff;
+}
+
+.ejercicio-numero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  border-radius: 9px;
+  background: #242424;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.ejercicio-identidad { flex: 1; min-width: 0; }
+
+.ejercicio-identidad label {
+  display: block;
+  margin: 0 0 7px;
+  color: #777d86;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .6px;
+  line-height: 1.4;
+}
+
+.ejercicio-identidad input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 40px;
+  padding: 10px 12px;
+  border: 1px solid #e0e4e8;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--negro);
+  font-size: 12px;
+  font-weight: 800;
+  transition: border-color .2s,box-shadow .2s;
+}
+
+.ejercicio-identidad input::placeholder {
+  color: #a1a5ad;
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.ejercicio-identidad input:focus {
+  outline: none;
+  border-color: var(--naranja);
+  box-shadow: 0 0 0 3px #f4772110;
+}
+
+.ejercicio-identidad input:disabled {
+  background: #f5f6f8;
+  color: #656872;
+  border-color: #eceef1;
+}
+
+.ejercicio-cuerpo {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+  padding: 16px 17px;
+}
+
+.referencia-repeticiones {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 15px;
+  border: 1px solid #f2d7c5;
+  border-radius: 9px;
+  background: #fffaf6;
+}
+
+.referencia-repeticiones-info { flex: 1; min-width: 0; }
+
+.referencia-repeticiones label {
+  display: block;
+  margin-bottom: 5px;
+  color: #86512e;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .6px;
+  line-height: 1.5;
+}
+
+.referencia-repeticiones small {
+  display: block;
+  color: #8a7b70;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.referencia-repeticiones input {
+  display: block;
+  width: 115px;
+  flex: 0 0 115px;
+  min-height: 40px;
+  padding: 9px 10px;
+  border: 1px solid #e9cdb9;
+  border-radius: 8px;
+  background: #fff;
+  color: #282828;
+  font-size: 13px;
+  font-weight: 900;
+  text-align: center;
+}
+
+.referencia-repeticiones input:focus {
+  outline: none;
+  border-color: var(--naranja);
+  box-shadow: 0 0 0 3px #f4772110;
+}
+
+.referencia-repeticiones input:disabled {
+  background: #f4f4f4;
+  color: #666;
+}
+
+.dias-editor {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 10px;
+  min-width: 0;
+}
+
+.tiempo-semanal-grid { grid-template-columns: repeat(5,minmax(0,1fr)); }
+
+.entrada-tiempo-unidad {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.entrada-tiempo-unidad input { flex: 1; min-width: 0; }
+
+.entrada-tiempo-unidad span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  min-height: 38px;
+  border: 1px solid #e8eaee;
+  border-radius: 7px;
+  background: #f5f6f8;
+  color: #646a74;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.dato-editor input[readonly] {
+  background: #f5f6f8;
+  border-color: #e7e9ed;
+  color: #666d77;
+  font-weight: 800;
+}
+
+.aviso-progresion-tiempo { margin-bottom: 0; font-size: 11px; }
+
+.dia-editor {
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid #e8eaee;
+  border-radius: 9px;
+  background: #fcfcfd;
+}
+
+.dia-editor-titulo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 11px;
+  padding-bottom: 9px;
+  border-bottom: 1px solid #eceef1;
+  color: #474c55;
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.dia-editor-etiqueta {
+  padding: 4px 6px;
+  border: 1px solid #f1ddcf;
+  border-radius: 5px;
+  background: #fff5ed;
+  color: var(--naranja-oscuro);
+  font-size: 8px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.dato-editor { min-width: 0; margin-bottom: 9px; }
+.dato-editor:last-child { margin-bottom: 0; }
+
+.dato-editor label {
+  display: block;
+  margin-bottom: 5px;
+  color: #777d86;
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.dato-editor input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: 38px;
+  padding: 7px 9px;
+  border: 1px solid #dfe3e8;
+  border-radius: 7px;
+  background: #fff;
+  color: #242424;
+  font-size: 12px;
+  text-align: center;
+  transition: border-color .2s,box-shadow .2s;
+}
+
+.dato-editor input::placeholder {
+  color: #b0b4bb;
+  font-size: 10px;
+}
+
+.dato-editor input:focus {
+  outline: none;
+  border-color: var(--naranja);
+  box-shadow: 0 0 0 2px #f4772114;
+}
+
+.dato-editor input:disabled {
+  background: #f3f4f6;
+  color: #666b75;
+  border-color: #e9ebef;
+}
+
+.dato-editor input[type="number"] { font-variant-numeric: tabular-nums; }
+
+.sin-ejercicios {
+  padding: 26px 18px;
+  border: 1px dashed #d4d8de;
+  border-radius: 10px;
+  background: #fff;
+  color: #777d86;
+  font-size: 12px;
+  line-height: 1.8;
+  text-align: center;
+}
+
+/* BIBLIOTECA */
+
+.biblioteca-cabecera {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.biblioteca-cabecera h3 {
+  margin: 0 0 7px;
+  color: #202020;
+  font-size: 19px;
+  font-weight: 900;
+  letter-spacing: -.2px;
+}
+
+.biblioteca-cabecera p {
+  max-width: 720px;
+  margin: 0;
+  color: var(--gris-texto);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.contador-biblioteca {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 34px;
+  padding: 8px 11px;
+  border: 1px solid #f2d5c3;
+  border-radius: 9px;
+  background: #fffaf6;
+  color: var(--naranja-oscuro);
+  font-size: 10px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.contador-biblioteca::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--naranja);
+}
+
+.buscador-biblioteca {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 19px;
+}
+
+.buscador-biblioteca input {
+  width: 100%;
+  min-width: 0;
+  min-height: 43px;
+  padding: 11px 13px;
+  border: 1px solid #dfe3e8;
+  border-radius: 9px;
+  background: #fff;
+  color: var(--negro);
+  font-size: 12px;
+  transition: border-color .2s,box-shadow .2s;
+}
+
+.buscador-biblioteca input::placeholder { color: #999ea7; }
+
+.buscador-biblioteca input:focus {
+  outline: none;
+  border-color: var(--naranja);
+  box-shadow: 0 0 0 3px #f4772110;
+}
+
+.biblioteca-grid {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  align-items: stretch;
+  gap: 17px;
+}
+
+.rutina-miniatura {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid #e3e6ea;
+  border-radius: 13px;
+  background: #fff;
+  cursor: pointer;
+  transition: transform .2s,box-shadow .2s,border-color .2s;
+}
+
+.rutina-miniatura:hover {
+  transform: translateY(-3px);
+  border-color: #edc4aa;
+  box-shadow: var(--sombra-hover);
+}
+
+.rutina-miniatura:focus-visible {
+  outline: 3px solid #f4772166;
+  outline-offset: 3px;
+}
+
+.miniatura-cabecera {
+  min-width: 0;
+  padding: 16px 15px 13px;
+  border-bottom: 1px solid #eceef1;
+  background: #fff;
+}
+
+.miniatura-club {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 11px;
+  color: var(--naranja-oscuro);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.miniatura-club::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  flex: 0 0 7px;
+  border-radius: 50%;
+  background: var(--naranja);
+}
+
+.miniatura-cabecera h4 {
+  margin: 0 0 11px;
+  color: #202020;
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.miniatura-detalle { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.miniatura-detalle span {
+  padding: 6px 8px;
+  border: 1px solid #e9ebef;
+  border-radius: 6px;
+  background: #f6f7f9;
+  color: #656b75;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.miniatura-vista {
+  flex: 1;
+  min-width: 0;
+  padding: 13px;
+  overflow: hidden;
+  background: #f8f9fb;
+}
+
+.miniatura-vista-titulo {
+  margin-bottom: 9px;
+  color: #777d86;
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: .7px;
+}
+
+.mini-tabla {
+  width: 100%;
+  min-width: 0;
+  border-collapse: collapse;
+  table-layout: fixed;
+  background: #fff;
+  font-size: 8px;
+}
+
+.mini-tabla th, .mini-tabla td {
+  min-width: 0;
+  padding: 5px 3px;
+  overflow: hidden;
+  border: 1px solid #e2e5e9;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.mini-tabla thead th {
+  background: #262626;
+  color: #fff;
+  font-size: 7px;
+  font-weight: 900;
+}
+
+.mini-tabla th:first-child, .mini-tabla td:first-child {
+  width: 36%;
+  text-align: left;
+}
+
+.mini-tabla .mini-bloque td {
+  padding: 5px;
+  background: var(--naranja-claro);
+  color: var(--naranja-oscuro);
+  font-size: 7px;
+  font-weight: 900;
+}
+
+.mini-tabla .mini-ejercicio { color: #333; font-weight: 800; }
+.mini-tabla .mini-vacio { color: #bbb; }
+
+.miniatura-pie {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 14px;
+  border-top: 1px solid #eceef1;
+  background: #fff;
+  color: #777d86;
+  font-size: 9px;
+}
+
+.miniatura-pie span:last-child {
+  color: var(--naranja-oscuro);
+  font-weight: 900;
+}
+
+.acciones-miniatura {
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px;
+  border: 1px solid #e5e7eb;
+  border-radius: 9px;
+  background: #ffffffed;
+  box-shadow: 0 3px 12px #0000000a;
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+  transition: opacity .18s,transform .18s;
+}
+
+.rutina-miniatura:hover .acciones-miniatura,
+.rutina-miniatura:focus-within .acciones-miniatura {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.accion-mini {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: #f3f4f6;
+  color: #333;
+  font-size: 14px;
+  transition: background .15s,color .15s;
+}
+
+.accion-mini:hover {
+  background: var(--naranja-claro);
+  color: var(--naranja-oscuro);
+}
+
+.accion-mini.eliminar:hover {
+  background: var(--rojo-fondo);
+  color: var(--rojo);
+}
+
+.sin-rutinas {
+  grid-column: 1 / -1;
+  padding: 38px 20px;
+  border: 1px dashed #d4d8de;
+  border-radius: 11px;
+  background: #fcfcfd;
+  color: #777d86;
+  font-size: 12px;
+  line-height: 1.9;
+  text-align: center;
+}
+
+/* MODAL */
+
+.modal-rutina {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: #1515158c;
+  backdrop-filter: blur(5px);
+}
+
+.modal-rutina.visible { display: flex; }
+
+.modal-contenido {
+  display: flex;
+  flex-direction: column;
+  width: min(1450px,100%);
+  max-height: 92vh;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid #e2e4e8;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 25px 80px #00000030;
+  animation: aparecerModal .18s ease-out;
+}
+
+@keyframes aparecerModal {
+  from { opacity: 0; transform: translateY(8px) scale(.99); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 17px 20px;
+  border-bottom: 1px solid var(--borde);
+  background: #fff;
+}
+
+.modal-titulo { min-width: 0; }
+
+.modal-titulo strong {
+  display: block;
+  color: #202020;
+  font-size: 15px;
+  font-weight: 900;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.modal-titulo small {
+  display: block;
+  margin-top: 4px;
+  color: var(--gris-texto);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.boton-cerrar-modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  border: 1px solid #e1e4e8;
+  border-radius: 9px;
+  background: #fff;
+  color: #444;
+  font-size: 22px;
+  transition: background .2s,color .2s;
+}
+
+.boton-cerrar-modal:hover {
+  background: #f4f5f7;
+  color: var(--naranja-oscuro);
+}
+
+.modal-cuerpo {
+  flex: 1;
+  min-height: 0;
+  padding: 20px;
+  overflow: auto;
+  background: #f5f6f8;
+}
+
+.modal-planilla {
+  max-width: 100%;
+  padding: 16px;
+  border: 1px solid #e2e5e9;
+  border-radius: 11px;
+  background: #fff;
+  box-shadow: 0 3px 12px #00000004;
+}
+
+.modal-acciones {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 14px 20px;
+  border-top: 1px solid var(--borde);
+  background: #fff;
+}
+
+.control-personas {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: auto;
+  padding: 5px;
+  border: 1px solid #e7e9ed;
+  border-radius: 10px;
+  background: #f8f9fb;
+}
+
+.control-personas span {
+  min-width: 78px;
+  color: #343840;
+  font-size: 11px;
+  font-weight: 900;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.control-personas .boton { min-height: 34px; padding: 7px 10px; }
+
+/* PLANILLA / PDF */
+
+.planilla-cabecera {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  min-height: 103px;
+  padding: 5px 10px;
+  border: 1px solid #777;
+  background: #fff;
+  text-align: center;
+}
+
+.planilla-cabecera img {
+  position: absolute;
+  top: 50%;
+  left: 21.5%;
+  display: block;
+  width: 90px;
+  height: 90px;
+  margin: 0;
+  object-fit: contain;
+  transform: translateY(-50%);
+}
+
+.planilla-cabecera-texto {
+  width: 100%;
+  min-width: 0;
+  text-align: center;
+  transform: translateX(2.5%);
+}
+
+.planilla-cabecera-texto strong {
+  display: block;
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 1.25;
+  letter-spacing: .35px;
+}
+
+.planilla-cabecera-texto span {
+  display: block;
+  margin-top: 5px;
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1.35;
+}
+
+.planilla-cabecera-texto small {
+  display: block;
+  margin-top: 4px;
+  color: #555;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .6px;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.planilla-bloque {
+  margin-top: 13px;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.planilla-bloque-titulo {
+  padding: 8px 10px;
+  background: #333;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .4px;
+  line-height: 1.4;
+}
+
+.planilla-scroll {
+  width: 100%;
+  margin-top: 0;
+  overflow-x: auto;
+  border: 1px solid #aaa;
+  border-top: 0;
+  border-radius: 0 0 3px 3px;
+}
+
+.tabla-planilla {
+  width: 100%;
+  min-width: 980px;
+  border-collapse: collapse;
+  background: #fff;
+  color: #111;
+  font-size: 10px;
+}
+
+.tabla-planilla th, .tabla-planilla td {
+  min-width: 34px;
+  padding: 6px 5px;
+  border: 1px solid #777;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.tabla-planilla thead th {
+  background: #f1f1f1;
+  color: #111;
+  font-weight: 900;
+}
+
+.tabla-planilla thead th.semana-planilla {
+  background: #dedede;
+  font-size: 9px;
+}
+
+.tabla-planilla th.ejercicio-planilla {
+  width: 185px;
+  min-width: 150px;
+  max-width: 200px;
+  white-space: normal;
+  font-weight: 900;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.tabla-planilla th.indicador-planilla {
+  min-width: 75px;
+  font-size: 9px;
+  font-weight: 900;
+}
+
+.tabla-planilla .fila-bloque th {
+  padding: 8px 10px;
+  background: #333;
+  color: #fff;
+  font-weight: 900;
+  letter-spacing: .4px;
+  text-align: left;
+}
+
+.tabla-planilla .fila-metrica:nth-child(even) td,
+.tabla-planilla .fila-metrica:nth-child(even) th.indicador-planilla {
+  background: #fafafa;
+}
+
+.tabla-planilla .indicador {
+  background: #f4f4f4;
+  font-size: 9px;
+  font-weight: 900;
+}
+
+.tabla-planilla .valor-vacio { color: #bbb; }
+
+.tabla-planilla.tabla-principales {
+  min-width: 1000px;
+  table-layout: fixed;
+}
+
+.tabla-planilla.tabla-principales th.ejercicio-planilla {
+  width: 180px;
+  min-width: 155px;
+}
+
+.tabla-planilla .celda-repeticiones {
+  min-width: 45px;
+  padding: 4px 3px 5px;
+}
+
+.tabla-planilla .valor-porcentaje {
+  display: block;
+  font-size: 9px;
+  font-weight: 800;
+  color: var(--naranja-oscuro);
+  line-height: 1.2;
+}
+
+.tabla-planilla .valor-repeticiones {
+  display: block;
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1.3;
+}
+
+.tabla-planilla .casillero-peso {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  height: 16px;
+  margin: 4px 0 0;
+  border: 1px solid #222;
+  background: #fff;
+}
+
+.tabla-planilla.tabla-complementarios { min-width: 760px; }
+
+.tabla-planilla.tabla-complementarios th.ejercicio-planilla { width: 220px; }
+.tabla-planilla.tabla-complementarios td { font-size: 11px; font-weight: 800; }
+
+.planilla-nombre {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: min(560px, 58%);
+  min-width: 300px;
+  min-height: 38px;
+  margin-top: 14px;
+  padding: 8px 10px;
+  border: 1px solid #777;
+  background: #fff;
+  color: #111;
+  font-size: 11px;
+  line-height: 1.4;
+  text-align: left;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.planilla-nombre strong {
+  flex: 0 0 auto;
+  font-size: 11px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.planilla-nombre .linea-nombre { flex: 1; min-width: 35px; height: 20px; }
+
+.planillas-personas { display: block; min-width: 0; }
+.planilla-persona { min-width: 0; }
+
+.planillas-personas.varias-personas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 14px;
+}
+
+.planillas-personas.varias-personas .planilla-persona + .planilla-persona { margin-top: 0; }
+.planillas-personas.varias-personas .planilla-bloque { min-width: 0; margin-top: 8px; }
+
+.planillas-personas.varias-personas .planilla-bloque-titulo {
+  padding: 6px 7px;
+  font-size: 8px;
+}
+
+.planillas-personas.varias-personas .planilla-scroll {
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+.planillas-personas.varias-personas .tabla-planilla {
+  width: 100%;
+  min-width: 0;
+  table-layout: fixed;
+  font-size: 7px;
+}
+
+.planillas-personas.varias-personas .tabla-planilla th,
+.planillas-personas.varias-personas .tabla-planilla td {
+  min-width: 0;
+  padding: 3px 1px;
+  font-size: 7px;
+  overflow-wrap: anywhere;
+}
+
+.planillas-personas.varias-personas .tabla-planilla th.ejercicio-planilla {
+  width: 74px;
+  min-width: 74px;
+  max-width: 74px;
+  padding: 3px 2px;
+  font-size: 7px;
+  line-height: 1.2;
+}
+
+.planillas-personas.varias-personas .tabla-planilla.tabla-principales th.ejercicio-planilla {
+  width: 74px;
+  min-width: 74px;
+  max-width: 74px;
+}
+
+.planillas-personas.varias-personas .tabla-planilla.tabla-complementarios th.ejercicio-planilla {
+  width: 88px;
+  min-width: 88px;
+  max-width: 88px;
+}
+
+.planillas-personas.varias-personas .tabla-planilla .celda-repeticiones { padding: 2px 1px 3px; }
+.planillas-personas.varias-personas .tabla-planilla .valor-repeticiones { font-size: 8px; }
+
+.planillas-personas.varias-personas .tabla-planilla .casillero-peso {
+  height: 10px;
+  margin-top: 2px;
+}
+
+.planillas-personas.varias-personas .tabla-planilla.tabla-complementarios td { font-size: 7px; }
+
+.planillas-personas.varias-personas .planilla-nombre {
+  width: 100%;
+  min-width: 0;
+  min-height: 29px;
+  margin-top: 7px;
+  padding: 4px 6px;
+  gap: 4px;
+  font-size: 8px;
+}
+
+.planillas-personas.varias-personas .planilla-nombre strong { font-size: 8px; }
+.planillas-personas.varias-personas .planilla-nombre .linea-nombre { min-width: 0; height: 15px; }
+.ejercicio-sin-nombre { color: #aaa; font-weight: 400; }
+#printRoutine { display: none; }
+
+/* RESPONSIVE */
+
+@media (max-width: 1250px) {
+  .contenido { padding: 25px; }
+  .biblioteca-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .grupo-editor { padding: 15px; }
+  .tiempo-semanal-grid { grid-template-columns: repeat(3,minmax(0,1fr)); }
+  .cabecera-configuracion { padding: 21px 21px 18px; }
+  .cuerpo-configuracion { padding: 0 21px 20px; }
+  .selector-categoria-superior { padding: 14px 16px; }
+  .campo-categoria-superior { width: 225px; flex-basis: 225px; }
+}
+
+@media (min-width: 761px) {
+  .sidebar { position: relative; margin-left: 0; transform: none; }
+  .sidebar.oculto { margin-left: -258px; transform: none; }
+}
+
+@media (max-width: 760px) {
+  :root { --alto-topbar: 72px; }
+
+  .barra-superior {
+    min-height: 72px;
+    gap: 9px;
+    padding: 10px 13px;
+  }
+
+  .boton-menu { width: 38px; height: 38px; font-size: 24px; }
+  .logo-superior { width: 44px; height: 44px; }
+  .titulo-superior h1 { margin-bottom: 3px; font-size: 15px; letter-spacing: .1px; }
+  .titulo-superior p { font-size: 10px; }
+  .perfil { display: none; }
+  .contenedor { min-height: calc(100vh - 72px); }
+
+  .sidebar {
+    position: fixed;
+    top: 72px;
+    bottom: 0;
+    left: 0;
+    z-index: 350;
+    width: 258px;
+    max-width: 86vw;
+    height: auto;
+    flex: none;
+    margin-left: 0;
+    padding: 20px 13px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background: #fff;
+    border-right: 1px solid var(--borde);
+    box-shadow: 8px 0 22px #0000000d;
+    transform: translateX(-110%);
+  }
+
+  .sidebar.oculto { margin-left: 0; transform: translateX(-110%); }
+  .sidebar.visible { transform: translateX(0); }
+
+  .capa-sidebar.visible {
+    display: block;
+    position: fixed;
+    inset: 72px 0 0;
+    z-index: 340;
+    background: #00000045;
+  }
+
+  .contenido { padding: 22px 13px; }
+  .cabecera-pagina { margin-bottom: 17px; }
+  .cabecera-pagina::before { margin-bottom: 8px; font-size: 9px; letter-spacing: 1.4px; }
+  .cabecera-pagina h2 { font-size: 25px; letter-spacing: -.4px; }
+  .cabecera-pagina p { font-size: 12px; }
+
+  .selector-categoria-superior {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 11px;
+    margin-bottom: 21px;
+    padding: 14px;
+    border-radius: 11px;
+  }
+
+  .icono-categoria-superior {
+    width: 38px;
+    height: 38px;
+    flex-basis: 38px;
+    border-radius: 10px;
+  }
+
+  .icono-categoria-superior svg { width: 20px; height: 20px; }
+  .texto-categoria-superior { padding-top: 2px; }
+  .texto-categoria-superior strong { font-size: 12px; }
+  .texto-categoria-superior span { font-size: 10px; }
+  .campo-categoria-superior { width: 100%; flex: 0 0 100%; }
+  .campo-categoria-superior label { margin-bottom: 6px; font-size: 9px; }
+  .campo-categoria-superior select { min-height: 43px; }
+
+  .tarjeta { padding: 16px; margin-bottom: 17px; border-radius: 12px; }
+  .tarjeta-configuracion { padding: 0; }
+  .tarjeta > h3 { font-size: 17px; }
+  .descripcion { margin-bottom: 17px; font-size: 11px; }
+
+  .cabecera-configuracion {
+    align-items: flex-start;
+    gap: 10px;
+    padding: 18px 15px 15px;
+  }
+
+  .icono-configuracion {
+    width: 38px;
+    height: 38px;
+    flex-basis: 38px;
+    border-radius: 10px;
+  }
+
+  .icono-configuracion svg { width: 20px; height: 20px; }
+  .texto-cabecera-configuracion h3 { font-size: 16px; }
+  .cuerpo-configuracion { padding: 0 15px 16px; }
+  .filtros { grid-template-columns: 1fr; gap: 14px; }
+
+  .campo-modo, .campo-titulo, .campo-semanas { grid-column: 1 / -1; }
+
+  .campo label { margin-bottom: 7px; font-size: 9px; }
+  .campo input, .campo select { min-height: 43px; padding: 10px 11px; }
+  .separador-configuracion { margin: 17px 0 14px; }
+
+  .pie-configuracion {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 13px;
+  }
+
+  .botones {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .botones .boton { width: 100%; min-height: 42px; }
+  .selector-jugadora-editor { max-width: none; margin-bottom: 15px; padding: 12px; }
+
+  .info-rutina {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 7px;
+    padding: 12px;
+  }
+
+  .editor-ejercicios { gap: 18px; }
+  .grupo-editor { padding: 12px; border-radius: 10px; }
+  .grupo-editor-cabecera { gap: 9px; margin-bottom: 12px; padding-bottom: 12px; }
+  .numero-grupo-editor { width: 33px; height: 33px; flex-basis: 33px; }
+  .grupo-editor-cabecera h4 { font-size: 13px; }
+
+  .lista-ejercicios-editor {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+    overflow: visible;
+    padding: 0;
+  }
+
+  .ejercicio-card { width: 100%; max-width: none; }
+  .ejercicio-card-cabecera { padding: 12px; }
+  .ejercicio-cuerpo { gap: 12px; padding: 11px; }
+
+  .referencia-repeticiones {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 9px;
+    padding: 11px;
+  }
+
+  .referencia-repeticiones input { width: 100%; flex-basis: auto; }
+  .dias-editor { grid-template-columns: 1fr; gap: 9px; }
+  .tiempo-semanal-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .dia-editor { padding: 11px; border-radius: 8px; }
+  .dia-editor-titulo { margin-bottom: 10px; font-size: 10px; }
+  .dato-editor label { font-size: 9px; }
+  .dato-editor input { height: 40px; padding: 7px 10px; font-size: 12px; }
+
+  .biblioteca-cabecera {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .biblioteca-cabecera h3 { font-size: 18px; }
+  .biblioteca-cabecera p { font-size: 11px; }
+  .biblioteca-grid { grid-template-columns: 1fr; gap: 13px; }
+  .acciones-miniatura { opacity: 1; transform: none; pointer-events: auto; }
+
+  .modal-rutina { padding: 8px; }
+  .modal-contenido { max-height: 96vh; border-radius: 11px; }
+  .modal-cabecera { padding: 12px; }
+  .modal-titulo strong { font-size: 13px; }
+  .modal-cuerpo { padding: 9px; }
+  .modal-planilla { padding: 7px; }
+  .modal-acciones { justify-content: stretch; padding: 9px; }
+
+  .modal-acciones .boton {
+    flex: 1 1 calc(50% - 8px);
+    min-width: 0;
+    padding: 9px 7px;
+    font-size: 10px;
+  }
+
+  .control-personas {
+    order: -1;
+    width: 100%;
+    justify-content: space-between;
+    margin-right: 0;
+  }
+
+  .control-personas .boton { flex: 0 0 auto; min-width: 0; padding: 8px 9px; }
+
+  .planilla-cabecera { min-height: 126px; gap: 5px; padding: 9px 7px; }
+  .planilla-cabecera img { left: 8px; width: 44px; height: 44px; }
+  .planilla-cabecera-texto strong { font-size: 18px; }
+  .planilla-cabecera-texto span { font-size: 12px; }
+  .planilla-cabecera-texto small { font-size: 10px; }
+  .planilla-nombre { width: 100%; min-width: 0; }
+}
+
+@media (max-width: 420px) {
+  .barra-superior { padding: 8px; gap: 6px; }
+  .boton-menu { width: 33px; height: 36px; font-size: 22px; }
+  .logo-superior { width: 36px; height: 36px; }
+  .titulo-superior h1 { font-size: 13px; }
+  .titulo-superior p { font-size: 9px; }
+  .contenido { padding: 18px 9px; }
+  .selector-categoria-superior { padding: 12px; }
+  .cabecera-pagina h2 { font-size: 22px; }
+  .tarjeta { padding: 12px; }
+  .tarjeta-configuracion { padding: 0; }
+  .cabecera-configuracion { padding: 15px 12px 13px; }
+  .icono-configuracion { width: 34px; height: 34px; flex-basis: 34px; }
+  .texto-cabecera-configuracion h3 { font-size: 15px; }
+  .cuerpo-configuracion { padding: 0 12px 13px; }
+  .dia-editor { padding: 9px; }
+  .modal-acciones { gap: 6px; }
+  .modal-acciones .boton { flex-basis: 100%; }
+
+  .mini-tabla th, .mini-tabla td {
+    padding: 4px 2px;
+    font-size: 7px;
+  }
+}
+
+/* IMPRESIÓN / PDF */
+
+@media print {
+  @page { size: A4 landscape; margin: 8mm; }
+
+  body.imprimir-solo-rutina {
+    background: #fff !important;
+    color: #111 !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  body.imprimir-solo-rutina > *:not(#printRoutine) { display: none !important; }
+
+  body.imprimir-solo-rutina #printRoutine {
+    display: block !important;
+    width: 100%;
+    color: #111;
+    background: #fff;
+  }
+
+  #printRoutine .planilla-cabecera {
+    min-height: 103px;
+    gap: 0;
+    padding: 5px 10px;
+    page-break-inside: avoid;
+  }
+
+  #printRoutine .planilla-cabecera img {
+    left: 21.5%;
+    width: 90px;
+    height: 90px;
+  }
+
+  #printRoutine .planilla-cabecera-texto { transform: translateX(2.5%); }
+  #printRoutine .planilla-cabecera-texto strong { font-size: 20px; }
+  #printRoutine .planilla-cabecera-texto span { font-size: 13px; }
+  #printRoutine .planilla-cabecera-texto small { font-size: 10px; }
+  #printRoutine .planilla-scroll { overflow: visible; border: 0; }
+
+  #printRoutine .tabla-planilla {
+    width: 100%;
+    min-width: 0;
+    table-layout: fixed;
+    font-size: 7px;
+  }
+
+  #printRoutine .tabla-planilla th,
+  #printRoutine .tabla-planilla td {
+    min-width: 0;
+    padding: 3px 2px;
+    font-size: 7px;
+    overflow-wrap: anywhere;
+  }
+
+  #printRoutine .tabla-planilla th.ejercicio-planilla {
+    width: 115px;
+    min-width: 115px;
+    max-width: 115px;
+  }
+
+  #printRoutine .tabla-planilla th.indicador-planilla { width: 42px; }
+
+  #printRoutine .planilla-bloque {
+    margin-top: 9px;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  #printRoutine .planillas-personas { display: block; }
+
+  #printRoutine .planilla-persona {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  #printRoutine .planilla-persona + .planilla-persona { margin-top: 12px; }
+
+  #printRoutine .tabla-planilla.tabla-principales {
+    min-width: 0;
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  #printRoutine .tabla-planilla.tabla-principales th.ejercicio-planilla {
+    width: 160px;
+    min-width: 140px;
+    max-width: none;
+  }
+
+  #printRoutine .tabla-planilla .casillero-peso {
+    width: 100%;
+    height: 15px;
+    margin: 3px 0 0;
+  }
+
+  #printRoutine .planilla-nombre {
+    width: 48%;
+    min-width: 0;
+    min-height: 34px;
+    margin-top: 10px;
+    padding: 6px 8px;
+    font-size: 10px;
+  }
+
+  #printRoutine .planilla-nombre strong { font-size: 10px; }
+
+  #printRoutine .planillas-personas.varias-personas {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: 8px;
+  }
+
+  #printRoutine .planillas-personas.varias-personas .planilla-persona {
+    min-width: 0;
+    margin: 0;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  #printRoutine .planillas-personas.varias-personas .planilla-bloque {
+    margin-top: 6px;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  #printRoutine .planillas-personas.varias-personas .planilla-bloque-titulo {
+    padding: 5px 6px;
+    font-size: 7px;
+  }
+
+  #printRoutine .planillas-personas.varias-personas .tabla-planilla {
+    width: 100%;
+    min-width: 0;
+    table-layout: fixed;
+    font-size: 6px;
+  }
+
+  #printRoutine .planillas-personas.varias-personas .tabla-planilla th,
+  #printRoutine .planillas-personas.varias-personas .tabla-planilla td {
+    min-width: 0;
+    padding: 2px 1px;
+    font-size: 6px;
+    overflow-wrap: anywhere;
+  }
+
+  #printRoutine .planillas-personas.varias-personas .tabla-planilla th.ejercicio-planilla,
+  #printRoutine .planillas-personas.varias-personas .tabla-planilla.tabla-principales th.ejercicio-planilla {
+    width: 75px;
+    min-width: 75px;
+    max-width: 75px;
+    padding: 2px 1px;
+    font-size: 6px;
+  }
+
+  #printRoutine .planillas-personas.varias-personas .tabla-planilla.tabla-complementarios th.ejercicio-planilla {
+    width: 88px;
+    min-width: 88px;
+    max-width: 88px;
+  }
+
+  #printRoutine .planillas-personas.varias-personas .tabla-planilla .celda-repeticiones {
+    padding: 2px 1px;
+  }
+
+  #printRoutine .planillas-personas.varias-personas .tabla-planilla .valor-repeticiones {
+    font-size: 7px;
+  }
+
+  #printRoutine .planillas-personas.varias-personas .tabla-planilla .casillero-peso {
+    height: 11px;
+    margin-top: 2px;
+  }
+
+  #printRoutine .planillas-personas.varias-personas .planilla-nombre {
+    width: 100%;
+    min-width: 0;
+    min-height: 27px;
+    margin-top: 6px;
+    padding: 4px 5px;
+    gap: 4px;
+    font-size: 8px;
+  }
+
+  #printRoutine .planillas-personas.varias-personas .planilla-nombre strong { font-size: 8px; }
+
+  #printRoutine .planillas-personas.varias-personas .planilla-nombre .linea-nombre {
+    min-width: 0;
+    height: 13px;
+  }
+
+  #printRoutine .tabla-planilla.tabla-complementarios {
+    min-width: 0;
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  #printRoutine .tabla-planilla.tabla-complementarios th.ejercicio-planilla {
+    width: 190px;
+    min-width: 150px;
+    max-width: none;
+  }
+
+  .sidebar, .capa-sidebar, .barra-superior, .contenido, .modal-rutina {
+    display: none !important;
+  }
+}
+</style>
+<script src="ADIUR-permisos.js?v=20261118-s16c"></script>
+</head>
+
+<body>
+
+<header class="barra-superior">
+  <button class="boton-menu" id="botonMenu" type="button" aria-label="Abrir menú" aria-expanded="true">☰</button>
+
+  <img class="logo-superior" src="ADIUR-Logo ADIUR.jpg" alt="Logo ADIUR" onerror="this.onerror=null;this.src='ADIUR-Logo ADIUR.jpg';">
+
+  <div class="titulo-superior">
+    <h1>ADIUR FEMENINO</h1>
+    <p>Gimnasio y planificación de cargas</p>
+  </div>
+
+  <div class="perfil">
+    <div class="avatar" id="avatarPerfil">U</div>
+    <span class="nombre-perfil" id="nombrePerfil">Usuario</span>
+  </div>
+</header>
+
+<div class="capa-sidebar" id="capaSidebar"></div>
+
+<div class="contenedor">
+
+  <aside class="sidebar" id="sidebar">
+
+    <a class="menu-inicio" href="ADIUR-Pagina Principal.html">
+      <span class="icono-menu">⌂</span>
+      INICIO
+    </a>
+
+    <div class="grupo-menu cerrado" id="grupoPlantel">
+      <button class="titulo-grupo" type="button" data-grupo="grupoPlantel" aria-expanded="false">
+        <span>PLANTEL</span><span class="flecha">›</span>
+      </button>
+      <div class="submenu">
+        <a href="ADIUR-jugadoras.html"><span class="nav-punto"></span>Jugadoras</a>
+        <a href="ADIUR-asistencia.html"><span class="nav-punto"></span>Asistencia</a>
+      </div>
+    </div>
+
+    <div class="grupo-menu" id="grupoEntrenamiento">
+      <button class="titulo-grupo" type="button" data-grupo="grupoEntrenamiento" aria-expanded="true">
+        <span>ENTRENAMIENTO</span><span class="flecha">›</span>
+      </button>
+      <div class="submenu">
+        <a href="ADIUR-calendario.html"><span class="nav-punto"></span>Calendario</a>
+        <a href="ADIUR-planificacion.html"><span class="nav-punto"></span>Planificación</a>
+        <a href="biblioteca.html"><span class="nav-punto"></span>Biblioteca de ejercicios</a>
+        <a href="ADIUR-gimnasio.html" class="activo"><span class="nav-punto"></span>Gimnasio</a>
+        <a href="ADIUR-calculadora.html"><span class="nav-punto"></span>Calculadora</a>
+      </div>
+    </div>
+
+    <div class="grupo-menu cerrado" id="grupoCompetencia">
+      <button class="titulo-grupo" type="button" data-grupo="grupoCompetencia" aria-expanded="false">
+        <span>COMPETENCIA</span><span class="flecha">›</span>
+      </button>
+      <div class="submenu">
+        <a href="ADIUR-Partidos.html"><span class="nav-punto"></span>Partidos</a>
+        <a href="ADIUR-informes.html"><span class="nav-punto"></span>Informes</a>
+        <a href="ADIUR-estadisticas.html"><span class="nav-punto"></span>Estadísticas</a>
+        <a href="ADIUR-pizarra.html"><span class="nav-punto"></span>Pizarra táctica</a>
+      </div>
+    </div>
+
+    <div class="grupo-menu cerrado" id="grupoRendimientos">
+      <button class="titulo-grupo" type="button" data-grupo="grupoRendimientos" aria-expanded="false">
+        <span>RENDIMIENTOS</span><span class="flecha">›</span>
+      </button>
+      <div class="submenu">
+        <a href="ADIUR-testeos.html"><span class="nav-punto"></span>Planilla de testeos</a>
+        <a href="ADIUR-tiempos.html"><span class="nav-punto"></span>Tiempos</a>
+        <a href="multimedia.html"><span class="nav-punto"></span>Multimedia</a>
+        <a href="ADIUR-encuestas.html"><span class="nav-punto"></span>Encuestas</a>
+        <a href="lesiones.html"><span class="nav-punto"></span>Lesiones</a>
+      </div>
+    </div>
+
+    <div class="separador-sesion">
+      <a class="enlace-cerrar-sesion" href="#" id="cerrarSesion">
+        <span class="icono-menu">⇥</span>
+        Cerrar sesión
+      </a>
+    </div>
+
+  </aside>
+
+  <main class="contenido">
+
+    <section class="cabecera-pagina">
+      <h2>Gimnasio</h2>
+      <p>Creá, organizá y consultá las rutinas de fuerza del plantel.</p>
+    </section>
+
+    <section class="selector-categoria-superior" aria-label="Selección de categoría del plantel">
+      <div class="icono-categoria-superior" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <circle cx="9" cy="8" r="3"></circle>
+          <path d="M3.5 19v-1.5A4.5 4.5 0 0 1 8 13h2"></path>
+          <circle cx="17" cy="9" r="2.5"></circle>
+          <path d="M15.5 14h1.5a4 4 0 0 1 4 4v1"></path>
+        </svg>
+      </div>
+
+      <div class="texto-categoria-superior">
+        <strong>Categoría del plantel</strong>
+        <span>Seleccioná la división sobre la que vas a trabajar.</span>
+      </div>
+
+      <div class="campo-categoria-superior">
+        <label for="division">CATEGORÍA</label>
+        <select id="division">
+          <option value="Sub 10">Sub 10</option>
+          <option value="Sub 12">Sub 12</option>
+          <option value="Sub 14">Sub 14</option>
+          <option value="Sub 16">Sub 16</option>
+          <option value="Primera">Primera</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="tarjeta tarjeta-configuracion" id="panelControlesRutina">
+      <div class="cabecera-configuracion">
+        <div class="icono-configuracion" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M6 8v8"></path>
+            <path d="M3.5 10v4"></path>
+            <path d="M18 8v8"></path>
+            <path d="M20.5 10v4"></path>
+            <path d="M6 12h12"></path>
+            <path d="M3.5 12H6"></path>
+            <path d="M18 12h2.5"></path>
+          </svg>
+        </div>
+        <div class="texto-cabecera-configuracion">
+          <h3>Configuración de la rutina</h3>
+        </div>
+      </div>
+
+      <div class="cuerpo-configuracion">
+        <div class="filtros">
+          <div class="campo campo-modo" id="campoModo">
+            <label for="modo"><span class="punto-label"></span>TIPO DE RUTINA</label>
+            <select id="modo">
+              <option value="general">Rutina general</option>
+              <option value="individual">Rutina individual</option>
+            </select>
+          </div>
+
+          <div class="campo campo-titulo">
+            <label for="tituloRutina"><span class="punto-label"></span>TÍTULO DE LA RUTINA</label>
+            <input id="tituloRutina" type="text" maxlength="90" placeholder="Ej. Potencia y Fuerza · Octubre">
+          </div>
+
+          <div class="campo campo-semanas">
+            <label for="semanas"><span class="punto-label"></span>DURACIÓN DEL BLOQUE (2 A 7 SEMANAS)</label>
+            <select id="semanas">
+              <option value="2">2 Semanas</option>
+              <option value="3">3 Semanas</option>
+              <option value="4" selected>4 Semanas</option>
+              <option value="5">5 Semanas</option>
+              <option value="6">6 Semanas</option>
+              <option value="7">7 Semanas</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="separador-configuracion"></div>
+
+        <div class="pie-configuracion">
+          <div class="botones" id="botonesGestion">
+            <button class="boton boton-principal" id="guardarRutina" type="button">
+              <span class="boton-icono">✓</span>Guardar rutina
+            </button>
+            <button class="boton boton-secundario" id="nuevaRutina" type="button">
+              <span class="boton-icono">+</span>Nueva rutina
+            </button>
+            <button class="boton boton-secundario" id="aplicarRutina" type="button">Aplicar a jugadoras</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tarjeta" id="panelEditorRutina">
+      <h3 id="tituloEditor">Nueva rutina</h3>
+
+      <p class="descripcion" id="descripcionEditor">
+        Potencia configurada con ondulación semanal específica (2 a 7 semanas) y 3 días de estímulo neural diferenciado.
+      </p>
+
+      <div class="aviso oculto" id="avisoJugador">
+        Estás viendo tu rutina individual. Los pesos y registros se guardan para tu perfil.
+      </div>
+
+      <div class="aviso oculto" id="avisoGeneral">
+        La rutina general establece la estructura de potencia, fuerza y complementarios para la división.
+      </div>
+
+      <div class="info-rutina">
+        <strong id="nombreSeleccionado">División: Sub 16</strong>
+        <span id="estadoRutina">Sin guardar</span>
+      </div>
+
+      <div class="campo selector-jugadora-editor oculto" id="campoJugadora">
+        <label for="jugadora"><span class="punto-label"></span>JUGADORA</label>
+        <select id="jugadora"></select>
+      </div>
+
+      <div id="editorEjercicios" class="editor-ejercicios"></div>
+
+      <div class="estado" id="estadoGuardado" role="status" aria-live="polite"></div>
+
+      <div class="pie-tabla">
+        <span id="textoPermisos"></span>
+        <span>ADIUR FEMENINO · Gimnasio</span>
+      </div>
+    </section>
+
+    <section class="tarjeta" id="panelBiblioteca">
+      <div class="biblioteca-cabecera">
+        <div>
+          <h3>Biblioteca de rutinas</h3>
+          <p>
+            Consultá las periodizaciones generadas para cada ejercicio. Abrí una rutina
+            para ver su planilla completa o editarla.
+          </p>
+        </div>
+        <span class="contador-biblioteca" id="contadorBiblioteca">0 rutinas guardadas</span>
+      </div>
+
+      <div class="buscador-biblioteca">
+        <input type="search" id="buscarRutina" placeholder="Buscar rutina por título..." aria-label="Buscar rutina por título">
+      </div>
+
+      <div id="listaRutinasGuardadas" class="biblioteca-grid"></div>
+    </section>
+
+  </main>
+</div>
+
+<div class="modal-rutina" id="modalRutina" role="dialog" aria-modal="true" aria-labelledby="modalTitulo">
+  <div class="modal-contenido">
+
+    <div class="modal-cabecera">
+      <div class="modal-titulo">
+        <strong id="modalTitulo">Vista ampliada de la rutina</strong>
+        <small id="modalSubtitulo">Planilla de entrenamiento</small>
+      </div>
+
+      <button class="boton-cerrar-modal" id="cerrarModal" type="button" aria-label="Cerrar vista ampliada">×</button>
+    </div>
+
+    <div class="modal-cuerpo" id="modalCuerpo"></div>
+
+    <div class="modal-acciones">
+      <div class="control-personas oculto" id="controlPersonasRutina" aria-label="Cantidad de personas para esta rutina">
+        <button class="boton boton-secundario" id="modalQuitarPersona" type="button" aria-label="Quitar una persona">−</button>
+        <span id="modalCantidadPersonas" aria-live="polite">1 persona</span>
+        <button class="boton boton-secundario" id="modalAgregarPersona" type="button">+ Agregar persona</button>
+      </div>
+      <button class="boton boton-secundario" id="modalEditar" type="button">Editar rutina</button>
+      <button class="boton boton-peligro" id="modalEliminar" type="button">Eliminar rutina</button>
+      <button class="boton boton-pdf" id="modalPDF" type="button">Descargar PDF</button>
+      <button class="boton boton-secundario" id="modalCerrarInferior" type="button">Cerrar</button>
+    </div>
+
+  </div>
+</div>
+
+<div id="printRoutine"></div>
+
+<script>
+"use strict";
+
+/* =====================================================
+   CONEXIÓN FIREBASE - GIMNASIO ADIUR
+===================================================== */
+
+window.firebaseGimnasioReady = (async () => {
+  const { initializeApp } = await import(
+    "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js"
+  );
+
+  const {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc,
+    serverTimestamp
+  } = await import(
+    "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js"
+  );
+
+const firebaseConfig = {
+    apiKey: "AIzaSyCc0dPIEkaKxbHoRC2gZK412dXVGPOdTI",
+    authDomain: "adiur-b1913.firebaseapp.com",
+    projectId: "adiur-b1913",
+    storageBucket: "adiur-b1913.firebasestorage.app",
+    messagingSenderId: "884643321144",
+    appId: "1:884643321144:web:ba3c314de3a1c9e3545dcd",
+    measurementId: "G-58LL26YXPM"
+};
+
+  const app = initializeApp(firebaseConfig);
+  const dbCloud = getFirestore(app);
+  const referenciaCloud = doc(dbCloud, "gimnasioADIUR", "principal");
+
+  window.cargarGimnasioNube = async () => {
+    const resultado = await getDoc(referenciaCloud);
+    if (resultado.exists()) return resultado.data().datos || null;
+    return null;
+  };
+
+  let colaGuardado = Promise.resolve();
+
+  window.guardarGimnasioEnNube = (datos) => {
+    const copia = JSON.parse(JSON.stringify(datos));
+
+    colaGuardado = colaGuardado.catch(() => {}).then(() =>
+      setDoc(referenciaCloud, {
+        datos: copia,
+        actualizado: serverTimestamp()
+      })
+    );
+
+    return colaGuardado;
+  };
+
+  return true;
+})();
+
+/* =====================================================
+   FUNCIONES GENERALES
+===================================================== */
+
+function escaparHTML(valor) {
+  return String(valor ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function normalizar(valor) {
+  return String(valor ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLowerCase();
+}
+
+const $ = id => document.getElementById(id);
+
+/* =====================================================
+   CONFIGURACIÓN
+===================================================== */
+
+const KEY = "gimnasioADIURRutinasV1";
+const PLAYERS_KEY = "jugadorasADIUR";
+const SESSION_KEY = "usuarioADIUR";
+
+const DIVISIONES = [
+  "Sub 10",
+  "Sub 12",
+  "Sub 14",
+  "Sub 16",
+  "Primera"
+];
+
+const DIAS_POR_SEMANA = 3;
+const CANTIDAD_RUTINAS_INICIALES = 10;
+const MAX_EJERCICIOS_SECCION = 5;
+
+const divisionSelect = $("division");
+const modoSelect = $("modo");
+const jugadoraSelect = $("jugadora");
+const semanasSelect = $("semanas");
+const tituloInput = $("tituloRutina");
+
+let usuario = leerUsuario();
+let esJugadora = detectarRol(usuario) === "jugadora";
+let esStaff = !esJugadora;
+
+let jugadoraSesion = null;
+let db = cargarDB();
+  // Solo se permite guardar en Firebase después de confirmar
+// que la carga inicial desde la nube terminó correctamente.
+let nubeListaParaGuardar = false;
+let indiceActual = 0;
+let rutinaActual = null;
+let indiceVistaModal = null;
+let cantidadPersonasVista = 1;
+const MAX_PERSONAS_RUTINA = 5;
+
+/* =====================================================
+   ONDULACIÓN SEMANAL Y DIARIA PARA POTENCIA (2 A 7 SEMANAS)
+===================================================== */
+
+function obtenerEstructuraPotenciaPorSemanas(totalSemanas) {
+  const num = Number(totalSemanas);
+
+  switch (num) {
+    case 2:
+      return [
+        { numero: 1, nombre: "ACUMULACIÓN", d1: 72, d2: 65, d3: 82 },
+        { numero: 2, nombre: "PICO", d1: 75, d2: 60, d3: 90 }
+      ];
+
+    case 3:
+      return [
+        { numero: 1, nombre: "CARGA 1", d1: 70, d2: 62, d3: 80 },
+        { numero: 2, nombre: "CARGA 2", d1: 75, d2: 65, d3: 88 },
+        { numero: 3, nombre: "DESCARGA", d1: 65, d2: 55, d3: 70 }
+      ];
+
+    case 4:
+      return [
+        { numero: 1, nombre: "BASE 1", d1: 70, d2: 60, d3: 78 },
+        { numero: 2, nombre: "BASE 2", d1: 72, d2: 62, d3: 85 },
+        { numero: 3, nombre: "INTENSIDAD", d1: 75, d2: 65, d3: 90 },
+        { numero: 4, nombre: "DESCARGA", d1: 65, d2: 55, d3: 68 }
+      ];
+
+    case 5:
+      return [
+        { numero: 1, nombre: "SEMANA 1", d1: 70, d2: 60, d3: 78 },
+        { numero: 2, nombre: "SEMANA 2", d1: 72, d2: 62, d3: 82 },
+        { numero: 3, nombre: "SEMANA 3", d1: 75, d2: 65, d3: 88 },
+        { numero: 4, nombre: "SEMANA 4", d1: 78, d2: 65, d3: 92 },
+        { numero: 5, nombre: "DESCARGA", d1: 65, d2: 55, d3: 68 }
+      ];
+
+    case 6:
+      return [
+        { numero: 1, nombre: "BLOQUE 1 - SEM 1", d1: 70, d2: 60, d3: 78 },
+        { numero: 2, nombre: "BLOQUE 1 - SEM 2", d1: 74, d2: 63, d3: 85 },
+        { numero: 3, nombre: "DESCARGA 1", d1: 62, d2: 55, d3: 70 },
+        { numero: 4, nombre: "BLOQUE 2 - SEM 1", d1: 72, d2: 62, d3: 82 },
+        { numero: 5, nombre: "BLOQUE 2 - SEM 2", d1: 76, d2: 65, d3: 91 },
+        { numero: 6, nombre: "DESCARGA 2", d1: 60, d2: 50, d3: 68 }
+      ];
+
+    case 7:
+    default:
+      return [
+        { numero: 1, nombre: "SEM 1", d1: 70, d2: 60, d3: 75 },
+        { numero: 2, nombre: "SEM 2", d1: 72, d2: 62, d3: 80 },
+        { numero: 3, nombre: "SEM 3", d1: 75, d2: 65, d3: 85 },
+        { numero: 4, nombre: "DESCARGA 1", d1: 62, d2: 55, d3: 68 },
+        { numero: 5, nombre: "SEM 5", d1: 74, d2: 63, d3: 83 },
+        { numero: 6, nombre: "PICO / MÁX", d1: 78, d2: 60, d3: 92 },
+        { numero: 7, nombre: "DESCARGA FINAL", d1: 60, d2: 50, d3: 65 }
+      ];
+  }
+}
+
+function obtenerPlantillaPeriodizacion(cantidadSemanas) {
+  const cantidad = Number(cantidadSemanas) >= 2 && Number(cantidadSemanas) <= 7
+    ? Number(cantidadSemanas)
+    : 4;
+
+  if (cantidad === 4) {
+    return [
+      { numero: 1, nombre: "ADAPTABILIDAD", repeticiones: [10, 8, 9] },
+      { numero: 2, nombre: "CARGA", repeticiones: [7, 8, 6] },
+      { numero: 3, nombre: "BAJADA", repeticiones: [9, 7, 8] },
+      { numero: 4, nombre: "PICO", repeticiones: [5, 3] }
+    ];
+  }
+
+  if (cantidad === 5) {
+    return [
+      { numero: 1, nombre: "ADAPTABILIDAD", repeticiones: [10, 8, 9] },
+      { numero: 2, nombre: "CARGA", repeticiones: [7, 8, 6] },
+      { numero: 3, nombre: "BAJADA", repeticiones: [9, 7, 8] },
+      { numero: 4, nombre: "CARGA", repeticiones: [5, 6, 4] },
+      { numero: 5, nombre: "PICO", repeticiones: [5, 3] }
+    ];
+  }
+
+  const patrones = [
+    [10, 8, 9],
+    [7, 8, 6],
+    [9, 7, 8],
+    [5, 6, 4],
+    [5, 3],
+    [7, 5, 6],
+    [5, 3]
+  ];
+
+  return Array.from({ length: cantidad }, (_, indice) => ({
+    numero: indice + 1,
+    nombre: "",
+    repeticiones: patrones[indice]
+  }));
+}
+
+function calcularRepeticiones(referencia, repeticionesIniciales) {
+  const valorBase = Number(referencia);
+  const iniciales = Number(repeticionesIniciales);
+
+  const baseValida = Number.isFinite(valorBase) && valorBase > 0 ? valorBase : 1;
+  const inicialesValidas = Number.isFinite(iniciales) && iniciales > 0 ? iniciales : 10;
+
+  return Math.max(1, Math.round(baseValida + inicialesValidas - 10));
+}
+
+/* =====================================================
+   TIEMPOS COMPLEMENTARIOS: PROGRESIÓN SEMANAL
+===================================================== */
+
+function leerSegundosTiempo(valor) {
+  if (valor === null || valor === undefined || String(valor).trim() === "") return null;
+
+  const texto = String(valor).trim().replace(",", ".");
+  const numeroDirecto = Number(texto);
+
+  if (Number.isFinite(numeroDirecto) && numeroDirecto >= 0) {
+    return Math.round(numeroDirecto);
+  }
+
+  const coincidencia = texto.match(/\d+(?:\.\d+)?/);
+  if (!coincidencia) return null;
+
+  const numero = Number(coincidencia[0]);
+  return Number.isFinite(numero) && numero >= 0 ? Math.round(numero) : null;
+}
+
+function obtenerTiempoBaseEjercicio(ejercicio, diasAntiguos = null) {
+  const guardado = leerSegundosTiempo(ejercicio?.tiempoBase);
+  if (guardado !== null) return guardado;
+
+  const dias = Array.isArray(diasAntiguos)
+    ? diasAntiguos
+    : (Array.isArray(ejercicio?.dias) ? ejercicio.dias : []);
+
+  const valorAnterior = dias
+    .map(dia => leerSegundosTiempo(dia?.tiempo))
+    .find(valor => valor !== null);
+
+  return valorAnterior ?? null;
+}
+
+function calcularTiempoSemana(tiempoBase, numeroSemana) {
+  const base = leerSegundosTiempo(tiempoBase);
+  if (base === null) return null;
+
+  const progresion = {
+    1: base,
+    2: base + 5,
+    3: base,
+    4: base + 10,
+    5: base + 10,
+    6: base + 10,
+    7: base + 10
+  };
+
+  return progresion[numeroSemana] ?? null;
+}
+
+function formatearTiempo(valor) {
+  const segundos = leerSegundosTiempo(valor);
+  return segundos === null ? "" : `${segundos}″`;
+}
+
+/* =====================================================
+   PERFIL Y JUGADORAS
+===================================================== */
+
+function leerUsuario() {
+  const valor = localStorage.getItem(SESSION_KEY);
+
+  if (!valor) return {};
+
+  // El login actual guarda "Fran", "Toto" o "Bianca" como texto plano.
+  // También se admiten sesiones guardadas como objetos JSON.
+  try {
+    const parseado = JSON.parse(valor);
+
+    if (typeof parseado === "string") {
+      return { usuario: parseado, nombre: parseado };
+    }
+
+    if (parseado && typeof parseado === "object") {
+      return parseado;
+    }
+  } catch (error) {
+    // No es JSON: se interpreta como el nombre guardado por el login.
+  }
+
+  return {
+    usuario: valor.trim(),
+    nombre: valor.trim()
+  };
+}
+
+function nombreSesion(obj) {
+  if (!obj || typeof obj !== "object") return "Usuario";
+  return String(obj.nombreCompleto || obj.nombre || obj.usuario || obj.username || "Usuario");
+}
+
+function esBianca(obj) {
+  const valores = [
+    obj?.usuario,
+    obj?.username,
+    obj?.nombreUsuario,
+    obj?.login,
+    obj?.nombre,
+    obj?.nombreCompleto
+  ].map(normalizar);
+
+  return valores.some(valor =>
+    valor === "bianca" ||
+    valor === "biancadominguez" ||
+    valor === "bianca dominguez"
+  );
+}
+
+function detectarRol(obj) {
+  if (esBianca(obj)) return "jugadora";
+
+  const valor = normalizar(obj?.rol || obj?.perfil || obj?.tipo || obj?.role || "");
+
+  if (
+    valor.includes("jugadora") ||
+    valor.includes("deportista") ||
+    valor.includes("player")
+  ) {
+    return "jugadora";
+  }
+
+  return "staff";
+}
+
+function leerJugadoras() {
+  try {
+    const datos = JSON.parse(localStorage.getItem(PLAYERS_KEY) || "[]");
+
+    if (Array.isArray(datos)) return datos;
+    if (datos && Array.isArray(datos.jugadoras)) return datos.jugadoras;
+
+    return [];
+  } catch {
+    return [];
+  }
+}
+
+function nombreJugadora(jugadora) {
+  if (!jugadora) return "Jugadora";
+
+  return String(
+    jugadora.nombreCompleto ||
+    jugadora.nombreYApellido ||
+    jugadora.nombre ||
+    [jugadora.nombres, jugadora.apellido].filter(Boolean).join(" ") ||
+    "Jugadora"
+  );
+}
+
+function divisionJugadora(jugadora) {
+  const valor = jugadora?.division || jugadora?.categoria || jugadora?.división || "Sub 14";
+
+  return DIVISIONES.find(division =>
+    normalizar(division) === normalizar(valor)
+  ) || "Sub 14";
+}
+
+function idJugadora(jugadora) {
+  return String(
+    jugadora?.id ||
+    jugadora?.usuario ||
+    jugadora?.username ||
+    jugadora?.nombreUsuario ||
+    jugadora?.login ||
+    nombreJugadora(jugadora)
+  );
+}
+
+function registroEsBianca(jugadora) {
+  return esBianca(jugadora);
+}
+
+function obtenerTodasLasJugadoras() {
+  const resultado = [...leerJugadoras()];
+
+  if (!resultado.some(registroEsBianca)) {
+    resultado.push({
+      id: "bianca",
+      usuario: "bianca",
+      nombreCompleto: "Bianca Dominguez",
+      division: "Sub 14"
+    });
+  }
+
+  const vistos = new Set();
+
+  return resultado.filter(jugadora => {
+    const id = idJugadora(jugadora);
+
+    if (!id || vistos.has(id)) return false;
+
+    vistos.add(id);
+    return true;
+  });
+}
+
+function buscarJugadoraSesion() {
+  const jugadoras = obtenerTodasLasJugadoras();
+
+  if (esBianca(usuario)) {
+    return jugadoras.find(registroEsBianca) || jugadoras[0] || null;
+  }
+
+  const clavesSesion = [
+    usuario?.id,
+    usuario?.jugadoraId,
+    usuario?.nombreCompleto,
+    usuario?.nombre,
+    usuario?.usuario,
+    usuario?.username,
+    usuario?.login
+  ].map(normalizar).filter(Boolean);
+
+  return jugadoras.find(jugadora => {
+    const claves = [
+      idJugadora(jugadora),
+      jugadora.usuario,
+      jugadora.username,
+      nombreJugadora(jugadora)
+    ].map(normalizar);
+
+    return claves.some(clave => clavesSesion.includes(clave));
+  }) || null;
+}
+
+/* =====================================================
+   ALMACENAMIENTO (LOCAL Y NUBE)
+===================================================== */
+
+function claveGeneral(division) {
+  return "GENERAL::" + division;
+}
+
+function claveIndividual(division, id) {
+  return "INDIVIDUAL::" + division + "::" + id;
+}
+
+function crearDiaVacio() {
+  return { repeticiones: "", peso: "", tiempo: "" };
+}
+
+function crearEjercicio(nombre = "") {
+  return {
+    nombre,
+    repeticionesBase: 10,
+    tiempoBase: "",
+    dias: Array.from({ length: 6 * DIAS_POR_SEMANA }, crearDiaVacio)
+  };
+}
+
+function crearRutina() {
+  return {
+    nombre: "",
+    guardada: false,
+    semanas: 4,
+
+    // Se conservan estas propiedades para compatibilidad con datos históricos.
+    rmPotencia1: "",
+    rmPotencia2: "",
+
+    potencia: [crearEjercicio(""), crearEjercicio("")],
+
+    // Cada bloque comienza con un solo ejercicio.
+    principales: [crearEjercicio("")],
+    complementarios: [crearEjercicio("")],
+
+    actualizada: new Date().toISOString(),
+    seccionesDinamicasInicializadas: true
+  };
+}
+
+function rutinaTieneDatos(rutina) {
+  if (!rutina || typeof rutina !== "object") return false;
+
+  if (
+    String(rutina.nombre || "").trim() &&
+    !/^(rutina|espacio)\s+\d+$/i.test(String(rutina.nombre).trim())
+  ) {
+    return true;
+  }
+
+  if (
+    String(rutina.rmPotencia1 || "").trim() ||
+    String(rutina.rmPotencia2 || "").trim()
+  ) {
+    return true;
+  }
+
+  const secciones = [
+    ...(Array.isArray(rutina.potencia) ? rutina.potencia : []),
+    ...(Array.isArray(rutina.principales) ? rutina.principales : []),
+    ...(Array.isArray(rutina.complementarios) ? rutina.complementarios : [])
+  ];
+
+  return secciones.some(ejercicio => {
+    if (!ejercicio) return false;
+
+    if (
+      String(ejercicio.nombre || "").trim() ||
+      String(ejercicio.tiempoBase || "").trim()
+    ) {
+      return true;
+    }
+
+    return Array.isArray(ejercicio.dias) &&
+      ejercicio.dias.some(dia =>
+        dia && (
+          String(dia.peso ?? "").trim() ||
+          String(dia.tiempo ?? "").trim() ||
+          String(dia.repeticiones ?? "").trim()
+        )
+      );
+  });
+}
+
+function normalizarSeccion(lista, cantidadPorDefecto = 1) {
+  const arr = Array.isArray(lista) ? lista : [];
+  const resultado = [];
+
+  for (
+    let i = 0;
+    i < Math.max(arr.length, cantidadPorDefecto);
+    i++
+  ) {
+    const original = arr[i] || {};
+
+    const valorBase = original.repeticionesBase ?? 10;
+    const numeroBase = Number(valorBase);
+
+    const repeticionesBase =
+      Number.isFinite(numeroBase) && numeroBase >= 1
+        ? Math.min(30, Math.round(numeroBase))
+        : 10;
+
+    const tiempoBase = String(original.tiempoBase || "");
+
+    // Recuperar los días existentes, sin borrarlos.
+    const diasOriginales = Array.isArray(original.dias)
+      ? original.dias
+      : [];
+
+    const dias = Array.from(
+      { length: 6 * DIAS_POR_SEMANA },
+      (_, indice) => {
+        const diaOriginal = diasOriginales[indice];
+
+        const dia = diaOriginal && typeof diaOriginal === "object"
+          ? diaOriginal
+          : {};
+
+        return {
+          ...crearDiaVacio(),
+          ...dia,
+          peso: String(dia.peso ?? ""),
+          tiempo: String(dia.tiempo ?? ""),
+          repeticiones: String(dia.repeticiones ?? "")
+        };
+      }
+    );
+
+    resultado.push({
+      ...original,
+      nombre: String(original.nombre || ""),
+      repeticionesBase,
+      tiempoBase,
+      dias
+    });
+  }
+
+  return resultado;
+}
+
+
+function ejercicioEsPredeterminadoVacio(ejercicio) {
+  if (!ejercicio) return true;
+
+  const nombre = String(ejercicio.nombre || "").trim();
+  const tiempo = String(ejercicio.tiempoBase || "").trim();
+  const repeticiones = Number(ejercicio.repeticionesBase ?? 10);
+
+  return !nombre && !tiempo && repeticiones === 10;
+}
+
+function normalizarRutina(rutina) {
+  const base = rutina && typeof rutina === "object"
+    ? rutina
+    : crearRutina();
+
+  if (typeof base.guardada !== "boolean") {
+    base.guardada = rutinaTieneDatos(base);
+  }
+
+  base.nombre = String(base.nombre || "");
+
+  const semNum = Number(base.semanas);
+  base.semanas = (semNum >= 2 && semNum <= 7) ? semNum : 4;
+
+  // Mantener propiedades antiguas para no perder compatibilidad.
+  base.rmPotencia1 = String(base.rmPotencia1 || "");
+  base.rmPotencia2 = String(base.rmPotencia2 || "");
+
+  if (Array.isArray(base.ejercicios) && !base.potencia) {
+    base.potencia = [crearEjercicio(""), crearEjercicio("")];
+    base.principales = base.ejercicios.slice(0, 4);
+    base.complementarios = base.ejercicios.slice(4, 8);
+    delete base.ejercicios;
+  }
+
+  const cantidadPotencia = Math.max(
+    1,
+    base.potencia ? base.potencia.length : 2
+  );
+
+  base.potencia = normalizarSeccion(base.potencia, cantidadPotencia);
+  base.principales = normalizarSeccion(base.principales, 1);
+  base.complementarios = normalizarSeccion(base.complementarios, 1);
+
+  /*
+    Compatibilidad con borradores antiguos:
+    si tenían cuatro tarjetas vacías por defecto, se reduce a una.
+    Las rutinas guardadas y los ejercicios que ya tienen datos se conservan.
+  */
+  if (!base.seccionesDinamicasInicializadas) {
+    if (!base.guardada) {
+      ["principales", "complementarios"].forEach(seccion => {
+        const lista = base[seccion] || [];
+
+        if (
+          lista.length > 1 &&
+          lista.every(ejercicioEsPredeterminadoVacio)
+        ) {
+          base[seccion] = [lista[0]];
+        }
+      });
+    }
+
+    base.seccionesDinamicasInicializadas = true;
+  }
+
+  return base;
+}
+
+function cargarDB() {
+  try {
+    const datos = JSON.parse(localStorage.getItem(KEY) || "{}");
+    return datos && typeof datos === "object" ? datos : {};
+  } catch {
+    return {};
+  }
+}
+
+function combinarBases(local, nube) {
+  const resultado = { ...(local || {}) };
+  const datosNube = nube && typeof nube === "object" ? nube : {};
+
+  Object.entries(datosNube).forEach(([clave, rutinasNube]) => {
+
+    if (!Array.isArray(rutinasNube)) {
+      if (resultado[clave] === undefined) {
+        resultado[clave] = rutinasNube;
+      }
+
+      return;
+    }
+
+    const rutinasLocales = Array.isArray(resultado[clave])
+      ? resultado[clave]
+      : [];
+
+    const cantidad = Math.max(
+      rutinasLocales.length,
+      rutinasNube.length
+    );
+
+    resultado[clave] = Array.from(
+      { length: cantidad },
+      (_, indice) => {
+        const rutinaNube = rutinasNube[indice];
+        const rutinaLocal = rutinasLocales[indice];
+
+        // Si la nube tiene información, se prioriza.
+        if (rutinaNube && rutinaTieneDatos(rutinaNube)) {
+          return rutinaNube;
+        }
+
+        // Si la nube está vacía, se conserva la rutina local.
+        if (rutinaLocal && rutinaTieneDatos(rutinaLocal)) {
+          return rutinaLocal;
+        }
+
+        return rutinaNube || rutinaLocal || crearRutina();
+      }
+    );
+  });
+
+  return resultado;
+}
+
+function guardarDB() {
+  try {
+    // Siempre conservar una copia local.
+    localStorage.setItem(KEY, JSON.stringify(db));
+
+    // No sobrescribir Firebase si la carga inicial falló.
+    if (!nubeListaParaGuardar) {
+      console.warn(
+        "ADIUR: guardado local. Firebase todavía no está habilitado."
+      );
+
+      return true;
+    }
+
+    if (typeof window.guardarGimnasioEnNube !== "function") {
+      console.error("No está disponible guardarGimnasioEnNube.");
+      mostrarEstado("Guardado local. No se pudo conectar con la nube.");
+
+      return true;
+    }
+
+    window.guardarGimnasioEnNube(db)
+      .then(() => {
+        mostrarEstado("Rutina guardada correctamente en la nube.");
+
+        console.log("ADIUR: Rutinas sincronizadas con Firestore.");
+      })
+      .catch(error => {
+        nubeListaParaGuardar = false;
+
+        console.error("ERROR AL GUARDAR EN FIREBASE:", error);
+
+        mostrarEstado(
+          "Error al guardar en la nube: " +
+          (error.code || error.message)
+        );
+      });
+
+    return true;
+
+  } catch (error) {
+    console.error("Error al guardar:", error);
+
+    mostrarEstado("No se pudieron guardar los cambios.");
+
+    return false;
+  }
+}
+
+
+function asegurarRutinasGenerales(division) {
+  const clave = claveGeneral(division);
+
+  if (!Array.isArray(db[clave])) {
+    db[clave] = [];
+  }
+
+  while (db[clave].length < CANTIDAD_RUTINAS_INICIALES) {
+    db[clave].push(crearRutina());
+  }
+
+  db[clave] = db[clave].map(normalizarRutina);
+  guardarDB();
+}
+
+function copiarObjeto(objeto) {
+  return JSON.parse(JSON.stringify(objeto));
+}
+
+function combinarRutinaGeneralEIndividual(general, individual) {
+  const resultado = copiarObjeto(normalizarRutina(general));
+  const anterior = normalizarRutina(individual || crearRutina());
+
+  resultado.rmPotencia1 = anterior.rmPotencia1 || general.rmPotencia1;
+  resultado.rmPotencia2 = anterior.rmPotencia2 || general.rmPotencia2;
+
+  resultado.complementarios = resultado.complementarios.map((ejercicio, i) => {
+    const ejercicioPersonal = anterior.complementarios?.[i];
+
+    ejercicio.tiempoBase =
+      obtenerTiempoBaseEjercicio(ejercicioPersonal) ??
+      obtenerTiempoBaseEjercicio(ejercicio) ??
+      "";
+
+    return ejercicio;
+  });
+
+  resultado.nombre = general.nombre;
+  resultado.semanas = Number(general.semanas) || 4;
+  resultado.guardada = Boolean(general.guardada);
+
+  return resultado;
+}
+
+function asegurarRutinasIndividuales(jugadora) {
+  if (!jugadora) return;
+
+  const division = divisionJugadora(jugadora);
+  asegurarRutinasGenerales(division);
+
+  const clave = claveIndividual(division, idJugadora(jugadora));
+
+  if (!Array.isArray(db[clave])) {
+    db[clave] = [];
+  }
+
+  const generales = db[claveGeneral(division)];
+
+  generales.forEach((general, indice) => {
+    if (!db[clave][indice]) {
+      db[clave][indice] = copiarObjeto(general);
+    } else {
+      db[clave][indice] = normalizarRutina(db[clave][indice]);
+    }
+  });
+
+  guardarDB();
+}
+
+function sincronizarRutinaGeneral(division, indice) {
+  asegurarRutinasGenerales(division);
+
+  const general = db[claveGeneral(division)][indice];
+
+  obtenerTodasLasJugadoras()
+    .filter(jugadora =>
+      normalizar(divisionJugadora(jugadora)) === normalizar(division)
+    )
+    .forEach(jugadora => {
+      asegurarRutinasIndividuales(jugadora);
+
+      const clave = claveIndividual(division, idJugadora(jugadora));
+
+      db[clave][indice] = combinarRutinaGeneralEIndividual(
+        general,
+        db[clave][indice]
+      );
+    });
+
+  guardarDB();
+}
+
+/* =====================================================
+   OBTENER RUTINA ACTUAL
+===================================================== */
+
+function obtenerJugadoraSeleccionada() {
+  if (esJugadora) return jugadoraSesion;
+
+  if (!jugadoraSelect.value || jugadoraSelect.value === "__TODAS__") {
+    return null;
+  }
+
+  return obtenerTodasLasJugadoras().find(
+    jugadora => idJugadora(jugadora) === jugadoraSelect.value
+  ) || null;
+}
+
+function obtenerRutinaActual() {
+  const division = divisionSelect.value;
+
+  asegurarRutinasGenerales(division);
+
+  if (modoSelect.value === "general") {
+    return db[claveGeneral(division)][indiceActual];
+  }
+
+  const jugadora = obtenerJugadoraSeleccionada();
+  if (!jugadora) return null;
+
+  asegurarRutinasIndividuales(jugadora);
+
+  const clave = claveIndividual(division, idJugadora(jugadora));
+
+  return db[clave][indiceActual] || null;
+}
+
+function puedeEditarEstructura() {
+  return esStaff && modoSelect.value === "general";
+}
+
+function puedeEditarValores() {
+  return esStaff || (esJugadora && modoSelect.value === "individual");
+}
+
+function mostrarEstado(mensaje) {
+  $("estadoGuardado").textContent = mensaje;
+}
+
+/* =====================================================
+   POBLAR JUGADORAS
+===================================================== */
+
+function poblarJugadoras() {
+  const division = divisionSelect.value;
+
+  const jugadoras = obtenerTodasLasJugadoras().filter(
+    jugadora =>
+      normalizar(divisionJugadora(jugadora)) === normalizar(division)
+  );
+
+  const valorAnterior = jugadoraSelect.value;
+  jugadoraSelect.innerHTML = "";
+
+  if (esJugadora) {
+    const jugadora = jugadoraSesion;
+
+    if (jugadora) {
+      const opcion = document.createElement("option");
+      opcion.value = idJugadora(jugadora);
+      opcion.textContent = nombreJugadora(jugadora);
+      jugadoraSelect.appendChild(opcion);
+    }
+
+    jugadoraSelect.disabled = true;
+    return;
+  }
+
+  jugadoraSelect.disabled = false;
+
+  const opcionTodas = document.createElement("option");
+  opcionTodas.value = "__TODAS__";
+  opcionTodas.textContent = "Seleccionar jugadora";
+  jugadoraSelect.appendChild(opcionTodas);
+
+  jugadoras.forEach(jugadora => {
+    const opcion = document.createElement("option");
+    opcion.value = idJugadora(jugadora);
+    opcion.textContent = nombreJugadora(jugadora);
+    jugadoraSelect.appendChild(opcion);
+  });
+
+  if (jugadoras.some(jugadora => idJugadora(jugadora) === valorAnterior)) {
+    jugadoraSelect.value = valorAnterior;
+  } else {
+    jugadoraSelect.value = "__TODAS__";
+  }
+}
+
+/* =====================================================
+   EDITOR DE EJERCICIOS
+===================================================== */
+
+function renderizarEditor() {
+  const contenedor = $("editorEjercicios");
+  const titulo = $("tituloEditor");
+  const descripcion = $("descripcionEditor");
+
+  contenedor.innerHTML = "";
+
+  const todasSeleccionadas =
+    modoSelect.value === "individual" &&
+    !esJugadora &&
+    jugadoraSelect.value === "__TODAS__";
+
+  if (todasSeleccionadas) {
+    titulo.textContent = "Seleccioná una jugadora";
+
+    descripcion.textContent =
+      "Elegí una jugadora para consultar su rutina individual.";
+
+    $("nombreSeleccionado").textContent =
+      "División: " + divisionSelect.value + " · Sin jugadora seleccionada";
+
+    $("estadoRutina").textContent = "Vista de consulta";
+
+    contenedor.innerHTML = `
+      <div class="sin-ejercicios">
+        Seleccioná una jugadora en este apartado para abrir su rutina individual.
+      </div>
+    `;
+
+    return;
+  }
+
+  rutinaActual = obtenerRutinaActual();
+
+  if (!rutinaActual) {
+    titulo.textContent = "No hay una rutina disponible";
+
+    contenedor.innerHTML = `
+      <div class="sin-ejercicios">
+        No hay una rutina disponible para la selección actual.
+      </div>
+    `;
+
+    return;
+  }
+
+  rutinaActual = normalizarRutina(rutinaActual);
+
+  semanasSelect.value = String(rutinaActual.semanas);
+  tituloInput.value = rutinaActual.nombre || "";
+
+  tituloInput.disabled = !puedeEditarEstructura();
+  semanasSelect.disabled = !puedeEditarEstructura();
+
+  titulo.textContent = rutinaActual.nombre || "Nueva rutina";
+
+  descripcion.textContent =
+    "Potencia configurada con ondulación semanal específica (2 a 7 semanas) y 3 días de estímulo neural diferenciado.";
+
+  $("nombreSeleccionado").textContent =
+    "División: " + divisionSelect.value +
+    (
+      modoSelect.value === "individual"
+        ? " · " + nombreJugadora(obtenerJugadoraSeleccionada())
+        : ""
+    );
+
+  $("estadoRutina").textContent =
+    rutinaActual.guardada ? "Rutina guardada" : "Borrador sin guardar";
+
+  $("avisoGeneral").classList.toggle(
+    "oculto",
+    !(esStaff && modoSelect.value === "general")
+  );
+
+  $("avisoJugador").classList.toggle("oculto", !esJugadora);
+
+  // GRUPO 1: POTENCIA
+  const grupoPotencia = document.createElement("section");
+  grupoPotencia.className = "grupo-editor";
+
+  grupoPotencia.innerHTML = `
+    <div class="grupo-editor-cabecera">
+      <div class="grupo-editor-info">
+        <div class="numero-grupo-editor">01</div>
+        <div><h4>Ejercicios de potencia</h4></div>
+      </div>
+
+      ${puedeEditarEstructura() ? `
+        <div class="acciones-grupo-editor">
+          <button type="button" class="boton boton-secundario" id="btnAgregarPotencia" style="padding: 6px 10px; font-size:10px;">+ Agregar ejercicio</button>
+          <button type="button" class="boton boton-peligro" id="btnQuitarPotencia" style="padding: 6px 10px; font-size:10px;" ${rutinaActual.potencia.length <= 1 ? "disabled" : ""}>− Quitar</button>
+        </div>
+      ` : ""}
+    </div>
+    <div class="lista-ejercicios-editor" id="listaPotencia"></div>
+  `;
+
+  // GRUPO 2: PRINCIPALES
+  const grupoPrincipales = document.createElement("section");
+  grupoPrincipales.className = "grupo-editor";
+
+  grupoPrincipales.innerHTML = `
+    <div class="grupo-editor-cabecera">
+      <div class="grupo-editor-info">
+        <div class="numero-grupo-editor">02</div>
+        <div>
+          <h4>Ejercicios principales</h4>
+          <p>Fuerza principal programada por repeticiones con ondulación automática.</p>
+        </div>
+      </div>
+
+      ${puedeEditarEstructura() ? `
+        <div class="acciones-grupo-editor">
+          <button type="button" class="boton boton-secundario" id="btnAgregarPrincipales" style="padding: 6px 10px; font-size:10px;">+ Agregar ejercicio</button>
+          <button type="button" class="boton boton-peligro" id="btnQuitarPrincipales" style="padding: 6px 10px; font-size:10px;" ${rutinaActual.principales.length <= 1 ? "disabled" : ""}>− Quitar</button>
+        </div>
+      ` : ""}
+    </div>
+    <div class="lista-ejercicios-editor" id="listaPrincipales"></div>
+  `;
+
+  // GRUPO 3: COMPLEMENTARIOS
+  const grupoComplementarios = document.createElement("section");
+  grupoComplementarios.className = "grupo-editor";
+
+  grupoComplementarios.innerHTML = `
+    <div class="grupo-editor-cabecera">
+      <div class="grupo-editor-info">
+        <div class="numero-grupo-editor">03</div>
+        <div>
+          <h4>Ejercicios complementarios</h4>
+          <p>Tiempo base semanal con progresión automática.</p>
+        </div>
+      </div>
+
+      ${puedeEditarEstructura() ? `
+        <div class="acciones-grupo-editor">
+          <button type="button" class="boton boton-secundario" id="btnAgregarComplementarios" style="padding: 6px 10px; font-size:10px;">+ Agregar ejercicio</button>
+          <button type="button" class="boton boton-peligro" id="btnQuitarComplementarios" style="padding: 6px 10px; font-size:10px;" ${rutinaActual.complementarios.length <= 1 ? "disabled" : ""}>− Quitar</button>
+        </div>
+      ` : ""}
+    </div>
+    <div class="lista-ejercicios-editor" id="listaComplementarios"></div>
+  `;
+
+  contenedor.append(grupoPotencia, grupoPrincipales, grupoComplementarios);
+
+  function agregarEjercicio(seccion) {
+    if (!puedeEditarEstructura()) return;
+    if (rutinaActual[seccion].length >= MAX_EJERCICIOS_SECCION) return;
+
+    rutinaActual[seccion].push(crearEjercicio(""));
+    guardarBorradorActual();
+    renderizarEditor();
+  }
+
+  function quitarEjercicio(seccion) {
+    if (!puedeEditarEstructura()) return;
+    if (rutinaActual[seccion].length <= 1) return;
+
+    rutinaActual[seccion].pop();
+    guardarBorradorActual();
+    renderizarEditor();
+  }
+
+  if (puedeEditarEstructura()) {
+    $("btnAgregarPotencia").addEventListener("click", () => {
+      agregarEjercicio("potencia");
+    });
+
+    $("btnQuitarPotencia").addEventListener("click", () => {
+      quitarEjercicio("potencia");
+    });
+
+    $("btnAgregarPrincipales").addEventListener("click", () => {
+      agregarEjercicio("principales");
+    });
+
+    $("btnQuitarPrincipales").addEventListener("click", () => {
+      quitarEjercicio("principales");
+    });
+
+    $("btnAgregarComplementarios").addEventListener("click", () => {
+      agregarEjercicio("complementarios");
+    });
+
+    $("btnQuitarComplementarios").addEventListener("click", () => {
+      quitarEjercicio("complementarios");
+    });
+  }
+
+  const renderizarCardsSeccion = (seccionNombre, listaDOM) => {
+    const lista = rutinaActual[seccionNombre];
+    const esPotencia = seccionNombre === "potencia";
+
+    lista.forEach((ejercicio, indice) => {
+      const tarjeta = document.createElement("article");
+      tarjeta.className = "ejercicio-card";
+
+      const baseTiempo = obtenerTiempoBaseEjercicio(ejercicio);
+
+      let cuerpoHTML = "";
+
+      if (esPotencia) {
+        const estructuraSemanal =
+          obtenerEstructuraPotenciaPorSemanas(rutinaActual.semanas);
+
+        cuerpoHTML = `
+          <div class="dias-editor" style="grid-template-columns: repeat(${Math.min(rutinaActual.semanas, 4)}, minmax(0, 1fr)); gap: 8px;">
+        `;
+
+        estructuraSemanal.forEach(sem => {
+          cuerpoHTML += `
+            <div class="dia-editor" style="padding: 8px;">
+              <div class="dia-editor-titulo" style="margin-bottom:6px; font-size:9px;">
+                <span>SEM ${sem.numero} (${sem.nombre})</span>
+              </div>
+              <div style="font-size:9px; color:#555; line-height:1.5;">
+                <div><strong>D1:</strong> ${sem.d1}%</div>
+                <div><strong>D2:</strong> ${sem.d2}%</div>
+                <div><strong>D3:</strong> ${sem.d3}%</div>
+              </div>
+            </div>
+          `;
+        });
+
+        cuerpoHTML += `</div>`;
+
+      } else if (seccionNombre === "principales") {
+
+        cuerpoHTML = `
+          <div class="referencia-repeticiones">
+            <div class="referencia-repeticiones-info">
+              <label for="rep-base-${seccionNombre}-${indice}">REPETICIONES INICIALES</label>
+              <small>La ondulación semanal de repeticiones se calcula automáticamente desde este valor.</small>
+            </div>
+            <input
+              id="rep-base-${seccionNombre}-${indice}"
+              type="number"
+              min="1"
+              max="30"
+              step="1"
+              value="${escaparHTML(ejercicio.repeticionesBase)}"
+              data-rep-base-seccion="${seccionNombre}"
+              data-rep-base-indice="${indice}"
+              ${puedeEditarEstructura() ? "" : "disabled"}
+            >
+          </div>
+        `;
+
+      } else {
+
+        const camposSemana = Array.from(
+          { length: rutinaActual.semanas },
+          (_, sIdx) => {
+            const numSem = sIdx + 1;
+            const tiempo = calcularTiempoSemana(baseTiempo, numSem);
+            const esBase = sIdx === 0;
+
+            return `
+              <div class="dia-editor ${esBase ? "semana-tiempo-base" : "semana-tiempo-auto"}">
+                <div class="dia-editor-titulo">
+                  <span>SEMANA ${numSem}</span>
+                  <span class="dia-editor-etiqueta">${esBase ? "BASE" : "AUTO"}</span>
+                </div>
+
+                <div class="dato-editor">
+                  <label>${esBase ? "TIEMPO BASE · SEG" : "TIEMPO CALC"}</label>
+
+                  ${esBase ? `
+                    <div class="entrada-tiempo-unidad">
+                      <input
+                        type="number"
+                        min="0"
+                        max="3600"
+                        step="1"
+                        value="${baseTiempo === null ? "" : escaparHTML(String(baseTiempo))}"
+                        data-tiempo-base-seccion="${seccionNombre}"
+                        data-tiempo-base-indice="${indice}"
+                        ${puedeEditarValores() ? "" : "disabled"}
+                      >
+                      <span>″</span>
+                    </div>
+                  ` : `
+                    <input
+                      type="text"
+                      value="${escaparHTML(formatearTiempo(tiempo))}"
+                      readonly
+                    >
+                  `}
+                </div>
+              </div>
+            `;
+          }
+        ).join("");
+
+        cuerpoHTML = `
+          <div class="aviso aviso-progresion-tiempo">Progreso automático de tiempo semanal.</div>
+          <div class="dias-editor tiempo-semanal-grid">${camposSemana}</div>
+        `;
+      }
+
+      tarjeta.innerHTML = `
+        <div class="ejercicio-card-cabecera">
+          <div class="ejercicio-numero">${String(indice + 1).padStart(2, "0")}</div>
+
+          <div class="ejercicio-identidad">
+            <label for="nombre-${seccionNombre}-${indice}">
+              ${
+                esPotencia
+                  ? "EJERCICIO DE POTENCIA"
+                  : seccionNombre === "principales"
+                    ? "EJERCICIO PRINCIPAL"
+                    : "EJERCICIO COMPLEMENTARIO"
+              }
+            </label>
+
+            <input
+              id="nombre-${seccionNombre}-${indice}"
+              type="text"
+              maxlength="120"
+              placeholder="Nombre del ejercicio..."
+              value="${escaparHTML(ejercicio.nombre)}"
+              data-nombre-seccion="${seccionNombre}"
+              data-nombre-indice="${indice}"
+              ${puedeEditarEstructura() ? "" : "disabled"}
+            >
+          </div>
+        </div>
+
+        <div class="ejercicio-cuerpo">
+          ${cuerpoHTML}
+        </div>
+      `;
+
+      listaDOM.appendChild(tarjeta);
+    });
+  };
+
+  renderizarCardsSeccion("potencia", $("listaPotencia"));
+  renderizarCardsSeccion("principales", $("listaPrincipales"));
+  renderizarCardsSeccion("complementarios", $("listaComplementarios"));
+
+  contenedor.querySelectorAll("[data-nombre-seccion]").forEach(input => {
+    input.addEventListener("change", () => {
+      const seccion = input.dataset.nombreSeccion;
+      const indice = Number(input.dataset.nombreIndice);
+
+      if (!rutinaActual || !rutinaActual[seccion][indice]) return;
+
+      rutinaActual[seccion][indice].nombre = input.value.trim();
+      guardarBorradorActual();
+    });
+  });
+
+  contenedor.querySelectorAll("[data-rep-base-seccion]").forEach(input => {
+    input.addEventListener("change", () => {
+      const seccion = input.dataset.repBaseSeccion;
+      const indice = Number(input.dataset.repBaseIndice);
+
+      if (!rutinaActual || !rutinaActual[seccion][indice]) return;
+
+      let valor = Number(input.value);
+
+      if (!Number.isFinite(valor) || valor < 1) valor = 1;
+      if (valor > 30) valor = 30;
+
+      rutinaActual[seccion][indice].repeticionesBase = Math.round(valor);
+      input.value = String(rutinaActual[seccion][indice].repeticionesBase);
+
+      guardarBorradorActual();
+    });
+  });
+
+  contenedor.querySelectorAll("[data-tiempo-base-seccion]").forEach(input => {
+    const seccion = input.dataset.tiempoBaseSeccion;
+    const indice = Number(input.dataset.tiempoBaseIndice);
+
+    input.addEventListener("change", () => {
+      if (!rutinaActual || !rutinaActual[seccion][indice]) return;
+
+      const valor = input.value === ""
+        ? ""
+        : String(Math.min(3600, Math.max(0, leerSegundosTiempo(input.value) ?? 0)));
+
+      rutinaActual[seccion][indice].tiempoBase = valor;
+      input.value = valor;
+
+      guardarBorradorActual();
+      renderizarEditor();
+    });
+  });
+}
+
+/* =====================================================
+   GUARDAR BORRADOR Y CONFIG
+===================================================== */
+
+function guardarBorradorActual() {
+  if (!rutinaActual) return;
+
+  rutinaActual.semanas = Number(semanasSelect.value) || 4;
+  rutinaActual.actualizada = new Date().toISOString();
+
+  const division = divisionSelect.value;
+
+  if (modoSelect.value === "general" && esStaff) {
+    const clave = claveGeneral(division);
+
+    asegurarRutinasGenerales(division);
+
+    db[clave][indiceActual] = copiarObjeto(rutinaActual);
+    guardarDB();
+
+    if (rutinaActual.guardada) {
+      sincronizarRutinaGeneral(division, indiceActual);
+      renderizarBiblioteca();
+    }
+
+  } else if (modoSelect.value === "individual" && puedeEditarValores()) {
+    const jugadora = obtenerJugadoraSeleccionada();
+
+    if (!jugadora) return;
+
+    asegurarRutinasIndividuales(jugadora);
+
+    const clave = claveIndividual(division, idJugadora(jugadora));
+
+    db[clave][indiceActual] = copiarObjeto(rutinaActual);
+    guardarDB();
+  }
+}
+
+function cambiarDuracion() {
+  if (!puedeEditarEstructura() || !rutinaActual) return;
+
+  rutinaActual.semanas = Number(semanasSelect.value) || 4;
+
+  guardarBorradorActual();
+  renderizarEditor();
+
+  mostrarEstado("Duración del bloque actualizada.");
+}
+
+/* =====================================================
+   GUARDAR RUTINA DEFINITIVA
+===================================================== */
+
+function guardarRutinaDefinitiva() {
+  if (!esStaff || modoSelect.value !== "general") return;
+
+  const titulo = tituloInput.value.trim();
+
+  if (!titulo) {
+    alert("Escribí un título para identificar la rutina.");
+    tituloInput.focus();
+    return;
+  }
+
+  const rutina = obtenerRutinaActual();
+  if (!rutina) return;
+
+  rutina.nombre = titulo;
+  rutina.semanas = Number(semanasSelect.value) || 4;
+  rutina.guardada = true;
+  rutina.actualizada = new Date().toISOString();
+
+  const division = divisionSelect.value;
+  const clave = claveGeneral(division);
+
+  asegurarRutinasGenerales(division);
+
+  db[clave][indiceActual] = normalizarRutina(copiarObjeto(rutina));
+
+  if (!guardarDB()) return;
+
+  sincronizarRutinaGeneral(division, indiceActual);
+
+  rutinaActual = db[clave][indiceActual];
+
+  renderizarEditor();
+  renderizarBiblioteca();
+
+  mostrarEstado("Rutina “" + titulo + "” guardada con éxito.");
+
+  $("panelBiblioteca").scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+}
+
+function crearNuevaRutina() {
+  if (!esStaff || modoSelect.value !== "general") return;
+
+  const division = divisionSelect.value;
+
+  asegurarRutinasGenerales(division);
+
+  const clave = claveGeneral(division);
+  const rutinas = db[clave];
+
+  let indiceLibre = rutinas.findIndex(
+    r => !r.guardada && !rutinaTieneDatos(r)
+  );
+
+  if (indiceLibre < 0) {
+    indiceLibre = rutinas.length;
+    rutinas.push(crearRutina());
+  }
+
+  indiceActual = indiceLibre;
+  rutinaActual = crearRutina();
+
+  db[clave][indiceActual] = copiarObjeto(rutinaActual);
+
+  guardarDB();
+
+  tituloInput.value = "";
+  semanasSelect.value = "4";
+
+  renderizarEditor();
+  renderizarBiblioteca();
+
+  mostrarEstado("Nueva rutina creada.");
+  tituloInput.focus();
+
+  $("panelEditorRutina").scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+}
+
+function aplicarRutinaAJugadoras() {
+  if (!esStaff || modoSelect.value !== "general") return;
+
+  const rutina = obtenerRutinaActual();
+
+  if (!rutina || !rutina.guardada) {
+    alert("Primero guardá la rutina general.");
+    return;
+  }
+
+  const division = divisionSelect.value;
+
+  if (!confirm(
+    "¿Aplicar la estructura de “" + rutina.nombre +
+    "” a las jugadoras de " + division + "?"
+  )) return;
+
+  sincronizarRutinaGeneral(division, indiceActual);
+
+  renderizarEditor();
+  renderizarBiblioteca();
+
+  mostrarEstado("Rutina sincronizada con las jugadoras.");
+}
+
+/* =====================================================
+   PLANILLA COMPLETA DE PERIODIZACIÓN / PDF
+===================================================== */
+
+function construirPlanillaHTML(rutina, division, cantidadPersonas = 1) {
+  const normalizada = normalizarRutina(copiarObjeto(rutina));
+  const totalSemanas = normalizada.semanas;
+
+  const cantidadCopias = Math.min(
+    MAX_PERSONAS_RUTINA,
+    Math.max(1, Number.parseInt(cantidadPersonas, 10) || 1)
+  );
+
+  const nombreSeguro = valor => {
+    const nombre = String(valor || "").trim();
+
+    return nombre
+      ? escaparHTML(nombre)
+      : '<span class="ejercicio-sin-nombre">Ejercicio pendiente</span>';
+  };
+
+  // POTENCIA: los encabezados solo muestran Semana N.
+  const estructuraPotencia =
+    obtenerEstructuraPotenciaPorSemanas(totalSemanas);
+
+  const encSemPotencia = estructuraPotencia.map(sem => `
+    <th class="semana-planilla" colspan="3">Semana ${sem.numero}</th>
+  `).join("");
+
+  const encDiasPotencia = estructuraPotencia
+    .map(() => `<th>D1</th><th>D2</th><th>D3</th>`)
+    .join("");
+
+  let filasPotencia = "";
+
+  normalizada.potencia.forEach(ejercicio => {
+    let celdas = "";
+
+    estructuraPotencia.forEach(sem => {
+      [sem.d1, sem.d2, sem.d3].forEach(pct => {
+        celdas += `
+          <td class="celda-repeticiones">
+            <span class="valor-porcentaje">${pct}%</span>
+          </td>
+        `;
+      });
+    });
+
+    filasPotencia += `
+      <tr class="fila-metrica">
+        <th class="ejercicio-planilla">${nombreSeguro(ejercicio.nombre)}</th>
+        ${celdas}
+      </tr>
+    `;
+  });
+
+  // PRINCIPALES: encabezados Semana 1, Semana 2, etc.
+  const plantillaPrin = obtenerPlantillaPeriodizacion(totalSemanas);
+
+  const encSemPrin = plantillaPrin.map(sem => `
+    <th class="semana-planilla" colspan="${sem.repeticiones.length}">
+      Semana ${sem.numero}
+    </th>
+  `).join("");
+
+  const encDiasPrin = plantillaPrin
+    .map(sem => sem.repeticiones.map((_, i) => `<th>D${i + 1}</th>`).join(""))
+    .join("");
+
+  let filasPrincipales = "";
+
+  normalizada.principales.forEach(ejercicio => {
+    const periodizacion = plantillaPrin.map(semana => ({
+      dias: semana.repeticiones.map(ref => ({
+        repeticiones: calcularRepeticiones(ref, ejercicio.repeticionesBase)
+      }))
+    }));
+
+    let celdas = "";
+
+    periodizacion.forEach(sem => {
+      sem.dias.forEach(dia => {
+        celdas += `
+          <td class="celda-repeticiones">
+            <span class="valor-repeticiones">${escaparHTML(dia.repeticiones)}</span>
+            <span class="casillero-peso" title="Peso utilizado"></span>
+          </td>
+        `;
+      });
+    });
+
+    filasPrincipales += `
+      <tr class="fila-metrica">
+        <th class="ejercicio-planilla">${nombreSeguro(ejercicio.nombre)}</th>
+        ${celdas}
+      </tr>
+    `;
+  });
+
+  // COMPLEMENTARIOS: encabezados Semana 1, Semana 2, etc.
+  const encSemComp = estructuraPotencia.map(sem => `
+    <th class="semana-planilla">Semana ${sem.numero}</th>
+  `).join("");
+
+  let filasComplementarias = "";
+
+  normalizada.complementarios.forEach(ejercicio => {
+    const baseTiempo = obtenerTiempoBaseEjercicio(ejercicio);
+
+    const celdas = estructuraPotencia.map(sem => {
+      const tiempo = calcularTiempoSemana(baseTiempo, sem.numero);
+      const valor = tiempo !== null ? `${tiempo}″` : "—";
+
+      return `<td>${escaparHTML(valor)}</td>`;
+    }).join("");
+
+    filasComplementarias += `
+      <tr class="fila-metrica">
+        <th class="ejercicio-planilla">${nombreSeguro(ejercicio.nombre)}</th>
+        ${celdas}
+      </tr>
+    `;
+  });
+
+  const cuerpoPersonaHTML = `
+    <div class="planilla-persona">
+
+      <section class="planilla-bloque">
+        <div class="planilla-bloque-titulo">EJERCICIOS DE POTENCIA</div>
+
+        <div class="planilla-scroll">
+          <table class="tabla-planilla">
+            <thead>
+              <tr>
+                <th rowspan="2" class="ejercicio-planilla">EJERCICIO</th>
+                ${encSemPotencia}
+              </tr>
+              <tr>${encDiasPotencia}</tr>
+            </thead>
+            <tbody>${filasPotencia}</tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="planilla-bloque">
+        <div class="planilla-bloque-titulo">EJERCICIOS PRINCIPALES</div>
+
+        <div class="planilla-scroll">
+          <table class="tabla-planilla tabla-principales">
+            <thead>
+              <tr>
+                <th rowspan="2" class="ejercicio-planilla">EJERCICIO</th>
+                ${encSemPrin}
+              </tr>
+              <tr>${encDiasPrin}</tr>
+            </thead>
+            <tbody>${filasPrincipales}</tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="planilla-bloque">
+        <div class="planilla-bloque-titulo">EJERCICIOS COMPLEMENTARIOS</div>
+
+        <div class="planilla-scroll">
+          <table class="tabla-planilla tabla-complementarios">
+            <thead>
+              <tr>
+                <th class="ejercicio-planilla">EJERCICIO</th>
+                ${encSemComp}
+              </tr>
+            </thead>
+            <tbody>${filasComplementarias}</tbody>
+          </table>
+        </div>
+      </section>
+
+      <div class="planilla-nombre">
+        <strong>Nombre y Apellido:</strong>
+        <span class="linea-nombre" aria-hidden="true"></span>
+      </div>
+
+    </div>
+  `;
+
+  return `
+    <div class="hoja-rutina">
+
+      <div class="planilla-cabecera">
+        <img
+          src="ADIUR-Logo ADIUR.jpg"
+          alt="Logo ADIUR"
+          onerror="this.onerror=null;this.src='ADIUR-Logo ADIUR.jpg';this.onerror=function(){this.style.display='none'}"
+        >
+
+        <div class="planilla-cabecera-texto">
+          <strong>ADIUR FEMENINO</strong>
+          <span>${escaparHTML(normalizada.nombre || "Rutina sin título")}</span>
+          <small>${escaparHTML(division.toUpperCase())} · Bloque ${totalSemanas} Semanas</small>
+        </div>
+      </div>
+
+      <div class="planillas-personas${cantidadCopias > 1 ? " varias-personas" : ""}">
+        ${Array.from({ length: cantidadCopias }, () => cuerpoPersonaHTML).join("")}
+      </div>
+
+    </div>
+  `;
+}
+
+/* =====================================================
+   MINIATURAS DE BIBLIOTECA
+===================================================== */
+
+function construirMiniatura(rutina) {
+  const normalizada = normalizarRutina(copiarObjeto(rutina));
+  const estructuraPotencia = obtenerEstructuraPotenciaPorSemanas(normalizada.semanas);
+
+  const encabezados = estructuraPotencia.map(sem => `
+    <th title="Semana ${sem.numero}">S${sem.numero}</th>
+  `).join("");
+
+  function crearFilasSimples(seccionLista, titulo) {
+    let filas = `
+      <tr class="mini-bloque">
+        <td colspan="${estructuraPotencia.length + 1}">${titulo}</td>
+      </tr>
+    `;
+
+    seccionLista.forEach(ejercicio => {
+      const nombre = String(ejercicio.nombre || "").trim();
+
+      filas += `
+        <tr>
+          <td class="mini-ejercicio">${escaparHTML(nombre || "Pendiente")}</td>
+      `;
+
+      estructuraPotencia.forEach(() => {
+        filas += `<td class="mini-vacio">—</td>`;
+      });
+
+      filas += `</tr>`;
+    });
+
+    return filas;
+  }
+
+  return `
+    <div class="miniatura-vista">
+      <div class="miniatura-vista-titulo">BLOQUE ${normalizada.semanas} SEMANAS</div>
+
+      <table class="mini-tabla">
+        <thead>
+          <tr>
+            <th>Ejercicio</th>
+            ${encabezados}
+          </tr>
+        </thead>
+
+        <tbody>
+          ${crearFilasSimples(normalizada.potencia, "POTENCIA")}
+          ${crearFilasSimples(normalizada.principales, "PRINCIPALES")}
+          ${crearFilasSimples(normalizada.complementarios, "COMPLEMENTARIOS")}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function renderizarBiblioteca() {
+  const contenedor = $("listaRutinasGuardadas");
+  const division = divisionSelect.value;
+
+  asegurarRutinasGenerales(division);
+
+  const rutinas = db[claveGeneral(division)] || [];
+
+  const guardadas = rutinas
+    .map((rutina, indice) => ({
+      rutina: normalizarRutina(rutina),
+      indice
+    }))
+    .filter(el => el.rutina.guardada)
+    .sort((a, b) => a.indice - b.indice);
+
+  $("contadorBiblioteca").textContent =
+    guardadas.length +
+    (guardadas.length === 1 ? " rutina guardada" : " rutinas guardadas");
+
+  const busqueda = normalizar($("buscarRutina").value);
+
+  const filtradas = guardadas.filter(el =>
+    normalizar(el.rutina.nombre).includes(busqueda)
+  );
+
+  if (!filtradas.length) {
+    contenedor.innerHTML = `
+      <div class="sin-rutinas">
+        ${
+          guardadas.length
+            ? "No se encontraron rutinas con ese título."
+            : "Todavía no hay rutinas guardadas para esta división."
+        }
+      </div>
+    `;
+
+    return;
+  }
+
+  contenedor.innerHTML = filtradas.map(({ rutina, indice }) => `
+    <article
+      class="rutina-miniatura"
+      data-ver-rutina="${indice}"
+      tabindex="0"
+      role="button"
+      aria-label="Abrir rutina ${escaparHTML(rutina.nombre)}"
+    >
+      <div class="acciones-miniatura">
+        ${esStaff ? `
+          <button type="button" class="accion-mini" data-editar-rutina="${indice}" title="Editar rutina">✎</button>
+          <button type="button" class="accion-mini eliminar" data-eliminar-rutina="${indice}" title="Eliminar rutina">×</button>
+        ` : ""}
+      </div>
+
+      <div class="miniatura-cabecera">
+        <div class="miniatura-club">ADIUR FEMENINO</div>
+        <h4>${escaparHTML(rutina.nombre || "Rutina sin título")}</h4>
+
+        <div class="miniatura-detalle">
+          <span>${escaparHTML(division)}</span>
+          <span>${rutina.semanas} semanas</span>
+        </div>
+      </div>
+
+      ${construirMiniatura(rutina)}
+
+      <div class="miniatura-pie">
+        <span>Rutina guardada</span>
+        <span>Ver planilla ↗</span>
+      </div>
+    </article>
+  `).join("");
+
+  contenedor.querySelectorAll("[data-ver-rutina]").forEach(tarjeta => {
+    tarjeta.addEventListener("click", e => {
+      if (e.target.closest("button")) return;
+      abrirVistaAmpliada(Number(tarjeta.dataset.verRutina));
+    });
+  });
+
+  contenedor.querySelectorAll("[data-editar-rutina]").forEach(boton => {
+    boton.addEventListener("click", e => {
+      e.stopPropagation();
+      editarRutinaGuardada(Number(boton.dataset.editarRutina));
+    });
+  });
+
+  contenedor.querySelectorAll("[data-eliminar-rutina]").forEach(boton => {
+    boton.addEventListener("click", e => {
+      e.stopPropagation();
+      eliminarRutinaGuardada(Number(boton.dataset.eliminarRutina));
+    });
+  });
+}
+
+/* =====================================================
+   EDITAR / ELIMINAR / VISTA AMPLIADA
+===================================================== */
+
+function editarRutinaGuardada(indice) {
+  if (!esStaff) return;
+
+  const division = divisionSelect.value;
+
+  asegurarRutinasGenerales(division);
+
+  const rutina = db[claveGeneral(division)][indice];
+
+  if (!rutina || !rutina.guardada) return;
+
+  indiceActual = indice;
+  modoSelect.value = "general";
+  rutinaActual = db[claveGeneral(division)][indice];
+
+  tituloInput.value = rutinaActual.nombre || "";
+  semanasSelect.value = String(rutinaActual.semanas || 4);
+
+  actualizarModoVisual();
+  cerrarVistaAmpliada();
+  renderizarEditor();
+
+  $("panelEditorRutina").scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+
+  mostrarEstado("Editando “" + rutinaActual.nombre + "”.");
+}
+
+function eliminarRutinaGuardada(indice) {
+  if (!esStaff) return;
+
+  const division = divisionSelect.value;
+
+  asegurarRutinasGenerales(division);
+
+  const clave = claveGeneral(division);
+  const rutina = db[clave][indice];
+
+  if (!rutina || !rutina.guardada) return;
+
+  if (!confirm("¿Querés eliminar la rutina “" + rutina.nombre + "”?")) return;
+
+  db[clave][indice] = crearRutina();
+
+  obtenerTodasLasJugadoras()
+    .filter(j => normalizar(divisionJugadora(j)) === normalizar(division))
+    .forEach(j => {
+      asegurarRutinasIndividuales(j);
+      db[claveIndividual(division, idJugadora(j))][indice] = crearRutina();
+    });
+
+  guardarDB();
+
+  if (indiceActual === indice) {
+    rutinaActual = db[clave][indice];
+    tituloInput.value = "";
+    semanasSelect.value = "4";
+    renderizarEditor();
+  }
+
+  cerrarVistaAmpliada();
+  renderizarBiblioteca();
+
+  mostrarEstado("Rutina eliminada.");
+}
+
+function renderizarPlanillaVistaActual() {
+  if (indiceVistaModal === null) return;
+
+  const division = divisionSelect.value;
+
+  asegurarRutinasGenerales(division);
+
+  const rutina = db[claveGeneral(division)]?.[indiceVistaModal];
+
+  if (!rutina || !rutina.guardada) return;
+
+  const cantidad = Math.min(
+    MAX_PERSONAS_RUTINA,
+    Math.max(1, Number.parseInt(cantidadPersonasVista, 10) || 1)
+  );
+
+  cantidadPersonasVista = cantidad;
+
+  $("modalCuerpo").innerHTML = `
+    <div class="modal-planilla">
+      ${construirPlanillaHTML(rutina, division, cantidadPersonasVista)}
+    </div>
+  `;
+
+  $("modalCantidadPersonas").textContent =
+    cantidadPersonasVista +
+    (cantidadPersonasVista === 1 ? " persona" : " personas");
+
+  $("modalQuitarPersona").disabled = cantidadPersonasVista <= 1;
+  $("modalAgregarPersona").disabled = cantidadPersonasVista >= MAX_PERSONAS_RUTINA;
+}
+
+function cambiarCantidadPersonas(delta) {
+  if (indiceVistaModal === null) return;
+
+  cantidadPersonasVista = Math.min(
+    MAX_PERSONAS_RUTINA,
+    Math.max(1, cantidadPersonasVista + delta)
+  );
+
+  renderizarPlanillaVistaActual();
+}
+
+function abrirVistaAmpliada(indice) {
+  const division = divisionSelect.value;
+
+  asegurarRutinasGenerales(division);
+
+  const rutina = db[claveGeneral(division)][indice];
+
+  if (!rutina || !rutina.guardada) return;
+
+  indiceVistaModal = indice;
+  cantidadPersonasVista = 1;
+
+  $("modalTitulo").textContent = rutina.nombre || "Rutina sin título";
+  $("modalSubtitulo").textContent = division + " · Bloque " + rutina.semanas + " Semanas";
+
+  $("controlPersonasRutina").classList.toggle("oculto", !esStaff);
+
+  renderizarPlanillaVistaActual();
+
+  $("modalEditar").classList.toggle("oculto", !esStaff);
+  $("modalEliminar").classList.toggle("oculto", !esStaff);
+
+  $("modalRutina").classList.add("visible");
+  document.body.style.overflow = "hidden";
+}
+
+function cerrarVistaAmpliada() {
+  $("modalRutina").classList.remove("visible");
+  document.body.style.overflow = "";
+
+  indiceVistaModal = null;
+  cantidadPersonasVista = 1;
+}
+
+function descargarRutinaPDF(indice, cantidadPersonas = 1) {
+  const division = divisionSelect.value;
+
+  asegurarRutinasGenerales(division);
+
+  const rutina = db[claveGeneral(division)][indice];
+
+  if (!rutina || !rutina.guardada) return;
+
+  const destino = $("printRoutine");
+  const tituloOriginal = document.title;
+
+  destino.innerHTML = construirPlanillaHTML(
+    rutina,
+    division,
+    cantidadPersonas
+  );
+
+  document.title =
+    "ADIUR FEMENINO - " + rutina.nombre + " - " + division;
+
+  document.body.classList.add("imprimir-solo-rutina");
+
+  let limpiezaRealizada = false;
+
+  function limpiarImpresion() {
+    if (limpiezaRealizada) return;
+
+    limpiezaRealizada = true;
+
+    document.body.classList.remove("imprimir-solo-rutina");
+    destino.innerHTML = "";
+    document.title = tituloOriginal;
+
+    window.removeEventListener("afterprint", limpiarImpresion);
+  }
+
+  window.addEventListener("afterprint", limpiarImpresion, { once: true });
+
+  window.print();
+
+  setTimeout(() => {
+    if (document.body.classList.contains("imprimir-solo-rutina")) {
+      limpiarImpresion();
+    }
+  }, 1500);
+}
+
+/* =====================================================
+   CAMBIO DE MODO Y DIVISIÓN
+===================================================== */
+
+function actualizarModoVisual() {
+  const esGeneral = modoSelect.value === "general";
+
+  $("botonesGestion").classList.toggle("oculto", !esGeneral);
+  $("avisoGeneral").classList.toggle("oculto", !esGeneral);
+  $("avisoJugador").classList.toggle("oculto", !esJugadora);
+
+  $("campoModo").classList.toggle("oculto", esJugadora);
+
+  $("campoJugadora").classList.toggle(
+    "oculto",
+    esJugadora || esGeneral
+  );
+
+  tituloInput.disabled = !esGeneral || esJugadora;
+  semanasSelect.disabled = !esGeneral || esJugadora;
+
+  $("aplicarRutina").classList.toggle("oculto", !esGeneral);
+}
+
+function cambiarModo() {
+  if (esJugadora) modoSelect.value = "individual";
+
+  actualizarModoVisual();
+  poblarJugadoras();
+
+  rutinaActual = obtenerRutinaActual() || crearRutina();
+
+  tituloInput.value = rutinaActual.nombre || "";
+  semanasSelect.value = String(rutinaActual.semanas || 4);
+
+  renderizarEditor();
+}
+
+function cambiarDivision() {
+  if (esJugadora) return;
+
+  indiceActual = 0;
+
+  poblarJugadoras();
+  asegurarRutinasGenerales(divisionSelect.value);
+
+  rutinaActual = obtenerRutinaActual() || crearRutina();
+
+  tituloInput.value = rutinaActual.nombre || "";
+  semanasSelect.value = String(rutinaActual.semanas || 4);
+
+  renderizarEditor();
+  renderizarBiblioteca();
+
+  mostrarEstado("Categoría seleccionada: " + divisionSelect.value + ".");
+}
+
+/* =====================================================
+   MENÚ LATERAL Y EVENTOS
+===================================================== */
+
+function alternarSidebar() {
+  const sidebar = $("sidebar");
+  const capa = $("capaSidebar");
+  const boton = $("botonMenu");
+
+  if (window.innerWidth <= 760) {
+    const visible = sidebar.classList.toggle("visible");
+
+    sidebar.classList.toggle("oculto", !visible);
+    capa.classList.toggle("visible", visible);
+    boton.setAttribute("aria-expanded", String(visible));
+
+  } else {
+    const oculto = sidebar.classList.toggle("oculto");
+    boton.setAttribute("aria-expanded", String(!oculto));
+  }
+}
+
+function toggleGrupo(id) {
+  const grupo = $(id);
+  if (!grupo) return;
+
+  grupo.classList.toggle("cerrado");
+
+  const titulo = grupo.querySelector(".titulo-grupo");
+
+  if (titulo) {
+    titulo.setAttribute(
+      "aria-expanded",
+      String(!grupo.classList.contains("cerrado"))
+    );
+  }
+}
+
+function configurarMenu() {
+  document.querySelectorAll(".titulo-grupo").forEach(titulo => {
+    titulo.addEventListener("click", () => {
+      toggleGrupo(titulo.dataset.grupo);
+    });
+  });
+
+  $("botonMenu").addEventListener("click", alternarSidebar);
+
+  $("capaSidebar").addEventListener("click", () => {
+    $("sidebar").classList.remove("visible");
+    $("sidebar").classList.add("oculto");
+    $("capaSidebar").classList.remove("visible");
+    $("botonMenu").setAttribute("aria-expanded", "false");
+  });
+
+  $("cerrarSesion").addEventListener("click", e => {
+    e.preventDefault();
+
+    if (!confirm("¿Querés cerrar la sesión?")) return;
+
+    localStorage.removeItem(SESSION_KEY);
+    window.location.href = "ADIUR-Loing.html";
+  });
+}
+
+$("cerrarModal").addEventListener("click", cerrarVistaAmpliada);
+$("modalCerrarInferior").addEventListener("click", cerrarVistaAmpliada);
+
+$("modalRutina").addEventListener("click", e => {
+  if (e.target === $("modalRutina")) cerrarVistaAmpliada();
+});
+
+$("modalEditar").addEventListener("click", () => {
+  if (indiceVistaModal !== null) {
+    editarRutinaGuardada(indiceVistaModal);
+  }
+});
+
+$("modalEliminar").addEventListener("click", () => {
+  if (indiceVistaModal !== null) {
+    eliminarRutinaGuardada(indiceVistaModal);
+  }
+});
+
+$("modalPDF").addEventListener("click", () => {
+  if (indiceVistaModal !== null) {
+    descargarRutinaPDF(indiceVistaModal, cantidadPersonasVista);
+  }
+});
+
+$("modalAgregarPersona").addEventListener("click", () => {
+  cambiarCantidadPersonas(1);
+});
+
+$("modalQuitarPersona").addEventListener("click", () => {
+  cambiarCantidadPersonas(-1);
+});
+
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") cerrarVistaAmpliada();
+});
+
+/* =====================================================
+   INICIALIZACIÓN
+===================================================== */
+
+async function sincronizarGimnasioConNube() {
+  try {
+    // La conexión a Firebase ocurre en segundo plano.
+    await window.firebaseGimnasioReady;
+
+    if (typeof window.cargarGimnasioNube !== "function") {
+      throw new Error("No se inicializó la función de lectura de Firebase.");
+    }
+
+    const datosNube = await window.cargarGimnasioNube();
+
+    // Se combina con la base local actual, incluyendo cambios hechos
+    // mientras Firebase estaba conectándose.
+    db = combinarBases(
+      db,
+      datosNube && typeof datosNube === "object" ? datosNube : {}
+    );
+
+    DIVISIONES.forEach(division => asegurarRutinasGenerales(division));
+
+    obtenerTodasLasJugadoras().forEach(jugadora => {
+      asegurarRutinasIndividuales(jugadora);
+    });
+
+    localStorage.setItem(KEY, JSON.stringify(db));
+
+    // Habilitar la nube recién después de terminar la lectura y combinación.
+    nubeListaParaGuardar = true;
+
+    // Subir la base combinada (también crea el documento si todavía no existe).
+    guardarDB();
+
+    rutinaActual = obtenerRutinaActual() || crearRutina();
+    tituloInput.value = rutinaActual.nombre || "";
+    semanasSelect.value = String(rutinaActual.semanas || 4);
+
+    renderizarEditor();
+    renderizarBiblioteca();
+
+    mostrarEstado("Datos del gimnasio sincronizados.");
+    console.log("ADIUR: sincronización inicial completada.");
+
+  } catch (error) {
+    nubeListaParaGuardar = false;
+
+    console.error("No se pudo sincronizar el gimnasio con Firebase:", error);
+
+    mostrarEstado(
+      "No se pudo conectar con la nube. La página sigue funcionando y guarda los cambios en este dispositivo."
+    );
+  }
+}
+
+function inicializar() {
+  // Primero se prepara toda la interfaz. No se espera a Firebase.
+  configurarMenu();
+
+  // Reconocer el perfil inmediatamente.
+  usuario = leerUsuario();
+  esJugadora = detectarRol(usuario) === "jugadora";
+  esStaff = !esJugadora;
+
+  $("nombrePerfil").textContent = nombreSesion(usuario);
+  $("avatarPerfil").textContent =
+    nombreSesion(usuario).trim().charAt(0).toUpperCase() || "U";
+
+  jugadoraSesion = buscarJugadoraSesion();
+
+  if (esJugadora) {
+    if (!jugadoraSesion) {
+      jugadoraSesion = {
+        id: "bianca",
+        usuario: "bianca",
+        nombreCompleto: nombreSesion(usuario),
+        division: "Sub 14"
+      };
+    }
+
+    divisionSelect.value = divisionJugadora(jugadoraSesion);
+    divisionSelect.disabled = true;
+    modoSelect.value = "individual";
+  }
+
+  poblarJugadoras();
+
+  // Preparar una base local para que la página sea utilizable sin esperar la nube.
+  DIVISIONES.forEach(division => asegurarRutinasGenerales(division));
+
+  obtenerTodasLasJugadoras().forEach(jugadora => {
+    asegurarRutinasIndividuales(jugadora);
+  });
+
+  // Registrar los eventos antes de iniciar la sincronización.
+  divisionSelect.addEventListener("change", cambiarDivision);
+  modoSelect.addEventListener("change", cambiarModo);
+
+  jugadoraSelect.addEventListener("change", () => {
+    rutinaActual = obtenerRutinaActual() || crearRutina();
+
+    tituloInput.value = rutinaActual.nombre || "";
+    semanasSelect.value = String(rutinaActual.semanas || 4);
+
+    renderizarEditor();
+  });
+
+  semanasSelect.addEventListener("change", cambiarDuracion);
+
+  tituloInput.addEventListener("input", () => {
+    if (rutinaActual && puedeEditarEstructura()) {
+      rutinaActual.nombre = tituloInput.value;
+      $("tituloEditor").textContent =
+        tituloInput.value.trim() || "Nueva rutina";
+    }
+  });
+
+  $("guardarRutina").addEventListener("click", guardarRutinaDefinitiva);
+  $("nuevaRutina").addEventListener("click", crearNuevaRutina);
+  $("aplicarRutina").addEventListener("click", aplicarRutinaAJugadoras);
+  $("buscarRutina").addEventListener("input", renderizarBiblioteca);
+
+  if (esJugadora) {
+    $("campoModo").classList.add("oculto");
+    $("campoJugadora").classList.add("oculto");
+    $("botonesGestion").classList.add("oculto");
+
+    modoSelect.value = "individual";
+    divisionSelect.value = divisionJugadora(jugadoraSesion);
+
+    poblarJugadoras();
+  }
+
+  actualizarModoVisual();
+  cambiarModo();
+  renderizarBiblioteca();
+
+  // Firebase se conecta en segundo plano; nunca bloquea botones ni perfil.
+  sincronizarGimnasioConNube();
+}
+document.addEventListener("DOMContentLoaded", inicializar);
+</script>
+
+
+
+</body>
+</html>

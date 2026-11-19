@@ -1,0 +1,2634 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pàgina Principal - TORITO</title>
+
+<style>
+:root {
+  --naranja: #f47721;
+  --naranja-oscuro: #dc5e0b;
+  --naranja-claro: #fff0e6;
+  --negro: #171717;
+  --gris: #f4f5f7;
+  --gris-texto: #747474;
+  --borde: #e8e8e8;
+  --blanco: #fff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #fff;
+  color: var(--negro);
+}
+
+button, input, select {
+  font: inherit;
+}
+
+button, a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* =====================================================
+   BARRA SUPERIOR
+===================================================== */
+
+.barra-superior {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  min-height: 84px;
+  padding: 12px 25px;
+  background: #fff;
+  border-bottom: 1px solid var(--borde);
+}
+
+.boton-menu {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border: 0;
+  background: white;
+  border-radius: 9px;
+  font-size: 27px;
+  color: var(--negro);
+}
+
+.boton-menu:hover {
+  background: var(--gris);
+}
+
+.logo-superior {
+  width: 55px;
+  height: 55px;
+  flex-shrink: 0;
+  object-fit: contain;
+  border-radius: 50%;
+  padding: 2px;
+  background: white;
+}
+
+.titulo-superior {
+  flex: 1;
+  min-width: 0;
+}
+
+.titulo-superior h1 {
+  margin: 0 0 5px;
+  font-size: 23px;
+  font-weight: 900;
+  letter-spacing: .5px;
+}
+
+.titulo-superior p {
+  margin: 0;
+  color: var(--gris-texto);
+  font-size: 13px;
+}
+
+.perfil {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  background: var(--negro);
+  color: white;
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+.nombre-perfil {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.rol-perfil {
+  color: var(--gris-texto);
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+/* =====================================================
+   ESTRUCTURA GENERAL
+===================================================== */
+
+.contenedor {
+  display: flex;
+  min-height: calc(100vh - 84px);
+  align-items: stretch;
+}
+
+/* =====================================================
+   BARRA LATERAL
+===================================================== */
+
+.sidebar {
+  width: 258px;
+  flex: 0 0 258px;
+  padding: 20px 13px;
+  background: #fff;
+  border-right: 1px solid var(--borde);
+  transition: margin-left .25s ease;
+  overflow-y: auto;
+}
+
+.sidebar.oculto {
+  margin-left: -258px;
+}
+
+.menu-inicio {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 14px;
+  margin-bottom: 16px;
+  border-radius: 11px;
+  background: var(--naranja-claro);
+  color: var(--naranja-oscuro);
+  font-size: 13px;
+  font-weight: 850;
+  transition: background .2s;
+}
+
+.menu-inicio:hover {
+  background: #ffe7d6;
+  color: var(--naranja-oscuro);
+}
+
+.menu-inicio .icono-inicio {
+  width: 15px;
+  text-align: center;
+  font-size: 17px;
+  line-height: 1;
+}
+
+.grupo-menu {
+  margin-bottom: 8px;
+}
+
+.titulo-grupo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 13px;
+  min-height: 46px;
+  cursor: pointer;
+  border-radius: 8px;
+  color: #171717;
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: .8px;
+  user-select: none;
+}
+
+.titulo-grupo:hover {
+  background: #f8f8f8;
+}
+
+.flecha {
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+  transition: transform .2s;
+}
+
+.grupo-menu.cerrado .flecha {
+  transform: rotate(0deg);
+}
+
+.grupo-menu:not(.cerrado) .flecha {
+  transform: rotate(90deg);
+}
+
+.submenu {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 0 0 5px 0;
+}
+
+.grupo-menu.cerrado .submenu {
+  display: none;
+}
+
+.submenu a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 9px;
+  font-size: 13px;
+  color: #656872;
+  transition: background .15s, color .15s;
+}
+
+.submenu a:hover {
+  background: #f6f6f6;
+  color: #181818;
+}
+
+.submenu a.activo {
+  background: var(--naranja-claro);
+  color: var(--naranja-oscuro);
+  font-weight: 800;
+}
+
+.nav-punto {
+  width: 6px;
+  height: 6px;
+  flex-shrink: 0;
+  background: #d7d9de;
+  border-radius: 50%;
+}
+
+.submenu a.activo .nav-punto {
+  background: var(--naranja);
+}
+
+.separador-sesion {
+  border-top: 1px solid #e8e8e8;
+  margin: 19px 0 0;
+  padding-top: 12px;
+}
+
+.enlace-cerrar-sesion {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 9px;
+  color: #c0392b;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.enlace-cerrar-sesion:hover {
+  background: #fff2f1;
+  color: #a93226;
+}
+
+.icono-salir {
+  font-size: 17px;
+}
+
+.capa-sidebar {
+  display: none;
+}
+
+/* =====================================================
+   CONTENIDO PRINCIPAL
+===================================================== */
+
+.contenido {
+  flex: 1;
+  min-width: 0;
+  padding: 28px;
+}
+
+.bienvenida {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.bienvenida h2 {
+  margin: 0 0 8px;
+  font-size: 27px;
+}
+
+.bienvenida p {
+  margin: 0;
+  color: var(--gris-texto);
+  line-height: 1.5;
+}
+
+.fecha-hoy {
+  color: #555;
+  font-size: 20px;
+  white-space: nowrap;
+}
+
+.banner {
+  min-height: 170px;
+  display: flex;
+  align-items: center;
+  padding: 28px 34px;
+  margin-bottom: 25px;
+  border-radius: 15px;
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, rgba(0,0,0,.78), rgba(0,0,0,.25)),
+    url("TORITO-Familia.jpg") center 45% / cover no-repeat;
+  color: white;
+}
+
+.banner h2 {
+  margin: 0 0 10px;
+  font-size: clamp(25px, 3vw, 38px);
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.banner p {
+  margin: 0;
+  font-size: 14px;
+}
+
+/* =====================================================
+   SECCIONES Y PANELES
+===================================================== */
+
+.columna-izquierda {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.etiqueta-fixture {
+  display: inline-block;
+  padding: 5px 8px;
+  border-radius: 20px;
+  background: var(--naranja-claro);
+  color: var(--naranja-oscuro);
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.paneles {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.panel {
+  min-width: 0;
+  padding: 21px;
+  border: 1px solid var(--borde);
+  border-radius: 14px;
+  background: #fff;
+}
+
+.panel-cabecera {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.panel-cabecera h3 {
+  margin: 0 0 6px;
+  font-size: 17px;
+}
+
+.panel-cabecera p {
+  margin: 0;
+  color: var(--gris-texto);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.selector-division {
+  max-width: 165px;
+  padding: 9px 10px;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  background: white;
+  font-size: 12px;
+  outline: none;
+}
+
+.selector-division:focus {
+  border-color: var(--naranja);
+}
+
+/* =====================================================
+   TARJETAS DE PARTIDOS
+===================================================== */
+
+.lista-resultados {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.partido {
+  padding: 14px;
+  border: 1px solid #eee;
+  border-left: 3px solid var(--naranja);
+  border-radius: 11px;
+  background: #fff;
+}
+
+.partido-arriba {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 13px;
+  font-size: 11px;
+  color: var(--gris-texto);
+}
+
+.etiqueta-estado {
+  display: inline-block;
+  padding: 5px 8px;
+  border-radius: 20px;
+  background: #e7f7ec;
+  color: #18753b;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.equipos {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+}
+
+.equipo {
+  min-width: 0;
+  text-align: center;
+}
+
+.escudo {
+  display: block;
+  width: 47px;
+  height: 47px;
+  object-fit: contain;
+  margin: 0 auto 7px;
+}
+
+.nombre-equipo {
+  font-size: 12px;
+  font-weight: bold;
+  overflow-wrap: anywhere;
+}
+
+.marcador {
+  font-size: 20px;
+  font-weight: 900;
+  white-space: nowrap;
+  color: var(--negro);
+}
+
+.detalle-partido {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px 12px;
+  margin-top: 13px;
+  padding-top: 11px;
+  border-top: 1px solid #f0f0f0;
+  color: var(--gris-texto);
+  font-size: 11px;
+}
+
+/* =====================================================
+   LISTA DE PRÓXIMOS CUMPLEAÑOS
+===================================================== */
+
+.lista-cumpleanos {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.item-cumple {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid #eee;
+  border-left: 3px solid var(--naranja);
+  border-radius: 10px;
+  background: #fafafa;
+}
+
+.item-cumple.hoy {
+  background: var(--naranja-claro);
+  border-color: #ffd3b6;
+  border-left-color: var(--naranja-oscuro);
+}
+
+.cumple-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.cumple-nombre {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--negro);
+  margin-bottom: 4px;
+}
+
+.cumple-sub {
+  font-size: 11.5px;
+  color: var(--gris-texto);
+}
+
+.cumple-badges {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.badge-falta {
+  display: inline-block;
+  padding: 4px 9px;
+  border-radius: 20px;
+  background: var(--naranja-claro);
+  color: var(--naranja-oscuro);
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.item-cumple.hoy .badge-falta {
+  background: var(--naranja);
+  color: #fff;
+}
+
+.badge-edad {
+  font-size: 11.5px;
+  font-weight: bold;
+  color: #333;
+}
+
+.sin-datos {
+  padding: 27px 13px;
+  text-align: center;
+  border: 1px dashed #ddd;
+  border-radius: 10px;
+  color: var(--gris-texto);
+}
+
+.sin-datos .simbolo {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.sin-datos strong {
+  display: block;
+  margin-bottom: 7px;
+  color: #444;
+  font-size: 13px;
+}
+
+.sin-datos p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.boton-secundario {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 10px 13px;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  background: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.boton-secundario:hover {
+  border-color: var(--naranja);
+  color: var(--naranja-oscuro);
+}
+
+/* =====================================================
+   CALENDARIO
+===================================================== */
+
+.calendario-mini {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 4px;
+  table-layout: fixed;
+}
+
+.calendario-mini th {
+  padding: 8px 0;
+  color: var(--gris-texto);
+  font-size: 10px;
+  font-weight: normal;
+}
+
+.calendario-mini td {
+  height: 42px;
+  padding: 0;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.dia-calendario {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 39px;
+  border: 0;
+  border-radius: 8px;
+  background: white;
+  font-size: 12px;
+}
+
+.dia-calendario:hover {
+  outline: 1px solid var(--naranja);
+}
+
+.dia-calendario.hoy {
+  border: 1px solid var(--naranja);
+  font-weight: bold;
+}
+
+.dia-calendario.seleccionado {
+  outline: 2px solid var(--naranja);
+  outline-offset: -2px;
+  font-weight: bold;
+}
+
+.marca-actividad {
+  width: 5px;
+  height: 5px;
+  margin-top: 2px;
+  border-radius: 50%;
+}
+
+.calendario-controles {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 13px;
+}
+
+.mes-titulo {
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.boton-mes {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--borde);
+  border-radius: 7px;
+  background: white;
+}
+
+.boton-mes:hover {
+  background: var(--gris);
+}
+
+.leyenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px 12px;
+  margin: 15px 0;
+}
+
+.leyenda-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #555;
+  font-size: 10px;
+}
+
+.punto-leyenda {
+  width: 9px;
+  height: 9px;
+  border-radius: 3px;
+}
+
+.detalle-dia {
+  padding: 14px;
+  border-radius: 10px;
+  background: #f8f8f8;
+  margin-top: 13px;
+}
+
+.detalle-dia h4 {
+  margin: 0 0 9px;
+  font-size: 13px;
+}
+
+.actividad-detalle {
+  padding: 11px;
+  margin-top: 8px;
+  background: white;
+  border-radius: 8px;
+  border-left: 4px solid var(--naranja);
+  overflow-wrap: anywhere;
+}
+
+.actividad-detalle p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.actividad-detalle img {
+  display: block;
+  max-width: 100%;
+  max-height: 90px;
+  object-fit: contain;
+  margin: 8px auto 0;
+}
+
+.actividad-detalle small {
+  display: block;
+  margin-top: 5px;
+  color: var(--gris-texto);
+}
+
+/* =====================================================
+   PIE DE PÁGINA
+===================================================== */
+
+.pie-pagina {
+  margin-top: 30px;
+  padding: 18px 0 5px;
+  border-top: 1px solid var(--borde);
+  color: var(--gris-texto);
+  text-align: center;
+  font-size: 11px;
+}
+
+/* =====================================================
+   ADAPTACIÓN RESPONSIVE
+===================================================== */
+
+@media (max-width: 1150px) {
+  .paneles {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .barra-superior {
+    min-height: 72px;
+    padding: 10px 13px;
+    gap: 9px;
+  }
+
+  .boton-menu {
+    width: 38px;
+    height: 38px;
+    font-size: 24px;
+  }
+
+  .logo-superior {
+    width: 44px;
+    height: 44px;
+  }
+
+  .titulo-superior h1 {
+    font-size: 16px;
+  }
+
+  .titulo-superior p {
+    font-size: 11px;
+  }
+
+  .nombre-perfil {
+    max-width: 80px;
+    font-size: 12px;
+  }
+
+  .rol-perfil {
+    display: none;
+  }
+
+  .avatar {
+    width: 36px;
+    height: 36px;
+  }
+
+  .contenedor {
+    min-height: calc(100vh - 72px);
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 72px;
+    bottom: 0;
+    left: 0;
+    z-index: 150;
+    width: 258px;
+    max-width: 86vw;
+    overflow-y: auto;
+    box-shadow: 5px 0 25px #00000012;
+    margin-left: 0;
+    transition: transform .25s ease;
+  }
+
+  .sidebar.oculto {
+    margin-left: 0;
+    transform: translateX(-110%);
+  }
+
+  .capa-sidebar.visible {
+    display: block;
+    position: fixed;
+    inset: 72px 0 0;
+    z-index: 140;
+    background: rgba(0,0,0,.32);
+  }
+
+  .contenido {
+    padding: 21px 14px;
+  }
+
+  .bienvenida {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 9px;
+  }
+
+  .bienvenida h2 {
+    font-size: 23px;
+  }
+
+  .banner {
+    min-height: 145px;
+    padding: 23px 19px;
+  }
+
+  .panel {
+    padding: 14px;
+  }
+
+  .panel-cabecera {
+    flex-direction: column;
+  }
+
+  .selector-division {
+    max-width: none;
+    width: 100%;
+  }
+
+  .calendario-mini {
+    border-spacing: 2px;
+  }
+
+  .calendario-mini td {
+    height: 38px;
+  }
+
+  .dia-calendario {
+    height: 35px;
+  }
+}
+
+@media (max-width: 380px) {
+  .titulo-superior h1 {
+    font-size: 14px;
+  }
+
+  .nombre-perfil {
+    max-width: 60px;
+  }
+}
+</style>
+<script src="TORITO-permisos.js?v=20261118-s16c"></script>
+</head>
+
+<body>
+
+<header class="barra-superior">
+
+  <button
+    class="boton-menu"
+    id="botonMenu"
+    aria-label="Abrir menú"
+    aria-controls="sidebar"
+    aria-expanded="true"
+    onclick="alternarSidebar()"
+  >☰</button>
+
+  <img
+    class="logo-superior"
+    src="TORITO-Logo TORITO.png"
+    alt="Logo TORITO"
+    onerror="if(!this.dataset.intento){this.dataset.intento='1';this.src='TORITO-Logo TORITO.png'}else{this.style.display='none'}"
+  >
+
+  <div class="titulo-superior">
+    <h1>TORITO</h1>
+    <p>Página Principal</p>
+  </div>
+
+  <div class="perfil">
+    <div class="avatar" id="avatarUsuario">U</div>
+    <div>
+      <div class="nombre-perfil" id="nombreUsuario">Usuario</div>
+      <div class="rol-perfil" id="rolUsuario">Club Torito</div>
+    </div>
+  </div>
+
+</header>
+
+<div class="capa-sidebar" id="capaSidebar" onclick="alternarSidebar()"></div>
+
+<div class="contenedor">
+
+  <aside class="sidebar" id="sidebar">
+
+    <!-- INICIO -->
+    <a class="menu-inicio" href="TORITO-Pagina Principal.html" aria-current="page">
+      <span class="icono-inicio" aria-hidden="true">⌂</span>
+      INICIO
+    </a>
+
+    <!-- PLANTEL -->
+    <div class="grupo-menu cerrado" id="grupoPlantel">
+
+      <div
+        class="titulo-grupo"
+        onclick="toggleGrupo('grupoPlantel')"
+        role="button"
+        tabindex="0"
+        aria-expanded="false"
+      >
+        <span>PLANTEL</span>
+        <span class="flecha" aria-hidden="true">›</span>
+      </div>
+
+      <div class="submenu">
+        <a href="TORITO-jugadoras.html">
+          <span class="nav-punto"></span>Jugadoras
+        </a>
+        <a href="TORITO-asistencia.html">
+          <span class="nav-punto"></span>Asistencia
+        </a>
+      </div>
+    </div>
+
+    <!-- ENTRENAMIENTO -->
+    <div class="grupo-menu cerrado" id="grupoEntrenamiento">
+
+      <div
+        class="titulo-grupo"
+        onclick="toggleGrupo('grupoEntrenamiento')"
+        role="button"
+        tabindex="0"
+        aria-expanded="false"
+      >
+        <span>ENTRENAMIENTO</span>
+        <span class="flecha" aria-hidden="true">›</span>
+      </div>
+
+      <div class="submenu">
+        <a href="TORITO-calendario.html">
+          <span class="nav-punto"></span>Calendario
+        </a>
+        <a href="TORITO-planificacion.html" data-ocultar-bianca>
+          <span class="nav-punto"></span>Planificación
+        </a>
+        <a href="biblioteca.html" data-ocultar-bianca>
+          <span class="nav-punto"></span>Biblioteca de ejercicios
+        </a>
+        <a href="TORITO-gimnasio.html">
+          <span class="nav-punto"></span>Gimnasio
+        </a>
+        <a href="TORITO-calculadora.html" data-ocultar-bianca>
+          <span class="nav-punto"></span>Calculadora
+        </a>
+      </div>
+    </div>
+
+    <!-- COMPETENCIA -->
+    <div class="grupo-menu cerrado" id="grupoCompetencia">
+
+      <div
+        class="titulo-grupo"
+        onclick="toggleGrupo('grupoCompetencia')"
+        role="button"
+        tabindex="0"
+        aria-expanded="false"
+      >
+        <span>COMPETENCIA</span>
+        <span class="flecha" aria-hidden="true">›</span>
+      </div>
+
+      <div class="submenu">
+
+        <a href="TORITO-Partidos.html">
+          <span class="nav-punto"></span>Partidos
+        </a>
+
+        <a href="TORITO-informes.html" data-ocultar-bianca>
+          <span class="nav-punto"></span>Informes
+        </a>
+
+        <a href="TORITO-estadisticas.html" data-ocultar-bianca>
+          <span class="nav-punto"></span>Estadísticas
+        </a>
+
+        <a href="TORITO-pizarra.html" data-ocultar-bianca>
+          <span class="nav-punto"></span>Pizarra táctica
+        </a>
+
+      </div>
+    </div>
+
+    <!-- RENDIMIENTOS -->
+    <div class="grupo-menu cerrado" id="grupoRendimientos">
+
+      <div
+        class="titulo-grupo"
+        onclick="toggleGrupo('grupoRendimientos')"
+        role="button"
+        tabindex="0"
+        aria-expanded="false"
+      >
+        <span>RENDIMIENTOS</span>
+        <span class="flecha" aria-hidden="true">›</span>
+      </div>
+
+      <div class="submenu">
+        <a href="TORITO-testeos.html">
+          <span class="nav-punto"></span>Planilla de testeos
+        </a>
+        <a href="TORITO-tiempos.html">
+          <span class="nav-punto"></span>Tiempos
+        </a>
+        <a href="multimedia.html">
+          <span class="nav-punto"></span>Multimedia
+        </a>
+        <a href="TORITO-encuestas.html">
+          <span class="nav-punto"></span>Encuestas
+        </a>
+        <a href="lesiones.html">
+          <span class="nav-punto"></span>Lesiones
+        </a>
+      </div>
+    </div>
+
+    <!-- CERRAR SESIÓN -->
+    <div class="separador-sesion">
+      <a
+        class="enlace-cerrar-sesion"
+        href="#"
+        onclick="cerrarSesion(event)"
+      >
+        <span class="icono-salir" aria-hidden="true">↪</span>
+        Cerrar sesión
+      </a>
+    </div>
+
+  </aside>
+
+  <!-- CONTENIDO DE LA PÁGINA -->
+
+  <main class="contenido">
+
+    <section class="bienvenida">
+      <div>
+        <h2>¡Bienvenido/a, <span id="saludoUsuario">jugador/a</span>!</h2>
+        <p>Todo lo importante de TORITO, en un solo lugar.</p>
+      </div>
+      <div class="fecha-hoy" id="fechaHoy"></div>
+    </section>
+
+    <section class="banner">
+      <div>
+        <h2>Más que un club, una familia</h2>
+        <p>Pasión, compromiso y trabajo en equipo.</p>
+      </div>
+    </section>
+
+    <section class="paneles">
+
+      <div class="columna-izquierda">
+
+        <!-- ÚLTIMOS 2 PARTIDOS JUGADOS (DESDE TORITO-Partidos.html) -->
+        <article class="panel">
+
+          <div class="panel-cabecera">
+            <div>
+              <h3>ÚLTIMOS PARTIDOS JUGADOS</h3>
+              <p>Últimos 2 encuentros disputados en TORITO-Partidos.html.</p>
+            </div>
+
+            <select
+              class="selector-division"
+              id="filtroFixture"
+              aria-label="Filtrar partidos por división"
+              onchange="renderizarFixture()"
+            >
+              <option value="Todas">Todas las divisiones</option>
+              <option value="Sub 10">Sub 10</option>
+              <option value="Sub 12">Sub 12</option>
+              <option value="Sub 14">Sub 14</option>
+              <option value="Sub 16">Sub 16</option>
+              <option value="Primera">Primera</option>
+            </select>
+          </div>
+
+          <div class="lista-resultados" id="listaFixture"></div>
+
+          <a class="boton-secundario" href="TORITO-Partidos.html">
+            Ver todos los partidos →
+          </a>
+
+        </article>
+
+        <!-- PRÓXIMOS CUMPLEAÑOS DE LAS JUGADORAS -->
+        <article class="panel">
+
+          <div class="panel-cabecera">
+            <div>
+              <h3>🎂 PRÓXIMOS CUMPLEAÑOS</h3>
+              <p>Cumpleaños del plantel ordenados por cercanía.</p>
+            </div>
+
+            <select
+              class="selector-division"
+              id="filtroCumpleanos"
+              aria-label="Filtrar cumpleaños por división"
+              onchange="renderizarCumpleanos()"
+            >
+              <option value="Todas">Todas las divisiones</option>
+              <option value="Sub 10">Sub 10</option>
+              <option value="Sub 12">Sub 12</option>
+              <option value="Sub 14">Sub 14</option>
+              <option value="Sub 16">Sub 16</option>
+              <option value="Primera">Primera</option>
+            </select>
+          </div>
+
+          <div class="lista-cumpleanos" id="listaCumpleanos"></div>
+
+          <a class="boton-secundario" href="TORITO-jugadoras.html">
+            Ver plantel completo →
+          </a>
+
+        </article>
+
+      </div>
+
+      <!-- CALENDARIO DEL CLUB -->
+      <article class="panel">
+
+        <div class="panel-cabecera">
+          <div>
+            <h3>Calendario del club</h3>
+            <p>Actividades guardadas en TORITO-calendario.html.</p>
+          </div>
+
+          <select
+            class="selector-division"
+            id="filtroCalendario"
+            aria-label="Elegir división del calendario"
+            onchange="cambiarDivisionCalendario()"
+          >
+            <option value="Sub 10">Sub 10</option>
+            <option value="Sub 12">Sub 12</option>
+            <option value="Sub 14">Sub 14</option>
+            <option value="Sub 16">Sub 16</option>
+            <option value="Primera">Primera</option>
+          </select>
+        </div>
+
+        <div class="calendario-controles">
+          <button
+            class="boton-mes"
+            onclick="cambiarMes(-1)"
+            aria-label="Mes anterior"
+          >‹</button>
+
+          <div class="mes-titulo" id="mesTitulo"></div>
+
+          <button
+            class="boton-mes"
+            onclick="cambiarMes(1)"
+            aria-label="Mes siguiente"
+          >›</button>
+        </div>
+
+        <table class="calendario-mini">
+          <thead>
+            <tr>
+              <th>Lun</th>
+              <th>Mar</th>
+              <th>Mié</th>
+              <th>Jue</th>
+              <th>Vie</th>
+              <th>Sáb</th>
+              <th>Dom</th>
+            </tr>
+          </thead>
+          <tbody id="cuerpoCalendario"></tbody>
+        </table>
+
+        <div class="leyenda">
+          <div class="leyenda-item">
+            <span class="punto-leyenda" style="background:#fff;border:1px solid #ccc"></span>
+            Libre
+          </div>
+          <div class="leyenda-item">
+            <span class="punto-leyenda" style="background:#888"></span>
+            Suspendido
+          </div>
+          <div class="leyenda-item">
+            <span class="punto-leyenda" style="background:#2eaa62"></span>
+            Bajo
+          </div>
+          <div class="leyenda-item">
+            <span class="punto-leyenda" style="background:#f3c928"></span>
+            Medio
+          </div>
+          <div class="leyenda-item">
+            <span class="punto-leyenda" style="background:#e74c3c"></span>
+            Alto
+          </div>
+        </div>
+
+        <div class="detalle-dia" id="detalleDia">
+          <h4>Seleccioná un día</h4>
+          <p style="font-size:12px;color:#777;margin:0">
+            Acá aparecerá la actividad guardada para ese día.
+          </p>
+        </div>
+
+        <a class="boton-secundario" href="TORITO-calendario.html">
+          Abrir calendario completo →
+        </a>
+
+      </article>
+
+    </section>
+
+    <footer class="pie-pagina">
+      TORITO · Más que un club, una familia.
+    </footer>
+
+  </main>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/* =====================================================
+   CONEXIÓN A FIRESTORE (adiur-b1913)
+===================================================== */
+const firebaseConfig = {
+  projectId: "adiur-b1913",
+  appId: "1:1032379124859:web:adiur-fem-web",
+  authDomain: "adiur-b1913.firebaseapp.com",
+  storageBucket: "adiur-b1913.appspot.com"
+};
+
+let db = null;
+let nubeActiva = false;
+try {
+  const app = initializeApp(firebaseConfig);
+  db = getFirestore(app);
+  nubeActiva = true;
+} catch (e) {
+  console.warn("Modo local activo:", e);
+}
+
+let cachePartidosNube = [];
+let cacheJugadorasNube = [];
+
+/* =====================================================
+   USUARIO Y PERMISOS
+===================================================== */
+
+const usuarioGuardado = localStorage.getItem("usuarioTORITO");
+
+if (!usuarioGuardado) {
+  window.location.href = "TORITO-Loing.html";
+}
+
+const usuarioNormalizado = (usuarioGuardado || "").trim().toLowerCase();
+
+const esFran = ["fran", "francisco", "francisco perez basla"].includes(usuarioNormalizado);
+const esToto = usuarioNormalizado === "toto";
+
+const esBianca = [
+  "biancadominguez",
+  "bianca"
+].includes(usuarioNormalizado);
+
+const nombreMostrar = usuarioGuardado || "Usuario";
+
+document.getElementById("nombreUsuario").textContent = nombreMostrar;
+document.getElementById("saludoUsuario").textContent = nombreMostrar;
+document.getElementById("avatarUsuario").textContent =
+  nombreMostrar.charAt(0).toUpperCase();
+
+document.getElementById("rolUsuario").textContent =
+  esFran ? "Administrador" :
+  esToto ? "Cuerpo técnico" :
+  esBianca ? "Jugadora · Sub 14" :
+  "Club Torito";
+
+document.getElementById("fechaHoy").textContent =
+  new Intl.DateTimeFormat("es-AR", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  }).format(new Date());
+
+/* Preferencias de división */
+
+const clavePreferencia =
+  "divisionPreferidaTORITO_" + usuarioNormalizado;
+
+function divisionPredeterminada() {
+  if (esBianca) return "Sub 14";
+
+  const guardada = localStorage.getItem(clavePreferencia);
+
+  const permitidas = [
+    "Sub 10",
+    "Sub 12",
+    "Sub 14",
+    "Sub 16",
+    "Primera"
+  ];
+
+  return permitidas.includes(guardada) ? guardada : "Primera";
+}
+
+function guardarPreferenciaDesdeSelector(id) {
+  const selector = document.getElementById(id);
+  if (!selector) return;
+
+  const division = selector.value;
+
+  if ([
+    "Sub 10",
+    "Sub 12",
+    "Sub 14",
+    "Sub 16",
+    "Primera"
+  ].includes(division)) {
+    localStorage.setItem(clavePreferencia, division);
+  }
+}
+
+function inicializarPreferencias() {
+  const preferida = divisionPredeterminada();
+
+  document.getElementById("filtroCalendario").value = preferida;
+  document.getElementById("filtroFixture").value = "Todas";
+  document.getElementById("filtroCumpleanos").value = "Todas";
+}
+
+/* Permisos de visualización del menú */
+
+if (esBianca) {
+  document.getElementById("grupoPlantel")?.remove();
+  document.getElementById("grupoRendimientos")?.remove();
+
+  document.querySelectorAll("[data-ocultar-bianca]").forEach(enlace => {
+    enlace.style.display = "none";
+  });
+}
+
+window.cerrarSesion = function(event) {
+  event.preventDefault();
+
+  localStorage.removeItem("usuarioTORITO");
+  window.location.href = "TORITO-Loing.html";
+};
+
+/* =====================================================
+   MENÚ LATERAL
+===================================================== */
+
+window.alternarSidebar = function() {
+  const sidebar = document.getElementById("sidebar");
+  const capa = document.getElementById("capaSidebar");
+  const boton = document.getElementById("botonMenu");
+
+  sidebar.classList.toggle("oculto");
+
+  const abierto = !sidebar.classList.contains("oculto");
+
+  boton.setAttribute("aria-expanded", String(abierto));
+
+  if (window.innerWidth <= 760) {
+    capa.classList.toggle("visible", abierto);
+  }
+};
+
+window.toggleGrupo = function(id) {
+  const grupo = document.getElementById(id);
+  if (!grupo) return;
+
+  grupo.classList.toggle("cerrado");
+
+  const titulo = grupo.querySelector(".titulo-grupo");
+
+  if (titulo) {
+    titulo.setAttribute(
+      "aria-expanded",
+      String(!grupo.classList.contains("cerrado"))
+    );
+  }
+};
+
+document.querySelectorAll(".titulo-grupo[role='button']").forEach(titulo => {
+  titulo.addEventListener("keydown", event => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+
+      const grupo = titulo.closest(".grupo-menu");
+
+      if (grupo) {
+        toggleGrupo(grupo.id);
+      }
+    }
+  });
+});
+
+function ajustarSidebarPorPantalla() {
+  const sidebar = document.getElementById("sidebar");
+  const capa = document.getElementById("capaSidebar");
+  const boton = document.getElementById("botonMenu");
+
+  if (window.innerWidth <= 760) {
+    sidebar.classList.add("oculto");
+    capa.classList.remove("visible");
+    boton.setAttribute("aria-expanded", "false");
+  } else {
+    sidebar.classList.remove("oculto");
+    capa.classList.remove("visible");
+    boton.setAttribute("aria-expanded", "true");
+  }
+}
+
+ajustarSidebarPorPantalla();
+window.addEventListener("resize", ajustarSidebarPorPantalla);
+
+/* =====================================================
+   FUNCIONES COMPARTIDAS PARA PARTIDOS Y FECHAS
+===================================================== */
+
+function normalizarTexto(valor) {
+  return String(valor ?? "").trim();
+}
+
+function fechaISOValida(fecha) {
+  if (!fecha) return null;
+
+  const texto = String(fecha).trim();
+
+  // Formato ISO YYYY-MM-DD
+  if (/^\d{4}-\d{2}-\d{2}/.test(texto)) {
+    const fechaObjeto = new Date(texto.slice(0, 10) + "T12:00:00");
+    return Number.isNaN(fechaObjeto.getTime()) ? null : fechaObjeto;
+  }
+
+  // Formato latino DD/MM/YYYY o DD-MM-YYYY
+  const matchLat = texto.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+  if (matchLat) {
+    const d = matchLat[1].padStart(2, "0");
+    const m = matchLat[2].padStart(2, "0");
+    const y = matchLat[3];
+    const fechaObjeto = new Date(`${y}-${m}-${d}T12:00:00`);
+    return Number.isNaN(fechaObjeto.getTime()) ? null : fechaObjeto;
+  }
+
+  return null;
+}
+
+function fechaLegible(fecha) {
+  const fechaObjeto = fecha instanceof Date ? fecha : fechaISOValida(fecha);
+
+  if (!fechaObjeto) {
+    return normalizarTexto(fecha) || "Fecha no indicada";
+  }
+
+  return new Intl.DateTimeFormat("es-AR", {
+    day: "numeric",
+    month: "short",
+    year: "numeric"
+  }).format(fechaObjeto);
+}
+
+function construirEscudo(url, nombre) {
+  const imagen = document.createElement("img");
+
+  imagen.className = "escudo";
+  imagen.alt = "Escudo de " + nombre;
+
+  if (url) {
+    imagen.src = url;
+
+    imagen.onerror = function() {
+      this.onerror = null;
+      this.style.display = "none";
+    };
+  } else {
+    imagen.style.display = "none";
+  }
+
+  return imagen;
+}
+
+/* =====================================================
+   LECTURA DE PARTIDOS DE PARTIDOS.HTML (NUBE + LOCAL)
+===================================================== */
+
+async function sincronizarPartidosDesdeNube() {
+  if (!nubeActiva || !db) return;
+  try {
+    const snap = await getDocs(collection(db,"torito_partidos"));
+    const lista = [];
+    snap.forEach(d => lista.push({ id: d.id, ...d.data() }));
+    cachePartidosNube = lista;
+  } catch (e) {
+    console.warn("No se pudieron cargar partidos desde Firestore:", e);
+  }
+}
+
+function listaDesdeDatosFixture(datos, divisionPadre = "") {
+  if (Array.isArray(datos)) {
+    return datos
+      .filter(partido => partido && typeof partido === "object")
+      .map(partido => ({
+        ...partido,
+        categoria: normalizarTexto(
+          partido.categoria || partido.division || divisionPadre
+        )
+      }));
+  }
+
+  if (!datos || typeof datos !== "object") return [];
+
+  for (const clave of [
+    "partidos",
+    "fixture",
+    "fixtures",
+    "encuentros",
+    "partidosFixture",
+    "fixtureTORITO",
+    "resultados",
+    "resultadosTORITO"
+  ]) {
+    if (Array.isArray(datos[clave])) {
+      return listaDesdeDatosFixture(datos[clave], divisionPadre);
+    }
+  }
+
+  const encontrados = [];
+
+  for (const [clave, valor] of Object.entries(datos)) {
+    if (!valor || typeof valor !== "object") continue;
+
+    const pareceDivision = /^(sub\s*\d+|primera)$/i.test(clave.trim());
+
+    const division = pareceDivision
+      ? clave.replace(/sub\s*(\d+)/i, "Sub $1")
+      : divisionPadre;
+
+    if (Array.isArray(valor)) {
+      encontrados.push(...listaDesdeDatosFixture(valor, division || clave));
+      continue;
+    }
+
+    const tieneDatosPartido = [
+      "fecha",
+      "fechaPartido",
+      "rival",
+      "equipoRival",
+      "oponente",
+      "visitante",
+      "equipoVisitante",
+      "hora",
+      "lugar",
+      "division",
+      "competicion",
+      "jornada",
+      "golestorito",
+      "resultado"
+    ].some(campo =>
+      Object.prototype.hasOwnProperty.call(valor, campo)
+    );
+
+    if (tieneDatosPartido) {
+      const claveEsFecha = /^\d{4}-\d{2}-\d{2}$/.test(clave);
+
+      encontrados.push({
+        ...valor,
+        fecha:
+          valor.fecha ||
+          valor.fechaPartido ||
+          (claveEsFecha ? clave : ""),
+        categoria: normalizarTexto(
+          valor.categoria || valor.division || division
+        )
+      });
+    } else {
+      encontrados.push(...listaDesdeDatosFixture(valor, division));
+    }
+  }
+
+  return encontrados;
+}
+
+function leerTodosLosPartidos() {
+  const combinados = [...cachePartidosNube];
+
+  const clavesPosibles = [
+    "partidosTORITO",
+    "resultadosTORITO",
+    "partidosJugadosTORITO",
+    "fixtureTORITO",
+    "partidosFixtureTORITO",
+    "partidosFixture",
+    "fixturePartidos",
+    "fixture"
+  ];
+
+  const clavesDinamicas = [];
+
+  for (let i = 0; i < localStorage.length; i++) {
+    const clave = localStorage.key(i);
+    if (clave && /(fixture|partidos|encuentros|resultados)/i.test(clave)) {
+      clavesDinamicas.push(clave);
+    }
+  }
+
+  for (const clave of [...new Set([...clavesPosibles, ...clavesDinamicas])]) {
+    try {
+      const texto = localStorage.getItem(clave);
+      if (!texto) continue;
+
+      const datos = JSON.parse(texto);
+      const partidos = listaDesdeDatosFixture(datos);
+      if (partidos.length) combinados.push(...partidos);
+    } catch (error) {
+      console.warn("No se pudo leer el registro guardado en", clave, error);
+    }
+  }
+
+  // Deduplicar por id o por combinación fecha + división + rival
+  const vistos = new Set();
+  return combinados.filter(p => {
+    if (!p || typeof p !== "object") return false;
+    const firma = p.id
+      ? String(p.id)
+      : `${normalizarTexto(p.fecha)}_${normalizarTexto(p.categoria || p.division)}_${normalizarTexto(p.rival || p.equipoRival || p.visitante)}`;
+    if (vistos.has(firma)) return false;
+    vistos.add(firma);
+    return true;
+  });
+}
+
+function fechaFixture(partido) {
+  const valor = normalizarTexto(
+    partido.fecha ||
+    partido.fechaPartido ||
+    partido.fechaEncuentro ||
+    partido.dia
+  );
+
+  if (!valor) return null;
+  return fechaISOValida(valor);
+}
+
+function partidoTieneMarcador(partido) {
+  const tieneGolesSeparados =
+    partido.golestorito !== undefined &&
+    partido.golestorito !== null &&
+    String(partido.golestorito).trim() !== "" &&
+    partido.golesRival !== undefined &&
+    partido.golesRival !== null &&
+    String(partido.golesRival).trim() !== "";
+
+  const tieneResultadoTexto =
+    partido.resultado !== undefined &&
+    partido.resultado !== null &&
+    /\d+\s*[-:]\s*\d+/.test(String(partido.resultado));
+
+  return tieneGolesSeparados || tieneResultadoTexto;
+}
+
+function esPartidoJugado(partido, hoyISO) {
+  const estado = normalizarTexto(
+    partido.estado || partido.estatus || partido.situacion
+  ).toLowerCase();
+
+  if (["cancelado", "cancelada", "suspendido", "suspendida", "postergado", "postergada"].includes(estado)) {
+    return false;
+  }
+
+  if (["jugado", "jugada", "finalizado", "finalizada", "terminado", "terminada"].includes(estado)) {
+    return true;
+  }
+
+  if (partidoTieneMarcador(partido)) {
+    return true;
+  }
+
+  const fecha = fechaFixture(partido);
+  if (fecha && fechaISODesdeFecha(fecha) < hoyISO) {
+    return true;
+  }
+
+  return false;
+}
+
+/* =====================================================
+   CREAR TARJETA DE ÚLTIMO PARTIDO JUGADO
+===================================================== */
+
+function crearPartidoJugadoCard(partido) {
+  const tarjeta = document.createElement("div");
+  tarjeta.className = "partido";
+
+  const arriba = document.createElement("div");
+  arriba.className = "partido-arriba";
+
+  const categoria = document.createElement("span");
+  categoria.style.fontWeight = "bold";
+  categoria.textContent =
+    normalizarTexto(partido.categoria || partido.division) ||
+    "División no indicada";
+
+  const etiqueta = document.createElement("span");
+  etiqueta.className = "etiqueta-estado";
+  etiqueta.textContent =
+    normalizarTexto(partido.competicion || partido.torneo) || "Finalizado";
+
+  arriba.append(categoria, etiqueta);
+
+  const equipos = document.createElement("div");
+  equipos.className = "equipos";
+
+  /* TORITO */
+
+  const local = document.createElement("div");
+  local.className = "equipo";
+
+  const nombreLocal =
+    normalizarTexto(partido.equipoLocal || partido.local) || "TORITO";
+
+  local.append(
+    construirEscudo(
+      partido.escudotorito || "TORITO-Logo TORITO.png",
+      nombreLocal
+    )
+  );
+
+  const textoLocal = document.createElement("div");
+  textoLocal.className = "nombre-equipo";
+  textoLocal.textContent = nombreLocal;
+
+  local.append(textoLocal);
+
+  /* Marcador */
+
+  const marcador = document.createElement("div");
+  marcador.className = "marcador";
+
+  const tieneGoles =
+    partido.golestorito !== undefined &&
+    partido.golestorito !== null &&
+    String(partido.golestorito).trim() !== "" &&
+    partido.golesRival !== undefined &&
+    partido.golesRival !== null &&
+    String(partido.golesRival).trim() !== "";
+
+  if (tieneGoles) {
+    marcador.textContent = `${partido.golestorito} - ${partido.golesRival}`;
+  } else if (partido.resultado) {
+    marcador.textContent = String(partido.resultado).trim();
+  } else {
+    marcador.textContent = "Jugado";
+  }
+
+  /* Rival y su escudo */
+
+  const visitante = document.createElement("div");
+  visitante.className = "equipo";
+
+  const rival = normalizarTexto(
+    partido.rival ||
+    partido.equipoRival ||
+    partido.oponente ||
+    partido.equipoVisitante ||
+    partido.visitante ||
+    partido.adversario
+  ) || "Rival";
+
+  let rutaEscudoRival = normalizarTexto(
+    partido.escudoRival || partido.escudo || ""
+  );
+
+  if (!rutaEscudoRival) {
+    const club = obtenerClubPorNombre(rival);
+    if (club) {
+      rutaEscudoRival = club.ruta;
+    }
+  }
+
+  visitante.append(construirEscudo(rutaEscudoRival, rival));
+
+  const textoRival = document.createElement("div");
+  textoRival.className = "nombre-equipo";
+  textoRival.textContent = rival;
+
+  visitante.append(textoRival);
+
+  equipos.append(local, marcador, visitante);
+
+  /* Detalles del partido */
+
+  const detalles = document.createElement("div");
+  detalles.className = "detalle-partido";
+
+  const jornada = partido.jornada || partido.fechaNumero;
+
+  if (jornada) {
+    const detalleJornada = document.createElement("span");
+    detalleJornada.textContent = "🏆 Jornada " + jornada;
+    detalles.append(detalleJornada);
+  }
+
+  const fecha = fechaFixture(partido);
+
+  if (fecha) {
+    const detalleFecha = document.createElement("span");
+    detalleFecha.textContent = "📅 " + fechaLegible(fecha);
+    detalles.append(detalleFecha);
+  }
+
+  const lugar = normalizarTexto(
+    partido.lugar || partido.cancha || partido.sede || partido.condicion
+  );
+
+  if (lugar) {
+    const detalleLugar = document.createElement("span");
+    detalleLugar.textContent = "📍 " + lugar;
+    detalles.append(detalleLugar);
+  }
+
+  tarjeta.append(arriba, equipos, detalles);
+
+  return tarjeta;
+}
+
+/* =====================================================
+   MOSTRAR ÚLTIMOS 2 PARTIDOS JUGADOS
+===================================================== */
+
+function fechaISODeHoy() {
+  const hoy = new Date();
+
+  return [
+    hoy.getFullYear(),
+    String(hoy.getMonth() + 1).padStart(2, "0"),
+    String(hoy.getDate()).padStart(2, "0")
+  ].join("-");
+}
+
+function fechaISODesdeFecha(fecha) {
+  return [
+    fecha.getFullYear(),
+    String(fecha.getMonth() + 1).padStart(2, "0"),
+    String(fecha.getDate()).padStart(2, "0")
+  ].join("-");
+}
+
+window.renderizarFixture = function() {
+  const contenedor = document.getElementById("listaFixture");
+  if (!contenedor) return;
+
+  const selector = document.getElementById("filtroFixture");
+  const filtro = selector ? selector.value : "Todas";
+  const filtroNorm = filtro.toLowerCase().replace(/\s+/g, "");
+  const hoy = fechaISODeHoy();
+
+  const partidos = leerTodosLosPartidos()
+    .filter(partido => esPartidoJugado(partido, hoy))
+    .filter(partido => {
+      if (filtro === "Todas") return true;
+      const cat = normalizarTexto(partido.categoria || partido.division).toLowerCase().replace(/\s+/g, "");
+      return cat === filtroNorm;
+    })
+    .sort((a, b) => {
+      const fechaA = fechaFixture(a);
+      const fechaB = fechaFixture(b);
+
+      if (!fechaA && !fechaB) return 0;
+      if (!fechaA) return 1;
+      if (!fechaB) return -1;
+
+      // Orden descendente: los más recientes primero
+      return fechaB.getTime() - fechaA.getTime();
+    })
+    .slice(0, 2);
+
+  contenedor.replaceChildren();
+
+  if (!partidos.length) {
+    const vacio = document.createElement("div");
+    vacio.className = "sin-datos";
+
+    const simbolo = document.createElement("div");
+    simbolo.className = "simbolo";
+    simbolo.textContent = "⚽";
+
+    const titulo = document.createElement("strong");
+    titulo.textContent = filtro === "Todas"
+      ? "Todavía no hay partidos jugados registrados"
+      : `Sin partidos jugados registrados en ${filtro}`;
+
+    const mensaje = document.createElement("p");
+    mensaje.textContent =
+      "Cuando se carguen resultados o partidos jugados en TORITO-Partidos.html, aparecerán los últimos 2 acá.";
+
+    vacio.append(simbolo, titulo, mensaje);
+    contenedor.append(vacio);
+    return;
+  }
+
+  partidos.forEach(partido => {
+    contenedor.append(crearPartidoJugadoCard(partido));
+  });
+};
+
+/* =====================================================
+   PRÓXIMOS CUMPLEAÑOS DE LAS JUGADORAS
+===================================================== */
+
+async function sincronizarJugadorasDesdeNube() {
+  let lista = [];
+  if (nubeActiva && db) {
+    try {
+      const snap = await getDocs(collection(db,"torito_jugadoras"));
+      snap.forEach(d => lista.push({ id: d.id, ...d.data() }));
+
+      if (lista.length === 0) {
+        const docPlantel = await getDoc(doc(db,"torito_plantel", "jugadoras"));
+        if (docPlantel.exists() && Array.isArray(docPlantel.data().lista)) {
+          lista = docPlantel.data().lista;
+        }
+      }
+    } catch (e) {
+      console.warn("Leyendo jugadoras desde almacenamiento local:", e);
+    }
+  }
+
+  if (lista.length === 0) {
+    const raw = localStorage.getItem("jugadorasTORITO") || localStorage.getItem("plantelTORITO");
+    if (raw) {
+      try { lista = JSON.parse(raw); } catch (e) {}
+    }
+  }
+
+  cacheJugadorasNube = lista;
+}
+
+function obtenerTodasJugadoras() {
+  if (cacheJugadorasNube.length > 0) return cacheJugadorasNube;
+  const raw = localStorage.getItem("jugadorasTORITO") || localStorage.getItem("plantelTORITO");
+  if (raw) {
+    try { return JSON.parse(raw); } catch (e) {}
+  }
+  return [];
+}
+
+function parsearFechaNacimiento(valor) {
+  if (!valor) return null;
+  const txt = String(valor).trim();
+
+  // YYYY-MM-DD
+  const matchIso = txt.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})/);
+  if (matchIso) {
+    const anio = Number(matchIso[1]);
+    const mes = Number(matchIso[2]);
+    const dia = Number(matchIso[3]);
+    if (anio > 1900 && mes >= 1 && mes <= 12 && dia >= 1 && dia <= 31) {
+      return { anio, mes, dia };
+    }
+  }
+
+  // DD/MM/YYYY o DD-MM-YYYY
+  const matchLat = txt.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+  if (matchLat) {
+    const dia = Number(matchLat[1]);
+    const mes = Number(matchLat[2]);
+    const anio = Number(matchLat[3]);
+    if (anio > 1900 && mes >= 1 && mes <= 12 && dia >= 1 && dia <= 31) {
+      return { anio, mes, dia };
+    }
+  }
+
+  return null;
+}
+
+function calcularProximoCumple(partesNac, hoySinHora) {
+  const anioActual = hoySinHora.getFullYear();
+  let proximo = new Date(anioActual, partesNac.mes - 1, partesNac.dia);
+
+  // Ajuste por 29 de febrero en años no bisiestos
+  if (partesNac.mes === 2 && partesNac.dia === 29 && proximo.getMonth() !== 1) {
+    proximo = new Date(anioActual, 1, 28);
+  }
+
+  if (proximo.getTime() < hoySinHora.getTime()) {
+    const siguienteAnio = anioActual + 1;
+    proximo = new Date(siguienteAnio, partesNac.mes - 1, partesNac.dia);
+    if (partesNac.mes === 2 && partesNac.dia === 29 && proximo.getMonth() !== 1) {
+      proximo = new Date(siguienteAnio, 1, 28);
+    }
+  }
+
+  const msPorDia = 1000 * 60 * 60 * 24;
+  const diasFaltantes = Math.round((proximo.getTime() - hoySinHora.getTime()) / msPorDia);
+  const edadQueCumple = proximo.getFullYear() - partesNac.anio;
+
+  return {
+    diasFaltantes,
+    edadQueCumple,
+    fechaNacFormateada: `${String(partesNac.dia).padStart(2, "0")}/${String(partesNac.mes).padStart(2, "0")}/${partesNac.anio}`
+  };
+}
+
+window.renderizarCumpleanos = function() {
+  const contenedor = document.getElementById("listaCumpleanos");
+  if (!contenedor) return;
+
+  const selector = document.getElementById("filtroCumpleanos");
+  const filtro = selector ? selector.value : "Todas";
+  const filtroNorm = filtro.toLowerCase().replace(/\s+/g, "");
+
+  const ahora = new Date();
+  const hoySinHora = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate());
+
+  const jugadorasConCumple = obtenerTodasJugadoras()
+    .map((j, idx) => {
+      const nombreCompleto = (j.nombre && j.apellido)
+        ? `${j.nombre.trim()} ${j.apellido.trim()}`
+        : (j.nombre || j.nombreCompleto || `Jugadora ${idx + 1}`).trim();
+      const division = normalizarTexto(j.categoria || j.division || "Sin división");
+      const rawNac = j.fechaNacimiento || j.nacimiento || j.fechaNac || j.cumpleanos || "";
+      const partesNac = parsearFechaNacimiento(rawNac);
+      if (!partesNac) return null;
+
+      const calc = calcularProximoCumple(partesNac, hoySinHora);
+      return {
+        nombreCompleto,
+        division,
+        ...calc
+      };
+    })
+    .filter(Boolean)
+    .filter(item => {
+      if (filtro === "Todas") return true;
+      return item.division.toLowerCase().replace(/\s+/g, "") === filtroNorm;
+    })
+    .sort((a, b) => a.diasFaltantes - b.diasFaltantes);
+
+  contenedor.replaceChildren();
+
+  if (!jugadorasConCumple.length) {
+    const vacio = document.createElement("div");
+    vacio.className = "sin-datos";
+
+    const simbolo = document.createElement("div");
+    simbolo.className = "simbolo";
+    simbolo.textContent = "🎂";
+
+    const titulo = document.createElement("strong");
+    titulo.textContent = filtro === "Todas"
+      ? "Sin fechas de nacimiento cargadas"
+      : `Sin cumpleaños registrados en ${filtro}`;
+
+    const mensaje = document.createElement("p");
+    mensaje.textContent =
+      "Cargá la fecha de nacimiento de las jugadoras en TORITO-jugadoras.html para ver los próximos cumpleaños.";
+
+    vacio.append(simbolo, titulo, mensaje);
+    contenedor.append(vacio);
+    return;
+  }
+
+  jugadorasConCumple.forEach(item => {
+    const fila = document.createElement("div");
+    fila.className = "item-cumple" + (item.diasFaltantes === 0 ? " hoy" : "");
+
+    const info = document.createElement("div");
+    info.className = "cumple-info";
+
+    const nombre = document.createElement("div");
+    nombre.className = "cumple-nombre";
+    nombre.textContent = item.nombreCompleto;
+
+    const sub = document.createElement("div");
+    sub.className = "cumple-sub";
+    sub.textContent = `${item.division} · Nacimiento: ${item.fechaNacFormateada}`;
+
+    info.append(nombre, sub);
+
+    const badges = document.createElement("div");
+    badges.className = "cumple-badges";
+
+    const badgeFalta = document.createElement("span");
+    badgeFalta.className = "badge-falta";
+    if (item.diasFaltantes === 0) {
+      badgeFalta.textContent = "🎉 ¡Hoy cumple años!";
+    } else if (item.diasFaltantes === 1) {
+      badgeFalta.textContent = "Falta 1 día (Mañana)";
+    } else {
+      badgeFalta.textContent = `Faltan ${item.diasFaltantes} días`;
+    }
+
+    const badgeEdad = document.createElement("span");
+    badgeEdad.className = "badge-edad";
+    badgeEdad.textContent = `Cumple ${item.edadQueCumple} años`;
+
+    badges.append(badgeFalta, badgeEdad);
+    fila.append(info, badges);
+    contenedor.append(fila);
+  });
+};
+
+/* =====================================================
+   FUNCIONES DEL CALENDARIO
+===================================================== */
+
+let fechaVista = new Date();
+
+fechaVista = new Date(
+  fechaVista.getFullYear(),
+  fechaVista.getMonth(),
+  1
+);
+
+let fechaSeleccionada = fechaISODeHoy();
+
+function leerActividades() {
+  try {
+    const datos = JSON.parse(
+      localStorage.getItem("actividadesTORITO") || "{}"
+    );
+
+    return datos &&
+      typeof datos === "object" &&
+      !Array.isArray(datos)
+      ? datos
+      : {};
+  } catch (error) {
+    console.error("No se pudieron leer las actividades:", error);
+    return {};
+  }
+}
+
+function obtenerActividadesDivision(division) {
+  const datos = leerActividades();
+
+  let actividades = datos[division];
+
+  if (!actividades || typeof actividades !== "object") {
+    const clave = Object.keys(datos).find(
+      nombre => nombre.toLowerCase() === division.toLowerCase()
+    );
+
+    actividades = clave ? datos[clave] : {};
+  }
+
+  return actividades && typeof actividades === "object"
+    ? actividades
+    : {};
+}
+
+function obtenerActividadFecha(division, fecha) {
+  const actividades = obtenerActividadesDivision(division);
+
+  if (Object.prototype.hasOwnProperty.call(actividades, fecha)) {
+    return actividades[fecha];
+  }
+
+  return null;
+}
+
+function obtenerColorActividad(actividad) {
+  if (!actividad || typeof actividad !== "object") {
+    return "#f47721";
+  }
+
+  const valor = String(
+    actividad.color ??
+    actividad.estado ??
+    actividad.nivel ??
+    actividad.colorFondo ??
+    ""
+  ).trim().toLowerCase();
+
+  const colores = {
+    "blanco": "#ffffff",
+    "libre": "#ffffff",
+    "#fff": "#ffffff",
+    "#ffffff": "#ffffff",
+    "gris": "#888888",
+    "suspendido": "#888888",
+    "suspendida": "#888888",
+    "#808080": "#888888",
+    "#888888": "#888888",
+    "verde": "#2eaa62",
+    "bajo": "#2eaa62",
+    "#008000": "#2eaa62",
+    "#00ff00": "#2eaa62",
+    "#2eaa62": "#2eaa62",
+    "amarillo": "#f3c928",
+    "medio": "#f3c928",
+    "#ffff00": "#f3c928",
+    "#f3c928": "#f3c928",
+    "rojo": "#e74c3c",
+    "alto": "#e74c3c",
+    "#ff0000": "#e74c3c",
+    "#e74c3c": "#e74c3c"
+  };
+
+  return colores[valor] || "#f47721";
+}
+
+function obtenerNombreEstado(actividad) {
+  if (!actividad || typeof actividad !== "object") return "";
+
+  const valor = String(
+    actividad.color ??
+    actividad.estado ??
+    actividad.nivel ??
+    ""
+  ).trim().toLowerCase();
+
+  const estados = {
+    "blanco": "Libre",
+    "libre": "Libre",
+    "gris": "Suspendido",
+    "suspendido": "Suspendido",
+    "suspendida": "Suspendido",
+    "verde": "Bajo",
+    "bajo": "Bajo",
+    "amarillo": "Medio",
+    "medio": "Medio",
+    "rojo": "Alto",
+    "alto": "Alto"
+  };
+
+  return estados[valor] || valor;
+}
+
+function obtenerTextoActividad(actividad) {
+  if (actividad === null || actividad === undefined) return "";
+
+  if (typeof actividad === "string" || typeof actividad === "number") {
+    return String(actividad);
+  }
+
+  if (typeof actividad !== "object") return "";
+
+  return String(
+    actividad.texto ??
+    actividad.text ??
+    actividad.descripcion ??
+    actividad.actividad ??
+    actividad.titulo ??
+    actividad.nombre ??
+    ""
+  ).trim();
+}
+
+function obtenerImagenActividad(actividad) {
+  if (!actividad || typeof actividad !== "object") return "";
+
+  return String(
+    actividad.imagen ??
+    actividad.img ??
+    actividad.foto ??
+    actividad.imagenUrl ??
+    ""
+  ).trim();
+}
+
+window.renderizarCalendario = function() {
+  const division = document.getElementById("filtroCalendario").value;
+  const cuerpo = document.getElementById("cuerpoCalendario");
+
+  cuerpo.replaceChildren();
+
+  document.getElementById("mesTitulo").textContent =
+    new Intl.DateTimeFormat("es-AR", {
+      month: "long",
+      year: "numeric"
+    }).format(fechaVista);
+
+  const anio = fechaVista.getFullYear();
+  const mes = fechaVista.getMonth();
+
+  const primerDia = new Date(anio, mes, 1);
+  const desplazamiento = (primerDia.getDay() + 6) % 7;
+  const cantidadDias = new Date(anio, mes + 1, 0).getDate();
+
+  let fila = document.createElement("tr");
+
+  for (let i = 0; i < desplazamiento; i++) {
+    fila.append(document.createElement("td"));
+  }
+
+  for (let dia = 1; dia <= cantidadDias; dia++) {
+    const fecha = new Date(anio, mes, dia);
+    const iso = fechaISODesdeFecha(fecha);
+
+    const actividad = obtenerActividadFecha(division, iso);
+
+    const celda = document.createElement("td");
+    const boton = document.createElement("button");
+
+    boton.type = "button";
+    boton.className = "dia-calendario";
+    boton.textContent = String(dia);
+
+    if (iso === fechaISODeHoy()) {
+      boton.classList.add("hoy");
+    }
+
+    if (iso === fechaSeleccionada) {
+      boton.classList.add("seleccionado");
+    }
+
+    if (actividad !== null && actividad !== undefined) {
+      const punto = document.createElement("span");
+
+      punto.className = "marca-actividad";
+      punto.style.background = obtenerColorActividad(actividad);
+      punto.title = obtenerNombreEstado(actividad) || "Actividad registrada";
+
+      boton.append(punto);
+    }
+
+    boton.addEventListener("click", () => {
+      fechaSeleccionada = iso;
+      renderizarCalendario();
+      renderizarDetalleDia(iso, division);
+    });
+
+    celda.append(boton);
+    fila.append(celda);
+
+    if ((desplazamiento + dia) % 7 === 0) {
+      cuerpo.append(fila);
+      fila = document.createElement("tr");
+    }
+  }
+
+  if (fila.children.length) {
+    while (fila.children.length < 7) {
+      fila.append(document.createElement("td"));
+    }
+
+    cuerpo.append(fila);
+  }
+
+  renderizarDetalleDia(fechaSeleccionada, division);
+};
+
+function renderizarDetalleDia(fecha, division) {
+  const contenedor = document.getElementById("detalleDia");
+  contenedor.replaceChildren();
+
+  const titulo = document.createElement("h4");
+  titulo.textContent = fechaLegible(fecha) + " · " + division;
+
+  contenedor.append(titulo);
+
+  const actividad = obtenerActividadFecha(division, fecha);
+
+  if (actividad === null || actividad === undefined) {
+    const mensaje = document.createElement("p");
+
+    mensaje.style.cssText = "font-size:12px;color:#777;margin:0";
+    mensaje.textContent =
+      "No hay ninguna actividad guardada para esta división y este día.";
+
+    contenedor.append(mensaje);
+    return;
+  }
+
+  const detalle = document.createElement("div");
+  detalle.className = "actividad-detalle";
+  detalle.style.borderLeftColor = obtenerColorActividad(actividad);
+
+  const estado = obtenerNombreEstado(actividad);
+  const texto = obtenerTextoActividad(actividad);
+
+  if (estado) {
+    const etiqueta = document.createElement("small");
+
+    etiqueta.style.cssText = "margin:0 0 7px;font-weight:bold";
+    etiqueta.textContent = estado;
+
+    detalle.append(etiqueta);
+  }
+
+  if (texto) {
+    const parrafo = document.createElement("p");
+    parrafo.textContent = texto;
+    detalle.append(parrafo);
+  }
+
+  const imagenUrl = obtenerImagenActividad(actividad);
+
+  if (imagenUrl) {
+    const imagen = document.createElement("img");
+
+    imagen.src = imagenUrl;
+    imagen.alt = "Imagen de la actividad";
+
+    imagen.onerror = function() {
+      this.style.display = "none";
+    };
+
+    detalle.append(imagen);
+  }
+
+  if (!estado && !texto && !imagenUrl) {
+    const parrafo = document.createElement("p");
+
+    parrafo.textContent =
+      "Hay una actividad registrada para este día. Abrí el calendario completo para verla.";
+
+    detalle.append(parrafo);
+  }
+
+  contenedor.append(detalle);
+}
+
+window.cambiarMes = function(cantidad) {
+  fechaVista = new Date(
+    fechaVista.getFullYear(),
+    fechaVista.getMonth() + cantidad,
+    1
+  );
+
+  renderizarCalendario();
+};
+
+window.cambiarDivisionCalendario = function() {
+  guardarPreferenciaDesdeSelector("filtroCalendario");
+  renderizarCalendario();
+};
+
+/* =====================================================
+   ACTUALIZACIÓN AUTOMÁTICA
+===================================================== */
+
+window.addEventListener("focus", async () => {
+  await Promise.all([sincronizarPartidosDesdeNube(), sincronizarJugadorasDesdeNube()]);
+  renderizarFixture();
+  renderizarCumpleanos();
+  renderizarCalendario();
+});
+
+window.addEventListener("storage", evento => {
+  if (evento.key === "actividadesTORITO") {
+    renderizarCalendario();
+  }
+
+  if (
+    evento.key &&
+    /(fixture|partidos|encuentros|resultados)/i.test(evento.key)
+  ) {
+    renderizarFixture();
+  }
+
+  if (evento.key && /(jugadoras|plantel)/i.test(evento.key)) {
+    renderizarCumpleanos();
+  }
+});
+
+/* =====================================================
+   CATÁLOGO DE CLUBES Y ESCUDOS
+   Compatible con TORITO-Partidos.html
+===================================================== */
+
+const ESCUDOS_CLUBES = [
+  { nombre: "14 de Junio", ruta: "CLUBES/14 JUNIO.jpg" },
+  { nombre: "Alianza", ruta: "CLUBES/ALIANZA.png" },
+  { nombre: "Argentino", ruta: "CLUBES/ARGENTINO.png" },
+  { nombre: "Banco", ruta: "CLUBES/BANCO.jpg" },
+  { nombre: "Botafogo", ruta: "CLUBES/BOTAFOGO.jpg" },
+  { nombre: "Central", ruta: "CLUBES/CENTRAL.png" },
+  { nombre: "CGR", ruta: "CLUBES/CGR.png" },
+  { nombre: "Coronel Aguirre", ruta: "CLUBES/CORONEL AGUIRRE.png" },
+  { nombre: "General Paz", ruta: "CLUBES/GRAL PAZ.jpg" },
+  { nombre: "Lamadrid", ruta: "CLUBES/LAMADRID.jpg" },
+  { nombre: "Leones", ruta: "CLUBES/LEONES.jpg" },
+  { nombre: "Mitre", ruta: "CLUBES/MITRE.png" },
+  { nombre: "Morning", ruta: "CLUBES/MORNING.jpg" },
+  { nombre: "Newell's Old Boys", ruta: "CLUBES/NEWELLS.png" },
+  { nombre: "Oriental", ruta: "CLUBES/ORIENTAL.jpg" },
+  { nombre: "Pablo VI", ruta: "CLUBES/PABLO VI.jpg" },
+  { nombre: "Provincial", ruta: "CLUBES/PROVINCIAL.png" },
+  { nombre: "Renato", ruta: "CLUBES/RENATO.jpg" },
+  { nombre: "San José", ruta: "CLUBES/SAN JOSE.jpg" },
+  { nombre: "San Roque", ruta: "CLUBES/SAN ROQUE.jpg" },
+  { nombre: "San Telmo", ruta: "CLUBES/SAN TELMO.png" },
+  { nombre: "Social Lux", ruta: "CLUBES/SOCIAL LUX.jpg" },
+  { nombre: "Sparta", ruta: "CLUBES/SPARTA.jpg" },
+  { nombre: "Tiro Federal", ruta: "CLUBES/TIRO FEDERAL.jpg" },
+  { nombre: "Tiro Suizo", ruta: "CLUBES/TIRO SUIZO.jpg" },
+  { nombre: "Torito", ruta: "CLUBES/TORITO.png" },
+  { nombre: "Unión Americana", ruta: "CLUBES/UNION AMERICANA.png" },
+  { nombre: "Villa Gobernador Gálvez", ruta: "CLUBES/VG GALVEZ.png" }
+];
+
+function normalizarUsuario(nombre) {
+  return String(nombre || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLowerCase();
+}
+
+function obtenerClubPorNombre(nombre) {
+  const normalizado = normalizarUsuario(nombre);
+
+  return ESCUDOS_CLUBES.find(club =>
+    normalizarUsuario(club.nombre) === normalizado
+  ) || null;
+}
+
+/* Inicializar la página */
+
+(async function iniciarPaginaPrincipal() {
+  inicializarPreferencias();
+  renderizarFixture();
+  renderizarCumpleanos();
+  renderizarCalendario();
+
+  await Promise.all([
+    sincronizarPartidosDesdeNube(),
+    sincronizarJugadorasDesdeNube()
+  ]);
+
+  renderizarFixture();
+  renderizarCumpleanos();
+})();
+</script>
+
+
+
+</body>
+</html>

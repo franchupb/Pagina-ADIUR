@@ -1,0 +1,4229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asistencia - ADIUR FEM</title>
+
+<style>
+:root {
+  --naranja: #f47721;
+  --naranja-oscuro: #dc5e0b;
+  --naranja-claro: #fff0e6;
+  --negro: #171717;
+  --gris: #f4f5f7;
+  --gris-texto: #747474;
+  --borde: #e8e8e8;
+  --verde: #18864b;
+  --verde-fondo: #e3f7eb;
+  --rojo: #c62828;
+  --rojo-fondo: #fde9e9;
+  --amarillo: #996500;
+  --amarillo-fondo: #fff3cd;
+  --gris-evento: #eeeeee;
+  --violeta: #5d55a5;
+  --violeta-fondo: #e9e8fc;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #fafafa;
+  color: var(--negro);
+}
+
+button, input, select {
+  font: inherit;
+}
+
+button, a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* =====================================================
+   BARRA SUPERIOR
+===================================================== */
+
+.barra-superior {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  min-height: 84px;
+  padding: 12px 25px;
+  background: #fff;
+  border-bottom: 1px solid var(--borde);
+}
+
+.boton-menu {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border: 0;
+  background: white;
+  border-radius: 9px;
+  font-size: 27px;
+  color: var(--negro);
+}
+
+.boton-menu:hover {
+  background: var(--gris);
+}
+
+.logo-superior {
+  width: 55px;
+  height: 55px;
+  flex-shrink: 0;
+  object-fit: contain;
+  border-radius: 50%;
+  padding: 2px;
+  background: white;
+}
+
+.titulo-superior {
+  flex: 1;
+  min-width: 0;
+}
+
+.titulo-superior h1 {
+  margin: 0 0 5px;
+  font-size: 23px;
+  font-weight: 900;
+  letter-spacing: .5px;
+}
+
+.titulo-superior p {
+  margin: 0;
+  color: var(--gris-texto);
+  font-size: 13px;
+}
+
+.perfil {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex-shrink: 0;
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  background: var(--negro);
+  color: #fff;
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.informacion-perfil {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+}
+
+.nombre-perfil {
+  display: block;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--negro);
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.rol-perfil {
+  display: block;
+  margin-top: 4px;
+  color: var(--gris-texto);
+  font-size: 11px;
+}
+
+/* =====================================================
+   ESTRUCTURA Y MENÚ LATERAL
+===================================================== */
+
+.contenedor {
+  display: flex;
+  min-height: calc(100vh - 84px);
+  align-items: stretch;
+}
+
+.sidebar {
+  width: 258px;
+  flex: 0 0 258px;
+  padding: 20px 13px;
+  background: #fff;
+  border-right: 1px solid var(--borde);
+  transition: margin-left .25s ease;
+  overflow-y: auto;
+}
+
+.sidebar.oculto {
+  margin-left: -258px;
+}
+
+.menu-inicio {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 14px;
+  margin-bottom: 16px;
+  border-radius: 11px;
+  background: var(--naranja-claro);
+  color: var(--naranja-oscuro);
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.menu-inicio:hover {
+  background: #ffe7d6;
+}
+
+.icono-inicio {
+  width: 15px;
+  text-align: center;
+  font-size: 17px;
+}
+
+.grupo-menu {
+  margin-bottom: 8px;
+}
+
+.titulo-grupo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 13px;
+  min-height: 46px;
+  cursor: pointer;
+  border-radius: 8px;
+  color: #171717;
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: .8px;
+  user-select: none;
+}
+
+.titulo-grupo:hover {
+  background: #f8f8f8;
+}
+
+.flecha {
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+  transition: transform .2s;
+}
+
+.grupo-menu.cerrado .flecha {
+  transform: rotate(0deg);
+}
+
+.grupo-menu:not(.cerrado) .flecha {
+  transform: rotate(90deg);
+}
+
+.submenu {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 0 0 5px;
+}
+
+.grupo-menu.cerrado .submenu {
+  display: none;
+}
+
+.submenu a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 9px;
+  font-size: 13px;
+  color: #656872;
+}
+
+.submenu a:hover {
+  background: #f6f6f6;
+  color: #181818;
+}
+
+.submenu a.activo {
+  background: var(--naranja-claro);
+  color: var(--naranja-oscuro);
+  font-weight: 800;
+}
+
+.nav-punto {
+  width: 6px;
+  height: 6px;
+  flex-shrink: 0;
+  background: #d7d9de;
+  border-radius: 50%;
+}
+
+.submenu a.activo .nav-punto {
+  background: var(--naranja);
+}
+
+.separador-sesion {
+  border-top: 1px solid var(--borde);
+  margin: 19px 0 0;
+  padding-top: 12px;
+}
+
+.enlace-cerrar-sesion {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 9px;
+  color: #c0392b;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.enlace-cerrar-sesion:hover {
+  background: #fff2f1;
+}
+
+.icono-salir {
+  font-size: 17px;
+}
+
+.capa-sidebar {
+  display: none;
+}
+
+/* =====================================================
+   CONTENIDO GENERAL
+===================================================== */
+
+.contenido {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 34px 34px 48px;
+}
+
+.cabecera-pagina {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 22px;
+  margin-bottom: 26px;
+}
+
+.etiqueta-seccion {
+  display: block;
+  color: var(--naranja-oscuro);
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 1.4px;
+  margin-bottom: 7px;
+}
+
+.cabecera-pagina .etiqueta-seccion {
+  margin-bottom: 8px;
+  letter-spacing: 1.35px;
+}
+
+.cabecera-pagina h2 {
+  margin: 0 0 8px;
+  color: #17181c;
+  font-size: clamp(25px, 2.3vw, 32px);
+  line-height: 1.15;
+  font-weight: 850;
+  letter-spacing: -.65px;
+}
+
+.cabecera-pagina p {
+  max-width: 690px;
+  margin: 0;
+  color: #727783;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+/* =====================================================
+   BOTÓN DE GUARDAR GLOBAL
+===================================================== */
+
+.acciones-superiores-pagina {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.boton-guardar-principal {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 22px;
+  background: var(--naranja);
+  color: white;
+  border: 0;
+  border-radius: 11px;
+  font-size: 13px;
+  font-weight: 900;
+  box-shadow: 0 4px 12px rgba(244, 119, 33, 0.3);
+  transition: background 0.15s, transform 0.1s;
+}
+
+.boton-guardar-principal:hover {
+  background: var(--naranja-oscuro);
+  transform: translateY(-1px);
+}
+
+.boton-guardar-principal:active {
+  transform: translateY(0);
+}
+
+/* =====================================================
+   SELECTOR PRINCIPAL DE CATEGORÍA
+===================================================== */
+
+.selector-categoria-panel {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  margin-bottom: 22px;
+  padding: 20px 23px;
+  background: #fff;
+  border: 1px solid var(--borde);
+  border-left: 4px solid var(--naranja);
+  border-radius: 15px;
+  box-shadow: 0 3px 13px #00000005;
+}
+
+.selector-categoria-icono {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: 13px;
+  background: var(--naranja-claro);
+  color: var(--naranja-oscuro);
+  font-size: 23px;
+}
+
+.selector-categoria-texto {
+  flex: 1;
+  min-width: 0;
+}
+
+.selector-categoria-texto .etiqueta-seccion {
+  margin-bottom: 5px;
+}
+
+.selector-categoria-texto h3 {
+  margin: 0 0 5px;
+  font-size: 17px;
+  font-weight: 900;
+}
+
+.selector-categoria-texto p {
+  margin: 0;
+  color: var(--gris-texto);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.selector-categoria-principal {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  width: 260px;
+  max-width: 100%;
+  flex-shrink: 0;
+}
+
+.selector-categoria-principal label {
+  color: #666;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .8px;
+}
+
+.selector-categoria-principal select {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 36px 10px 13px;
+  border: 1px solid #e2e2e2;
+  border-radius: 10px;
+  background: #fff;
+  color: #222;
+  font-size: 13px;
+  font-weight: 800;
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
+}
+
+.selector-categoria-principal select:hover {
+  border-color: #f5b48c;
+}
+
+.selector-categoria-principal select:focus-visible {
+  border-color: var(--naranja);
+  outline: 2px solid #f4772130;
+  outline-offset: 2px;
+}
+
+/* =====================================================
+   PLANILLA MENSUAL
+===================================================== */
+
+.panel-asistencia {
+  min-width: 0;
+  margin-bottom: 22px;
+  overflow: hidden;
+  background: white;
+  border: 1px solid var(--borde);
+  border-radius: 15px;
+  box-shadow: 0 3px 13px #00000005;
+}
+
+/* =====================================================
+   MES Y NAVEGACIÓN
+===================================================== */
+
+.cabecera-mes {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 22px 23px;
+  border-bottom: 1px solid var(--borde);
+}
+
+.mes-informacion {
+  min-width: 0;
+}
+
+.mes-informacion h3 {
+  margin: 0;
+  font-size: 27px;
+  font-weight: 900;
+  text-transform: capitalize;
+}
+
+.mes-informacion p {
+  margin: 7px 0 0;
+  color: var(--gris-texto);
+  font-size: 12px;
+}
+
+.mes-derecha {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.controles-mes {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-shrink: 0;
+}
+
+.boton-mes {
+  width: 38px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--borde);
+  border-radius: 9px;
+  background: white;
+  color: var(--negro);
+  font-size: 23px;
+}
+
+.boton-mes:hover {
+  background: var(--naranja-claro);
+  color: var(--naranja-oscuro);
+  border-color: #ffd5bc;
+}
+
+/* =====================================================
+   DÍAS HABITUALES POR CATEGORÍA
+===================================================== */
+
+.configuracion-dias {
+  padding: 20px 23px;
+  background: #fff;
+  border-bottom: 1px solid var(--borde);
+}
+
+.titulo-configuracion {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 6px;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .5px;
+}
+
+.icono-configuracion {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 27px;
+  height: 27px;
+  border-radius: 8px;
+  background: var(--naranja-claro);
+  color: var(--naranja-oscuro);
+}
+
+.descripcion-configuracion {
+  margin: 0 0 15px;
+  color: var(--gris-texto);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.dias-semana {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.dia-semana {
+  min-width: 77px;
+  min-height: 37px;
+  padding: 8px 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 1px solid #e2e2e2;
+  border-radius: 9px;
+  background: white;
+  color: #777;
+  font-size: 12px;
+  font-weight: 800;
+  transition: background .15s, border-color .15s, color .15s;
+}
+
+.dia-semana:hover {
+  border-color: var(--naranja);
+}
+
+.dia-semana.activo {
+  color: var(--naranja-oscuro);
+  border-color: #ffc59f;
+  background: var(--naranja-claro);
+}
+
+.dia-semana .indicador {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #c7c7c7;
+}
+
+.dia-semana.activo .indicador {
+  background: var(--naranja);
+}
+
+.dia-semana:focus-visible,
+.boton-mes:focus-visible,
+.boton-estado:focus-visible,
+.boton-sin-entreno:focus-visible,
+.selector-categoria-principal select:focus-visible,
+.selector-jugadora:focus-visible {
+  outline: 2px solid var(--naranja);
+  outline-offset: 2px;
+}
+
+/* =====================================================
+   LEYENDA DE ASISTENCIA
+===================================================== */
+
+.leyenda-asistencia {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 19px;
+  padding: 15px 23px;
+  border-bottom: 1px solid var(--borde);
+}
+
+.leyenda-titulo {
+  color: #555;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .4px;
+}
+
+.leyenda-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #555;
+  font-size: 11px;
+}
+
+.muestra-leyenda {
+  width: 21px;
+  height: 21px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.muestra-presente {
+  color: var(--verde);
+  background: var(--verde-fondo);
+}
+
+.muestra-ausente {
+  color: var(--rojo);
+  background: var(--rojo-fondo);
+}
+
+.muestra-tarde {
+  color: var(--amarillo);
+  background: var(--amarillo-fondo);
+}
+
+.muestra-justificada {
+  color: var(--violeta);
+  background: var(--violeta-fondo);
+}
+
+.muestra-sin-entreno {
+  background: var(--gris-evento);
+  color: var(--gris-texto);
+}
+
+/* =====================================================
+   TABLA DE ASISTENCIA
+===================================================== */
+
+.planilla-cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 19px 23px 14px;
+}
+
+.planilla-cabecera h3 {
+  margin: 0 0 5px;
+  font-size: 15px;
+}
+
+.planilla-cabecera p {
+  margin: 0;
+  color: var(--gris-texto);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.planilla-acciones {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+.selector-orden {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 155px;
+}
+
+.selector-orden label {
+  color: #777;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .7px;
+}
+
+.selector-orden select {
+  width: 100%;
+  min-height: 36px;
+  padding: 8px 30px 8px 10px;
+  border: 1px solid #e4e4e4;
+  border-radius: 9px;
+  background: #fff;
+  color: #333;
+  font-size: 11px;
+  font-weight: 700;
+  outline: none;
+}
+
+.selector-orden select:focus-visible {
+  outline: 2px solid var(--naranja);
+  outline-offset: 2px;
+}
+
+.estado-guardado {
+  color: var(--verde);
+  font-size: 11px;
+  font-weight: 700;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.tabla-contenedor {
+  width: 100%;
+  max-height: 65vh;
+  overflow: auto;
+  border-top: 1px solid var(--borde);
+  scrollbar-width: thin;
+  scrollbar-color: #ccc #f7f7f7;
+}
+
+.tabla-asistencia {
+  width: max-content;
+  min-width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+  background: white;
+}
+
+.tabla-asistencia th,
+.tabla-asistencia td {
+  border-right: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.tabla-asistencia thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  height: 101px;
+  padding: 8px 5px;
+  background: #fafafa;
+}
+
+.tabla-asistencia .columna-jugadora {
+  position: sticky;
+  left: 0;
+  z-index: 15;
+  width: 250px;
+  min-width: 250px;
+  max-width: 250px;
+  padding: 10px 15px;
+  text-align: left;
+  background: #fff;
+  border-right: 2px solid #e4e4e4;
+}
+
+.tabla-asistencia thead .columna-jugadora {
+  z-index: 25;
+  top: 0;
+  background: #f8f8f8;
+}
+
+.tabla-asistencia thead .columna-fecha {
+  width: 84px;
+  min-width: 84px;
+  max-width: 84px;
+}
+
+.tabla-asistencia tbody .columna-jugadora {
+  position: sticky;
+  left: 0;
+  z-index: 5;
+  background: #fff;
+}
+
+.tabla-asistencia tbody tr:hover .columna-jugadora {
+  background: #fffaf6;
+}
+
+.tabla-asistencia tbody tr:hover td {
+  background-color: #fffdfb;
+}
+
+.tabla-asistencia th:last-child,
+.tabla-asistencia td:last-child {
+  border-right: 0;
+}
+
+.columna-jugadora .encabezado-nombres {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .6px;
+}
+
+.icono-jugadoras {
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: var(--naranja-claro);
+  color: var(--naranja-oscuro);
+  font-size: 14px;
+}
+
+.encabezado-fecha {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  min-width: 0;
+}
+
+.encabezado-fecha .dia-nombre {
+  color: #777;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.numero-dia {
+  width: 31px;
+  height: 31px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  background: white;
+  border: 1px solid #e6e6e6;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.numero-dia.hoy {
+  background: var(--naranja);
+  border-color: var(--naranja);
+  color: white;
+}
+
+.mes-corto {
+  color: #999;
+  font-size: 9px;
+  text-transform: uppercase;
+}
+
+.boton-sin-entreno {
+  width: 100%;
+  min-height: 29px;
+  margin-top: 4px;
+  padding: 5px 3px;
+  border: 1px solid #e2e2e2;
+  border-radius: 6px;
+  background: white;
+  color: #777;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1.3;
+  transition: all .15s;
+}
+
+.boton-sin-entreno:hover {
+  border-color: var(--naranja);
+  background: var(--naranja-claro);
+  color: var(--naranja-oscuro);
+}
+
+.boton-sin-entreno.marcado {
+  background: var(--gris-evento);
+  border-color: #d6d6d6;
+  color: #666;
+}
+
+.tabla-asistencia tbody td {
+  height: 57px;
+  padding: 6px;
+}
+
+.datos-jugadora {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.avatar-jugadora {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #fff0e6;
+  color: var(--naranja-oscuro);
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.informacion-jugadora {
+  min-width: 0;
+}
+
+.nombre-jugadora {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #222;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.categoria-jugadora {
+  display: block;
+  margin-top: 4px;
+  color: #8a8a8a;
+  font-size: 10px;
+}
+
+.boton-estado {
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  font-size: 17px;
+  font-weight: 900;
+  transition: transform .12s, background .12s;
+}
+
+.boton-estado:hover {
+  transform: scale(1.06);
+}
+
+.boton-estado.sin-marcar {
+  border-color: #e8e8e8;
+  background: #fff;
+  color: #c1c1c1;
+}
+
+.boton-estado.sin-marcar:hover {
+  background: #f8f8f8;
+  color: #777;
+}
+
+.boton-estado.presente {
+  background: var(--verde-fondo);
+  color: var(--verde);
+  border-color: #c8edd6;
+}
+
+.boton-estado.ausente {
+  background: var(--rojo-fondo);
+  color: var(--rojo);
+  border-color: #f8d0d0;
+}
+
+.boton-estado.tarde {
+  background: var(--amarillo-fondo);
+  color: var(--amarillo);
+  border-color: #f5e1a2;
+}
+
+.boton-estado.justificada {
+  background: var(--violeta-fondo);
+  color: var(--violeta);
+  border-color: #d5d2f5;
+}
+
+.celda-sin-entreno {
+  min-height: 43px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 7px;
+  background: #f0f0f0;
+  color: #999;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.fila-vacia td {
+  padding: 35px 20px !important;
+  color: #777;
+  font-size: 13px;
+  text-align: center;
+}
+
+.pie-planilla {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 9px;
+  padding: 15px 23px;
+  background: #fcfcfc;
+  color: #888;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.pie-planilla strong {
+  color: #555;
+}
+
+/* =====================================================
+   SEGUIMIENTO INDIVIDUAL
+===================================================== */
+
+.seguimiento-individual {
+  overflow: hidden;
+  background: white;
+  border: 1px solid var(--borde);
+  border-radius: 15px;
+  box-shadow: 0 3px 13px #00000005;
+}
+
+.seguimiento-cabecera {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 23px;
+  border-bottom: 1px solid var(--borde);
+}
+
+.seguimiento-titulo {
+  min-width: 0;
+}
+
+.seguimiento-titulo h3 {
+  margin: 0 0 7px;
+  font-size: 20px;
+}
+
+.seguimiento-titulo p {
+  margin: 0;
+  color: var(--gris-texto);
+  font-size: 12px;
+  line-height: 1.6;
+  max-width: 540px;
+}
+
+.selector-individual {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 240px;
+  max-width: 320px;
+  width: 100%;
+}
+
+.selector-individual label {
+  color: #666;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .8px;
+}
+
+.selector-jugadora {
+  width: 100%;
+  min-height: 43px;
+  padding: 10px 34px 10px 12px;
+  border: 1px solid #e4e4e4;
+  border-radius: 9px;
+  background: white;
+  font-size: 12px;
+  font-weight: 800;
+  color: #222;
+  outline: none;
+}
+
+.selector-jugadora:disabled {
+  background: #f6f6f6;
+  color: #999;
+  cursor: not-allowed;
+}
+
+/* Identidad de la jugadora */
+
+.individual-identidad {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 19px 23px;
+  background: #fcfcfc;
+  border-bottom: 1px solid var(--borde);
+}
+
+.avatar-individual {
+  width: 47px;
+  height: 47px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--naranja-claro);
+  color: var(--naranja-oscuro);
+  font-weight: 900;
+  font-size: 13px;
+}
+
+.individual-identidad h4 {
+  margin: 0 0 5px;
+  font-size: 15px;
+}
+
+.individual-identidad p {
+  margin: 0;
+  color: var(--gris-texto);
+  font-size: 11px;
+}
+
+/* Tarjetas estadísticas individuales */
+
+.metricas-individuales {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  padding: 20px 23px;
+}
+
+.metrica {
+  min-width: 0;
+  padding: 15px;
+  border: 1px solid #eee;
+  border-radius: 11px;
+  background: #fff;
+}
+  
+/* =====================================================
+   RESUMEN DE PROMEDIOS MENSUALES Y ANUALES
+===================================================== */
+
+.metrica-periodo-titulo {
+  padding: 17px 23px 5px;
+  color: var(--naranja-oscuro);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .8px;
+}
+
+.resumen-periodos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 14px 23px 20px;
+}
+
+.resumen-periodo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  background: #fffaf6;
+}
+
+.resumen-periodo-etiqueta {
+  color: #777;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .6px;
+  line-height: 1.5;
+}
+
+.resumen-periodo strong {
+  color: var(--naranja-oscuro);
+  font-size: 34px;
+  font-weight: 900;
+}
+
+.resumen-periodo p {
+  margin: 0;
+  color: #777;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.resumen-division {
+  background: #fff;
+  border-color: #f2d5c2;
+}
+
+@media (max-width: 760px) {
+  .metrica-periodo-titulo {
+    padding: 15px 14px 5px;
+  }
+
+  .resumen-periodos {
+    grid-template-columns: 1fr;
+    padding: 12px 14px 16px;
+    gap: 9px;
+  }
+
+  .resumen-periodo {
+    padding: 16px;
+  }
+
+  .resumen-periodo strong {
+    font-size: 29px;
+  }
+}
+
+
+.metrica-superior {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 13px;
+}
+
+.metrica-icono {
+  width: 33px;
+  height: 33px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 9px;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.metrica-numero {
+  margin: 0;
+  font-size: 26px;
+  line-height: 1.1;
+  font-weight: 900;
+  color: #222;
+  overflow-wrap: anywhere;
+}
+
+.metrica-etiqueta {
+  display: block;
+  margin-top: 6px;
+  color: #777;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.metrica-presente .metrica-icono {
+  background: var(--verde-fondo);
+  color: var(--verde);
+}
+
+.metrica-ausente .metrica-icono {
+  background: var(--rojo-fondo);
+  color: var(--rojo);
+}
+
+.metrica-tarde .metrica-icono {
+  background: var(--amarillo-fondo);
+  color: var(--amarillo);
+}
+
+.metrica-porcentaje .metrica-icono {
+  background: var(--naranja-claro);
+  color: var(--naranja-oscuro);
+}
+
+.individual-aclaracion {
+  margin: 0 23px 22px;
+  padding: 13px 15px;
+  border: 1px solid #f2dfd1;
+  border-radius: 9px;
+  background: #fffaf6;
+  color: #765239;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.sin-jugadora {
+  padding: 35px 20px;
+  text-align: center;
+  color: #777;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.pie-seguimiento {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 9px;
+  padding: 14px 23px;
+  border-top: 1px solid var(--borde);
+  background: #fcfcfc;
+  color: #888;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.pie-seguimiento strong {
+  color: #555;
+}
+
+.pie-pagina {
+  margin-top: 25px;
+  padding: 18px 0 5px;
+  border-top: 1px solid var(--borde);
+  color: var(--gris-texto);
+  text-align: center;
+  font-size: 11px;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1150px) {
+  .contenido {
+    padding: 30px 24px 40px;
+  }
+
+  .tabla-asistencia .columna-jugadora {
+    width: 220px;
+    min-width: 220px;
+    max-width: 220px;
+  }
+
+  .metricas-individuales {
+    gap: 8px;
+  }
+
+  .metrica {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 760px) {
+  .barra-superior {
+    min-height: 72px;
+    padding: 10px 13px;
+    gap: 9px;
+  }
+
+  .boton-menu {
+    width: 38px;
+    height: 38px;
+    font-size: 24px;
+  }
+
+  .logo-superior {
+    width: 44px;
+    height: 44px;
+  }
+
+  .titulo-superior h1 {
+    font-size: 16px;
+  }
+
+  .titulo-superior p {
+    font-size: 11px;
+  }
+
+  .perfil {
+    gap: 6px;
+  }
+
+  .avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+  }
+
+  .nombre-perfil {
+    max-width: 80px;
+    font-size: 12px;
+  }
+
+  .rol-perfil {
+    display: none;
+  }
+
+  .contenedor {
+    min-height: calc(100vh - 72px);
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 72px;
+    bottom: 0;
+    left: 0;
+    z-index: 150;
+    width: 258px;
+    max-width: 86vw;
+    overflow-y: auto;
+    box-shadow: 5px 0 25px #00000012;
+    margin-left: 0;
+    transition: transform .25s ease;
+  }
+
+  .sidebar.oculto {
+    margin-left: 0;
+    transform: translateX(-110%);
+  }
+
+  .capa-sidebar.visible {
+    display: block;
+    position: fixed;
+    inset: 72px 0 0;
+    z-index: 140;
+    background: rgba(0, 0, 0, .32);
+  }
+
+  .contenido {
+    padding: 24px 15px 34px;
+  }
+
+  .cabecera-pagina {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 13px;
+  }
+
+  .cabecera-pagina h2 {
+    font-size: 25px;
+  }
+
+  .selector-categoria-panel {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 13px;
+    padding: 17px 14px;
+  }
+
+  .selector-categoria-icono {
+    width: 42px;
+    height: 42px;
+    font-size: 20px;
+  }
+
+  .selector-categoria-principal {
+    width: 100%;
+  }
+
+  .selector-categoria-texto h3 {
+    font-size: 16px;
+  }
+
+  .cabecera-mes {
+    align-items: stretch;
+    flex-direction: column;
+    padding: 17px 14px;
+    gap: 16px;
+  }
+
+  .mes-informacion h3 {
+    font-size: 22px;
+  }
+
+  .mes-derecha {
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+
+  .boton-mes {
+    width: 35px;
+  }
+
+  .configuracion-dias {
+    padding: 17px 14px;
+  }
+
+  .dias-semana {
+    gap: 6px;
+  }
+
+  .dia-semana {
+    min-width: 68px;
+    padding: 8px 9px;
+    flex: 1 0 20%;
+  }
+
+  .leyenda-asistencia {
+    padding: 13px 14px;
+    gap: 10px;
+  }
+
+  .leyenda-titulo {
+    width: 100%;
+  }
+
+  .planilla-cabecera {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 16px 14px 12px;
+  }
+
+  .planilla-acciones {
+    width: 100%;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .selector-orden {
+    width: 100%;
+    min-width: 0;
+    max-width: 280px;
+  }
+
+  .estado-guardado {
+    text-align: left;
+    white-space: normal;
+  }
+
+  .tabla-contenedor {
+    max-height: 65vh;
+  }
+
+  .tabla-asistencia .columna-jugadora {
+    width: 185px;
+    min-width: 185px;
+    max-width: 185px;
+    padding: 9px;
+  }
+
+  .tabla-asistencia thead th {
+    height: 99px;
+  }
+
+  .tabla-asistencia thead .columna-fecha {
+    width: 76px;
+    min-width: 76px;
+    max-width: 76px;
+  }
+
+  .tabla-asistencia tbody td {
+    height: 53px;
+    padding: 5px;
+  }
+
+  .avatar-jugadora {
+    width: 29px;
+    height: 29px;
+  }
+
+  .nombre-jugadora {
+    font-size: 11px;
+  }
+
+  .boton-estado {
+    width: 34px;
+    height: 34px;
+  }
+
+  .pie-planilla {
+    padding: 13px 14px;
+  }
+
+  .seguimiento-cabecera {
+    align-items: stretch;
+    flex-direction: column;
+    padding: 18px 14px;
+    gap: 16px;
+  }
+
+  .selector-individual {
+    min-width: 0;
+    max-width: none;
+  }
+
+  .individual-identidad {
+    padding: 15px 14px;
+  }
+
+  .metricas-individuales {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+    padding: 14px;
+  }
+
+  .metrica {
+    padding: 12px;
+  }
+
+  .metrica-numero {
+    font-size: 23px;
+  }
+
+  .individual-aclaracion {
+    margin: 0 14px 15px;
+    padding: 12px;
+  }
+
+  .pie-seguimiento {
+    padding: 13px 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .barra-superior {
+    padding: 8px;
+    gap: 6px;
+  }
+
+  .boton-menu {
+    width: 32px;
+    height: 36px;
+    font-size: 23px;
+  }
+
+  .logo-superior {
+    width: 34px;
+    height: 34px;
+  }
+
+  .titulo-superior h1 {
+    font-size: 14px;
+  }
+
+  .titulo-superior p {
+    font-size: 9px;
+  }
+
+  .perfil {
+    gap: 6px;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+
+  .nombre-perfil {
+    max-width: 60px;
+    font-size: 12px;
+  }
+
+  .mes-informacion h3 {
+    font-size: 20px;
+  }
+
+  .mes-derecha {
+    gap: 8px;
+  }
+
+  .dia-semana {
+    min-width: 62px;
+    font-size: 11px;
+  }
+
+  .tabla-asistencia .columna-jugadora {
+    width: 165px;
+    min-width: 165px;
+    max-width: 165px;
+  }
+
+  .metrica-numero {
+    font-size: 21px;
+  }
+}
+
+/* =====================================================
+   PERFIL Y BARRA SUPERIOR
+===================================================== */
+
+.barra-superior {
+  min-height: 84px;
+  padding: 12px 25px;
+  gap: 14px;
+  background: rgba(255,255,255,.97);
+  border-bottom: 1px solid #e9eaf0;
+  box-shadow: 0 2px 10px rgba(20, 26, 36, .025);
+  backdrop-filter: blur(12px);
+}
+
+.boton-menu {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  background: transparent;
+  font-size: 25px;
+  line-height: 1;
+  color: #24252b;
+}
+
+.boton-menu:hover {
+  background: #f5f6f8;
+  border-color: #eceef2;
+}
+
+.logo-superior {
+  width: 52px;
+  height: 52px;
+}
+
+.titulo-superior h1 {
+  font-size: 21px;
+  letter-spacing: .55px;
+}
+
+.titulo-superior p {
+  font-size: 12px;
+  color: #7b808b;
+}
+
+.perfil {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex-shrink: 0;
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  background: #1b1c20;
+  color: #fff;
+  border: 3px solid #f1f2f5;
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.informacion-perfil {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+}
+
+.nombre-perfil {
+  display: block;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--negro);
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.rol-perfil {
+  display: block;
+  margin-top: 4px;
+  color: var(--gris-texto);
+  font-size: 11px;
+}
+
+@media (max-width: 760px) {
+  .barra-superior {
+    min-height: 72px;
+    padding: 10px 13px;
+    gap: 9px;
+  }
+
+  .boton-menu {
+    width: 38px;
+    height: 38px;
+    font-size: 24px;
+  }
+
+  .logo-superior {
+    width: 44px;
+    height: 44px;
+  }
+
+  .titulo-superior h1 {
+    font-size: 16px;
+  }
+
+  .titulo-superior p {
+    font-size: 11px;
+  }
+
+  .perfil {
+    gap: 6px;
+  }
+
+  .avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+  }
+
+  .nombre-perfil {
+    max-width: 80px;
+    font-size: 12px;
+  }
+
+  .rol-perfil {
+    display: none;
+  }
+}
+
+@media (max-width: 380px) {
+  .barra-superior {
+    padding: 8px;
+    gap: 6px;
+  }
+
+  .boton-menu {
+    width: 32px;
+    height: 36px;
+    font-size: 23px;
+  }
+
+  .logo-superior {
+    width: 34px;
+    height: 34px;
+  }
+
+  .titulo-superior h1 {
+    font-size: 14px;
+  }
+
+  .titulo-superior p {
+    font-size: 9px;
+  }
+
+  .nombre-perfil {
+    max-width: 60px;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+</style>
+<script src="ADIUR-permisos.js?v=20261118-s16c"></script>
+</head>
+
+<body>
+
+<header class="barra-superior">
+
+  <button
+    class="boton-menu"
+    id="botonMenu"
+    aria-label="Abrir menú"
+    aria-controls="sidebar"
+    aria-expanded="true"
+    onclick="alternarSidebar()"
+  >☰</button>
+
+  <img
+    class="logo-superior"
+    src="ADIUR-Logo ADIUR.jpg"
+    alt="Logo ADIUR"
+    onerror="if(!this.dataset.intento){this.dataset.intento='1';this.src='ADIUR-Logo ADIUR.jpg'}else{this.style.display='none'}"
+  >
+
+  <div class="titulo-superior">
+    <h1>ADIUR FEMENINO</h1>
+    <p>Asistencia del plantel</p>
+  </div>
+
+  <div class="perfil">
+    <div class="avatar" id="avatarUsuario">U</div>
+    <div class="informacion-perfil">
+      <div class="nombre-perfil" id="nombreUsuario">Usuario</div>
+      <div class="rol-perfil" id="rolUsuario">Club ADIUR</div>
+    </div>
+  </div>
+
+</header>
+
+<div
+  class="capa-sidebar"
+  id="capaSidebar"
+  onclick="alternarSidebar()"
+></div>
+
+<div class="contenedor">
+
+  <aside class="sidebar" id="sidebar">
+
+    <a class="menu-inicio" href="ADIUR-Pagina Principal.html">
+      <span class="icono-inicio" aria-hidden="true">⌂</span>
+      INICIO
+    </a>
+
+    <div class="grupo-menu" id="grupoPlantel">
+
+      <div
+        class="titulo-grupo"
+        onclick="toggleGrupo('grupoPlantel')"
+        role="button"
+        tabindex="0"
+        aria-expanded="true"
+      >
+        <span>PLANTEL</span>
+        <span class="flecha" aria-hidden="true">›</span>
+      </div>
+
+      <div class="submenu">
+        <a href="ADIUR-jugadoras.html">
+          <span class="nav-punto"></span>Jugadoras
+        </a>
+
+        <a href="ADIUR-asistencia.html" class="activo" aria-current="page">
+          <span class="nav-punto"></span>Asistencia
+        </a>
+      </div>
+    </div>
+
+    <div class="grupo-menu cerrado" id="grupoEntrenamiento">
+
+      <div
+        class="titulo-grupo"
+        onclick="toggleGrupo('grupoEntrenamiento')"
+        role="button"
+        tabindex="0"
+        aria-expanded="false"
+      >
+        <span>ENTRENAMIENTO</span>
+        <span class="flecha" aria-hidden="true">›</span>
+      </div>
+
+      <div class="submenu">
+        <a href="ADIUR-calendario.html">
+          <span class="nav-punto"></span>Calendario
+        </a>
+
+        <a href="ADIUR-planificacion.html" data-ocultar-bianca>
+          <span class="nav-punto"></span>Planificación
+        </a>
+
+        <a href="biblioteca.html" data-ocultar-bianca>
+          <span class="nav-punto"></span>Biblioteca de ejercicios
+        </a>
+
+        <a href="ADIUR-gimnasio.html">
+          <span class="nav-punto"></span>Gimnasio
+        </a>
+
+        <a href="ADIUR-calculadora.html" data-ocultar-bianca>
+          <span class="nav-punto"></span>Calculadora
+        </a>
+      </div>
+    </div>
+
+    <div class="grupo-menu cerrado" id="grupoCompetencia">
+
+      <div
+        class="titulo-grupo"
+        onclick="toggleGrupo('grupoCompetencia')"
+        role="button"
+        tabindex="0"
+        aria-expanded="false"
+      >
+        <span>COMPETENCIA</span>
+        <span class="flecha" aria-hidden="true">›</span>
+      </div>
+
+      <div class="submenu">
+        <a href="ADIUR-Partidos.html">
+          <span class="nav-punto"></span>Partidos
+        </a>
+
+        <a href="ADIUR-informes.html" data-ocultar-bianca>
+          <span class="nav-punto"></span>Informes
+        </a>
+
+        <a href="ADIUR-estadisticas.html" data-ocultar-bianca>
+          <span class="nav-punto"></span>Estadísticas
+        </a>
+
+        <a href="ADIUR-pizarra.html" data-ocultar-bianca>
+          <span class="nav-punto"></span>Pizarra táctica
+        </a>
+      </div>
+    </div>
+
+    <div class="grupo-menu cerrado" id="grupoRendimientos">
+
+      <div
+        class="titulo-grupo"
+        onclick="toggleGrupo('grupoRendimientos')"
+        role="button"
+        tabindex="0"
+        aria-expanded="false"
+      >
+        <span>RENDIMIENTOS</span>
+        <span class="flecha" aria-hidden="true">›</span>
+      </div>
+
+      <div class="submenu">
+        <a href="ADIUR-testeos.html">
+          <span class="nav-punto"></span>Planilla de testeos
+        </a>
+
+        <a href="ADIUR-tiempos.html">
+          <span class="nav-punto"></span>Tiempos
+        </a>
+
+        <a href="multimedia.html">
+          <span class="nav-punto"></span>Multimedia
+        </a>
+
+        <a href="ADIUR-encuestas.html">
+          <span class="nav-punto"></span>Encuestas
+        </a>
+
+        <a href="lesiones.html">
+          <span class="nav-punto"></span>Lesiones
+        </a>
+      </div>
+    </div>
+
+    <div class="separador-sesion">
+      <a
+        class="enlace-cerrar-sesion"
+        href="#"
+        onclick="cerrarSesion(event)"
+      >
+        <span class="icono-salir" aria-hidden="true">↪</span>
+        Cerrar sesión
+      </a>
+    </div>
+
+  </aside>
+
+  <main class="contenido">
+
+    <section class="cabecera-pagina">
+      <div>
+        <span class="etiqueta-seccion">PLANTEL - ASISTENCIA</span>
+        <h2>Asistencia mensual</h2>
+        <p>
+          Registrá la asistencia por categoría y consultá el seguimiento
+          individual de cada jugadora al final de la página.
+        </p>
+      </div>
+
+      <div class="acciones-superiores-pagina">
+        <button
+          type="button"
+          class="boton-guardar-principal"
+          id="botonGuardarAsistencia"
+          onclick="guardarTodoManual()"
+        >
+          💾 Guardar asistencia
+        </button>
+      </div>
+    </section>
+
+    <!-- SELECTOR PRINCIPAL DE CATEGORÍA -->
+
+    <section class="selector-categoria-panel" aria-label="Seleccionar categoría del plantel">
+
+      <div class="selector-categoria-icono" aria-hidden="true">⚽</div>
+
+      <div class="selector-categoria-texto">
+        <span class="etiqueta-seccion">CATEGORÍA DEL PLANTEL</span>
+        <h3>Seleccioná la categoría</h3>
+        <p>La planilla mensual y el seguimiento individual se actualizan según la categoría elegida.</p>
+      </div>
+
+      <div class="selector-categoria-principal">
+        <label for="filtroCategoria">CATEGORÍA</label>
+        <select id="filtroCategoria" aria-label="Seleccionar categoría"></select>
+      </div>
+
+    </section>
+
+    <!-- PLANILLA MENSUAL -->
+
+    <section class="panel-asistencia">
+
+      <div class="cabecera-mes">
+
+        <div class="mes-informacion">
+          <h3 id="mesTitulo">Octubre 2026</h3>
+          <p id="subtituloMes">Planilla mensual de entrenamiento</p>
+        </div>
+
+        <div class="mes-derecha">
+
+          <div class="controles-mes">
+            <button
+              class="boton-mes"
+              id="mesAnterior"
+              aria-label="Mes anterior"
+              title="Mes anterior"
+            >‹</button>
+
+            <button
+              class="boton-mes"
+              id="mesSiguiente"
+              aria-label="Mes siguiente"
+              title="Mes siguiente"
+            >›</button>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="configuracion-dias">
+
+        <h3 class="titulo-configuracion">
+          <span class="icono-configuracion">◷</span>
+          DÍAS HABITUALES DE ENTRENAMIENTO
+        </h3>
+
+        <p class="descripcion-configuracion">
+          Estos días son específicos de la categoría seleccionada.
+          Podés modificarlos sin alterar la configuración de las demás.
+        </p>
+
+        <div class="dias-semana" id="diasSemana"></div>
+
+      </div>
+
+      <div class="leyenda-asistencia">
+
+        <span class="leyenda-titulo">ESTADOS</span>
+
+        <span class="leyenda-item">
+          <span class="muestra-leyenda muestra-presente">✓</span>
+          Presente
+        </span>
+
+        <span class="leyenda-item">
+          <span class="muestra-leyenda muestra-ausente">×</span>
+          Ausente
+        </span>
+
+        <span class="leyenda-item">
+          <span class="muestra-leyenda muestra-tarde">T</span>
+          Tarde
+        </span>
+
+        <span class="leyenda-item">
+          <span class="muestra-leyenda muestra-justificada">J</span>
+          Justificada
+        </span>
+
+        <span class="leyenda-item">
+          <span class="muestra-leyenda muestra-sin-entreno">—</span>
+          Sin entrenamiento
+        </span>
+
+      </div>
+
+      <div class="planilla-cabecera">
+
+        <div>
+          <h3 id="tituloPlanilla">Planilla de jugadoras</h3>
+          <p>
+            Tocá un casillero para alternar entre sin marcar,
+            presente, ausente, tarde y justificada.
+          </p>
+        </div>
+
+        <div class="planilla-acciones">
+
+          <div class="selector-orden">
+            <label for="ordenLista">ORDENAR JUGADORAS</label>
+
+            <select id="ordenLista" aria-label="Ordenar jugadoras de la planilla">
+              <option value="apellido">Apellido · A–Z</option>
+              <option value="puesto">Por puesto</option>
+            </select>
+          </div>
+
+          <div
+            class="estado-guardado"
+            id="estadoGuardado"
+            aria-live="polite"
+          >
+            Modificá y tocá "Guardar asistencia"
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="tabla-contenedor">
+        <table class="tabla-asistencia" id="tablaAsistencia">
+          <thead id="encabezadoTabla"></thead>
+          <tbody id="cuerpoTabla"></tbody>
+        </table>
+      </div>
+
+      <div class="pie-planilla">
+
+        <span>
+          <strong id="cantidadJugadoras">0 jugadoras activas</strong>
+          · <span id="textoOrdenLista">Orden: Apellido A–Z</span>
+        </span>
+
+        <span>
+          Recordá hacer clic en "Guardar asistencia" arriba para conservar los cambios en la nube para todas las categorías.
+        </span>
+
+      </div>
+
+    </section>
+
+    <!-- SEGUIMIENTO INDIVIDUAL -->
+
+    <section class="seguimiento-individual" id="seguimientoIndividual">
+
+      <div class="seguimiento-cabecera">
+
+        <div class="seguimiento-titulo">
+          <span class="etiqueta-seccion">ANÁLISIS INDIVIDUAL</span>
+          <h3>Seguimiento de asistencia</h3>
+          <p>
+            Seleccioná una jugadora de la categoría elegida arriba
+            para consultar sus estadísticas de asistencia del mes.
+          </p>
+        </div>
+
+        <div class="selector-individual">
+
+          <label for="selectorJugadoraSeguimiento">
+            SELECCIONAR JUGADORA
+          </label>
+
+          <select
+            class="selector-jugadora"
+            id="selectorJugadoraSeguimiento"
+          ></select>
+
+        </div>
+
+      </div>
+
+      <div id="contenidoSeguimiento">
+
+        <div class="sin-jugadora">
+          Seleccioná una jugadora para consultar su seguimiento individual.
+        </div>
+
+      </div>
+
+    </section>
+
+    <footer class="pie-pagina">
+      ADIUR FEMENINO · Más que un club, una familia.
+    </footer>
+
+  </main>
+
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-analytics.js";
+  import { getFirestore, collection, addDoc, getDocs, doc, setDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCc0dPIEkaKxbHoRC2CgZK412dXVGPOdTI",
+    authDomain: "adiur-b1913.firebaseapp.com",
+    projectId: "adiur-b1913",
+    storageBucket: "adiur-b1913.firebasestorage.app",
+    messagingSenderId: "884643321144",
+    appId: "1:884643321144:web:ba3c314de3a1c9e3545dcd",
+    measurementId: "G-58LL26YXPM"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const db = getFirestore(app);
+
+/* =====================================================
+   USUARIO Y PERMISOS
+===================================================== */
+
+const usuarioGuardado = localStorage.getItem("usuarioADIUR");
+
+if (!usuarioGuardado) {
+  window.location.href = "ADIUR-Loing.html";
+}
+
+function normalizarTexto(valor) {
+  return String(valor ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ");
+}
+
+function normalizarCategoria(valor) {
+  return normalizarTexto(valor)
+    .replace(/\bsub\s*(\d+)/g, "sub $1");
+}
+
+const usuarioNormalizado = normalizarTexto(usuarioGuardado)
+  .replace(/[^a-z0-9]/g, "");
+
+const esFran = [
+  "fran",
+  "francisco",
+  "franciscoperezbasla"
+].includes(usuarioNormalizado);
+
+const esToto = usuarioNormalizado === "toto";
+
+const esBianca = [
+  "bianca",
+  "biancadominguez"
+].includes(usuarioNormalizado);
+
+const nombreMostrar = usuarioGuardado || "Usuario";
+
+document.getElementById("nombreUsuario").textContent = nombreMostrar;
+
+document.getElementById("avatarUsuario").textContent =
+  nombreMostrar.charAt(0).toUpperCase();
+
+document.getElementById("rolUsuario").textContent =
+  esFran ? "Administrador" :
+  esToto ? "Cuerpo técnico" :
+  esBianca ? "Jugadora · Sub 14" :
+  "Club ADIUR";
+
+if (!esFran && !esToto && usuarioGuardado) {
+  window.location.href = "ADIUR-Pagina Principal.html";
+}
+
+if (esBianca) {
+  document.getElementById("grupoPlantel")?.remove();
+  document.getElementById("grupoRendimientos")?.remove();
+
+  document.querySelectorAll("[data-ocultar-bianca]").forEach(enlace => {
+    enlace.style.display = "none";
+  });
+}
+
+/* =====================================================
+   MENÚ Y SESIÓN
+===================================================== */
+
+window.cerrarSesion = function(event) {
+  event.preventDefault();
+  localStorage.removeItem("usuarioADIUR");
+  window.location.href = "ADIUR-Loing.html";
+}
+
+window.alternarSidebar = function() {
+  const sidebar = document.getElementById("sidebar");
+  const capa = document.getElementById("capaSidebar");
+  const boton = document.getElementById("botonMenu");
+
+  sidebar.classList.toggle("oculto");
+
+  const abierto = !sidebar.classList.contains("oculto");
+
+  boton.setAttribute("aria-expanded", String(abierto));
+
+  if (window.innerWidth <= 760) {
+    capa.classList.toggle("visible", abierto);
+  }
+}
+
+window.toggleGrupo = function(id) {
+  const grupo = document.getElementById(id);
+
+  if (!grupo) return;
+
+  grupo.classList.toggle("cerrado");
+
+  const titulo = grupo.querySelector(".titulo-grupo");
+
+  if (titulo) {
+    titulo.setAttribute(
+      "aria-expanded",
+      String(!grupo.classList.contains("cerrado"))
+    );
+  }
+}
+
+document.querySelectorAll(".titulo-grupo[role='button']").forEach(titulo => {
+  titulo.addEventListener("keydown", event => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+
+      const grupo = titulo.closest(".grupo-menu");
+      if (grupo) toggleGrupo(grupo.id);
+    }
+  });
+});
+
+function ajustarSidebarPorPantalla() {
+  const sidebar = document.getElementById("sidebar");
+  const capa = document.getElementById("capaSidebar");
+  const boton = document.getElementById("botonMenu");
+
+  if (window.innerWidth <= 760) {
+    sidebar.classList.add("oculto");
+    capa.classList.remove("visible");
+    boton.setAttribute("aria-expanded", "false");
+  } else {
+    sidebar.classList.remove("oculto");
+    capa.classList.remove("visible");
+    boton.setAttribute("aria-expanded", "true");
+  }
+}
+
+window.addEventListener("resize", ajustarSidebarPorPantalla);
+ajustarSidebarPorPantalla();
+
+/* =====================================================
+   CLAVES DE ALMACENAMIENTO Y NUBE
+===================================================== */
+
+const CLAVE_JUGADORAS = "jugadorasADIUR";
+const CLAVE_DIAS_SEMANA = "diasEntrenamientoSemanaADIUR";
+const CLAVE_DIAS_SIN_ENTRENO = "diasSinEntrenamientoADIUR";
+const CLAVE_CATEGORIA = "categoriaAsistenciaSeleccionadaADIUR";
+const CLAVE_JUGADORA_SEGUIMIENTO = "jugadoraSeguimientoAsistenciaADIUR";
+const CLAVE_ORDEN_LISTA = "ordenAsistenciaJugadorasADIUR";
+
+const DIAS_SEMANA = [
+  { valor: 1, nombre: "Lunes" },
+  { valor: 2, nombre: "Martes" },
+  { valor: 3, nombre: "Miércoles" },
+  { valor: 4, nombre: "Jueves" },
+  { valor: 5, nombre: "Viernes" },
+  { valor: 6, nombre: "Sábado" },
+  { valor: 0, nombre: "Domingo" }
+];
+
+let mesActual = new Date();
+mesActual = new Date(mesActual.getFullYear(), mesActual.getMonth(), 1);
+
+function leerJSON(clave, valorPorDefecto) {
+  try {
+    const guardado = localStorage.getItem(clave);
+    if (guardado === null) return valorPorDefecto;
+    return JSON.parse(guardado);
+  } catch (error) {
+    console.error("No se pudo leer:", clave, error);
+    return valorPorDefecto;
+  }
+}
+
+function escaparHTML(valor) {
+  return String(valor ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+/* =====================================================
+   JUGADORAS (DESDE LA NUBE Y LOCAL)
+===================================================== */
+
+function obtenerNombreJugadora(jugadora) {
+  const directo =
+    jugadora.nombre ||
+    jugadora.nombreCompleto ||
+    jugadora.nombre_completo;
+
+  if (directo) {
+    return String(directo).trim();
+  }
+
+  return [
+    jugadora.nombres,
+    jugadora.apellido,
+    jugadora.apellidos
+  ].filter(Boolean).join(" ").trim();
+}
+
+function obtenerCategoriaJugadora(jugadora) {
+  return String(
+    jugadora.categoria ||
+    jugadora.division ||
+    jugadora.categoría ||
+    "Sin categoría"
+  ).trim().replace(/\s+/g, " ");
+}
+
+let jugadoras = [];
+
+function procesarListaJugadoras(listaCruda) {
+  return listaCruda
+    .filter(j => j && typeof j === "object")
+    .map(j => ({
+      ...j,
+      nombre: obtenerNombreJugadora(j),
+      categoria: obtenerCategoriaJugadora(j)
+    }))
+    .filter(j => j.nombre.trim() !== "")
+    .sort((a, b) =>
+      a.nombre.localeCompare(b.nombre, "es", {
+        sensitivity: "base",
+        ignorePunctuation: true
+      })
+    );
+}
+
+function cargarJugadorasLocales() {
+  const datos = leerJSON(CLAVE_JUGADORAS, []);
+  let lista = [];
+  if (Array.isArray(datos)) {
+    lista = datos;
+  } else if (datos && Array.isArray(datos.jugadoras)) {
+    lista = datos.jugadoras;
+  }
+  return procesarListaJugadoras(lista);
+}
+
+jugadoras = cargarJugadorasLocales();
+
+onSnapshot(collection(db, "jugadoras"), (snapshot) => {
+  let listaNube = [];
+  snapshot.forEach((docSnap) => {
+    listaNube.push({ id: docSnap.id, ...docSnap.data() });
+  });
+  if (listaNube.length > 0) {
+    jugadoras = procesarListaJugadoras(listaNube);
+  } else {
+    jugadoras = cargarJugadorasLocales();
+  }
+  actualizarCategoriasYReRenderizar();
+});
+
+function claveJugadora(jugadora) {
+  if (
+    jugadora.id !== undefined &&
+    jugadora.id !== null &&
+    String(jugadora.id).trim() !== ""
+  ) {
+    return "id:" + String(jugadora.id);
+  }
+  return "nombre:" + normalizarTexto(jugadora.nombre);
+}
+
+function inicialesJugadora(nombre) {
+  const partes = String(nombre || "")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
+
+  if (!partes.length) return "?";
+
+  if (partes.length === 1) {
+    return partes[0].substring(0, 2).toUpperCase();
+  }
+
+  return (
+    partes[0].charAt(0) +
+    partes[partes.length - 1].charAt(0)
+  ).toUpperCase();
+}
+
+/* =====================================================
+   CATEGORÍAS Y ORDENAMIENTO
+===================================================== */
+
+function obtenerCategoriasDisponibles() {
+  const mapa = new Map();
+
+  jugadoras.forEach(j => {
+    const categoria = obtenerCategoriaJugadora(j);
+    const clave = normalizarCategoria(categoria);
+
+    if (clave && !mapa.has(clave)) {
+      mapa.set(clave, categoria);
+    }
+  });
+
+  return [...mapa.values()].sort((a, b) => {
+    const aSin = normalizarCategoria(a) === "sin categoria";
+    const bSin = normalizarCategoria(b) === "sin categoria";
+
+    if (aSin && !bSin) return 1;
+    if (!aSin && bSin) return -1;
+
+    return a.localeCompare(b, "es", {
+      numeric: true,
+      sensitivity: "base"
+    });
+  });
+}
+
+let categoriasDisponibles = obtenerCategoriasDisponibles();
+
+function obtenerCategoriaInicial() {
+  const guardada = localStorage.getItem(CLAVE_CATEGORIA);
+
+  const coincide = categoriasDisponibles.find(c =>
+    normalizarCategoria(c) === normalizarCategoria(guardada)
+  );
+
+  return coincide || categoriasDisponibles[0] || "";
+}
+
+let categoriaSeleccionada = obtenerCategoriaInicial();
+
+let ordenLista = localStorage.getItem(CLAVE_ORDEN_LISTA) === "puesto"
+  ? "puesto"
+  : "apellido";
+
+function esJugadoraActiva(jugadora) {
+  const estado = normalizarTexto(
+    jugadora.estado || jugadora.status || jugadora.estadoJugadora || ""
+  );
+
+  return estado === "activo" || estado === "activa";
+}
+
+function obtenerApellidoParaOrden(jugadora) {
+  const apellidoSeparado =
+    jugadora.apellido ||
+    jugadora.apellidos ||
+    jugadora.surname ||
+    jugadora.lastName ||
+    jugadora.last_name;
+
+  if (apellidoSeparado && String(apellidoSeparado).trim()) {
+    return normalizarTexto(apellidoSeparado);
+  }
+
+  const nombreCompleto = String(jugadora.nombre || "").trim();
+
+  if (!nombreCompleto) return "";
+
+  if (nombreCompleto.includes(",")) {
+    return normalizarTexto(nombreCompleto.split(",")[0]);
+  }
+
+  const partes = nombreCompleto.split(/\s+/).filter(Boolean);
+
+  return normalizarTexto(
+    partes.length > 1 ? partes[partes.length - 1] : partes[0]
+  );
+}
+
+function obtenerPuestoParaOrden(jugadora) {
+  return normalizarTexto(
+    jugadora.posicion || jugadora.puesto || jugadora.position || ""
+  );
+}
+
+const ORDEN_PUESTOS_ASISTENCIA = [
+  "arquera",
+  "defensora",
+  "mediocampista",
+  "delantera",
+  "polifuncional"
+];
+
+function compararJugadorasPorApellido(a, b) {
+  return obtenerApellidoParaOrden(a).localeCompare(
+    obtenerApellidoParaOrden(b),
+    "es",
+    { sensitivity: "base", ignorePunctuation: true }
+  ) || String(a.nombre || "").localeCompare(
+    String(b.nombre || ""),
+    "es",
+    { sensitivity: "base", ignorePunctuation: true }
+  );
+}
+
+function jugadorasCategoriaActual() {
+  if (!categoriaSeleccionada) return [];
+
+  const activas = jugadoras.filter(j =>
+    esJugadoraActiva(j) &&
+    normalizarCategoria(j.categoria) ===
+    normalizarCategoria(categoriaSeleccionada)
+  );
+
+  return activas.sort((a, b) => {
+    if (ordenLista === "puesto") {
+      const puestoA = obtenerPuestoParaOrden(a);
+      const puestoB = obtenerPuestoParaOrden(b);
+
+      const indiceA = ORDEN_PUESTOS_ASISTENCIA.indexOf(puestoA);
+      const indiceB = ORDEN_PUESTOS_ASISTENCIA.indexOf(puestoB);
+
+      const rangoA = indiceA === -1
+        ? ORDEN_PUESTOS_ASISTENCIA.length
+        : indiceA;
+
+      const rangoB = indiceB === -1
+        ? ORDEN_PUESTOS_ASISTENCIA.length
+        : indiceB;
+
+      if (rangoA !== rangoB) return rangoA - rangoB;
+    }
+
+    return compararJugadorasPorApellido(a, b);
+  });
+}
+
+function guardarCategoriaSeleccionada() {
+  if (categoriaSeleccionada) {
+    localStorage.setItem(CLAVE_CATEGORIA, categoriaSeleccionada);
+  } else {
+    localStorage.removeItem(CLAVE_CATEGORIA);
+  }
+}
+
+function renderizarSelectorCategorias() {
+  const selector = document.getElementById("filtroCategoria");
+
+  if (!categoriasDisponibles.length) {
+    selector.innerHTML =
+      '<option value="">No hay categorías cargadas</option>';
+    selector.disabled = true;
+    return;
+  }
+
+  selector.disabled = false;
+
+  selector.innerHTML = categoriasDisponibles.map(categoria => `
+    <option value="${escaparHTML(categoria)}">
+      ${escaparHTML(categoria)}
+    </option>
+  `).join("");
+
+  selector.value = categoriaSeleccionada;
+}
+
+/* =====================================================
+   DÍAS HABITUALES POR CATEGORÍA
+===================================================== */
+
+function claveDiasEntrenamiento(categoria) {
+  return CLAVE_DIAS_SEMANA + "_" + encodeURIComponent(
+    normalizarCategoria(categoria || "sin categoria")
+  );
+}
+
+function cargarDiasEntrenamiento(categoria) {
+  const clavePropia = claveDiasEntrenamiento(categoria);
+  let valor = leerJSON(clavePropia, null);
+
+  if (!Array.isArray(valor)) {
+    valor = leerJSON(CLAVE_DIAS_SEMANA, [1, 3, 5]);
+  }
+
+  if (!Array.isArray(valor)) {
+    valor = [1, 3, 5];
+  }
+
+  return [...new Set(
+    valor
+      .map(Number)
+      .filter(d => Number.isInteger(d) && d >= 0 && d <= 6)
+  )];
+}
+
+let diasEntrenamiento = cargarDiasEntrenamiento(categoriaSeleccionada);
+
+
+async function guardarDiasEntrenamiento() {
+  const categoria = categoriaSeleccionada;
+  const dias = [...diasEntrenamiento];
+
+  // Guardado local
+  try {
+    localStorage.setItem(
+      claveDiasEntrenamiento(categoria),
+      JSON.stringify(dias)
+    );
+  } catch (error) {
+    console.error("Error al guardar localmente:", error);
+  }
+
+  // Guardado en Firestore
+  try {
+    await setDoc(
+      doc(
+        db,
+        "configuracionAsistenciaADIUR",
+        claveDiasEntrenamiento(categoria)
+      ),
+      {
+        categoria: categoria,
+        dias: dias,
+        actualizadoEn: new Date().toISOString()
+      }
+    );
+
+    console.log("Días de entrenamiento guardados en la nube.");
+  } catch (error) {
+    console.error("Error al guardar los días en Firestore:", error);
+    alert("No se pudieron guardar los días de entrenamiento en la nube.");
+  }
+}
+
+let cancelarEscuchaDiasNube = null;
+let categoriaEscuchadaDiasNube = null;
+
+function escucharDiasEntrenamientoNube(categoria) {
+  // Evita crear varias escuchas para la misma categoría.
+  if (
+    normalizarCategoria(categoria) ===
+    normalizarCategoria(categoriaEscuchadaDiasNube)
+  ) {
+    return;
+  }
+
+  if (cancelarEscuchaDiasNube) {
+    cancelarEscuchaDiasNube();
+  }
+
+  categoriaEscuchadaDiasNube = categoria;
+
+  const referencia = doc(
+    db,
+    "configuracionAsistenciaADIUR",
+    claveDiasEntrenamiento(categoria)
+  );
+
+  cancelarEscuchaDiasNube = onSnapshot(
+    referencia,
+    async (snapshot) => {
+      if (snapshot.exists()) {
+        const datos = snapshot.data();
+
+        if (Array.isArray(datos.dias)) {
+          diasEntrenamiento = [...new Set(
+            datos.dias
+              .map(Number)
+              .filter(d => Number.isInteger(d) && d >= 0 && d <= 6)
+          )];
+
+          localStorage.setItem(
+            claveDiasEntrenamiento(categoria),
+            JSON.stringify(diasEntrenamiento)
+          );
+
+          renderizarDiasSemana();
+          renderizarMatriz();
+          renderizarSeguimientoIndividual();
+        }
+      } else {
+        // Si todavía no existe la configuración en la nube,
+        // guarda los días que ya estaban configurados localmente.
+        await guardarDiasEntrenamiento();
+      }
+    },
+    (error) => {
+      console.error("Error al sincronizar los días:", error);
+    }
+  );
+}
+
+
+function renderizarDiasSemana() {
+  const contenedor = document.getElementById("diasSemana");
+
+  contenedor.innerHTML = DIAS_SEMANA.map(dia => {
+    const activo = diasEntrenamiento.includes(dia.valor);
+
+    return `
+      <button
+        type="button"
+        class="dia-semana ${activo ? "activo" : ""}"
+        data-dia-semana="${dia.valor}"
+        aria-pressed="${activo}"
+      >
+        <span class="indicador"></span>
+        <span>${dia.nombre}</span>
+      </button>
+    `;
+  }).join("");
+
+  contenedor.querySelectorAll("[data-dia-semana]").forEach(boton => {
+    boton.addEventListener("click", () => {
+      const dia = Number(boton.dataset.diaSemana);
+
+      if (diasEntrenamiento.includes(dia)) {
+        diasEntrenamiento = diasEntrenamiento.filter(d => d !== dia);
+      } else {
+        diasEntrenamiento.push(dia);
+      }
+
+      diasEntrenamiento = [...new Set(diasEntrenamiento)];
+
+      guardarDiasEntrenamiento();
+      renderizarDiasSemana();
+      renderizarMatriz();
+      renderizarSeguimientoIndividual();
+    });
+  });
+}
+
+/* =====================================================
+   SESIONES DE ASISTENCIA (SINCRONIZADAS EN FIRESTORE)
+===================================================== */
+
+let sesiones = {};
+
+onSnapshot(collection(db, "asistenciaADIUR"), (snapshot) => {
+  snapshot.forEach((docSnap) => {
+    sesiones[docSnap.id] = docSnap.data();
+  });
+  renderizarMatriz();
+  renderizarSeguimientoIndividual();
+});
+
+function claveSesion(categoria, fecha) {
+  const catLimpia = String(categoria || "Sin categoría").trim().replace(/[\s\/]+/g, "_");
+  return catLimpia + "_" + fecha;
+}
+
+function obtenerSesion(categoria, fecha) {
+  const sesion = sesiones[claveSesion(categoria, fecha)];
+
+  if (!sesion || typeof sesion !== "object") {
+    return null;
+  }
+
+  if (!sesion.asistencias || typeof sesion.asistencias !== "object") {
+    sesion.asistencias = {};
+  }
+
+  return sesion;
+}
+
+function crearSesion(categoria, fecha) {
+  const clave = claveSesion(categoria, fecha);
+
+  if (!sesiones[clave] || typeof sesiones[clave] !== "object") {
+    sesiones[clave] = {
+      fecha,
+      categoria: categoria || "Sin categoría",
+      tipoSesion: "Entrenamiento",
+      asistencias: {}
+    };
+  }
+
+  if (
+    !sesiones[clave].asistencias ||
+    typeof sesiones[clave].asistencias !== "object"
+  ) {
+    sesiones[clave].asistencias = {};
+  }
+
+  return sesiones[clave];
+}
+
+/* =====================================================
+   BOTÓN GUARDAR MANUAL COMPLETO (TODAS LAS CATEGORÍAS)
+===================================================== */
+
+window.guardarTodoManual = async function() {
+  const boton = document.getElementById("botonGuardarAsistencia");
+  const originalTexto = boton.innerHTML;
+  boton.disabled = true;
+  boton.innerHTML = "⏳ Guardando todas las categorías...";
+
+  try {
+    const promesas = Object.keys(sesiones).map(clave => {
+      const sesion = sesiones[clave];
+      if (!sesion) return Promise.resolve();
+      // Aseguramos que el ID del documento Firestore sea limpio y seguro para cualquier categoría
+      const docId = clave.replace(/[\s\/]+/g, "_");
+      return setDoc(doc(db, "asistenciaADIUR", docId), sesion);
+    });
+
+    await Promise.all(promesas);
+
+    const indicador = document.getElementById("estadoGuardado");
+    if (indicador) {
+      indicador.textContent = "✓ ¡Guardado en la nube con éxito!";
+    }
+    
+    setTimeout(() => {
+      if (indicador) indicador.textContent = "Modificá y tocá \"Guardar asistencia\"";
+    }, 3500);
+
+    alert("¡Asistencia guardada correctamente en la nube para todas las categorías (Sub 10, Sub 12, Sub 14, Sub 16 y Primera)!");
+  } catch (error) {
+    console.error("Error al guardar manualmente:", error);
+    alert("Hubo un error al guardar. Verificá tu conexión a internet.");
+  } finally {
+    boton.disabled = false;
+    boton.innerHTML = originalTexto;
+  }
+};
+
+/* =====================================================
+   DÍAS SIN ENTRENAMIENTO POR CATEGORÍA
+===================================================== */
+
+function claveDiaSinEntrenamiento(categoria, fecha) {
+  return String(categoria || "Sin categoría") + "|" + fecha;
+}
+
+function esFechaISO(valor) {
+  return /^\d{4}-\d{2}-\d{2}$/.test(String(valor));
+}
+
+function datosDiaSinEntrenamiento(valor) {
+  const texto = String(valor);
+  const coincidencia = texto.match(/^(.*)\|(\d{4}-\d{2}-\d{2})$/);
+
+  if (coincidencia) {
+    return {
+      categoria: coincidencia[1],
+      fecha: coincidencia[2]
+    };
+  }
+
+  if (esFechaISO(texto)) {
+    return {
+      categoria: "",
+      fecha: texto
+    };
+  }
+
+  return null;
+}
+
+function cargarDiasSinEntrenamiento() {
+  const guardados = leerJSON(CLAVE_DIAS_SIN_ENTRENO, []);
+
+  if (!Array.isArray(guardados)) return [];
+
+  const resultado = [];
+
+  guardados.forEach(valor => {
+    const dato = datosDiaSinEntrenamiento(valor);
+
+    if (!dato) return;
+
+    if (!dato.categoria) {
+      const categorias = categoriasDisponibles.length
+        ? categoriasDisponibles
+        : ["Sin categoría"];
+
+      categorias.forEach(categoria => {
+        resultado.push(
+          claveDiaSinEntrenamiento(categoria, dato.fecha)
+        );
+      });
+    } else {
+      resultado.push(String(valor));
+    }
+  });
+
+  return [...new Set(resultado)];
+}
+
+let diasSinEntrenamiento = cargarDiasSinEntrenamiento();
+
+function esDiaSinEntrenamiento(fecha) {
+  return diasSinEntrenamiento.includes(
+    claveDiaSinEntrenamiento(categoriaSeleccionada, fecha)
+  );
+}
+
+function guardarDiasSinEntrenamiento() {
+  try {
+    localStorage.setItem(
+      CLAVE_DIAS_SIN_ENTRENO,
+      JSON.stringify(diasSinEntrenamiento)
+    );
+  } catch (error) {
+    console.error("No se pudo guardar el día sin entrenamiento.", error);
+  }
+}
+
+function alternarSinEntrenamiento(fecha) {
+  const clave = claveDiaSinEntrenamiento(
+    categoriaSeleccionada,
+    fecha
+  );
+
+  if (diasSinEntrenamiento.includes(clave)) {
+    diasSinEntrenamiento = diasSinEntrenamiento.filter(v => v !== clave);
+  } else {
+    diasSinEntrenamiento.push(clave);
+  }
+
+  diasSinEntrenamiento = [...new Set(diasSinEntrenamiento)];
+
+  guardarDiasSinEntrenamiento();
+  renderizarMatriz();
+  renderizarSeguimientoIndividual();
+}
+
+/* =====================================================
+   FECHAS
+===================================================== */
+
+function crearFechaISO(anio, mes, dia) {
+  return (
+    String(anio).padStart(4, "0") + "-" +
+    String(mes + 1).padStart(2, "0") + "-" +
+    String(dia).padStart(2, "0")
+  );
+}
+
+function fechaISO(fecha) {
+  return crearFechaISO(
+    fecha.getFullYear(),
+    fecha.getMonth(),
+    fecha.getDate()
+  );
+}
+
+function fechaDesdeISO(valor) {
+  const partes = String(valor).split("-").map(Number);
+
+  if (partes.length !== 3 || partes.some(Number.isNaN)) {
+    return null;
+  }
+
+  const fecha = new Date(partes[0], partes[1] - 1, partes[2]);
+
+  if (fechaISO(fecha) !== valor) {
+    return null;
+  }
+
+  return fecha;
+}
+
+function obtenerDiasDelMes(fecha) {
+  return new Date(
+    fecha.getFullYear(),
+    fecha.getMonth() + 1,
+    0
+  ).getDate();
+}
+
+function mismoMes(fechaValor, referencia) {
+  const fecha = fechaDesdeISO(fechaValor);
+
+  if (!fecha) return false;
+
+  return (
+    fecha.getFullYear() === referencia.getFullYear() &&
+    fecha.getMonth() === referencia.getMonth()
+  );
+}
+
+function formatearMes(fecha) {
+  return new Intl.DateTimeFormat("es-AR", {
+    month: "long",
+    year: "numeric"
+  }).format(fecha);
+}
+
+function obtenerNombreDia(fecha) {
+  return new Intl.DateTimeFormat("es-AR", {
+    weekday: "long"
+  }).format(fecha);
+}
+
+/* =====================================================
+   RECUPERAR CATEGORÍA Y FECHA DE SESIÓN
+===================================================== */
+
+function obtenerCategoriaDeSesion(clave, sesion) {
+  if (sesion && sesion.categoria) {
+    return String(sesion.categoria);
+  }
+
+  const partes = String(clave).split("_");
+  if (partes.length > 1) {
+    partes.pop(); // Quitar la fecha final (YYYY-MM-DD)
+    return partes.join(" ");
+  }
+
+  return "";
+}
+
+function obtenerFechaDeSesion(clave, sesion) {
+  if (sesion && sesion.fecha && esFechaISO(sesion.fecha)) {
+    return String(sesion.fecha);
+  }
+
+  const coincidencia = String(clave).match(
+    /(\d{4}-\d{2}-\d{2})$/
+  );
+
+  return coincidencia ? coincidencia[1] : "";
+}
+
+/* =====================================================
+   FECHAS DEL MES PARA LA CATEGORÍA
+===================================================== */
+
+function obtenerFechasDelMes() {
+  const fechas = new Set();
+  const anio = mesActual.getFullYear();
+  const mes = mesActual.getMonth();
+  const cantidadDias = obtenerDiasDelMes(mesActual);
+
+  for (let dia = 1; dia <= cantidadDias; dia++) {
+    const fecha = new Date(anio, mes, dia);
+
+    if (diasEntrenamiento.includes(fecha.getDay())) {
+      fechas.add(fechaISO(fecha));
+    }
+  }
+
+  Object.keys(sesiones).forEach(clave => {
+    const sesion = sesiones[clave];
+
+    if (!sesion || typeof sesion !== "object") return;
+
+    const categoriaSesion = obtenerCategoriaDeSesion(clave, sesion);
+
+    if (
+      normalizarCategoria(categoriaSesion) !==
+      normalizarCategoria(categoriaSeleccionada)
+    ) {
+      return;
+    }
+
+    const fecha = obtenerFechaDeSesion(clave, sesion);
+
+    if (fecha && mismoMes(fecha, mesActual)) {
+      fechas.add(fecha);
+    }
+  });
+
+  diasSinEntrenamiento.forEach(valor => {
+    const dato = datosDiaSinEntrenamiento(valor);
+
+    if (!dato) return;
+
+    if (
+      normalizarCategoria(dato.categoria) ===
+      normalizarCategoria(categoriaSeleccionada) &&
+      mismoMes(dato.fecha, mesActual)
+    ) {
+      fechas.add(dato.fecha);
+    }
+  });
+
+  return [...fechas]
+    .filter(fecha => fechaDesdeISO(fecha) !== null)
+    .sort((a, b) => a.localeCompare(b));
+}
+
+/* =====================================================
+   ESTADÍSTICAS MENSUALES Y ANUALES
+===================================================== */
+
+// Obtiene todas las fechas con sesiones registradas
+// de una categoría durante un año.
+
+function obtenerFechasDelAnio(anio) {
+  const fechas = new Set();
+
+  Object.keys(sesiones).forEach(clave => {
+    const sesion = sesiones[clave];
+
+    if (!sesion || typeof sesion !== "object") return;
+
+    const categoria = obtenerCategoriaDeSesion(clave, sesion);
+
+    if (
+      normalizarCategoria(categoria) !==
+      normalizarCategoria(categoriaSeleccionada)
+    ) return;
+
+    const fecha = obtenerFechaDeSesion(clave, sesion);
+
+    if (
+      fecha &&
+      fechaDesdeISO(fecha) &&
+      fechaDesdeISO(fecha).getFullYear() === anio
+    ) {
+      fechas.add(fecha);
+    }
+  });
+
+  return [...fechas].sort();
+}
+
+
+// Calcula las estadísticas de una jugadora
+// en un conjunto de fechas.
+
+function calcularEstadisticasJugadora(jugadora, fechas) {
+  let presentes = 0;
+  let ausentes = 0;
+  let tardes = 0;
+  let justificadas = 0;
+
+  fechas.forEach(fecha => {
+    if (esDiaSinEntrenamiento(fecha)) return;
+
+    const estado = obtenerEstadoJugadora(jugadora, fecha);
+
+    if (estado === "presente") presentes++;
+    else if (estado === "ausente") ausentes++;
+    else if (estado === "tarde") tardes++;
+    else if (estado === "justificada") justificadas++;
+  });
+
+  const asistencias = presentes + tardes;
+  const diasComputables = presentes + ausentes + tardes;
+
+  const porcentaje = diasComputables > 0
+    ? Math.round((asistencias / diasComputables) * 100)
+    : 0;
+
+  return {
+    presentes,
+    ausentes,
+    tardes,
+    justificadas,
+    asistencias,
+    diasComputables,
+    porcentaje
+  };
+}
+
+
+// Calcula el promedio de toda la división.
+// Se suman los registros de todas las jugadoras,
+// no se promedian porcentajes individuales.
+
+function calcularEstadisticasDivision(fechas) {
+  let presentes = 0;
+  let ausentes = 0;
+  let tardes = 0;
+  let justificadas = 0;
+
+  const lista = jugadorasCategoriaActual();
+
+  lista.forEach(jugadora => {
+    const datos = calcularEstadisticasJugadora(
+      jugadora,
+      fechas
+    );
+
+    presentes += datos.presentes;
+    ausentes += datos.ausentes;
+    tardes += datos.tardes;
+    justificadas += datos.justificadas;
+  });
+
+  const asistencias = presentes + tardes;
+  const diasComputables = presentes + ausentes + tardes;
+
+  const porcentaje = diasComputables > 0
+    ? Math.round((asistencias / diasComputables) * 100)
+    : 0;
+
+  return {
+    cantidadJugadoras: lista.length,
+    presentes,
+    ausentes,
+    tardes,
+    justificadas,
+    asistencias,
+    diasComputables,
+    porcentaje
+  };
+}
+
+/* =====================================================
+   ESTADOS DE ASISTENCIA
+===================================================== */
+
+function normalizarEstado(estado) {
+  const valor = normalizarTexto(estado);
+
+  if (["presente", "presencia", "p"].includes(valor)) {
+    return "presente";
+  }
+
+  if (["ausente", "ausencia", "a"].includes(valor)) {
+    return "ausente";
+  }
+
+  if (["tarde", "llego tarde", "llegada tarde", "t"].includes(valor)) {
+    return "tarde";
+  }
+
+  if (["justificada", "justificado"].includes(valor)) {
+    return "justificada";
+  }
+
+  return "";
+}
+
+function obtenerEstadoJugadora(jugadora, fecha) {
+  const sesion = obtenerSesion(jugadora.categoria, fecha);
+
+  if (!sesion || !sesion.asistencias) return "";
+
+  const asistencias = sesion.asistencias;
+  const clavePrincipal = claveJugadora(jugadora);
+  const nombreNormalizado = normalizarTexto(jugadora.nombre);
+
+  const clavesPosibles = [
+    clavePrincipal,
+    String(jugadora.id ?? ""),
+    "nombre:" + nombreNormalizado,
+    nombreNormalizado
+  ];
+
+  for (const clave of clavesPosibles) {
+    if (
+      clave &&
+      Object.prototype.hasOwnProperty.call(asistencias, clave)
+    ) {
+      return normalizarEstado(asistencias[clave]);
+    }
+  }
+
+  return "";
+}
+
+function guardarEstadoJugadora(jugadora, fecha, nuevoEstado) {
+  const sesion = crearSesion(jugadora.categoria, fecha);
+  const clave = claveJugadora(jugadora);
+
+  if (nuevoEstado) {
+    sesion.asistencias[clave] =
+      nuevoEstado === "presente" ? "Presente" :
+      nuevoEstado === "ausente" ? "Ausente" :
+      nuevoEstado === "tarde" ? "Tarde" :
+      nuevoEstado === "justificada" ? "Justificada" : "";
+  } else {
+    delete sesion.asistencias[clave];
+  }
+}
+
+const ESTADOS_CICLICOS = [
+  "",
+  "presente",
+  "ausente",
+  "tarde",
+  "justificada"
+];
+
+function siguienteEstado(estadoActual) {
+  const indice = ESTADOS_CICLICOS.indexOf(estadoActual);
+
+  if (indice === -1) {
+    return "presente";
+  }
+
+  return ESTADOS_CICLICOS[
+    (indice + 1) % ESTADOS_CICLICOS.length
+  ];
+}
+
+function etiquetaEstado(estado) {
+  switch (estado) {
+    case "presente": return "Presente";
+    case "ausente": return "Ausente";
+    case "tarde": return "Llegó tarde";
+    case "justificada": return "Justificada";
+    default: return "Sin registrar";
+  }
+}
+
+function simboloEstado(estado) {
+  switch (estado) {
+    case "presente": return "✓";
+    case "ausente": return "×";
+    case "tarde": return "T";
+    case "justificada": return "J";
+    default: return "·";
+  }
+}
+
+function cambiarEstado(fecha, clave) {
+  if (esDiaSinEntrenamiento(fecha)) return;
+
+  const jugadora = jugadoras.find(
+    item => claveJugadora(item) === clave
+  );
+
+  if (!jugadora) return;
+
+  if (
+    normalizarCategoria(jugadora.categoria) !==
+    normalizarCategoria(categoriaSeleccionada)
+  ) {
+    return;
+  }
+
+  const actual = obtenerEstadoJugadora(jugadora, fecha);
+  const siguiente = siguienteEstado(actual);
+
+  guardarEstadoJugadora(jugadora, fecha, siguiente);
+
+  renderizarMatriz();
+  renderizarSeguimientoIndividual();
+}
+
+/* =====================================================
+   ENCABEZADO DE LA MATRIZ
+===================================================== */
+
+function renderizarEncabezado(fechas) {
+  const encabezado = document.getElementById("encabezadoTabla");
+  const hoy = fechaISO(new Date());
+
+  let html = `
+    <tr>
+      <th class="columna-jugadora">
+        <div class="encabezado-nombres">
+          <span class="icono-jugadoras">♙</span>
+          <span>JUGADORAS</span>
+        </div>
+      </th>
+  `;
+
+  fechas.forEach(fechaValor => {
+    const fecha = fechaDesdeISO(fechaValor);
+
+    if (!fecha) return;
+
+    const noEntrena = esDiaSinEntrenamiento(fechaValor);
+
+    const claseNumero = fechaValor === hoy
+      ? "numero-dia hoy"
+      : "numero-dia";
+
+    const textoBoton = noEntrena ? "Reactivar" : "Sin entreno";
+
+    const claseBoton = noEntrena
+      ? "boton-sin-entreno marcado"
+      : "boton-sin-entreno";
+
+    const tituloBoton = noEntrena
+      ? "Reactivar el entrenamiento de esta categoría"
+      : "Marcar esta fecha como sin entrenamiento para esta categoría";
+
+    html += `
+      <th class="columna-fecha">
+        <div class="encabezado-fecha">
+
+          <span class="dia-nombre">
+            ${escaparHTML(obtenerNombreDia(fecha).substring(0, 3))}
+          </span>
+
+          <span class="${claseNumero}">
+            ${fecha.getDate()}
+          </span>
+
+          <span class="mes-corto">
+            ${escaparHTML(new Intl.DateTimeFormat("es-AR", {
+              month: "short"
+            }).format(fecha).replace(/\.$/, ""))}
+          </span>
+
+          <button
+            type="button"
+            class="${claseBoton}"
+            data-no-entrenamiento="${fechaValor}"
+            title="${escaparHTML(tituloBoton)}"
+            aria-pressed="${noEntrena}"
+          >${textoBoton}</button>
+
+        </div>
+      </th>
+    `;
+  });
+
+  html += "</tr>";
+  encabezado.innerHTML = html;
+
+  encabezado.querySelectorAll("[data-no-entrenamiento]").forEach(boton => {
+    boton.addEventListener("click", () => {
+      alternarSinEntrenamiento(boton.dataset.noEntrenamiento);
+    });
+  });
+}
+
+/* =====================================================
+   CUERPO DE LA MATRIZ
+===================================================== */
+
+function renderizarCuerpo(fechas) {
+  const cuerpo = document.getElementById("cuerpoTabla");
+  const jugadorasVisibles = jugadorasCategoriaActual();
+  const cantidadColumnas = Math.max(1, fechas.length + 1);
+
+  if (!categoriasDisponibles.length) {
+    cuerpo.innerHTML = `
+      <tr class="fila-vacia">
+        <td colspan="${cantidadColumnas}">
+          No hay jugadoras cargadas. Agregalas desde la sección Plantel.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  if (!jugadorasVisibles.length) {
+    cuerpo.innerHTML = `
+      <tr class="fila-vacia">
+        <td colspan="${cantidadColumnas}">
+          No hay jugadoras con estado ACTIVO en ${escaparHTML(categoriaSeleccionada)}.
+          Solo las jugadoras activas aparecen en esta planilla.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  if (!fechas.length) {
+    cuerpo.innerHTML = `
+      <tr class="fila-vacia">
+        <td colspan="${cantidadColumnas}">
+          No hay días programados para este mes.
+          Activá los días habituales de entrenamiento de esta categoría.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  let html = "";
+
+  jugadorasVisibles.forEach(jugadora => {
+    const nombre = escaparHTML(jugadora.nombre);
+    const categoria = escaparHTML(jugadora.categoria);
+    const iniciales = escaparHTML(inicialesJugadora(jugadora.nombre));
+    const clave = escaparHTML(claveJugadora(jugadora));
+
+    html += `
+      <tr>
+        <th class="columna-jugadora" scope="row">
+          <div class="datos-jugadora">
+
+            <span class="avatar-jugadora">${iniciales}</span>
+
+            <span class="informacion-jugadora">
+              <span class="nombre-jugadora">${nombre}</span>
+              <span class="categoria-jugadora">${categoria}</span>
+            </span>
+
+          </div>
+        </th>
+    `;
+
+    fechas.forEach(fecha => {
+      if (esDiaSinEntrenamiento(fecha)) {
+        html += `
+          <td>
+            <div
+              class="celda-sin-entreno"
+              title="No hubo entrenamiento para esta categoría"
+              aria-label="No hubo entrenamiento"
+            >—</div>
+          </td>
+        `;
+        return;
+      }
+
+      const estado = obtenerEstadoJugadora(jugadora, fecha);
+      const siguiente = siguienteEstado(estado);
+
+      html += `
+        <td>
+          <button
+            type="button"
+            class="boton-estado ${estado || "sin-marcar"}"
+            data-fecha="${fecha}"
+            data-jugadora="${clave}"
+            title="${escaparHTML(etiquetaEstado(estado))}. Próximo estado: ${escaparHTML(etiquetaEstado(siguiente))}."
+            aria-label="${nombre}, ${fecha}: ${escaparHTML(etiquetaEstado(estado))}."
+          >${simboloEstado(estado)}</button>
+        </td>
+      `;
+    });
+
+    html += "</tr>";
+  });
+
+  cuerpo.innerHTML = html;
+
+  cuerpo.querySelectorAll("[data-fecha][data-jugadora]").forEach(boton => {
+    boton.addEventListener("click", () => {
+      cambiarEstado(
+        boton.dataset.fecha,
+        boton.dataset.jugadora
+      );
+    });
+  });
+}
+
+/* =====================================================
+   SEGUIMIENTO INDIVIDUAL
+===================================================== */
+
+function obtenerJugadoraSeguimientoSeleccionada() {
+  const select = document.getElementById("selectorJugadoraSeguimiento");
+  const clave = select.value;
+
+  return jugadorasCategoriaActual().find(
+    jugadora => claveJugadora(jugadora) === clave
+  ) || null;
+}
+
+function renderizarSelectorJugadoras() {
+  const select = document.getElementById("selectorJugadoraSeguimiento");
+  const jugadorasVisibles = jugadorasCategoriaActual();
+
+  const claveGuardada = localStorage.getItem(
+    CLAVE_JUGADORA_SEGUIMIENTO
+  );
+
+  if (!jugadorasVisibles.length) {
+    select.innerHTML =
+      '<option value="">No hay jugadoras en esta categoría</option>';
+    select.disabled = true;
+    return;
+  }
+
+  select.disabled = false;
+
+  select.innerHTML = jugadorasVisibles.map(jugadora => `
+    <option value="${escaparHTML(claveJugadora(jugadora))}">
+      ${escaparHTML(jugadora.nombre)}
+    </option>
+  `).join("");
+
+  const existeGuardada = jugadorasVisibles.some(
+    jugadora => claveJugadora(jugadora) === claveGuardada
+  );
+
+  const claveSeleccionada = existeGuardada
+    ? claveGuardada
+    : claveJugadora(jugadorasVisibles[0]);
+
+  select.value = claveSeleccionada;
+
+  localStorage.setItem(
+    CLAVE_JUGADORA_SEGUIMIENTO,
+    claveSeleccionada
+  );
+}
+
+
+function renderizarSeguimientoIndividual() {
+  const contenido = document.getElementById("contenidoSeguimiento");
+
+  renderizarSelectorJugadoras();
+
+  const jugadora = obtenerJugadoraSeguimientoSeleccionada();
+
+  if (!jugadora) {
+    contenido.innerHTML = `
+      <div class="sin-jugadora">
+        No hay jugadoras disponibles para
+        ${escaparHTML(categoriaSeleccionada || "esta categoría")}.
+      </div>
+    `;
+    return;
+  }
+
+  const anio = mesActual.getFullYear();
+
+  // Estadísticas individuales
+  const fechasMes = obtenerFechasDelMes();
+  const fechasAnio = obtenerFechasDelAnio(anio);
+
+  const mensual = calcularEstadisticasJugadora(
+    jugadora,
+    fechasMes
+  );
+
+  const anual = calcularEstadisticasJugadora(
+    jugadora,
+    fechasAnio
+  );
+
+  // Estadísticas de toda la división
+  const divisionMensual = calcularEstadisticasDivision(
+    fechasMes
+  );
+
+  const divisionAnual = calcularEstadisticasDivision(
+    fechasAnio
+  );
+
+  const iniciales = escaparHTML(
+    inicialesJugadora(jugadora.nombre)
+  );
+
+  const nombre = escaparHTML(jugadora.nombre);
+  const categoria = escaparHTML(jugadora.categoria);
+  const mes = escaparHTML(formatearMes(mesActual));
+
+  contenido.innerHTML = `
+
+    <div class="individual-identidad">
+
+      <div class="avatar-individual">${iniciales}</div>
+
+      <div>
+        <h4>${nombre}</h4>
+        <p>
+          Categoría ${categoria}
+          · ${mes}
+        </p>
+      </div>
+
+    </div>
+
+    <!-- ESTADÍSTICAS INDIVIDUALES DEL MES -->
+
+    <div class="metrica-periodo-titulo">
+      ASISTENCIA INDIVIDUAL · ${mes.toUpperCase()}
+    </div>
+
+    <div class="metricas-individuales">
+
+      <div class="metrica metrica-presente">
+        <div class="metrica-superior">
+          <span class="metrica-icono">✓</span>
+        </div>
+        <p class="metrica-numero">${mensual.asistencias}</p>
+        <span class="metrica-etiqueta">Asistencias</span>
+      </div>
+
+      <div class="metrica metrica-ausente">
+        <div class="metrica-superior">
+          <span class="metrica-icono">×</span>
+        </div>
+        <p class="metrica-numero">${mensual.ausentes}</p>
+        <span class="metrica-etiqueta">Inasistencias</span>
+      </div>
+
+      <div class="metrica metrica-tarde">
+        <div class="metrica-superior">
+          <span class="metrica-icono">T</span>
+        </div>
+        <p class="metrica-numero">${mensual.tardes}</p>
+        <span class="metrica-etiqueta">Llegadas tarde</span>
+      </div>
+
+      <div class="metrica metrica-porcentaje">
+        <div class="metrica-superior">
+          <span class="metrica-icono">%</span>
+        </div>
+        <p class="metrica-numero">${mensual.porcentaje}%</p>
+        <span class="metrica-etiqueta">Promedio mensual</span>
+      </div>
+
+    </div>
+
+    <!-- ESTADÍSTICAS INDIVIDUALES DEL AÑO -->
+
+    <div class="resumen-periodos">
+
+      <div class="resumen-periodo">
+
+        <span class="resumen-periodo-etiqueta">
+          PROMEDIO ANUAL INDIVIDUAL
+        </span>
+
+        <strong>${anual.porcentaje}%</strong>
+
+        <p>
+          ${anual.asistencias} asistencias de
+          ${anual.diasComputables} entrenamientos registrados.
+        </p>
+
+      </div>
+
+      <div class="resumen-periodo">
+
+        <span class="resumen-periodo-etiqueta">
+          PROMEDIO MENSUAL INDIVIDUAL
+        </span>
+
+        <strong>${mensual.porcentaje}%</strong>
+
+        <p>
+          ${mensual.asistencias} asistencias de
+          ${mensual.diasComputables} entrenamientos registrados.
+        </p>
+
+      </div>
+
+    </div>
+
+    <!-- PROMEDIO DE TODA LA DIVISIÓN -->
+
+    <div class="metrica-periodo-titulo">
+      RENDIMIENTO GENERAL · ${escaparHTML(categoriaSeleccionada)}
+    </div>
+
+    <div class="resumen-periodos">
+
+      <div class="resumen-periodo resumen-division">
+
+        <span class="resumen-periodo-etiqueta">
+          PROMEDIO MENSUAL DE LA DIVISIÓN
+        </span>
+
+        <strong>${divisionMensual.porcentaje}%</strong>
+
+        <p>
+          ${divisionMensual.cantidadJugadoras} jugadoras.
+          ${divisionMensual.asistencias} asistencias sobre
+          ${divisionMensual.diasComputables} registros computables.
+        </p>
+
+      </div>
+
+      <div class="resumen-periodo resumen-division">
+
+        <span class="resumen-periodo-etiqueta">
+          PROMEDIO ANUAL DE LA DIVISIÓN · ${anio}
+        </span>
+
+        <strong>${divisionAnual.porcentaje}%</strong>
+
+        <p>
+          ${divisionAnual.cantidadJugadoras} jugadoras.
+          ${divisionAnual.asistencias} asistencias sobre
+          ${divisionAnual.diasComputables} registros computables.
+        </p>
+
+      </div>
+
+    </div>
+
+    <div class="individual-aclaracion">
+
+      <strong>Criterio de evaluación:</strong>
+      las presentes y las llegadas tarde cuentan como asistencia.
+      Las ausencias cuentan como inasistencia.
+      Las justificadas, los días sin entrenamiento y los días
+      sin marcar no se incluyen en el porcentaje.
+
+    </div>
+
+    <div class="pie-seguimiento">
+
+      <span>
+        <strong>${nombre}</strong> · ${categoria}
+      </span>
+
+      <span>
+        Seguimiento mensual y anual · ${anio}
+      </span>
+
+    </div>
+  `;
+}
+
+
+/* =====================================================
+   ACTUALIZAR MATRIZ
+===================================================== */
+
+function renderizarMatriz() {
+  document.getElementById("mesTitulo").textContent =
+    formatearMes(mesActual);
+
+  document.getElementById("subtituloMes").textContent =
+    categoriaSeleccionada
+      ? "Planilla mensual · " + categoriaSeleccionada
+      : "Planilla mensual de entrenamiento";
+
+  document.getElementById("tituloPlanilla").textContent =
+    categoriaSeleccionada
+      ? "Planilla de " + categoriaSeleccionada
+      : "Planilla de jugadoras";
+
+  const fechas = obtenerFechasDelMes();
+
+  renderizarEncabezado(fechas);
+  renderizarCuerpo(fechas);
+
+  const cantidad = jugadorasCategoriaActual().length;
+
+  document.getElementById("cantidadJugadoras").textContent =
+    cantidad === 1
+      ? "1 jugadora activa de " + categoriaSeleccionada
+      : cantidad + " jugadoras activas de " + (categoriaSeleccionada || "la categoría");
+
+  const textoOrden = document.getElementById("textoOrdenLista");
+
+  if (textoOrden) {
+    textoOrden.textContent = ordenLista === "puesto"
+      ? "Orden: Por puesto"
+      : "Orden: Apellido A–Z";
+  }
+
+  const selectorOrden = document.getElementById("ordenLista");
+
+  if (selectorOrden && selectorOrden.value !== ordenLista) {
+    selectorOrden.value = ordenLista;
+  }
+}
+
+function actualizarCategoriasYReRenderizar() {
+  categoriasDisponibles = obtenerCategoriasDisponibles();
+
+  if (
+    !categoriasDisponibles.some(
+      categoria =>
+        normalizarCategoria(categoria) ===
+        normalizarCategoria(categoriaSeleccionada)
+    )
+  ) {
+    categoriaSeleccionada = categoriasDisponibles[0] || "";
+  } else {
+    categoriaSeleccionada = categoriasDisponibles.find(
+      categoria =>
+        normalizarCategoria(categoria) ===
+        normalizarCategoria(categoriaSeleccionada)
+    ) || categoriaSeleccionada;
+  }
+
+  guardarCategoriaSeleccionada();
+
+  diasEntrenamiento = cargarDiasEntrenamiento(categoriaSeleccionada);
+  escucharDiasEntrenamientoNube(categoriaSeleccionada);
+  diasSinEntrenamiento = cargarDiasSinEntrenamiento();
+
+  renderizarSelectorCategorias();
+  renderizarDiasSemana();
+  renderizarMatriz();
+  renderizarSeguimientoIndividual();
+}
+
+/* =====================================================
+   CAMBIAR CATEGORÍA
+===================================================== */
+
+function cambiarCategoria() {
+  categoriaSeleccionada = document.getElementById("filtroCategoria").value;
+
+  guardarCategoriaSeleccionada();
+
+  diasEntrenamiento = cargarDiasEntrenamiento(categoriaSeleccionada);
+escucharDiasEntrenamientoNube(categoriaSeleccionada);
+  renderizarDiasSemana();
+  renderizarMatriz();
+  renderizarSeguimientoIndividual();
+}
+
+document.getElementById("filtroCategoria").addEventListener(
+  "change",
+  cambiarCategoria
+);
+
+document.getElementById("ordenLista").addEventListener("change", event => {
+  ordenLista = event.target.value === "puesto" ? "puesto" : "apellido";
+
+  localStorage.setItem(CLAVE_ORDEN_LISTA, ordenLista);
+
+  renderizarMatriz();
+  renderizarSeguimientoIndividual();
+});
+
+/* =====================================================
+   CAMBIAR JUGADORA DEL SEGUIMIENTO
+===================================================== */
+
+document.getElementById("selectorJugadoraSeguimiento").addEventListener(
+  "change",
+  event => {
+    localStorage.setItem(
+      CLAVE_JUGADORA_SEGUIMIENTO,
+      event.target.value
+    );
+
+    renderizarSeguimientoIndividual();
+  }
+);
+
+/* =====================================================
+   NAVEGACIÓN ENTRE MESES
+===================================================== */
+
+document.getElementById("mesAnterior").addEventListener("click", () => {
+  mesActual = new Date(
+    mesActual.getFullYear(),
+    mesActual.getMonth() - 1,
+    1
+  );
+
+  renderizarMatriz();
+  renderizarSeguimientoIndividual();
+});
+
+document.getElementById("mesSiguiente").addEventListener("click", () => {
+  mesActual = new Date(
+    mesActual.getFullYear(),
+    mesActual.getMonth() + 1,
+    1
+  );
+
+  renderizarMatriz();
+  renderizarSeguimientoIndividual();
+});
+
+/* =====================================================
+   INICIALIZACIÓN
+===================================================== */
+
+function iniciarAsistencia() {
+  actualizarCategoriasYReRenderizar();
+}
+
+iniciarAsistencia();
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,3729 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Partidos | TORITO</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --naranja: #f47721;
+    --naranja-oscuro: #dc5e0b;
+    --naranja-claro: #fff0e6;
+    --naranja-suave: #fff7f1;
+    --negro: #171717;
+    --rojo: #a00000;
+    --fondo: #f7f8fa;
+    --texto: #242424;
+    --borde: #e7e9ed;
+    --gris: #f4f5f7;
+    --gris-texto: #737782;
+    --sombra: 0 3px 14px rgba(23,23,23,.035);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 100px;
+}
+
+body {
+    background: var(--fondo);
+    color: var(--texto);
+    -webkit-font-smoothing: antialiased;
+}
+
+button, input, select {
+    font: inherit;
+}
+
+button, a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button {
+    cursor: pointer;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+    outline: 3px solid rgba(244,119,33,.24);
+    outline-offset: 2px;
+}
+
+/* =====================================================
+   BARRA SUPERIOR
+===================================================== */
+
+.barra-superior,
+.barra-superior * {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.barra-superior {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    min-height: 84px;
+    padding: 12px 25px;
+    background: rgba(255,255,255,.97);
+    border-bottom: 1px solid var(--borde);
+    box-shadow: 0 2px 12px rgba(23,23,23,.025);
+    backdrop-filter: blur(12px);
+}
+
+.boton-menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--negro);
+    font-size: 25px;
+    transition: background .2s, color .2s;
+}
+
+.boton-menu:hover {
+    background: var(--gris);
+    color: var(--naranja-oscuro);
+}
+
+.identidad-club {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+}
+
+.logo-club {
+    width: 53px;
+    height: 53px;
+    flex-shrink: 0;
+    object-fit: contain;
+    border-radius: 50%;
+    padding: 2px;
+    background: #fff;
+    margin-right: 13px;
+}
+
+.textos-club {
+    flex: 1;
+    min-width: 0;
+}
+
+.textos-club h1 {
+    margin: 0 0 5px;
+    color: var(--negro);
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: .5px;
+}
+
+.textos-club p {
+    margin: 0;
+    color: var(--gris-texto);
+    font-size: 12px;
+}
+
+/* PERFIL */
+
+.perfil {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    min-width: 0;
+    margin-left: auto;
+    padding: 5px 9px 5px 5px;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    background: transparent;
+    text-align: left;
+    color: inherit;
+    transition: background .2s, border-color .2s;
+}
+
+.perfil:hover {
+    background: #fafafa;
+    border-color: var(--borde);
+}
+
+.avatar {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--negro);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.informacion-perfil {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.nombre-perfil {
+    display: block;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--negro);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.rol-perfil {
+    display: block;
+    margin-top: 4px;
+    color: var(--gris-texto);
+    font-size: 11px;
+}
+
+/* =====================================================
+   ESTRUCTURA GENERAL
+===================================================== */
+
+.contenedor {
+    display: flex;
+    align-items: stretch;
+    min-height: calc(100vh - 84px);
+}
+
+/* =====================================================
+   BARRA LATERAL
+===================================================== */
+
+.sidebar,
+.sidebar * {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.sidebar {
+    width: 258px;
+    flex: 0 0 258px;
+    padding: 20px 13px;
+    background: #fff;
+    border-right: 1px solid var(--borde);
+    transition: margin-left .25s ease;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.sidebar.oculto {
+    margin-left: -258px;
+}
+
+.menu-inicio {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 14px;
+    margin-bottom: 16px;
+    border-radius: 11px;
+    background: var(--naranja-claro);
+    color: var(--naranja-oscuro);
+    font-size: 12px;
+    font-weight: 900;
+    transition: background .2s;
+}
+
+.menu-inicio:hover {
+    background: #ffe7d6;
+    color: var(--naranja-oscuro);
+}
+
+.menu-inicio .icono-inicio {
+    width: 20px;
+    flex-shrink: 0;
+    text-align: center;
+    font-size: 18px;
+    line-height: 1;
+}
+
+.grupo-menu {
+    margin-bottom: 7px;
+}
+
+.titulo-grupo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    min-height: 44px;
+    padding: 12px 13px;
+    border: 0;
+    border-radius: 9px;
+    background: transparent;
+    color: #202020;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: .7px;
+    user-select: none;
+    transition: background .2s;
+}
+
+.titulo-grupo:hover {
+    background: #f7f8fa;
+}
+
+.flecha {
+    display: inline-block;
+    flex-shrink: 0;
+    font-size: 17px;
+    line-height: 1;
+    transition: transform .2s;
+}
+
+.grupo-menu.cerrado .flecha {
+    transform: rotate(0deg);
+}
+
+.grupo-menu:not(.cerrado) .flecha {
+    transform: rotate(90deg);
+}
+
+.submenu {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 0 0 5px;
+}
+
+.grupo-menu.cerrado .submenu {
+    display: none;
+}
+
+.submenu a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 9px;
+    color: #656872;
+    font-size: 12px;
+    line-height: 1.45;
+    transition: background .15s, color .15s;
+}
+
+.submenu a:hover {
+    background: #f6f6f6;
+    color: #181818;
+}
+
+.submenu a.actual {
+    background: var(--naranja-claro);
+    color: var(--naranja-oscuro);
+    font-weight: 850;
+}
+
+.submenu a.actual:hover {
+    background: #ffe7d6;
+}
+
+.nav-punto {
+    width: 6px;
+    height: 6px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: #d7d9de;
+}
+
+.submenu a.actual .nav-punto {
+    background: var(--naranja);
+}
+
+.separador-sesion {
+    margin-top: 19px;
+    padding-top: 12px;
+    border-top: 1px solid var(--borde);
+}
+
+.enlace-cerrar-sesion {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    border-radius: 9px;
+    color: #c0392b;
+    font-size: 12px;
+    font-weight: 800;
+    transition: background .2s;
+}
+
+.enlace-cerrar-sesion:hover {
+    background: #fff2f1;
+    color: #a93226;
+}
+
+.icono-salir {
+    font-size: 17px;
+}
+
+.fondo-sidebar {
+    display: none;
+}
+
+/* =====================================================
+   CONTENIDO PRINCIPAL
+===================================================== */
+
+main {
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+    max-width: 1700px;
+    margin: 0 auto;
+    padding: 30px 30px 45px;
+}
+
+/* =====================================================
+   CABECERA ESTÁNDAR TORITO
+===================================================== */
+
+.page-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 24px;
+}
+
+.page-heading > div:first-child {
+    flex: 1;
+    min-width: 0;
+}
+
+.page-heading > div:first-child::before {
+    content: "COMPETENCIA · PARTIDOS";
+    display: block;
+    margin-bottom: 10px;
+    color: var(--naranja-oscuro);
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 1.8px;
+    line-height: 1.4;
+}
+
+.page-heading h2 {
+    margin: 0 0 8px;
+    color: var(--negro);
+    font-size: 31px;
+    font-weight: 900;
+    letter-spacing: -.7px;
+    line-height: 1.2;
+}
+
+.page-heading p {
+    max-width: 720px;
+    margin: 0;
+    color: var(--gris-texto);
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.botones-fixture {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 9px;
+}
+
+/* ESTADO DE SINCRONIZACIÓN CON LA NUBE */
+
+.estado-guardado {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 42px;
+    padding: 9px 13px;
+    border-radius: 9px;
+    border: 1px solid #d5eedc;
+    background: #eefaf1;
+    color: #176c34;
+    font-size: 11px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.estado-guardado.guardando {
+    border-color: #f4d9b8;
+    background: #fff6ea;
+    color: #9e5607;
+}
+
+.estado-guardado.offline {
+    border-color: #e4e6eb;
+    background: #f4f5f7;
+    color: #5b606b;
+}
+
+/* BOTONES */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 11px 15px;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    font-size: 11px;
+    font-weight: 900;
+    line-height: 1.4;
+    white-space: nowrap;
+    transition: background .18s, border-color .18s, color .18s,
+        transform .15s, box-shadow .18s;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 11px rgba(0,0,0,.07);
+}
+
+.btn:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-primary {
+    background: var(--naranja);
+    color: #fff;
+    box-shadow: 0 2px 5px rgba(244,119,33,.12);
+}
+
+.btn-primary:hover {
+    background: var(--naranja-oscuro);
+}
+
+.btn-secondary {
+    border-color: #e0e3e8;
+    background: #fff;
+    color: #353941;
+}
+
+.btn-secondary:hover {
+    border-color: #cbd0d8;
+    background: #f8f9fa;
+}
+
+.btn-danger {
+    border-color: #f1cccc;
+    background: #fde9e9;
+    color: #ae2525;
+}
+
+.btn-danger:hover {
+    border-color: #e9aaaa;
+    background: #fbdede;
+}
+
+/* =====================================================
+   CONTADORES POR CATEGORÍA
+===================================================== */
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+.stat {
+    position: relative;
+    min-width: 0;
+    min-height: 100px;
+    padding: 17px 16px;
+    overflow: hidden;
+    border: 1px solid var(--borde);
+    border-top: 2px solid var(--naranja);
+    border-radius: 13px;
+    background: #fff;
+    box-shadow: var(--sombra);
+    transition: transform .2s, box-shadow .2s, border-color .2s;
+}
+
+.stat::after {
+    content: "";
+    position: absolute;
+    right: -17px;
+    bottom: -28px;
+    width: 78px;
+    height: 78px;
+    border-radius: 50%;
+    background: rgba(244,119,33,.045);
+    pointer-events: none;
+}
+
+.stat:hover {
+    transform: translateY(-2px);
+    border-color: #efd3c0;
+    box-shadow: 0 8px 20px rgba(23,23,23,.06);
+}
+
+.stat span {
+    position: relative;
+    z-index: 1;
+    display: block;
+    color: var(--gris-texto);
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: .65px;
+    line-height: 1.4;
+}
+
+.stat strong {
+    position: relative;
+    z-index: 1;
+    display: block;
+    margin-top: 9px;
+    color: #202020;
+    font-size: 29px;
+    font-weight: 900;
+    letter-spacing: -.8px;
+    line-height: 1.1;
+}
+
+/* =====================================================
+   FILTROS
+===================================================== */
+
+.filters {
+    display: grid;
+    grid-template-columns: minmax(180px, 1.6fr) repeat(2, minmax(150px, 1fr));
+    gap: 15px;
+    margin-bottom: 27px;
+    padding: 19px;
+    border: 1px solid var(--borde);
+    border-radius: 13px;
+    background: #fff;
+    box-shadow: var(--sombra);
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-width: 0;
+}
+
+.field label {
+    color: #59606b;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: .45px;
+    line-height: 1.45;
+}
+
+.field input,
+.field select {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    height: 43px;
+    padding: 10px 12px;
+    border: 1px solid #dfe3e8;
+    border-radius: 9px;
+    background: #fff;
+    color: #242424;
+    outline: none;
+    font-size: 12px;
+    transition: border-color .2s, box-shadow .2s, background .2s;
+}
+
+.field input::placeholder {
+    color: #a0a4ad;
+    font-size: 11px;
+}
+
+.field input:hover,
+.field select:hover {
+    border-color: #c8cdd4;
+}
+
+.field input:focus,
+.field select:focus {
+    border-color: var(--naranja);
+    box-shadow: 0 0 0 3px rgba(244,119,33,.09);
+}
+
+/* =====================================================
+   DIVISIONES
+===================================================== */
+
+.division-section {
+    margin-bottom: 32px;
+}
+
+.division-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding: 17px 19px;
+    border: 1px solid #292929;
+    border-left: 4px solid var(--naranja);
+    border-radius: 12px;
+    background: #202020;
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(23,23,23,.055);
+}
+
+.division-heading h3 {
+    font-size: 15px;
+    font-weight: 900;
+    letter-spacing: .7px;
+}
+
+.division-heading span {
+    margin-left: auto;
+    padding: 6px 10px;
+    border: 1px solid #ffffff12;
+    border-radius: 7px;
+    background: #ffffff10;
+    color: #e7e7e7;
+    font-size: 10px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+/* COMPETICIONES */
+
+.competition-section {
+    margin-bottom: 27px;
+}
+
+.competition-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 13px 2px;
+    padding: 5px 0 5px 12px;
+    border-left: 3px solid #f3b78d;
+}
+
+.competition-heading h4 {
+    color: #353941;
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+}
+
+.competition-heading span {
+    color: #8a8e97;
+    font-size: 10px;
+    white-space: nowrap;
+}
+
+/* =====================================================
+   FECHAS Y JORNADAS
+===================================================== */
+
+.columnas-fechas {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: 15px;
+}
+
+.columna-fechas {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    min-width: 0;
+}
+
+.jornada-card {
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid #e5e8ec;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(23,23,23,.025);
+    transition: border-color .2s, box-shadow .2s;
+}
+
+.jornada-card:hover {
+    border-color: #e5d2c5;
+    box-shadow: 0 5px 17px rgba(23,23,23,.055);
+}
+
+.jornada-heading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 41px;
+    padding: 10px 13px;
+    border-bottom: 1px solid #f0d8c6;
+    background: #fff6ef;
+    color: #b8500b;
+    text-align: center;
+}
+
+.jornada-heading strong {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    line-height: 1.25;
+}
+
+/* PARTIDOS */
+
+.partido {
+    display: grid;
+    grid-template-columns: 29px minmax(0, 1fr) 29px 25px 29px minmax(0, 1fr) 29px 25px;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+    min-height: 55px;
+    padding: 10px 9px;
+    background: #fff;
+    transition: background .18s;
+}
+
+.partido + .partido {
+    border-top: 1px solid #f0f1f3;
+}
+
+.partido:hover {
+    background: #fffaf6;
+}
+
+.partido.modo-eliminar,
+body.eliminando .partido {
+    background: #fff4f4;
+}
+
+.escudo-mini {
+    display: block;
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    flex-shrink: 0;
+    justify-self: center;
+}
+
+.equipo-nombre {
+    min-width: 0;
+    color: #333741;
+    font-size: 9px;
+    font-weight: 900;
+    line-height: 1.3;
+    text-align: center;
+    text-transform: uppercase;
+    overflow-wrap: anywhere;
+    letter-spacing: -.15px;
+}
+
+.marcador-gol {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    min-height: 31px;
+    padding: 4px 2px;
+    border: 1px solid #e6e8ec;
+    border-radius: 7px;
+    background: #f6f7f9;
+    color: #202020;
+    font-size: 12px;
+    font-weight: 900;
+    font-variant-numeric: tabular-nums;
+}
+
+.vs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 24px;
+    padding: 4px 2px;
+    border: 1px solid #f4dfd0;
+    border-radius: 6px;
+    background: #fff4eb;
+    color: #b8500b;
+    font-size: 8px;
+    font-weight: 900;
+    text-align: center;
+}
+
+/* ACCIONES */
+
+.acciones {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    min-height: 30px;
+}
+
+.btn-puntos {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 29px;
+    height: 29px;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 7px;
+    background: transparent;
+    color: #747782;
+    font-size: 20px;
+    line-height: 1;
+    transition: background .15s, color .15s, border-color .15s;
+}
+
+.btn-puntos:hover {
+    border-color: #f4dfd0;
+    background: var(--naranja-claro);
+    color: var(--naranja-oscuro);
+}
+
+.btn-seleccionar-eliminar {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    min-width: 29px;
+    min-height: 29px;
+    padding: 5px;
+    border: 1px solid #f0c5c5;
+    border-radius: 7px;
+    background: #fff;
+    color: #b42318;
+    font-size: 11px;
+}
+
+.btn-seleccionar-eliminar:hover {
+    border-color: #e9aaaa;
+    background: #fde9e9;
+}
+
+body.eliminando .btn-seleccionar-eliminar {
+    display: inline-flex;
+}
+
+body.eliminando .btn-puntos {
+    display: none;
+}
+
+/* INFORMACIÓN COMPLEMENTARIA DEL PARTIDO */
+
+.partido-meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 7px 14px;
+    padding: 7px 10px 10px;
+    border-top: 1px solid #f0f1f3;
+    background: #fcfcfd;
+    color: #747782;
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+/* ESTADO VACÍO */
+
+.empty {
+    padding: 48px 24px;
+    border: 1px dashed #d5d9df;
+    border-radius: 13px;
+    background: #fff;
+    color: #777d86;
+    text-align: center;
+    box-shadow: var(--sombra);
+}
+
+.empty .empty-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 58px;
+    height: 58px;
+    margin: 0 auto 16px;
+    border: 1px solid #f3d6c3;
+    border-radius: 16px;
+    background: var(--naranja-claro);
+    font-size: 27px;
+}
+
+.empty h3 {
+    margin-bottom: 8px;
+    color: #252525;
+    font-size: 16px;
+    font-weight: 900;
+}
+
+.empty p {
+    max-width: 400px;
+    margin: 0 auto;
+    color: #777d86;
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+/* =====================================================
+   MODAL DE PARTIDOS
+===================================================== */
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 22px;
+    overflow-y: auto;
+    background: rgba(19,21,24,.56);
+    backdrop-filter: blur(4px);
+}
+
+.modal-overlay.visible {
+    display: flex;
+}
+
+.modal {
+    width: 100%;
+    max-width: 720px;
+    max-height: 92vh;
+    margin: auto;
+    overflow: auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 15px;
+    background: #fff;
+    box-shadow: 0 22px 70px rgba(0,0,0,.24);
+    animation: modalAparecer .18s ease-out;
+}
+
+@keyframes modalAparecer {
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(.99);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--borde);
+    background: #fff;
+}
+
+.modal-header h3 {
+    color: #202020;
+    font-size: 18px;
+    font-weight: 900;
+    letter-spacing: -.3px;
+}
+
+.modal-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid #e3e5e8;
+    border-radius: 9px;
+    background: #f7f8fa;
+    color: #42464f;
+    font-size: 22px;
+    line-height: 1;
+    transition: background .15s, color .15s;
+}
+
+.modal-close:hover {
+    background: var(--naranja-claro);
+    color: var(--naranja-oscuro);
+}
+
+.modal-body {
+    padding: 23px 24px;
+    background: #fff;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 17px 16px;
+}
+
+/* ESCUDOS DEL FORMULARIO */
+
+.escudos-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 22px;
+}
+
+.escudo-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 11px;
+    min-width: 0;
+    padding: 17px;
+    border: 1px solid #e5e8ec;
+    border-radius: 11px;
+    background: #fcfcfd;
+    text-align: center;
+    transition: border-color .2s;
+}
+
+.escudo-upload:hover {
+    border-color: #edc9b2;
+}
+
+.escudo-preview {
+    width: 78px;
+    height: 78px;
+    padding: 4px;
+    object-fit: contain;
+    border: 1px solid #e5e8ec;
+    border-radius: 12px;
+    background: #fff;
+}
+
+.escudo-upload label {
+    color: #343842;
+    font-size: 11px;
+    font-weight: 900;
+}
+
+.escudo-fijo-aviso,
+.form-help,
+.notice {
+    color: #777d86;
+    font-size: 11px;
+    line-height: 1.7;
+}
+
+.notice {
+    margin-top: 18px;
+    padding: 12px 13px;
+    border: 1px solid #f1e0d4;
+    border-radius: 8px;
+    background: #fffaf6;
+    color: #76553e;
+}
+
+.aviso-escudo {
+    display: none;
+    color: #b42318;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.aviso-escudo.visible {
+    display: block;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 9px;
+    padding: 15px 24px;
+    border-top: 1px solid var(--borde);
+    background: #fafbfc;
+}
+
+/* =====================================================
+   PERFIL
+===================================================== */
+
+.fondo-perfil {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 250;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    background: rgba(19,21,24,.55);
+    backdrop-filter: blur(3px);
+}
+
+.fondo-perfil.visible {
+    display: flex;
+}
+
+.tarjeta-perfil {
+    width: 100%;
+    max-width: 360px;
+    padding: 28px;
+    border: 1px solid #e5e8ec;
+    border-radius: 15px;
+    background: #fff;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,.2);
+    animation: modalAparecer .18s ease-out;
+}
+
+.avatar-perfil {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 62px;
+    height: 62px;
+    margin: 0 auto 15px;
+    border-radius: 50%;
+    background: var(--negro);
+    color: #fff;
+    font-size: 25px;
+    font-weight: 900;
+}
+
+.tarjeta-perfil h2 {
+    margin-bottom: 7px;
+    color: #202020;
+    font-size: 19px;
+    font-weight: 900;
+}
+
+.tarjeta-perfil p {
+    margin-bottom: 20px;
+    color: #777d86;
+    font-size: 12px;
+}
+
+.boton-cerrar-perfil {
+    width: 100%;
+    min-height: 42px;
+    padding: 11px 14px;
+    border: 0;
+    border-radius: 9px;
+    background: var(--naranja);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 900;
+    transition: background .18s;
+}
+
+.boton-cerrar-perfil:hover {
+    background: var(--naranja-oscuro);
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1250px) {
+    main {
+        padding: 25px;
+    }
+
+    .stats {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .filters {
+        gap: 13px;
+        padding: 16px;
+    }
+
+    .partido {
+        grid-template-columns: 26px minmax(0, 1fr) 27px 22px 27px minmax(0, 1fr) 26px 23px;
+        gap: 3px;
+        padding: 8px 6px;
+    }
+
+    .escudo-mini {
+        width: 25px;
+        height: 25px;
+    }
+
+    .equipo-nombre {
+        font-size: 9px;
+    }
+
+    .marcador-gol {
+        min-height: 29px;
+        font-size: 11px;
+    }
+}
+
+@media (min-width: 761px) {
+    .sidebar {
+        position: relative;
+        margin-left: 0;
+        transform: none;
+    }
+
+    .sidebar.oculto {
+        margin-left: -258px;
+        transform: none;
+    }
+}
+
+@media (max-width: 760px) {
+    .barra-superior {
+        min-height: 72px;
+        padding: 10px 13px;
+        gap: 9px;
+    }
+
+    .boton-menu {
+        width: 38px;
+        height: 38px;
+        font-size: 24px;
+    }
+
+    .logo-club {
+        width: 44px;
+        height: 44px;
+        margin-right: 9px;
+    }
+
+    .textos-club h1 {
+        font-size: 16px;
+    }
+
+    .textos-club p {
+        font-size: 11px;
+    }
+
+    .avatar {
+        width: 36px;
+        height: 36px;
+        font-size: 12px;
+    }
+
+    .nombre-perfil {
+        max-width: 80px;
+        font-size: 12px;
+    }
+
+    .rol-perfil {
+        display: none;
+    }
+
+    .contenedor {
+        min-height: calc(100vh - 72px);
+    }
+
+    .sidebar,
+    .sidebar.oculto {
+        position: fixed;
+        top: 72px;
+        bottom: 0;
+        left: 0;
+        z-index: 150;
+        display: block;
+        flex: none;
+        width: 258px;
+        max-width: 86vw;
+        min-width: 0;
+        height: auto;
+        margin: 0;
+        padding: 20px 13px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        border-right: 1px solid var(--borde);
+        background: #fff;
+        box-shadow: 5px 0 25px rgba(0,0,0,.07);
+        transition: transform .25s ease;
+    }
+
+    .sidebar {
+        transform: translateX(0);
+    }
+
+    .sidebar.oculto {
+        transform: translateX(-110%);
+    }
+
+    .capa-sidebar.visible {
+        display: block;
+        position: fixed;
+        inset: 72px 0 0;
+        z-index: 140;
+        background: rgba(0,0,0,.32);
+    }
+
+    main {
+        margin: 0 auto;
+        padding: 24px 16px 32px;
+    }
+
+    .page-heading {
+        align-items: flex-start;
+        gap: 17px;
+        margin-bottom: 22px;
+    }
+
+    .page-heading h2 {
+        font-size: 25px;
+    }
+
+    .page-heading > div:first-child::before {
+        margin-bottom: 8px;
+        font-size: 9px;
+    }
+
+    .page-heading p {
+        font-size: 12px;
+    }
+
+    .botones-fixture {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .stats {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 9px;
+        margin-bottom: 18px;
+    }
+
+    .stat {
+        min-height: 89px;
+        padding: 13px 10px;
+        border-radius: 11px;
+    }
+
+    .stat span {
+        font-size: 9px;
+    }
+
+    .stat strong {
+        margin-top: 8px;
+        font-size: 23px;
+    }
+
+    .filters {
+        grid-template-columns: 1fr 1fr;
+        gap: 13px;
+        padding: 15px;
+        margin-bottom: 22px;
+        border-radius: 12px;
+    }
+
+    .filters .field:first-child {
+        grid-column: 1 / -1;
+    }
+
+    .columnas-fechas {
+        gap: 11px;
+    }
+
+    .columna-fechas {
+        gap: 11px;
+    }
+
+    .division-heading {
+        margin-bottom: 16px;
+        padding: 15px;
+        border-radius: 11px;
+    }
+
+    .competition-section {
+        margin-bottom: 23px;
+    }
+
+    .jornada-card {
+        border-radius: 11px;
+    }
+
+    .partido {
+        min-height: 53px;
+    }
+
+    .modal-overlay {
+        padding: 15px;
+    }
+
+    .modal {
+        max-height: 94vh;
+        border-radius: 13px;
+    }
+
+    .modal-header {
+        padding: 17px 19px;
+    }
+
+    .modal-body {
+        padding: 19px;
+    }
+
+    .modal-footer {
+        padding: 14px 19px;
+    }
+}
+
+@media (max-width: 560px) {
+    .barra-superior {
+        padding: 8px;
+        gap: 6px;
+    }
+
+    .boton-menu {
+        width: 32px;
+        height: 36px;
+        font-size: 23px;
+    }
+
+    .logo-club {
+        width: 34px;
+        height: 34px;
+        margin-right: 6px;
+    }
+
+    .textos-club h1 {
+        font-size: 12px;
+        letter-spacing: .3px;
+    }
+
+    .textos-club p {
+        font-size: 9px;
+    }
+
+    .perfil {
+        gap: 5px;
+        padding: 3px;
+    }
+
+    .avatar {
+        width: 32px;
+        height: 32px;
+        font-size: 11px;
+    }
+
+    .nombre-perfil {
+        max-width: 60px;
+        font-size: 10px;
+    }
+
+    main {
+        padding: 22px 12px 28px;
+    }
+
+    .page-heading h2 {
+        font-size: 22px;
+    }
+
+    .page-heading p {
+        font-size: 12px;
+    }
+
+    .botones-fixture {
+        gap: 8px;
+    }
+
+    .btn {
+        min-height: 40px;
+        padding: 10px 12px;
+        font-size: 10px;
+    }
+
+    .stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 9px;
+    }
+
+    .stat {
+        min-height: 86px;
+        padding: 13px;
+    }
+
+    .stat span {
+        font-size: 10px;
+    }
+
+    .stat strong {
+        font-size: 23px;
+    }
+
+    .filters,
+    .form-grid,
+    .escudos-form {
+        grid-template-columns: 1fr;
+    }
+
+    .filters {
+        padding: 14px;
+    }
+
+    .filters .field:first-child {
+        grid-column: auto;
+    }
+
+    .columnas-fechas {
+        grid-template-columns: 1fr;
+        gap: 11px;
+    }
+
+    .columna-fechas {
+        gap: 11px;
+    }
+
+    .division-heading {
+        padding: 14px;
+    }
+
+    .division-heading h3 {
+        font-size: 14px;
+    }
+
+    .division-heading span {
+        padding: 5px 8px;
+        font-size: 9px;
+    }
+
+    .competition-heading h4 {
+        font-size: 10px;
+    }
+
+    .jornada-heading {
+        min-height: 39px;
+        padding: 10px 12px;
+    }
+
+    .jornada-heading strong {
+        font-size: 10px;
+    }
+
+    .partido {
+        grid-template-columns: 30px minmax(0, 1fr) 30px 24px 30px minmax(0, 1fr) 30px 25px;
+        gap: 3px;
+        min-height: 51px;
+        padding: 7px 6px;
+    }
+
+    .escudo-mini {
+        width: 26px;
+        height: 26px;
+    }
+
+    .equipo-nombre {
+        font-size: 9px;
+        line-height: 1.25;
+    }
+
+    .marcador-gol {
+        min-height: 28px;
+        font-size: 11px;
+    }
+
+    .vs {
+        font-size: 8px;
+    }
+
+    .partido-meta {
+        gap: 6px 10px;
+        padding: 7px 8px 9px;
+        font-size: 9px;
+    }
+
+    .modal-overlay {
+        padding: 10px;
+    }
+
+    .modal-header,
+    .modal-footer {
+        padding: 14px;
+    }
+
+    .modal-header h3 {
+        font-size: 16px;
+    }
+
+    .modal-body {
+        padding: 15px;
+    }
+
+    .escudo-upload {
+        padding: 14px;
+    }
+
+    .empty {
+        padding: 35px 17px;
+    }
+}
+
+@media (max-width: 380px) {
+    .textos-club h1 {
+        font-size: 11px;
+    }
+
+    .nombre-perfil {
+        max-width: 54px;
+    }
+
+    .partido {
+        grid-template-columns: 24px minmax(0, 1fr) 25px 20px 25px minmax(0, 1fr) 24px 22px;
+        gap: 2px;
+        padding: 7px 4px;
+    }
+
+    .escudo-mini {
+        width: 23px;
+        height: 23px;
+    }
+
+    .equipo-nombre {
+        font-size: 8px;
+    }
+
+    .marcador-gol {
+        min-height: 26px;
+        font-size: 10px;
+    }
+
+    .vs {
+        font-size: 7px;
+    }
+
+    .stats {
+        gap: 7px;
+    }
+
+    .stat {
+        padding: 11px;
+    }
+
+    .stat span {
+        font-size: 9px;
+    }
+
+    .stat strong {
+        font-size: 21px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+    }
+}
+</style>
+<script src="TORITO-permisos.js?v=20261118-s16c"></script>
+</head>
+
+<body>
+
+<header class="barra-superior">
+
+    <button
+        class="boton-menu"
+        id="botonMenu"
+        type="button"
+        aria-label="Abrir menú"
+        aria-controls="sidebar"
+        aria-expanded="true"
+    >☰</button>
+
+    <div class="identidad-club">
+
+        <img
+            class="logo-club"
+            src="TORITO-Logo TORITO.png"
+            alt="Logo TORITO"
+            onerror="if(!this.dataset.intento){this.dataset.intento='1';this.src='TORITO-Logo TORITO.png'}else{this.style.display='none'}"
+        >
+
+        <div class="textos-club">
+            <h1>TORITO</h1>
+            <p>Partidos</p>
+        </div>
+
+    </div>
+
+    <button
+        class="perfil"
+        id="botonPerfil"
+        type="button"
+        aria-label="Ver perfil de usuario"
+    >
+        <span class="avatar" id="avatarUsuario">U</span>
+
+        <span class="informacion-perfil">
+            <span class="nombre-perfil" id="nombreUsuario">Usuario</span>
+            <span class="rol-perfil" id="rolUsuario">Club Torito</span>
+        </span>
+    </button>
+
+</header>
+
+<div class="capa-sidebar" id="capaSidebar" aria-hidden="true"></div>
+
+<div class="contenedor">
+
+    <aside class="sidebar" id="sidebar">
+
+        <a href="TORITO-Pagina Principal.html" class="menu-inicio">
+            <span class="icono-inicio" aria-hidden="true">⌂</span>
+            INICIO
+        </a>
+
+        <div class="grupo-menu cerrado" id="grupoPlantel">
+
+            <button
+                class="titulo-grupo"
+                type="button"
+                data-grupo="grupoPlantel"
+                aria-expanded="false"
+            >
+                <span>PLANTEL</span>
+                <span class="flecha" aria-hidden="true">›</span>
+            </button>
+
+            <div class="submenu">
+
+                <a href="TORITO-jugadoras.html" data-ocultar-bianca>
+                    <span class="nav-punto" aria-hidden="true"></span>
+                    Jugadoras
+                </a>
+
+                <a href="TORITO-asistencia.html">
+                    <span class="nav-punto" aria-hidden="true"></span>
+                    Asistencia
+                </a>
+
+            </div>
+        </div>
+
+        <div class="grupo-menu cerrado" id="grupoEntrenamiento">
+
+            <button
+                class="titulo-grupo"
+                type="button"
+                data-grupo="grupoEntrenamiento"
+                aria-expanded="false"
+            >
+                <span>ENTRENAMIENTO</span>
+                <span class="flecha" aria-hidden="true">›</span>
+            </button>
+
+            <div class="submenu">
+
+                <a href="TORITO-calendario.html">
+                    <span class="nav-punto" aria-hidden="true"></span>
+                    Calendario
+                </a>
+
+                <a href="TORITO-planificacion.html" data-ocultar-bianca>
+                    <span class="nav-punto" aria-hidden="true"></span>
+                    Planificación
+                </a>
+
+                <a href="biblioteca.html" data-ocultar-bianca>
+                    <span class="nav-punto" aria-hidden="true"></span>
+                    Biblioteca de ejercicios
+                </a>
+
+                <a href="TORITO-gimnasio.html">
+                    <span class="nav-punto" aria-hidden="true"></span>
+                    Gimnasio
+                </a>
+
+                <a href="TORITO-calculadora.html" data-ocultar-bianca>
+                    <span class="nav-punto" aria-hidden="true"></span>
+                    Calculadora
+                </a>
+
+            </div>
+        </div>
+
+        <div class="grupo-menu" id="grupoCompetencia">
+
+            <button
+                class="titulo-grupo"
+                type="button"
+                data-grupo="grupoCompetencia"
+                aria-expanded="true"
+            >
+                <span>COMPETENCIA</span>
+                <span class="flecha" aria-hidden="true">›</span>
+            </button>
+
+            <div class="submenu">
+
+                <a href="TORITO-Partidos.html" class="actual" aria-current="page">
+                    <span class="nav-punto" aria-hidden="true"></span>
+                    Partidos
+                </a>
+
+                <a href="TORITO-informes.html" data-ocultar-bianca>
+                    <span class="nav-punto" aria-hidden="true"></span>
+                    Informes
+                </a>
+
+                <a href="TORITO-estadisticas.html" data-ocultar-bianca>
+                    <span class="nav-punto" aria-hidden="true"></span>
+                    Estadísticas
+                </a>
+
+                <a href="TORITO-pizarra.html" data-ocultar-bianca>
+                    <span class="nav-punto" aria-hidden="true"></span>
+                    Pizarra táctica
+                </a>
+
+            </div>
+        </div>
+
+        <div class="grupo-menu cerrado" id="grupoRendimientos">
+
+            <button
+                class="titulo-grupo"
+                type="button"
+                data-grupo="grupoRendimientos"
+                aria-expanded="false"
+            >
+                <span>RENDIMIENTOS</span>
+                <span class="flecha" aria-hidden="true">›</span>
+            </button>
+
+            <div class="submenu">
+
+                <a href="TORITO-testeos.html">
+                    <span class="nav-punto" aria-hidden="true"></span>
+                    Planilla de testeos
+                </a>
+
+                <a href="TORITO-tiempos.html">
+                    <span class="nav-punto" aria-hidden="true"></span>
+                    Tiempos
+                </a>
+
+                <a href="multimedia.html">
+                    <span class="nav-punto" aria-hidden="true"></span>
+                    Multimedia
+                </a>
+
+                <a href="TORITO-encuestas.html">
+                    <span class="nav-punto" aria-hidden="true"></span>
+                    Encuestas
+                </a>
+
+                <a href="lesiones.html">
+                    <span class="nav-punto" aria-hidden="true"></span>
+                    Lesiones
+                </a>
+
+            </div>
+        </div>
+
+        <div class="separador-sesion">
+
+            <a href="#" class="enlace-cerrar-sesion" id="cerrarSesion">
+                <span class="icono-salir" aria-hidden="true">↪</span>
+                Cerrar sesión
+            </a>
+
+        </div>
+
+    </aside>
+
+    <main>
+
+        <section class="page-heading">
+
+            <div>
+                <h2>Fixture de competencia</h2>
+                <p>
+                    Organizá los partidos por división, competición y fecha del torneo.
+                </p>
+            </div>
+
+            <div class="botones-fixture">
+
+                <span class="estado-guardado" id="estadoGuardado" aria-live="polite">
+                    ☁️ Sincronizando...
+                </span>
+
+                <button
+                    class="btn btn-danger"
+                    id="btnEliminarModo"
+                    type="button"
+                    style="display:none"
+                >
+                    🗑 Eliminar partidos
+                </button>
+
+                <button
+                    class="btn btn-primary"
+                    id="btnNuevo"
+                    type="button"
+                >
+                    + Cargar partido
+                </button>
+
+            </div>
+
+        </section>
+
+        <section class="stats">
+
+            <div class="stat">
+                <span>Sub 10</span>
+                <strong id="contadorSub10">0</strong>
+            </div>
+
+            <div class="stat">
+                <span>Sub 12</span>
+                <strong id="contadorSub12">0</strong>
+            </div>
+
+            <div class="stat">
+                <span>Sub 14</span>
+                <strong id="contadorSub14">0</strong>
+            </div>
+
+            <div class="stat">
+                <span>Sub 16</span>
+                <strong id="contadorSub16">0</strong>
+            </div>
+
+            <div class="stat">
+                <span>Primera</span>
+                <strong id="contadorPrimera">0</strong>
+            </div>
+
+        </section>
+
+        <section class="filters">
+
+            <div class="field">
+                <label for="busqueda">Buscar partido</label>
+                <input
+                    type="search"
+                    id="busqueda"
+                    placeholder="Buscar por rival o fecha..."
+                >
+            </div>
+
+            <div class="field">
+                <label for="filtroDivision">Categoría</label>
+                <select id="filtroDivision">
+                    <option value="">Todas las categorías</option>
+                    <option value="Sub 10">Sub 10</option>
+                    <option value="Sub 12">Sub 12</option>
+                    <option value="Sub 14">Sub 14</option>
+                    <option value="Sub 16">Sub 16</option>
+                    <option value="Primera">Primera</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="filtroCompeticion">Competición</label>
+                <select id="filtroCompeticion">
+                    <option value="">Todas las competiciones</option>
+                </select>
+            </div>
+
+        </section>
+
+        <div class="contenedor-fixture" id="contenedorFixture"></div>
+
+    </main>
+
+</div>
+
+<!-- MODAL PARA CARGAR O MODIFICAR PARTIDOS -->
+
+<div class="modal-overlay" id="modalOverlay">
+
+    <section
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="tituloModal"
+    >
+
+        <div class="modal-header">
+
+            <h3 id="tituloModal">Cargar partido</h3>
+
+            <button
+                type="button"
+                class="modal-close"
+                id="cerrarModal"
+                aria-label="Cerrar"
+            >×</button>
+
+        </div>
+
+        <form id="formPartido">
+
+            <div class="modal-body">
+
+                <div class="form-grid">
+
+                    <div class="field">
+                        <label for="division">Categoría *</label>
+                        <select id="division" required>
+                            <option value="Sub 10">Sub 10</option>
+                            <option value="Sub 12">Sub 12</option>
+                            <option value="Sub 14">Sub 14</option>
+                            <option value="Sub 16">Sub 16</option>
+                            <option value="Primera">Primera</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="competicion">Competición *</label>
+                        <select id="competicion" required></select>
+                    </div>
+
+                    <div class="field">
+                        <label for="jornada" id="labelJornada">Fecha del torneo *</label>
+                        <input
+                            type="number"
+                            id="jornada"
+                            min="1"
+                            max="99"
+                            step="1"
+                            placeholder="Ej.: 1"
+                            required
+                        >
+                    </div>
+
+                    <div class="field">
+                        <label for="fechaPartido">Fecha del partido</label>
+                        <input type="date" id="fechaPartido">
+                    </div>
+
+                    <div class="field">
+                        <label for="lugarPartido">Estadio / Club / Sede</label>
+                        <input
+                            type="text"
+                            id="lugarPartido"
+                            maxlength="120"
+                            placeholder="Ej.: Cancha de TORITO"
+                        >
+                    </div>
+
+                    <div class="field">
+                        <label for="rival">Rival *</label>
+                        <select id="rival" required>
+                            <option value="">Seleccioná un club...</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="golestorito">Goles TORITO</label>
+                        <input
+                            type="number"
+                            id="golestorito"
+                            min="0"
+                            max="99"
+                            step="1"
+                            placeholder="Ej.: 2"
+                        >
+                    </div>
+
+                    <div class="field">
+                        <label for="golesRival">Goles RIVAL</label>
+                        <input
+                            type="number"
+                            id="golesRival"
+                            min="0"
+                            max="99"
+                            step="1"
+                            placeholder="Ej.: 1"
+                        >
+                    </div>
+
+                </div>
+
+                <div class="escudos-form">
+
+                    <div class="escudo-upload">
+
+                        <label>Escudo de TORITO</label>
+
+                        <img
+                            id="previewtorito"
+                            class="escudo-preview"
+                            src="TORITO-Logo TORITO.png"
+                            alt="Escudo de TORITO"
+                            onerror="this.onerror=null;this.src='TORITO-Logo TORITO.png';"
+                        >
+
+                        <p class="escudo-fijo-aviso">
+                            Escudo fijo del club. No se puede cambiar desde este formulario.
+                        </p>
+
+                    </div>
+
+                    <div class="escudo-upload">
+
+                        <label for="rival">Escudo del rival</label>
+
+                        <img
+                            id="previewRival"
+                            class="escudo-preview"
+                            alt="Escudo del rival"
+                            style="display:none"
+                        >
+
+                        <div
+                            id="placeholderRival"
+                            style="width:76px;height:76px;display:grid;place-items:center;font-size:30px;"
+                        >⚽</div>
+
+                        <p class="form-help" id="nombreEscudoRival">
+                            Seleccioná el rival para ver su escudo.
+                        </p>
+
+                        <p class="aviso-escudo" id="avisoEscudo">
+                            No se pudo cargar la imagen. Revisá el archivo dentro de CLUBES.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <p class="notice">
+                    * Campos obligatorios. Las competiciones disponibles cambian automáticamente
+                    según la categoría seleccionada. Para partidos amistosos, la fecha del torneo no es obligatoria.
+                </p>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    id="cancelarModal"
+                >Cancelar</button>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                    id="btnGuardar"
+                >Guardar partido</button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+</div>
+
+<!-- PERFIL -->
+
+<div class="fondo-perfil" id="fondoPerfil">
+
+    <section class="tarjeta-perfil">
+
+        <div class="avatar-perfil" id="avatarPerfil">U</div>
+
+        <h2 id="nombrePerfil">Usuario</h2>
+
+        <p id="rolPerfil">Club Torito</p>
+
+        <button
+            class="boton-cerrar-perfil"
+            id="cerrarPerfil"
+            type="button"
+        >Cerrar</button>
+
+    </section>
+
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+    getFirestore,
+    collection,
+    doc,
+    setDoc,
+    deleteDoc,
+    onSnapshot
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/* =====================================================
+   CONEXIÓN A FIREBASE CLOUD FIRESTORE (adiur-b1913)
+===================================================== */
+
+const firebaseConfig = {
+    projectId: "adiur-b1913",
+    appId: "1:1032379124859:web:adiur-fem-web",
+    authDomain: "adiur-b1913.firebaseapp.com",
+    storageBucket: "adiur-b1913.appspot.com"
+};
+
+let db = null;
+let nubeActiva = false;
+
+try {
+    const app = initializeApp(firebaseConfig);
+    db = getFirestore(app);
+    nubeActiva = true;
+} catch (error) {
+    console.warn("Firebase en modo local:", error);
+}
+
+const elEstadoGuardado = document.getElementById("estadoGuardado");
+
+function actualizarIndicadorGuardado(tipo, texto) {
+    if (!elEstadoGuardado) return;
+    elEstadoGuardado.className = "estado-guardado" + (tipo ? " " + tipo : "");
+    elEstadoGuardado.textContent = texto;
+}
+
+/* =====================================================
+   USUARIO Y PERMISOS
+===================================================== */
+
+function normalizarUsuario(valor) {
+    return String(valor || "")
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[\s._-]+/g, "");
+}
+
+function leerUsuario() {
+    try {
+        return (localStorage.getItem("usuarioTORITO") || "").trim();
+    } catch (error) {
+        return "";
+    }
+}
+
+const usuarioGuardado = leerUsuario();
+const usuarioNormalizado = normalizarUsuario(usuarioGuardado);
+
+function esFran() {
+    return [
+        "fran",
+        "francisco",
+        "franciscoperezbasla"
+    ].includes(usuarioNormalizado);
+}
+
+function esToto() {
+    return usuarioNormalizado === "toto";
+}
+
+function esBianca() {
+    return [
+        "bianca",
+        "biancadominguez"
+    ].includes(usuarioNormalizado);
+}
+
+const puedeEditar = esFran() || esToto();
+const puedeEliminar = esFran();
+
+/* Información del usuario */
+
+document.getElementById("nombreUsuario").textContent =
+    usuarioGuardado || "Usuario";
+
+document.getElementById("avatarUsuario").textContent =
+    usuarioGuardado
+        ? usuarioGuardado.charAt(0).toUpperCase()
+        : "U";
+
+document.getElementById("rolUsuario").textContent =
+    esFran() ? "Administrador" :
+    esToto() ? "Cuerpo técnico" :
+    esBianca() ? "Jugadora · Sub 14" :
+    "Club Torito";
+
+document.getElementById("nombrePerfil").textContent =
+    usuarioGuardado || "Usuario";
+
+document.getElementById("avatarPerfil").textContent =
+    usuarioGuardado
+        ? usuarioGuardado.charAt(0).toUpperCase()
+        : "U";
+
+document.getElementById("rolPerfil").textContent =
+    document.getElementById("rolUsuario").textContent;
+
+/* Redirigir si no hay sesión iniciada */
+
+if (!usuarioGuardado) {
+    window.location.href = "TORITO-Loing.html";
+}
+
+/* Permisos */
+
+if (!puedeEditar) {
+    document.getElementById("btnNuevo").style.display = "none";
+}
+
+if (puedeEliminar) {
+    document.getElementById("btnEliminarModo").style.display = "inline-flex";
+}
+
+/* Permisos visuales de Bianca */
+
+if (esBianca()) {
+    document.getElementById("grupoPlantel")?.remove();
+    document.getElementById("grupoRendimientos")?.remove();
+
+    document.querySelectorAll("[data-ocultar-bianca]").forEach(enlace => {
+        enlace.style.display = "none";
+    });
+}
+
+/* =====================================================
+   BARRA LATERAL
+===================================================== */
+
+const botonMenu = document.getElementById("botonMenu");
+const sidebar = document.getElementById("sidebar");
+const capaSidebar = document.getElementById("capaSidebar");
+
+function esPantallaMovil() {
+    return window.innerWidth <= 760;
+}
+
+function actualizarEstadoSidebar() {
+    const abierto = !sidebar.classList.contains("oculto");
+
+    botonMenu.setAttribute("aria-expanded", String(abierto));
+
+    botonMenu.setAttribute(
+        "aria-label",
+        abierto ? "Cerrar menú" : "Abrir menú"
+    );
+
+    if (esPantallaMovil()) {
+        capaSidebar.classList.toggle("visible", abierto);
+    } else {
+        capaSidebar.classList.remove("visible");
+    }
+}
+
+function alternarSidebar() {
+    sidebar.classList.toggle("oculto");
+    actualizarEstadoSidebar();
+}
+
+function cerrarSidebar() {
+    sidebar.classList.add("oculto");
+    capaSidebar.classList.remove("visible");
+    actualizarEstadoSidebar();
+}
+
+botonMenu.addEventListener("click", alternarSidebar);
+capaSidebar.addEventListener("click", cerrarSidebar);
+
+/* Abrir y cerrar grupos */
+
+document.querySelectorAll(".titulo-grupo[data-grupo]").forEach(boton => {
+    boton.addEventListener("click", () => {
+        const grupo = document.getElementById(boton.dataset.grupo);
+
+        if (!grupo) return;
+
+        grupo.classList.toggle("cerrado");
+
+        boton.setAttribute(
+            "aria-expanded",
+            String(!grupo.classList.contains("cerrado"))
+        );
+    });
+});
+
+/* Adaptar barra lateral */
+
+function ajustarSidebar() {
+    if (esPantallaMovil()) {
+        sidebar.classList.add("oculto");
+    } else {
+        sidebar.classList.remove("oculto");
+    }
+
+    actualizarEstadoSidebar();
+}
+
+window.addEventListener("resize", ajustarSidebar);
+ajustarSidebar();
+
+/* Cerrar menú en móvil al seleccionar una opción */
+
+document.querySelectorAll(".sidebar a").forEach(enlace => {
+    enlace.addEventListener("click", () => {
+        if (esPantallaMovil() && enlace.id !== "cerrarSesion") {
+            cerrarSidebar();
+        }
+    });
+});
+
+/* =====================================================
+   PERFIL
+===================================================== */
+
+document.getElementById("botonPerfil").addEventListener("click", () => {
+    document.getElementById("fondoPerfil").classList.add("visible");
+});
+
+function cerrarPerfil() {
+    document.getElementById("fondoPerfil").classList.remove("visible");
+}
+
+document.getElementById("cerrarPerfil").addEventListener(
+    "click",
+    cerrarPerfil
+);
+
+document.getElementById("fondoPerfil").addEventListener("click", event => {
+    if (event.target.id === "fondoPerfil") {
+        cerrarPerfil();
+    }
+});
+
+/* =====================================================
+   CERRAR SESIÓN
+===================================================== */
+
+document.getElementById("cerrarSesion").addEventListener("click", event => {
+    event.preventDefault();
+
+    try {
+        localStorage.removeItem("usuarioTORITO");
+    } catch (error) {
+        console.warn("No se pudo limpiar el usuario guardado.");
+    }
+
+    window.location.href = "TORITO-Loing.html";
+});
+
+/* =====================================================
+   CATEGORÍAS Y COMPETICIONES
+===================================================== */
+
+const DIVISIONES = [
+    "Sub 10",
+    "Sub 12",
+    "Sub 14",
+    "Sub 16",
+    "Primera"
+];
+
+const COMPETICIONES_POR_DIVISION = {
+    "Sub 10": [
+        "Rosarina",
+        "Copa Oro - ARF",
+        "Copa Plata - ARF",
+        "Amistoso"
+    ],
+    "Sub 12": [
+        "Rosarina",
+        "Copa Oro - ARF",
+        "Copa Plata - ARF",
+        "Amistoso"
+    ],
+    "Sub 14": [
+        "Rosarina",
+        "Copa Oro - ARF",
+        "Copa Plata - ARF",
+        "Amistoso"
+    ],
+    "Sub 16": [
+        "Rosarina",
+        "Copa Oro - ARF",
+        "Copa Plata - ARF",
+        "Amistoso"
+    ],
+    "Primera": [
+        "Fase Regular - ARF",
+        "Copa Oro - ARF",
+        "Copa Santa Fe",
+        "Torneo Regional AFA",
+        "Amistoso"
+    ]
+};
+
+const ORDEN_COMPETICIONES = [
+    "Rosarina",
+    "Copa Oro - ARF",
+    "Copa Plata - ARF",
+    "Fase Regular - ARF",
+    "Copa Santa Fe",
+    "Torneo Regional AFA",
+    "Amistoso"
+];
+
+const CLAVE_FIXTURE = "fixtureTORITO";
+const LOGO_TORITO_FIJO = "TORITO-Logo TORITO.png";
+
+/* =====================================================
+   CLUBES Y ESCUDOS
+===================================================== */
+
+const ESCUDOS_CLUBES = [
+    { nombre: "14 de Junio", ruta: "CLUBES/14 JUNIO.jpg" },
+    { nombre: "Alianza", ruta: "CLUBES/ALIANZA.png" },
+    { nombre: "Argentino", ruta: "CLUBES/ARGENTINO.png" },
+    { nombre: "Banco", ruta: "CLUBES/BANCO.jpg" },
+    { nombre: "Botafogo", ruta: "CLUBES/BOTAFOGO.jpg" },
+    { nombre: "Central", ruta: "CLUBES/CENTRAL.png" },
+    { nombre: "CGR", ruta: "CLUBES/CGR.png" },
+    { nombre: "Coronel Aguirre", ruta: "CLUBES/CORONEL AGUIRRE.png" },
+    { nombre: "General Paz", ruta: "CLUBES/GRAL PAZ.jpg" },
+    { nombre: "Lamadrid", ruta: "CLUBES/LAMADRID.jpg" },
+    { nombre: "Leones", ruta: "CLUBES/LEONES.jpg" },
+    { nombre: "Mitre", ruta: "CLUBES/MITRE.png" },
+    { nombre: "Morning", ruta: "CLUBES/MORNING.jpg" },
+    { nombre: "Newell's Old Boys", ruta: "CLUBES/NEWELLS.png" },
+    { nombre: "Oriental", ruta: "CLUBES/ORIENTAL.jpg" },
+    { nombre: "Pablo VI", ruta: "CLUBES/PABLO VI.jpg" },
+    { nombre: "Provincial", ruta: "CLUBES/PROVINCIAL.png" },
+    { nombre: "Renato", ruta: "CLUBES/RENATO.jpg" },
+    { nombre: "San José", ruta: "CLUBES/SAN JOSE.jpg" },
+    { nombre: "San Roque", ruta: "CLUBES/SAN ROQUE.jpg" },
+    { nombre: "San Telmo", ruta: "CLUBES/SAN TELMO.png" },
+    { nombre: "Social Lux", ruta: "CLUBES/SOCIAL LUX.jpg" },
+    { nombre: "Sparta", ruta: "CLUBES/SPARTA.jpg" },
+    { nombre: "Tiro Federal", ruta: "CLUBES/TIRO FEDERAL.jpg" },
+    { nombre: "Tiro Suizo", ruta: "CLUBES/TIRO SUIZO.jpg" },
+    { nombre: "Torito", ruta: "CLUBES/TORITO.png" },
+    { nombre: "Unión Americana", ruta: "CLUBES/UNION AMERICANA.png" },
+    { nombre: "Villa Gobernador Gálvez", ruta: "CLUBES/VG GALVEZ.png" }
+];
+
+function obtenerClubPorNombre(nombre) {
+    const normalizado = normalizarUsuario(nombre);
+
+    return ESCUDOS_CLUBES.find(club =>
+        normalizarUsuario(club.nombre) === normalizado
+    ) || null;
+}
+
+function rutaImagen(nombre) {
+    if (!nombre) return "";
+
+    const archivo = String(nombre).trim();
+
+    if (/^data:image\//i.test(archivo)) {
+        return archivo;
+    }
+
+    const minusculas = archivo.toLowerCase();
+
+    if (
+        minusculas === "torito" ||
+        minusculas === "TORITO-Logo TORITO.png" ||
+        minusculas === "logo torito.png" ||
+        minusculas === "logo torito.jpeg"
+    ) {
+        return LOGO_TORITO_FIJO;
+    }
+
+    if (archivo.includes("/") || archivo.includes("\\")) {
+        return archivo.replace(/\\/g, "/");
+    }
+
+    if (
+        minusculas === "nob.jpg" ||
+        minusculas === "newells.jpg"
+    ) {
+        return "CLUBES/NEWELLS.png";
+    }
+
+    const club = ESCUDOS_CLUBES.find(item =>
+        item.ruta.split("/").pop().toLowerCase() === minusculas
+    );
+
+    return club ? club.ruta : archivo;
+}
+
+/* =====================================================
+   SELECTOR DE RIVAL
+===================================================== */
+
+const selectorRival = document.getElementById("rival");
+const previewRival = document.getElementById("previewRival");
+const placeholderRival = document.getElementById("placeholderRival");
+const nombreEscudoRival = document.getElementById("nombreEscudoRival");
+const avisoEscudo = document.getElementById("avisoEscudo");
+
+function completarSelectorRival(valorActual = "", rutaAntigua = "") {
+    selectorRival.replaceChildren();
+
+    const primeraOpcion = document.createElement("option");
+    primeraOpcion.value = "";
+    primeraOpcion.textContent = "Seleccioná un club...";
+    selectorRival.appendChild(primeraOpcion);
+
+    ESCUDOS_CLUBES.forEach(club => {
+        const opcion = document.createElement("option");
+
+        opcion.value = club.nombre;
+        opcion.textContent = club.nombre;
+        opcion.dataset.ruta = club.ruta;
+
+        selectorRival.appendChild(opcion);
+    });
+
+    const existe = ESCUDOS_CLUBES.some(club =>
+        normalizarUsuario(club.nombre) === normalizarUsuario(valorActual)
+    );
+
+    if (valorActual && !existe) {
+        const opcionAntigua = document.createElement("option");
+
+        opcionAntigua.value = valorActual;
+        opcionAntigua.textContent = valorActual;
+        opcionAntigua.dataset.ruta = rutaAntigua || "";
+
+        selectorRival.appendChild(opcionAntigua);
+    }
+
+    selectorRival.value = valorActual || "";
+}
+
+function mostrarEscudoRival(ruta, nombre = "") {
+    avisoEscudo.classList.remove("visible");
+
+    if (!ruta) {
+        previewRival.removeAttribute("src");
+        previewRival.style.display = "none";
+        placeholderRival.style.display = "grid";
+
+        nombreEscudoRival.textContent =
+            "Seleccioná el rival para ver su escudo.";
+
+        return;
+    }
+
+    nombreEscudoRival.textContent = nombre
+        ? "Escudo de " + nombre
+        : "Escudo del rival";
+
+    previewRival.onload = function() {
+        previewRival.style.display = "block";
+        placeholderRival.style.display = "none";
+        avisoEscudo.classList.remove("visible");
+    };
+
+    previewRival.onerror = function() {
+        previewRival.style.display = "none";
+        placeholderRival.style.display = "grid";
+        avisoEscudo.classList.add("visible");
+    };
+
+    previewRival.src = ruta;
+}
+
+function actualizarEscudoRival() {
+    const opcion = selectorRival.selectedOptions[0];
+
+    if (!opcion || !opcion.value) {
+        mostrarEscudoRival("");
+        return;
+    }
+
+    mostrarEscudoRival(
+        opcion.dataset.ruta || "",
+        opcion.textContent
+    );
+}
+
+selectorRival.addEventListener("change", actualizarEscudoRival);
+completarSelectorRival();
+
+/* =====================================================
+   NORMALIZACIÓN Y ALMACENAMIENTO DUAL (NUBE + LOCAL)
+===================================================== */
+
+function normalizarObjetoPartido(p, indice = 0) {
+    const division = DIVISIONES.includes(p.division)
+        ? p.division
+        : "Sub 10";
+
+    let competicion = p.competicion || "";
+
+    if (division === "Primera") {
+        if (competicion === "Rosarina") {
+            competicion = "Fase Regular - ARF";
+        } else if (competicion === "Regional") {
+            competicion = "Torneo Regional AFA";
+        }
+    }
+
+    let jornada = parseInt(p.jornada ?? p.fechaNumero, 10);
+
+    if (!Number.isFinite(jornada) || jornada < 1) {
+        jornada = 1;
+    }
+
+    const rival = p.rival || p.equipoRival || "";
+    const clubCatalogado = obtenerClubPorNombre(rival);
+
+    let escudoRival = p.escudoRival || p.escudo || "";
+
+    if (!escudoRival && clubCatalogado) {
+        escudoRival = clubCatalogado.ruta;
+    } else if (
+        escudoRival &&
+        !/^data:image\//i.test(escudoRival)
+    ) {
+        escudoRival = rutaImagen(escudoRival);
+    }
+
+    const golestorito = p.golestorito ?? p.marcadortorito ?? "";
+    const golesRival = p.golesRival ?? p.marcadorRival ?? "";
+
+    return {
+        id: String(p.id || ("partido-" + Date.now() + "-" + indice)),
+        division,
+        categoria: division,
+        competicion,
+        jornada,
+        fechaPartido: p.fechaPartido || p.fecha || "",
+        fecha: p.fechaPartido || p.fecha || "",
+        lugarPartido: p.lugarPartido || p.lugar || p.cancha || "",
+        rival,
+        escudotorito: LOGO_TORITO_FIJO,
+        escudoRival,
+        golestorito: golestorito === "" || golestorito === null
+            ? ""
+            : String(golestorito),
+        golesRival: golesRival === "" || golesRival === null
+            ? ""
+            : String(golesRival)
+    };
+}
+
+function cargarPartidosLocales() {
+    try {
+        const texto = localStorage.getItem(CLAVE_FIXTURE);
+        if (!texto) return [];
+        const datos = JSON.parse(texto);
+        if (!Array.isArray(datos)) return [];
+        return datos.map((p, indice) => normalizarObjetoPartido(p, indice));
+    } catch (error) {
+        console.error("Error cargando fixture local:", error);
+        return [];
+    }
+}
+
+let partidos = cargarPartidosLocales();
+let idEditando = null;
+let modoEliminar = false;
+let migracionInicialRealizada = false;
+
+function respaldarEnLocalStorage() {
+    try {
+        localStorage.setItem(CLAVE_FIXTURE, JSON.stringify(partidos));
+    } catch (error) {
+        console.warn("No se pudo respaldar en localStorage:", error);
+    }
+}
+
+async function guardarPartidoEnNube(partido) {
+    respaldarEnLocalStorage();
+
+    if (!nubeActiva || !db) {
+        actualizarIndicadorGuardado("offline", "💾 Guardado local (sin red)");
+        return true;
+    }
+
+    actualizarIndicadorGuardado("guardando", "⏳ Guardando en la nube...");
+    try {
+        await setDoc(doc(db,"torito_partidos", String(partido.id)), {
+            ...partido,
+            actualizadoPor: usuarioGuardado,
+            actualizadoEl: new Date().toISOString()
+        });
+        actualizarIndicadorGuardado("", "☁️ Guardado en la nube");
+        return true;
+    } catch (error) {
+        console.error("Error guardando partido en Firestore:", error);
+        actualizarIndicadorGuardado("offline", "💾 Guardado local (sin red)");
+        return true;
+    }
+}
+
+async function eliminarPartidoEnNube(id) {
+    respaldarEnLocalStorage();
+
+    if (!nubeActiva || !db) {
+        actualizarIndicadorGuardado("offline", "💾 Guardado local (sin red)");
+        return true;
+    }
+
+    actualizarIndicadorGuardado("guardando", "⏳ Eliminando en la nube...");
+    try {
+        await deleteDoc(doc(db,"torito_partidos", String(id)));
+        actualizarIndicadorGuardado("", "☁️ Guardado en la nube");
+        return true;
+    } catch (error) {
+        console.error("Error eliminando partido en Firestore:", error);
+        actualizarIndicadorGuardado("offline", "💾 Guardado local (sin red)");
+        return true;
+    }
+}
+
+function iniciarSincronizacionNube() {
+    if (!nubeActiva || !db) {
+        actualizarIndicadorGuardado("offline", "💾 Guardado local (sin red)");
+        return;
+    }
+
+    onSnapshot(
+        collection(db,"torito_partidos"),
+        async snapshot => {
+            const listaNube = [];
+            snapshot.forEach(docSnap => {
+                listaNube.push(normalizarObjetoPartido({ id: docSnap.id, ...docSnap.data() }));
+            });
+
+            if (listaNube.length === 0 && partidos.length > 0 && !migracionInicialRealizada) {
+                migracionInicialRealizada = true;
+                for (const pLocal of partidos) {
+                    await setDoc(doc(db,"torito_partidos", String(pLocal.id)), {
+                        ...pLocal,
+                        actualizadoPor: usuarioGuardado,
+                        actualizadoEl: new Date().toISOString()
+                    });
+                }
+                actualizarIndicadorGuardado("", "☁️ Guardado en la nube");
+                return;
+            }
+
+            migracionInicialRealizada = true;
+            partidos = listaNube;
+            respaldarEnLocalStorage();
+            renderizarFixture();
+            actualizarIndicadorGuardado("", "☁️ Guardado en la nube");
+        },
+        error => {
+            console.warn("No se pudo suscribir a Firestore:", error);
+            actualizarIndicadorGuardado("offline", "💾 Guardado local (sin red)");
+        }
+    );
+}
+
+/* =====================================================
+   CONTADORES POR CATEGORÍA
+===================================================== */
+
+function actualizarContadoresCategorias() {
+    const contadores = {
+        "Sub 10": "contadorSub10",
+        "Sub 12": "contadorSub12",
+        "Sub 14": "contadorSub14",
+        "Sub 16": "contadorSub16",
+        "Primera": "contadorPrimera"
+    };
+
+    Object.entries(contadores).forEach(([division, id]) => {
+        const elemento = document.getElementById(id);
+
+        if (elemento) {
+            elemento.textContent = partidos.filter(
+                partido => partido.division === division
+            ).length;
+        }
+    });
+}
+
+/* =====================================================
+   COMPETICIONES SEGÚN CATEGORÍA Y VALIDACIÓN DE FECHA
+===================================================== */
+
+function actualizarRequisitoFecha() {
+    const competicionSelect = document.getElementById("competicion");
+    const jornadaInput = document.getElementById("jornada");
+    const labelJornada = document.getElementById("labelJornada");
+    const esAmistoso = competicionSelect.value === "Amistoso";
+
+    if (esAmistoso) {
+        jornadaInput.removeAttribute("required");
+        labelJornada.textContent = "Fecha del torneo (opcional)";
+        if (!jornadaInput.value) {
+            jornadaInput.value = "1";
+        }
+    } else {
+        jornadaInput.setAttribute("required", "required");
+        labelJornada.textContent = "Fecha del torneo *";
+    }
+}
+
+function actualizarCompeticionesFormulario(valorPreferido = "") {
+    const division = document.getElementById("division").value;
+    const selector = document.getElementById("competicion");
+
+    const opciones = COMPETICIONES_POR_DIVISION[division] ||
+        COMPETICIONES_POR_DIVISION["Sub 10"];
+
+    selector.replaceChildren();
+
+    opciones.forEach(nombre => {
+        const option = document.createElement("option");
+
+        option.value = nombre;
+        option.textContent = nombre;
+
+        selector.appendChild(option);
+    });
+
+    selector.value = opciones.includes(valorPreferido)
+        ? valorPreferido
+        : opciones[0];
+
+    actualizarRequisitoFecha();
+}
+
+document.getElementById("division").addEventListener("change", () => {
+    actualizarCompeticionesFormulario();
+});
+
+document.getElementById("competicion").addEventListener("change", () => {
+    actualizarRequisitoFecha();
+});
+
+function actualizarFiltroCompeticion() {
+    const division = document.getElementById("filtroDivision").value;
+    const selector = document.getElementById("filtroCompeticion");
+    const valorAnterior = selector.value;
+
+    const competiciones = division
+        ? COMPETICIONES_POR_DIVISION[division]
+        : ORDEN_COMPETICIONES;
+
+    selector.replaceChildren();
+
+    const todas = document.createElement("option");
+    todas.value = "";
+    todas.textContent = "Todas las competiciones";
+    selector.appendChild(todas);
+
+    competiciones.forEach(nombre => {
+        const option = document.createElement("option");
+        option.value = nombre;
+        option.textContent = nombre;
+        selector.appendChild(option);
+    });
+
+    selector.value = competiciones.includes(valorAnterior)
+        ? valorAnterior
+        : "";
+
+    renderizarFixture();
+}
+
+document.getElementById("filtroDivision").addEventListener(
+    "change",
+    actualizarFiltroCompeticion
+);
+
+document.getElementById("filtroCompeticion").addEventListener(
+    "change",
+    renderizarFixture
+);
+
+document.getElementById("busqueda").addEventListener(
+    "input",
+    renderizarFixture
+);
+
+/* =====================================================
+   MODAL PARA CARGAR Y MODIFICAR PARTIDOS
+===================================================== */
+
+function abrirModal(id = null) {
+    if (!puedeEditar) {
+        alert("No tenés permisos para cargar o modificar partidos.");
+        return;
+    }
+
+    idEditando = id;
+
+    document.getElementById("formPartido").reset();
+
+    actualizarCompeticionesFormulario();
+    completarSelectorRival();
+
+    document.getElementById("tituloModal").textContent =
+        id === null
+            ? "Cargar partido"
+            : "Modificar partido";
+
+    document.getElementById("btnGuardar").textContent =
+        id === null
+            ? "Guardar partido"
+            : "Guardar cambios";
+
+    document.getElementById("jornada").value = 1;
+    actualizarRequisitoFecha();
+
+    const previewtorito = document.getElementById("previewtorito");
+
+    previewtorito.style.display = "block";
+
+    previewtorito.onerror = function() {
+        this.onerror = null;
+        this.src = "TORITO-Logo TORITO.png";
+    };
+
+    previewtorito.src = LOGO_TORITO_FIJO;
+
+    mostrarEscudoRival("");
+
+    if (id !== null) {
+        const partido = partidos.find(
+            p => String(p.id) === String(id)
+        );
+
+        if (!partido) {
+            alert("No se encontró el partido.");
+            return;
+        }
+
+        document.getElementById("division").value = partido.division;
+
+        actualizarCompeticionesFormulario(partido.competicion);
+
+        const selectorCompeticion =
+            document.getElementById("competicion");
+
+        if (
+            partido.competicion &&
+            !Array.from(selectorCompeticion.options).some(
+                opcion => opcion.value === partido.competicion
+            )
+        ) {
+            const opcionAntigua = document.createElement("option");
+            opcionAntigua.value = partido.competicion;
+            opcionAntigua.textContent = partido.competicion;
+            selectorCompeticion.appendChild(opcionAntigua);
+        }
+
+        selectorCompeticion.value = partido.competicion;
+        actualizarRequisitoFecha();
+
+        document.getElementById("jornada").value = partido.jornada;
+        document.getElementById("fechaPartido").value =
+            partido.fechaPartido || "";
+
+        document.getElementById("lugarPartido").value =
+            partido.lugarPartido || "";
+
+        document.getElementById("golestorito").value =
+            partido.golestorito ?? "";
+
+        document.getElementById("golesRival").value =
+            partido.golesRival ?? "";
+
+        completarSelectorRival(
+            partido.rival,
+            partido.escudoRival
+        );
+
+        selectorRival.value = partido.rival;
+
+        if (partido.rival) {
+            const opcion = selectorRival.selectedOptions[0];
+            const ruta = opcion?.dataset.ruta ||
+                partido.escudoRival ||
+                "";
+
+            mostrarEscudoRival(ruta, partido.rival);
+        }
+    }
+
+    document.getElementById("modalOverlay").classList.add("visible");
+    document.body.style.overflow = "hidden";
+}
+
+function cerrarModal() {
+    document.getElementById("modalOverlay").classList.remove("visible");
+    document.body.style.overflow = "";
+    idEditando = null;
+}
+
+document.getElementById("btnNuevo").addEventListener("click", () => {
+    abrirModal();
+});
+
+document.getElementById("cerrarModal").addEventListener(
+    "click",
+    cerrarModal
+);
+
+document.getElementById("cancelarModal").addEventListener(
+    "click",
+    cerrarModal
+);
+
+document.getElementById("modalOverlay").addEventListener("click", event => {
+    if (event.target.id === "modalOverlay") {
+        cerrarModal();
+    }
+});
+
+/* =====================================================
+   GUARDAR PARTIDO
+===================================================== */
+
+document.getElementById("formPartido").addEventListener(
+    "submit",
+    guardarPartido
+);
+
+async function guardarPartido(event) {
+    event.preventDefault();
+
+    if (!puedeEditar) {
+        alert("No tenés permisos para modificar el fixture.");
+        return;
+    }
+
+    const division = document.getElementById("division").value;
+    const competicion = document.getElementById("competicion").value;
+    
+    let jornadaVal = document.getElementById("jornada").value;
+    const esAmistoso = competicion === "Amistoso";
+
+    if (esAmistoso && (jornadaVal === "" || jornadaVal === null || isNaN(jornadaVal))) {
+        jornadaVal = 1;
+    }
+
+    const jornada = parseInt(jornadaVal, 10);
+
+    const rival = selectorRival.value.trim();
+    const fechaPartido = document.getElementById("fechaPartido").value;
+    const lugarPartido = document.getElementById("lugarPartido").value.trim();
+    const golestoritoIngresados = document.getElementById("golestorito").value;
+    const golesRivalIngresados = document.getElementById("golesRival").value;
+
+    if (
+        golestoritoIngresados !== "" &&
+        (
+            !Number.isInteger(Number(golestoritoIngresados)) ||
+            Number(golestoritoIngresados) < 0 ||
+            Number(golestoritoIngresados) > 99
+        )
+    ) {
+        alert("Ingresá una cantidad válida de goles para TORITO (0 a 99).");
+        return;
+    }
+
+    if (
+        golesRivalIngresados !== "" &&
+        (
+            !Number.isInteger(Number(golesRivalIngresados)) ||
+            Number(golesRivalIngresados) < 0 ||
+            Number(golesRivalIngresados) > 99
+        )
+    ) {
+        alert("Ingresá una cantidad válida de goles para el rival (0 a 99).");
+        return;
+    }
+
+    if (!DIVISIONES.includes(division)) {
+        alert("Seleccioná una categoría válida.");
+        return;
+    }
+
+    const competenciasValidas = COMPETICIONES_POR_DIVISION[division] || [];
+    const competicionValida = competenciasValidas.includes(competicion);
+
+    const competicionAntiguaPermitida =
+        idEditando !== null &&
+        partidos.some(p =>
+            String(p.id) === String(idEditando) &&
+            p.competicion === competicion
+        );
+
+    if (!competicionValida && !competicionAntiguaPermitida) {
+        alert("Seleccioná una competición válida para esta categoría.");
+        return;
+    }
+
+    if (!esAmistoso && (!Number.isInteger(jornada) || jornada < 1 || jornada > 99)) {
+        alert("Ingresá un número de fecha válido entre 1 y 99.");
+        return;
+    }
+
+    if (!rival) {
+        alert("Seleccioná el rival.");
+        return;
+    }
+
+    const opcionRival = selectorRival.selectedOptions[0];
+    const escudoRival = opcionRival ? (opcionRival.dataset.ruta || "") : "";
+
+    const anterior = idEditando !== null
+        ? partidos.find(p => String(p.id) === String(idEditando))
+        : null;
+
+    const partido = {
+        id: anterior
+            ? String(anterior.id)
+            : "partido-" + Date.now() + "-" +
+                Math.random().toString(36).slice(2, 8),
+        division,
+        categoria: division,
+        competicion,
+        jornada: Number.isFinite(jornada) ? jornada : 1,
+        fechaPartido,
+        fecha: fechaPartido,
+        lugarPartido,
+        rival,
+        escudotorito: LOGO_TORITO_FIJO,
+        escudoRival: escudoRival || (anterior?.escudoRival || ""),
+        golestorito: golestoritoIngresados,
+        golesRival: golesRivalIngresados
+    };
+
+    const btnGuardar = document.getElementById("btnGuardar");
+    btnGuardar.disabled = true;
+
+    partidos = anterior
+        ? partidos.map(p =>
+            String(p.id) === String(idEditando)
+                ? partido
+                : p
+        )
+        : [...partidos, partido];
+
+    cerrarModal();
+    renderizarFixture();
+
+    await guardarPartidoEnNube(partido);
+    btnGuardar.disabled = false;
+}
+
+/* =====================================================
+   ELIMINAR PARTIDOS
+===================================================== */
+
+function alternarModoEliminar() {
+    if (!puedeEliminar) return;
+
+    modoEliminar = !modoEliminar;
+
+    document.body.classList.toggle("eliminando", modoEliminar);
+
+    document.getElementById("btnEliminarModo").textContent =
+        modoEliminar
+            ? "✕ Cancelar eliminación"
+            : "🗑 Eliminar partidos";
+
+    renderizarFixture();
+}
+
+document.getElementById("btnEliminarModo").addEventListener(
+    "click",
+    alternarModoEliminar
+);
+
+async function eliminarPartido(id) {
+    if (!puedeEliminar) {
+        alert("Solo Fran puede eliminar partidos.");
+        return;
+    }
+
+    const partido = partidos.find(p => String(p.id) === String(id));
+    if (!partido) return;
+
+    const confirmar = confirm(
+        `¿Querés eliminar el partido de ${partido.division}, Fecha ${partido.jornada}, contra ${partido.rival}?`
+    );
+
+    if (!confirmar) return;
+
+    partidos = partidos.filter(p => String(p.id) !== String(id));
+    renderizarFixture();
+
+    await eliminarPartidoEnNube(id);
+}
+
+/* =====================================================
+   TEXTO Y ESCUDOS
+===================================================== */
+
+function escaparHTML(valor) {
+    return String(valor ?? "").replace(/[&<>"']/g, caracter => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[caracter]);
+}
+
+function construirEscudo(src, nombre, estorito = false) {
+    const ruta = estorito
+        ? LOGO_TORITO_FIJO
+        : rutaImagen(src || "");
+
+    if (!ruta) {
+        return '<span class="escudo-mini" aria-hidden="true">⚽</span>';
+    }
+
+    const rutaSegura = escaparHTML(encodeURI(ruta));
+    const altSeguro = escaparHTML(nombre || "Escudo del equipo");
+
+    if (estorito) {
+        return `
+            <img
+                class="escudo-mini"
+                src="${rutaSegura}"
+                alt="${altSeguro}"
+                onerror="this.onerror=null;this.src='TORITO-Logo TORITO.png';"
+            >
+        `;
+    }
+
+    return `
+        <img
+            class="escudo-mini"
+            src="${rutaSegura}"
+            alt="${altSeguro}"
+            onerror="this.style.display='none';this.nextElementSibling.style.display='block';"
+        >
+        <span
+            class="escudo-mini"
+            style="display:none;text-align:center;"
+            aria-hidden="true"
+        >⚽</span>
+    `;
+}
+
+function mostrarGol(valor) {
+    return valor === "" || valor === null || valor === undefined
+        ? "&nbsp;"
+        : escaparHTML(valor);
+}
+
+/* =====================================================
+   RENDERIZAR FIXTURE
+===================================================== */
+
+function renderizarFixture() {
+    const contenedor = document.getElementById("contenedorFixture");
+
+    const busqueda = document.getElementById("busqueda")
+        .value.trim().toLowerCase();
+
+    const divisionFiltro = document.getElementById("filtroDivision").value;
+    const competicionFiltro = document.getElementById("filtroCompeticion").value;
+
+    actualizarContadoresCategorias();
+
+    const filtrados = partidos.filter(p => {
+        const coincideDivision = !divisionFiltro || p.division === divisionFiltro;
+        const coincideCompeticion =
+            !competicionFiltro || p.competicion === competicionFiltro;
+
+        const texto = [
+            p.rival,
+            p.division,
+            p.competicion,
+            p.jornada,
+            p.fechaPartido,
+            p.lugarPartido,
+            p.golestorito,
+            p.golesRival
+        ].join(" ").toLowerCase();
+
+        return coincideDivision && coincideCompeticion && texto.includes(busqueda);
+    });
+
+    if (filtrados.length === 0) {
+        contenedor.innerHTML = `
+            <div class="empty">
+                <div class="empty-icon">⚽</div>
+                <h3>No hay partidos para mostrar</h3>
+                <p>Probá cambiar los filtros o cargar un nuevo partido.</p>
+            </div>
+        `;
+        return;
+    }
+
+    let html = "";
+
+    DIVISIONES.forEach(division => {
+        const deDivision = filtrados.filter(p => p.division === division);
+        if (!deDivision.length) return;
+
+        html += `
+            <section class="division-section">
+                <div class="division-heading">
+                    <h3>${escaparHTML(division)}</h3>
+                    <span>
+                        ${deDivision.length}
+                        ${deDivision.length === 1 ? "partido" : "partidos"}
+                    </span>
+                </div>
+        `;
+
+        const competicionesConfiguradas =
+            COMPETICIONES_POR_DIVISION[division] || [];
+
+        const competicionesGuardadas = [
+            ...new Set(deDivision.map(p => p.competicion).filter(Boolean))
+        ];
+
+        const competicionesAmostrar = [
+            ...competicionesConfiguradas,
+            ...competicionesGuardadas.filter(
+                c => !competicionesConfiguradas.includes(c)
+            )
+        ];
+
+        competicionesAmostrar.forEach(competicion => {
+            const deCompeticion = deDivision.filter(
+                p => p.competicion === competicion
+            );
+
+            if (!deCompeticion.length) return;
+
+            html += `
+                <section class="competition-section">
+                    <div class="competition-heading">
+                        <h4>${escaparHTML(competicion)}</h4>
+                        <span>
+                            ${deCompeticion.length}
+                            ${deCompeticion.length === 1 ? "partido" : "partidos"}
+                        </span>
+                    </div>
+            `;
+
+            const fechas = [
+                ...new Set(
+                    deCompeticion.map(p => Number(p.jornada) || 1)
+                )
+            ].sort((a, b) => a - b);
+
+            const puntoDivision = Math.ceil(fechas.length / 2);
+
+            const columnas = [
+                fechas.slice(0, puntoDivision),
+                fechas.slice(puntoDivision)
+            ];
+
+            html += '<div class="columnas-fechas">';
+
+            columnas.forEach(listaFechas => {
+                html += '<div class="columna-fechas">';
+
+                listaFechas.forEach(fechaNumero => {
+                    const deFecha = deCompeticion
+                        .filter(p => (Number(p.jornada) || 1) === fechaNumero)
+                        .sort((a, b) =>
+                            String(a.rival).localeCompare(String(b.rival), "es")
+                        );
+
+                    html += `
+                        <section class="jornada-card">
+                            <div class="jornada-heading">
+                                <strong>${competicion === "Amistoso" ? "AMISTOSO" : "FECHA " + fechaNumero}</strong>
+                            </div>
+                    `;
+
+                    deFecha.forEach(p => {
+                        const idSeguro = escaparHTML(p.id);
+                        const nombreRival = escaparHTML(p.rival || "Rival");
+
+                        const escudoRival = construirEscudo(
+                            p.escudoRival,
+                            p.rival || "Rival",
+                            false
+                        );
+
+                        const escudotorito = construirEscudo(
+                            LOGO_TORITO_FIJO,
+                            "TORITO",
+                            true
+                        );
+
+                        html += `
+                            <article class="partido ${modoEliminar ? "modo-eliminar" : ""}">
+                                ${escudotorito}
+                                <span class="equipo-nombre">TORITO</span>
+                                <span class="marcador-gol">${mostrarGol(p.golestorito)}</span>
+                                <span class="vs">VS</span>
+                                <span class="marcador-gol">${mostrarGol(p.golesRival)}</span>
+                                <span class="equipo-nombre">${nombreRival}</span>
+                                ${escudoRival}
+
+                                <div class="acciones">
+                                    ${puedeEditar ? `
+                                        <button
+                                            type="button"
+                                            class="btn-puntos"
+                                            aria-label="Modificar partido contra ${nombreRival}"
+                                            title="Modificar partido"
+                                            data-accion="editar"
+                                            data-id="${idSeguro}"
+                                        >⋮</button>
+                                    ` : ""}
+
+                                    ${puedeEliminar ? `
+                                        <button
+                                            type="button"
+                                            class="btn-seleccionar-eliminar"
+                                            data-accion="eliminar"
+                                            data-id="${idSeguro}"
+                                            aria-label="Eliminar partido"
+                                            title="Eliminar partido"
+                                        >🗑</button>
+                                    ` : ""}
+                                </div>
+                            </article>
+
+                            ${(p.fechaPartido || p.lugarPartido) ? `
+                                <div class="partido-meta">
+                                    ${p.fechaPartido ? `
+                                        <span>📅 ${escaparHTML(
+                                            p.fechaPartido.split("-").reverse().join("/")
+                                        )}</span>
+                                    ` : ""}
+
+                                    ${p.lugarPartido ? `
+                                        <span>📍 ${escaparHTML(p.lugarPartido)}</span>
+                                    ` : ""}
+                                </div>
+                            ` : ""}
+                        `;
+                    });
+
+                    html += '</section>';
+                });
+
+                html += '</div>';
+            });
+
+            html += '</div></section>';
+        });
+
+        html += '</section>';
+    });
+
+    contenedor.innerHTML = html;
+    actualizarContadoresCategorias();
+}
+
+/* =====================================================
+   ACCIONES: EDITAR Y ELIMINAR
+===================================================== */
+
+document.getElementById("contenedorFixture").addEventListener(
+    "click",
+    event => {
+        const boton = event.target.closest("button[data-accion]");
+        if (!boton) return;
+
+        const accion = boton.dataset.accion;
+        const id = boton.dataset.id;
+
+        if (accion === "editar") {
+            if (puedeEditar) abrirModal(id);
+            return;
+        }
+
+        if (accion === "eliminar") {
+            eliminarPartido(id);
+        }
+    }
+);
+
+/* =====================================================
+   TECLA ESCAPE
+===================================================== */
+
+document.addEventListener("keydown", event => {
+    if (event.key === "Escape") {
+        cerrarModal();
+        cerrarPerfil();
+    }
+});
+
+/* =====================================================
+   SINCRONIZACIÓN ENTRE PESTAÑAS
+===================================================== */
+
+window.addEventListener("storage", event => {
+    if (event.key === CLAVE_FIXTURE) {
+        partidos = cargarPartidosLocales();
+        renderizarFixture();
+    }
+
+    if (event.key === "usuarioTORITO") {
+        if (!event.newValue) {
+            window.location.href = "TORITO-Loing.html";
+        } else {
+            window.location.reload();
+        }
+    }
+});
+
+/* =====================================================
+   INICIALIZACIÓN
+===================================================== */
+
+actualizarCompeticionesFormulario();
+actualizarFiltroCompeticion();
+actualizarContadoresCategorias();
+renderizarFixture();
+iniciarSincronizacionNube();
+</script>
+
+
+
+</body>
+</html>
