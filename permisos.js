@@ -197,6 +197,14 @@
   }
 
   function aplicarPermisos() {
+    document.querySelectorAll('a[href]').forEach(a => {
+      const destino = (a.getAttribute('href') || '').split(/[?#]/)[0].toLowerCase();
+      if (/^(biblioteca|biblioteca de ejercicios|multimedia|lesiones)\\.html$/.test(destino)) {
+        a.hidden = true;
+        a.removeAttribute('href');
+        a.setAttribute('aria-disabled', 'true');
+      }
+    });
     actualizarPerfil();
     fijarSelectoresDivision();
     filtrarSelectoresBianca();
