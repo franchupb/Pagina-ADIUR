@@ -3,28 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <meta name="theme-color" content="#171717">
-    <meta name="description" content="Inicio de sesión de TORITO. Accedé al sistema de gestión del club.">
+
+    <meta
+        name="description"
+        content="Inicio de sesión de TORITO. Accedé al sistema de gestión del club."
+    >
 
     <title>Iniciar sesión | TORITO</title>
 
     <style>
+        /* =====================================================
+           IDENTIDAD VISUAL TORITO
+        ===================================================== */
+
         :root {
             --naranja: #f47721;
             --naranja-oscuro: #dc5e0b;
             --naranja-claro: #fff0e6;
+
             --negro: #171717;
             --negro-suave: #262626;
+
             --blanco: #ffffff;
             --fondo: #f6f6f6;
             --gris: #f4f5f7;
             --gris-texto: #747474;
             --borde: #e5e5e5;
+
             --rojo: #c62828;
             --rojo-fondo: #fde9e9;
+
             --radio: 18px;
             --sombra: 0 24px 65px rgba(0, 0, 0, 0.30);
         }
+
+        /* =====================================================
+           CONFIGURACIÓN GENERAL
+        ===================================================== */
 
         *,
         *::before,
@@ -41,13 +58,18 @@
         body {
             min-height: 100vh;
             min-height: 100dvh;
+
             display: flex;
             align-items: center;
             justify-content: center;
+
             padding: 24px;
+
             font-family: Arial, Helvetica, sans-serif;
             color: var(--negro);
+
             background-color: #202020;
+
             background-image:
                 linear-gradient(
                     135deg,
@@ -56,6 +78,7 @@
                     rgba(18, 18, 18, 0.78)
                 ),
                 url("TORITO - Familia.jpg");
+
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -77,22 +100,34 @@
             outline-offset: 3px;
         }
 
+        /* =====================================================
+           CONTENEDOR PRINCIPAL
+        ===================================================== */
+
         .login-container {
             position: relative;
+
             width: 100%;
             max-width: 430px;
+
             overflow: hidden;
+
             background: rgba(255, 255, 255, 0.98);
+
             border: 1px solid rgba(255, 255, 255, 0.75);
             border-radius: var(--radio);
+
             box-shadow: var(--sombra);
+
             text-align: center;
+
             animation: aparecer 0.45s ease-out;
         }
 
         .franja-superior {
             width: 100%;
             height: 7px;
+
             background: linear-gradient(
                 90deg,
                 var(--naranja-oscuro),
@@ -110,36 +145,54 @@
                 opacity: 0;
                 transform: translateY(14px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
 
+        /* =====================================================
+           LOGO OFICIAL DEL TORITO
+        ===================================================== */
+
         .logo-contenedor {
             display: flex;
             align-items: center;
             justify-content: center;
+
             margin: 2px 0 19px;
         }
 
         .logo {
             display: block;
+
             width: 112px;
             height: 125px;
+
             object-fit: contain;
+
             padding: 0;
+
             background: transparent;
+
             border-radius: 0;
         }
+
+        /* =====================================================
+           IDENTIDAD Y TÍTULOS
+        ===================================================== */
 
         .etiqueta-club {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 7px;
+
             margin-bottom: 13px;
+
             color: var(--naranja-oscuro);
+
             font-size: 10px;
             font-weight: 900;
             letter-spacing: 2px;
@@ -149,23 +202,28 @@
         .etiqueta-punto {
             width: 6px;
             height: 6px;
+
             background: var(--naranja);
             border-radius: 50%;
         }
 
         h1 {
             color: var(--negro);
+
             font-size: 26px;
             font-weight: 900;
             line-height: 1.25;
             letter-spacing: -0.5px;
+
             margin-bottom: 8px;
         }
 
         .subtitulo {
             color: var(--gris-texto);
+
             font-size: 13px;
             line-height: 1.6;
+
             margin-bottom: 24px;
         }
 
@@ -173,17 +231,25 @@
             display: flex;
             align-items: center;
             justify-content: center;
+
             width: 100%;
+
             margin-bottom: 25px;
         }
 
         .separador::before {
             content: "";
+
             width: 54px;
             height: 4px;
+
             border-radius: 10px;
             background: var(--naranja);
         }
+
+        /* =====================================================
+           CABECERA DEL FORMULARIO
+        ===================================================== */
 
         .formulario-cabecera {
             text-align: left;
@@ -192,16 +258,23 @@
 
         .formulario-cabecera h2 {
             color: var(--negro);
+
             font-size: 17px;
             font-weight: 900;
+
             margin-bottom: 5px;
         }
 
         .formulario-cabecera p {
             color: var(--gris-texto);
+
             font-size: 12px;
             line-height: 1.5;
         }
+
+        /* =====================================================
+           CAMPOS DEL FORMULARIO
+        ===================================================== */
 
         .campo {
             text-align: left;
@@ -210,8 +283,11 @@
 
         .campo label {
             display: block;
+
             margin-bottom: 8px;
+
             color: #333333;
+
             font-size: 12px;
             font-weight: 900;
             letter-spacing: 0.1px;
@@ -219,15 +295,23 @@
 
         .campo input {
             display: block;
+
             width: 100%;
             min-height: 49px;
+
             padding: 13px 14px;
+
             border: 1px solid #dcdcdc;
             border-radius: 10px;
+
             background: #ffffff;
+
             color: var(--negro);
+
             font-size: 13px;
+
             outline: none;
+
             transition:
                 border-color 0.2s ease,
                 box-shadow 0.2s ease,
@@ -245,14 +329,23 @@
 
         .campo input:focus {
             border-color: var(--naranja);
-            box-shadow: 0 0 0 3px rgba(244, 119, 33, 0.12);
+
+            box-shadow:
+                0 0 0 3px rgba(244, 119, 33, 0.12);
+
             background: #ffffff;
         }
 
         .campo input[aria-invalid="true"] {
             border-color: var(--rojo);
-            box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.08);
+
+            box-shadow:
+                0 0 0 3px rgba(198, 40, 40, 0.08);
         }
+
+        /* =====================================================
+           CONTRASEÑA Y VISIBILIDAD
+        ===================================================== */
 
         .contenedor-contrasena {
             position: relative;
@@ -264,21 +357,32 @@
 
         .boton-ver-contrasena {
             position: absolute;
+
             top: 50%;
             right: 8px;
+
             transform: translateY(-50%);
+
             display: inline-flex;
             align-items: center;
             justify-content: center;
+
             min-height: 32px;
+
             padding: 0 8px;
+
             border: none;
             border-radius: 7px;
+
             background: transparent;
+
             color: #626262;
+
             font-size: 11px;
             font-weight: 800;
+
             cursor: pointer;
+
             transition:
                 background 0.2s ease,
                 color 0.2s ease;
@@ -289,24 +393,37 @@
             color: var(--naranja-oscuro);
         }
 
+        /* =====================================================
+           BOTÓN DE INICIO DE SESIÓN
+        ===================================================== */
+
         .boton-login {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 11px;
+
             width: 100%;
             min-height: 50px;
+
             margin-top: 7px;
             padding: 14px 18px;
+
             border: 1px solid var(--naranja);
             border-radius: 10px;
+
             background: var(--naranja);
             color: var(--blanco);
+
             font-size: 12px;
             font-weight: 900;
             letter-spacing: 0.8px;
-            box-shadow: 0 5px 12px rgba(244, 119, 33, 0.17);
+
+            box-shadow:
+                0 5px 12px rgba(244, 119, 33, 0.17);
+
             cursor: pointer;
+
             transition:
                 background 0.2s ease,
                 border-color 0.2s ease,
@@ -317,7 +434,10 @@
         .boton-login:hover {
             background: var(--naranja-oscuro);
             border-color: var(--naranja-oscuro);
-            box-shadow: 0 7px 17px rgba(220, 94, 11, 0.24);
+
+            box-shadow:
+                0 7px 17px rgba(220, 94, 11, 0.24);
+
             transform: translateY(-1px);
         }
 
@@ -339,26 +459,37 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
+
             font-size: 19px;
             line-height: 1;
         }
 
+        /* =====================================================
+           MENSAJE DE ERROR
+        ===================================================== */
+
         .error {
             display: none;
+
             margin-top: 16px;
             padding: 12px 13px;
+
             border: 1px solid #f3cccc;
             border-radius: 9px;
+
             background: var(--rojo-fondo);
             color: var(--rojo);
+
             font-size: 12px;
             font-weight: 700;
             line-height: 1.5;
+
             text-align: left;
         }
 
         .error.visible {
             display: block;
+
             animation: mostrarError 0.2s ease-out;
         }
 
@@ -367,25 +498,36 @@
                 opacity: 0;
                 transform: translateY(-4px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
 
+        /* =====================================================
+           PIE DEL LOGIN
+        ===================================================== */
+
         .pie-login {
             margin-top: 26px;
             padding-top: 19px;
+
             border-top: 1px solid #eeeeee;
+
             color: var(--gris-texto);
+
             font-size: 10px;
             line-height: 1.7;
         }
 
         .pie-login strong {
             display: block;
+
             margin-bottom: 3px;
+
             color: #404040;
+
             font-size: 10px;
             font-weight: 900;
             letter-spacing: 1.1px;
@@ -396,9 +538,14 @@
             font-weight: 700;
         }
 
+        /* =====================================================
+           RESPONSIVE: CELULARES Y TABLETS
+        ===================================================== */
+
         @media (max-width: 500px) {
             body {
                 padding: 16px;
+
                 background-attachment: scroll;
                 background-position: center center;
             }
@@ -471,6 +618,10 @@
             }
         }
 
+        /* =====================================================
+           PANTALLAS CON POCA ALTURA
+        ===================================================== */
+
         @media (max-height: 650px) and (min-width: 501px) {
             body {
                 align-items: flex-start;
@@ -514,6 +665,10 @@
             }
         }
 
+        /* =====================================================
+           ACCESIBILIDAD
+        ===================================================== */
+
         @media (prefers-reduced-motion: reduce) {
             *,
             *::before,
@@ -535,13 +690,17 @@
 
         <div class="login-contenido">
 
+            <!-- LOGO OFICIAL DE C.A. EL TORITO -->
+
             <div class="logo-contenedor">
                 <img
-                    src="CLUBES/TORITO.png"
+                    src="TORITO - Logo.png"
                     alt="Escudo oficial de C.A. El Torito"
                     class="logo"
                 >
             </div>
+
+            <!-- IDENTIDAD DEL CLUB -->
 
             <div class="etiqueta-club">
                 <span class="etiqueta-punto" aria-hidden="true"></span>
@@ -556,11 +715,17 @@
 
             <div class="separador" aria-hidden="true"></div>
 
+            <!-- CABECERA DEL FORMULARIO -->
+
             <div class="formulario-cabecera">
                 <p></p>
             </div>
 
+            <!-- FORMULARIO -->
+
             <form id="loginForm" novalidate>
+
+                <!-- USUARIO -->
 
                 <div class="campo">
                     <label for="usuario">Usuario</label>
@@ -578,11 +743,12 @@
                     >
                 </div>
 
+                <!-- CONTRASEÑA -->
+
                 <div class="campo">
                     <label for="contrasena">Contraseña</label>
 
                     <div class="contenedor-contrasena">
-
                         <input
                             type="password"
                             id="contrasena"
@@ -602,9 +768,10 @@
                         >
                             Mostrar
                         </button>
-
                     </div>
                 </div>
+
+                <!-- BOTÓN -->
 
                 <button
                     type="submit"
@@ -618,6 +785,8 @@
                     <span class="icono-ingreso" aria-hidden="true">→</span>
                 </button>
 
+                <!-- MENSAJE DE ERROR -->
+
                 <div
                     class="error"
                     id="mensajeError"
@@ -629,6 +798,8 @@
                 </div>
 
             </form>
+
+            <!-- PIE INSTITUCIONAL -->
 
             <footer class="pie-login">
                 <strong></strong>
@@ -643,15 +814,18 @@
 
         /* =====================================================
            USUARIOS AUTORIZADOS
+
+           Se conservan los usuarios y las contraseñas
+           definidos en el código original.
         ===================================================== */
 
         const usuarios = {
-            "Fran": {
+            "fran": {
                 contrasena: "TORITO",
                 nombre: "Fran"
             },
 
-            "Liana": {
+            "liana": {
                 contrasena: "TORITO",
                 nombre: "Liana"
             }
@@ -665,6 +839,7 @@
         const campoUsuario = document.getElementById("usuario");
         const campoContrasena = document.getElementById("contrasena");
         const mensajeError = document.getElementById("mensajeError");
+
         const botonLogin = document.getElementById("botonLogin");
         const textoBoton = document.getElementById("textoBoton");
 
@@ -676,26 +851,25 @@
            MOSTRAR U OCULTAR CONTRASEÑA
         ===================================================== */
 
-        botonVerContrasena.addEventListener("click", function () {
+        botonVerContrasena.addEventListener("click", function() {
 
-            const mostrar = campoContrasena.type === "password";
+            const estaOculta = campoContrasena.type === "password";
 
-            campoContrasena.type = mostrar ? "text" : "password";
+            campoContrasena.type = estaOculta ? "text" : "password";
 
-            botonVerContrasena.textContent = mostrar
+            botonVerContrasena.textContent = estaOculta
                 ? "Ocultar"
                 : "Mostrar";
 
             botonVerContrasena.setAttribute(
                 "aria-label",
-                mostrar ? "Ocultar contraseña" : "Mostrar contraseña"
+                estaOculta ? "Ocultar contraseña" : "Mostrar contraseña"
             );
 
             botonVerContrasena.setAttribute(
                 "aria-pressed",
-                String(mostrar)
+                String(estaOculta)
             );
-
         });
 
         /* =====================================================
@@ -708,7 +882,6 @@
 
             campoUsuario.removeAttribute("aria-invalid");
             campoContrasena.removeAttribute("aria-invalid");
-
         }
 
         function mostrarError(mensaje, campoAEnfocar = null) {
@@ -720,9 +893,7 @@
 
                 campoAEnfocar.setAttribute("aria-invalid", "true");
                 campoAEnfocar.focus();
-
             }
-
         }
 
         campoUsuario.addEventListener("input", ocultarError);
@@ -732,7 +903,7 @@
            INICIO DE SESIÓN
         ===================================================== */
 
-        loginForm.addEventListener("submit", function (event) {
+        loginForm.addEventListener("submit", function(event) {
 
             event.preventDefault();
 
@@ -754,7 +925,6 @@
                 );
 
                 return;
-
             }
 
             if (!contrasena) {
@@ -765,10 +935,9 @@
                 );
 
                 return;
-
             }
 
-            /* BUSCAR LA CUENTA */
+            /* COMPROBAR USUARIO Y CONTRASEÑA */
 
             const cuenta = Object.prototype.hasOwnProperty.call(
                 usuarios,
@@ -777,9 +946,48 @@
                 ? usuarios[usuario]
                 : null;
 
-            /* VALIDAR CREDENCIALES */
+            if (
+                cuenta &&
+                cuenta.contrasena === contrasena
+            ) {
 
-            if (!cuenta || cuenta.contrasena !== contrasena) {
+                /*
+                 * GUARDAR LA SESIÓN
+
+                 * Se utiliza la clave propia de TORITO
+                 * para mantener la sesión separada de ADIUR.
+                 */
+
+                try {
+
+                    localStorage.setItem(
+                        "usuarioTORITO",
+                        cuenta.nombre
+                    );
+
+                } catch (error) {
+
+                    console.error(
+                        "No se pudo guardar la sesión:",
+                        error
+                    );
+
+                    mostrarError(
+                        "No se pudo guardar la sesión. Revisá la configuración del navegador."
+                    );
+
+                    return;
+                }
+
+                /*
+                 * REDIRECCIÓN ORIGINAL
+                 */
+
+                window.location.href = "TORITO-Pagina Principal.html";
+
+            } else {
+
+                /* CREDENCIALES INCORRECTAS */
 
                 campoContrasena.value = "";
 
@@ -787,46 +995,14 @@
                     "Usuario o contraseña incorrectos. Revisá los datos e intentá nuevamente.",
                     campoContrasena
                 );
-
-                return;
-
             }
-
-            /* GUARDAR LA SESIÓN */
-
-            try {
-
-                localStorage.setItem(
-                    "usuarioTORITO",
-                    cuenta.nombre
-                );
-
-            } catch (error) {
-
-                console.error(
-                    "No se pudo guardar la sesión:",
-                    error
-                );
-
-                mostrarError(
-                    "No se pudo guardar la sesión. Revisá la configuración del navegador."
-                );
-
-                return;
-
-            }
-
-            /* REDIRIGIR A LA PÁGINA PRINCIPAL */
-
-            window.location.href = "./TORITO-Pagina Principal.html";
-
         });
 
         /* =====================================================
            INICIALIZACIÓN
         ===================================================== */
 
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
 
             campoUsuario.focus({ preventScroll: true });
 
