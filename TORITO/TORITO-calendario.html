@@ -1788,9 +1788,9 @@ main {
 
     <img
         class="logo-superior"
-        src="TORITO-Logo TORITO.png"
+        src="CLUBES/TORITO.png"
         alt="Logo de TORITO"
-        onerror="if(!this.dataset.intento){this.dataset.intento='1';this.src='TORITO-Logo TORITO.png'}else{this.style.display='none'}"
+        onerror="if(!this.dataset.intento){this.dataset.intento='1';this.src='CLUBES/TORITO.png'}else{this.style.display='none'}"
     >
 
     <div class="titulo-superior">
@@ -2150,7 +2150,7 @@ main {
 
             <select id="imagenActividad">
                 <option value="">Sin escudo</option>
-                <option value="TORITO-Logo TORITO.png">TORITO</option>
+                <option value="CLUBES/TORITO.png">TORITO</option>
                 <option value="CLUBES/14 JUNIO.jpg">14 de Junio</option>
                 <option value="CLUBES/ALIANZA.png">Alianza</option>
                 <option value="CLUBES/ARGENTINO.png">Argentino</option>
@@ -2707,11 +2707,11 @@ function rutaImagen(nombre) {
     if (
         normalizado === "torito" ||
         normalizado === "logo torito" ||
-        normalizado === "TORITO-Logo TORITO.png" ||
+        normalizado === "CLUBES/TORITO.png" ||
         normalizado === "logo torito.png" ||
         normalizado === "logo torito.jpeg"
     ) {
-        return encodeURI("TORITO-Logo TORITO.png");
+        return encodeURI("CLUBES/TORITO.png");
     }
 
     if (archivo.includes("/") || archivo.includes("\\")) {
