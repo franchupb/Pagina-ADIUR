@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gimnasio y Rutinas | torito FEMENINO</title>
+<title>Gimnasio y Rutinas | TORITO</title>
 
 <style>
 :root {
@@ -2383,10 +2383,10 @@ a:focus-visible,
 <header class="barra-superior">
   <button class="boton-menu" id="botonMenu" type="button" aria-label="Abrir menú" aria-expanded="true">☰</button>
 
-  <img class="logo-superior" src="Logo TORITO.png" alt="Logo torito" onerror="this.onerror=null;this.src='Logo TORITO.png';">
+  <img class="logo-superior" src="Logo TORITO.png" alt="Logo TORITO" onerror="this.onerror=null;this.src='Logo TORITO.png';">
 
   <div class="titulo-superior">
-    <h1>torito FEMENINO</h1>
+    <h1>TORITO</h1>
     <p>Gimnasio y planificación de cargas</p>
   </div>
 
@@ -2591,7 +2591,7 @@ a:focus-visible,
 
       <div class="pie-tabla">
         <span id="textoPermisos"></span>
-        <span>torito FEMENINO · Gimnasio</span>
+        <span>TORITO · Gimnasio</span>
       </div>
     </section>
 
@@ -2682,7 +2682,7 @@ const firebaseConfig = {
 
   const app = initializeApp(firebaseConfig);
   const dbCloud = getFirestore(app);
-  const referenciaCloud = doc(dbCloud,"torito_gimnasiotorito", "principal");
+  const referenciaCloud = doc(dbCloud,"torito_gimnasioTORITO", "principal");
 
   window.cargarGimnasioNube = async () => {
     const resultado = await getDoc(referenciaCloud);
@@ -2735,9 +2735,9 @@ const $ = id => document.getElementById(id);
    CONFIGURACIÓN
 ===================================================== */
 
-const KEY = "gimnasiotoritoRutinasV1";
-const PLAYERS_KEY = "jugadorastorito";
-const SESSION_KEY = "usuariotorito";
+const KEY = "gimnasioTORITORutinasV1";
+const PLAYERS_KEY = "jugadorasTORITO";
+const SESSION_KEY = "usuarioTORITO";
 
 const DIVISIONES = [
   "Sub 10",
@@ -3394,7 +3394,7 @@ function guardarDB() {
     // No sobrescribir Firebase si la carga inicial falló.
     if (!nubeListaParaGuardar) {
       console.warn(
-        "torito: guardado local. Firebase todavía no está habilitado."
+        "TORITO: guardado local. Firebase todavía no está habilitado."
       );
 
       return true;
@@ -3411,7 +3411,7 @@ function guardarDB() {
       .then(() => {
         mostrarEstado("Rutina guardada correctamente en la nube.");
 
-        console.log("torito: Rutinas sincronizadas con Firestore.");
+        console.log("TORITO: Rutinas sincronizadas con Firestore.");
       })
       .catch(error => {
         nubeListaParaGuardar = false;
@@ -4378,12 +4378,12 @@ function construirPlanillaHTML(rutina, division, cantidadPersonas = 1) {
       <div class="planilla-cabecera">
         <img
           src="Logo TORITO.png"
-          alt="Logo torito"
+          alt="Logo TORITO"
           onerror="this.onerror=null;this.src='Logo TORITO.png';this.onerror=function(){this.style.display='none'}"
         >
 
         <div class="planilla-cabecera-texto">
-          <strong>torito FEMENINO</strong>
+          <strong>TORITO</strong>
           <span>${escaparHTML(normalizada.nombre || "Rutina sin título")}</span>
           <small>${escaparHTML(division.toUpperCase())} · Bloque ${totalSemanas} Semanas</small>
         </div>
@@ -4512,7 +4512,7 @@ function renderizarBiblioteca() {
       </div>
 
       <div class="miniatura-cabecera">
-        <div class="miniatura-club">torito FEMENINO</div>
+        <div class="miniatura-club">TORITO</div>
         <h4>${escaparHTML(rutina.nombre || "Rutina sin título")}</h4>
 
         <div class="miniatura-detalle">
@@ -4720,7 +4720,7 @@ function descargarRutinaPDF(indice, cantidadPersonas = 1) {
   );
 
   document.title =
-    "torito FEMENINO - " + rutina.nombre + " - " + division;
+    "TORITO - " + rutina.nombre + " - " + division;
 
   document.body.classList.add("imprimir-solo-rutina");
 
@@ -4951,7 +4951,7 @@ async function sincronizarGimnasioConNube() {
     renderizarBiblioteca();
 
     mostrarEstado("Datos del gimnasio sincronizados.");
-    console.log("torito: sincronización inicial completada.");
+    console.log("TORITO: sincronización inicial completada.");
 
   } catch (error) {
     nubeListaParaGuardar = false;
