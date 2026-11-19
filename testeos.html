@@ -150,105 +150,159 @@ a{text-decoration:none;color:inherit}
   min-height:calc(100vh - 84px);
 }
 
-.sidebar{
-  width:258px;
-  flex:0 0 258px;
-  padding:20px 13px;
-  background:#fff;
-  border-right:1px solid var(--borde);
-  overflow-y:auto;
-  transition:margin-left .25s;
+.sidebar {
+  width: 258px;
+  flex: 0 0 258px;
+  padding: 20px 13px;
+  background: #fff;
+  border-right: 1px solid var(--borde);
+  transition: margin-left .25s ease;
+  overflow-y: auto;
 }
 
-.sidebar.oculto{margin-left:-258px}
-
-.menu-inicio{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  padding:13px 14px;
-  margin-bottom:16px;
-  border-radius:10px;
-  font-size:13px;
-  font-weight:850;
+.sidebar.oculto {
+  margin-left: -258px;
 }
 
-.menu-inicio:hover{background:var(--gris)}
-
-.grupo-menu{margin-bottom:8px}
-
-.titulo-grupo{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  min-height:45px;
-  padding:12px 13px;
-  border-radius:8px;
-  font-size:11px;
-  font-weight:900;
-  letter-spacing:.7px;
-  cursor:pointer;
+.menu-inicio {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 14px;
+  margin-bottom: 16px;
+  border-radius: 11px;
+  background: var(--naranja-claro);
+  color: var(--naranja-oscuro);
+  font-size: 13px;
+  font-weight: 850;
+  transition: background .2s;
 }
 
-.titulo-grupo:hover{background:#f8f8f8}
-
-.flecha{transition:transform .2s}
-
-.grupo-menu:not(.cerrado) .flecha{transform:rotate(90deg)}
-.grupo-menu.cerrado .submenu{display:none}
-
-.submenu{
-  display:flex;
-  flex-direction:column;
-  gap:3px;
+.menu-inicio:hover {
+  background: #ffe7d6;
+  color: var(--naranja-oscuro);
 }
 
-.submenu a{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:10px 12px;
-  border-radius:9px;
-  color:#656872;
-  font-size:13px;
+.menu-inicio .icono-inicio {
+  width: 15px;
+  text-align: center;
+  font-size: 17px;
+  line-height: 1;
 }
 
-.submenu a:hover{background:#f6f6f6}
-
-.submenu a.activo{
-  background:var(--naranja-claro);
-  color:var(--naranja-oscuro);
-  font-weight:800;
+.grupo-menu {
+  margin-bottom: 8px;
 }
 
-.nav-punto{
-  width:6px;
-  height:6px;
-  border-radius:50%;
-  background:#d7d9de;
+.titulo-grupo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 13px;
+  min-height: 46px;
+  cursor: pointer;
+  border-radius: 8px;
+  color: #171717;
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: .8px;
+  user-select: none;
 }
 
-.submenu a.activo .nav-punto{background:var(--naranja)}
-
-.separador-sesion{
-  margin-top:20px;
-  padding-top:12px;
-  border-top:1px solid var(--borde);
+.titulo-grupo:hover {
+  background: #f8f8f8;
 }
 
-.enlace-cerrar-sesion{
-  display:flex;
-  gap:10px;
-  padding:12px;
-  border-radius:9px;
-  color:#c0392b;
-  font-size:13px;
-  font-weight:700;
+.flecha {
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+  transition: transform .2s;
 }
 
-.enlace-cerrar-sesion:hover{background:#fff2f1}
+.grupo-menu.cerrado .flecha {
+  transform: rotate(0deg);
+}
 
-.capa-sidebar{display:none}
+.grupo-menu:not(.cerrado) .flecha {
+  transform: rotate(90deg);
+}
+
+.submenu {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 0 0 5px 0;
+}
+
+.grupo-menu.cerrado .submenu {
+  display: none;
+}
+
+.submenu a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 9px;
+  font-size: 13px;
+  color: #656872;
+  transition: background .15s, color .15s;
+}
+
+.submenu a:hover {
+  background: #f6f6f6;
+  color: #181818;
+}
+
+.submenu a.activo {
+  background: var(--naranja-claro);
+  color: var(--naranja-oscuro);
+  font-weight: 800;
+}
+
+.nav-punto {
+  width: 6px;
+  height: 6px;
+  flex-shrink: 0;
+  background: #d7d9de;
+  border-radius: 50%;
+}
+
+.submenu a.activo .nav-punto {
+  background: var(--naranja);
+}
+
+.separador-sesion {
+  border-top: 1px solid #e8e8e8;
+  margin: 19px 0 0;
+  padding-top: 12px;
+}
+
+.enlace-cerrar-sesion {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 9px;
+  color: #c0392b;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.enlace-cerrar-sesion:hover {
+  background: #fff2f1;
+  color: #a93226;
+}
+
+.icono-salir {
+  font-size: 17px;
+}
+
+.capa-sidebar {
+  display: none;
+}
 
 /* =====================================================
    CONTENIDO GENERAL
@@ -1668,28 +1722,31 @@ a{text-decoration:none;color:inherit}
   .nombre-perfil{max-width:75px;font-size:10px}
   .rol-perfil{display:none}
 
-  .sidebar{
-    position:fixed;
-    top:72px;
-    bottom:0;
-    left:0;
-    z-index:150;
-    width:258px;
-    max-width:85vw;
-    margin-left:0;
-    transform:translateX(-110%);
-    box-shadow:5px 0 25px rgba(0,0,0,.1);
+  .sidebar {
+    position: fixed;
+    top: 72px;
+    bottom: 0;
+    left: 0;
+    z-index: 150;
+    width: 258px;
+    max-width: 86vw;
+    overflow-y: auto;
+    box-shadow: 5px 0 25px #00000012;
+    margin-left: 0;
+    transition: transform .25s ease;
   }
 
-  .sidebar:not(.oculto){transform:translateX(0)}
-  .sidebar.oculto{margin-left:0}
+  .sidebar.oculto {
+    margin-left: 0;
+    transform: translateX(-110%);
+  }
 
-  .capa-sidebar.visible{
-    display:block;
-    position:fixed;
-    inset:72px 0 0;
-    z-index:140;
-    background:rgba(0,0,0,.3);
+  .capa-sidebar.visible {
+    display: block;
+    position: fixed;
+    inset: 72px 0 0;
+    z-index: 140;
+    background: rgba(0,0,0,.32);
   }
 
   .contenido{padding:15px 11px 25px}
@@ -1808,23 +1865,13 @@ a{text-decoration:none;color:inherit}
   }
 }
 
+
+
+
 /* =====================================================
    COMPORTAMIENTO DE NAVEGACIÓN
 ===================================================== */
-
-.contenedor{align-items:flex-start}
-
-.sidebar{
-  position:sticky;
-  top:84px;
-  align-self:flex-start;
-  height:calc(100vh - 84px);
-  min-height:420px;
-  overflow-y:auto;
-  overscroll-behavior:contain;
-  scrollbar-width:thin;
-}
-
+.contenedor{align-items:stretch}
 .grupo-menu:not(.cerrado)>.submenu{display:flex!important}
 .grupo-menu.cerrado>.submenu{display:none!important}
 .titulo-grupo{user-select:none}
@@ -1833,7 +1880,6 @@ a{text-decoration:none;color:inherit}
 /* =====================================================
    AJUSTES DE ESTADÍSTICAS Y DATOS COMPARADOS
 ===================================================== */
-
 .panel-estadisticas{padding:20px}
 .stats-cabecera{padding-bottom:15px;border-bottom:1px solid #eff0f2}
 .stats-fuente{max-width:210px;white-space:normal;text-align:center;line-height:1.35}
@@ -1854,15 +1900,13 @@ a{text-decoration:none;color:inherit}
     max-height:none;
   }
 }
-
 </style>
-<script src="permisos.js"></script>
 </head>
 
 <body>
 
 <header class="barra-superior">
-  <button class="boton-menu" onclick="alternarSidebar()" aria-label="Abrir menú">☰</button>
+  <button class="boton-menu" id="botonMenu" onclick="alternarSidebar()" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="true">☰</button>
 
   <img class="logo-superior" src="Logo ADIUR.jpg" alt="Logo ADIUR">
 
@@ -1888,57 +1932,140 @@ a{text-decoration:none;color:inherit}
 
   <aside class="sidebar" id="sidebar">
 
-    <a class="menu-inicio" href="Pagina Principal.html">⌂ INICIO</a>
+    <!-- INICIO -->
+    <a class="menu-inicio" href="Pagina Principal.html">
+      <span class="icono-inicio" aria-hidden="true">⌂</span>
+      INICIO
+    </a>
 
+    <!-- PLANTEL -->
     <div class="grupo-menu cerrado" id="grupoPlantel">
-      <div class="titulo-grupo" role="button" tabindex="0" aria-expanded="false" aria-controls="submenuPlantel" onclick="toggleGrupo('grupoPlantel')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleGrupo('grupoPlantel')}">
-        <span>PLANTEL</span><span class="flecha">›</span>
+      <div
+        class="titulo-grupo"
+        onclick="toggleGrupo('grupoPlantel')"
+        role="button"
+        tabindex="0"
+        aria-expanded="false"
+      >
+        <span>PLANTEL</span>
+        <span class="flecha" aria-hidden="true">›</span>
       </div>
-      <div class="submenu" id="submenuPlantel">
-        <a href="jugadoras.html"><span class="nav-punto"></span>Jugadoras</a>
-        <a href="asistencia.html"><span class="nav-punto"></span>Asistencia</a>
+
+      <div class="submenu">
+        <a href="jugadoras.html">
+          <span class="nav-punto"></span>Jugadoras
+        </a>
+        <a href="asistencia.html">
+          <span class="nav-punto"></span>Asistencia
+        </a>
       </div>
     </div>
 
+    <!-- ENTRENAMIENTO -->
     <div class="grupo-menu cerrado" id="grupoEntrenamiento">
-      <div class="titulo-grupo" role="button" tabindex="0" aria-expanded="false" aria-controls="submenuEntrenamiento" onclick="toggleGrupo('grupoEntrenamiento')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleGrupo('grupoEntrenamiento')}">
-        <span>ENTRENAMIENTO</span><span class="flecha">›</span>
+      <div
+        class="titulo-grupo"
+        onclick="toggleGrupo('grupoEntrenamiento')"
+        role="button"
+        tabindex="0"
+        aria-expanded="false"
+      >
+        <span>ENTRENAMIENTO</span>
+        <span class="flecha" aria-hidden="true">›</span>
       </div>
-      <div class="submenu" id="submenuEntrenamiento">
-        <a href="calendario.html"><span class="nav-punto"></span>Calendario</a>
-        <a href="planificacion.html"><span class="nav-punto"></span>Planificación</a>
-        <a href="gimnasio.html"><span class="nav-punto"></span>Gimnasio</a>
+
+      <div class="submenu">
+        <a href="calendario.html">
+          <span class="nav-punto"></span>Calendario
+        </a>
+        <a href="planificacion.html" data-ocultar-bianca>
+          <span class="nav-punto"></span>Planificación
+        </a>
+        <a href="biblioteca.html" data-ocultar-bianca>
+          <span class="nav-punto"></span>Biblioteca de ejercicios
+        </a>
+        <a href="gimnasio.html">
+          <span class="nav-punto"></span>Gimnasio
+        </a>
+        <a href="calculadora.html" data-ocultar-bianca>
+          <span class="nav-punto"></span>Calculadora
+        </a>
       </div>
     </div>
 
-    <div class="grupo-menu" id="grupoCompetencia">
-      <div class="titulo-grupo" role="button" tabindex="0" aria-expanded="true" aria-controls="submenuCompetencia" onclick="toggleGrupo('grupoCompetencia')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleGrupo('grupoCompetencia')}">
-        <span>COMPETENCIA</span><span class="flecha">›</span>
+    <!-- COMPETENCIA -->
+    <div class="grupo-menu cerrado" id="grupoCompetencia">
+      <div
+        class="titulo-grupo"
+        onclick="toggleGrupo('grupoCompetencia')"
+        role="button"
+        tabindex="0"
+        aria-expanded="false"
+      >
+        <span>COMPETENCIA</span>
+        <span class="flecha" aria-hidden="true">›</span>
       </div>
-      <div class="submenu" id="submenuCompetencia">
-        <a href="Partidos.html"><span class="nav-punto"></span>Partidos</a>
-        <a href="informes.html"><span class="nav-punto"></span>Informes</a>
-        <a href="estadisticas.html"><span class="nav-punto"></span>Estadísticas</a>
-        <a href="pizarra.html"><span class="nav-punto"></span>Pizarra táctica</a>
+
+      <div class="submenu">
+        <a href="Partidos.html">
+          <span class="nav-punto"></span>Partidos
+        </a>
+        <a href="informes.html" data-ocultar-bianca>
+          <span class="nav-punto"></span>Informes
+        </a>
+        <a href="estadisticas.html" data-ocultar-bianca>
+          <span class="nav-punto"></span>Estadísticas
+        </a>
+        <a href="pizarra.html" data-ocultar-bianca>
+          <span class="nav-punto"></span>Pizarra táctica
+        </a>
       </div>
     </div>
 
-    <div class="grupo-menu" id="grupoRendimientos">
-      <div class="titulo-grupo" role="button" tabindex="0" aria-expanded="true" aria-controls="submenuRendimientos" onclick="toggleGrupo('grupoRendimientos')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleGrupo('grupoRendimientos')}">
-        <span>RENDIMIENTOS</span><span class="flecha">›</span>
+    <!-- RENDIMIENTOS -->
+    <div class="grupo-menu cerrado" id="grupoRendimientos">
+      <div
+        class="titulo-grupo"
+        onclick="toggleGrupo('grupoRendimientos')"
+        role="button"
+        tabindex="0"
+        aria-expanded="false"
+      >
+        <span>RENDIMIENTOS</span>
+        <span class="flecha" aria-hidden="true">›</span>
       </div>
-      <div class="submenu" id="submenuRendimientos">
-        <a href="testeos.html" class="activo"><span class="nav-punto"></span>Planilla de testeos</a>
-        <a href="tiempos.html"><span class="nav-punto"></span>Tiempos</a>
-        <a href="multimedia.html"><span class="nav-punto"></span>Multimedia</a>
-        <a href="encuestas.html"><span class="nav-punto"></span>Encuestas</a>
-        <a href="lesiones.html"><span class="nav-punto"></span>Lesiones</a>
+
+      <div class="submenu">
+        <a href="testeos.html">
+          <span class="nav-punto"></span>Planilla de testeos
+        </a>
+        <a href="tiempos.html">
+          <span class="nav-punto"></span>Tiempos
+        </a>
+        <a href="multimedia.html">
+          <span class="nav-punto"></span>Multimedia
+        </a>
+        <a href="encuestas.html">
+          <span class="nav-punto"></span>Encuestas
+        </a>
+        <a href="lesiones.html">
+          <span class="nav-punto"></span>Lesiones
+        </a>
       </div>
     </div>
 
+    <!-- CERRAR SESIÓN -->
     <div class="separador-sesion">
-      <a class="enlace-cerrar-sesion" href="#" onclick="cerrarSesion(event)">↪ Cerrar sesión</a>
+      <a
+        class="enlace-cerrar-sesion"
+        href="#"
+        onclick="cerrarSesion(event)"
+      >
+        <span class="icono-salir" aria-hidden="true">↪</span>
+        Cerrar sesión
+      </a>
     </div>
+
   </aside>
 
   <main class="contenido">
@@ -2305,6 +2432,18 @@ const esToto=usuarioNormalizado==="toto";
 const esBianca=["biancadominguez","bianca"].includes(usuarioNormalizado);
 const puedeEditar=esFran||esToto;
 
+/* =====================================================
+   PERMISOS DE VISUALIZACIÓN DEL MENÚ
+===================================================== */
+if(esBianca){
+  document.getElementById("grupoPlantel")?.remove();
+  document.getElementById("grupoRendimientos")?.remove();
+
+  document.querySelectorAll("[data-ocultar-bianca]").forEach(enlace=>{
+    enlace.style.display="none";
+  });
+}
+
 document.getElementById("nombreUsuario").textContent=usuarioGuardado;
 document.getElementById("avatarUsuario").textContent=usuarioGuardado.charAt(0).toUpperCase();
 
@@ -2457,19 +2596,101 @@ window.cerrarSesion=function(event){
   window.location.href="Loing.html";
 };
 
+/* =====================================================
+   MENÚ LATERAL
+===================================================== */
 window.alternarSidebar=function(){
-  document.getElementById("sidebar").classList.toggle("oculto");
-  document.getElementById("capaSidebar").classList.toggle("visible");
+  const sidebar=document.getElementById("sidebar");
+  const capa=document.getElementById("capaSidebar");
+  const boton=document.getElementById("botonMenu");
+  if(!sidebar||!capa||!boton)return;
+
+  sidebar.classList.toggle("oculto");
+  const abierto=!sidebar.classList.contains("oculto");
+  boton.setAttribute("aria-expanded",String(abierto));
+
+  if(window.innerWidth<=760){
+    capa.classList.toggle("visible",abierto);
+  }
 };
 
 window.toggleGrupo=function(id){
   const grupo=document.getElementById(id);
   if(!grupo)return;
-  const seAbre=grupo.classList.contains("cerrado");
-  grupo.classList.toggle("cerrado",!seAbre);
+
+  grupo.classList.toggle("cerrado");
   const titulo=grupo.querySelector(".titulo-grupo");
-  if(titulo)titulo.setAttribute("aria-expanded",seAbre?"true":"false");
+  if(titulo){
+    titulo.setAttribute(
+      "aria-expanded",
+      String(!grupo.classList.contains("cerrado"))
+    );
+  }
 };
+
+/* Permite abrir y cerrar los grupos también con Enter o barra espaciadora. */
+document.querySelectorAll(".titulo-grupo[role='button']").forEach(titulo=>{
+  titulo.addEventListener("keydown",event=>{
+    if(event.key==="Enter"||event.key===" "){
+      event.preventDefault();
+      const grupo=titulo.closest(".grupo-menu");
+      if(grupo)window.toggleGrupo(grupo.id);
+    }
+  });
+});
+
+/* Resalta automáticamente la página actual y abre su grupo. */
+function marcarPaginaActualEnSidebar(){
+  let paginaActual="";
+  try{
+    paginaActual=decodeURIComponent(window.location.pathname.split("/").pop()||"").toLowerCase();
+  }catch(error){
+    paginaActual=(window.location.pathname.split("/").pop()||"").toLowerCase();
+  }
+  if(!paginaActual)return;
+
+  document.querySelectorAll(".sidebar a[href]").forEach(enlace=>{
+    const destinoOriginal=(enlace.getAttribute("href")||"").split("?")[0].split("#")[0];
+    let destino="";
+    try{
+      destino=decodeURIComponent(destinoOriginal.split("/").pop()||"").toLowerCase();
+    }catch(error){
+      destino=(destinoOriginal.split("/").pop()||"").toLowerCase();
+    }
+
+    if(destino===paginaActual){
+      enlace.classList.add("activo");
+      enlace.setAttribute("aria-current","page");
+      const grupo=enlace.closest(".grupo-menu");
+      if(grupo){
+        grupo.classList.remove("cerrado");
+        const titulo=grupo.querySelector(".titulo-grupo");
+        if(titulo)titulo.setAttribute("aria-expanded","true");
+      }
+    }
+  });
+}
+
+function ajustarSidebarPorPantalla(){
+  const sidebar=document.getElementById("sidebar");
+  const capa=document.getElementById("capaSidebar");
+  const boton=document.getElementById("botonMenu");
+  if(!sidebar||!capa||!boton)return;
+
+  if(window.innerWidth<=760){
+    sidebar.classList.add("oculto");
+    capa.classList.remove("visible");
+    boton.setAttribute("aria-expanded","false");
+  }else{
+    sidebar.classList.remove("oculto");
+    capa.classList.remove("visible");
+    boton.setAttribute("aria-expanded","true");
+  }
+}
+
+marcarPaginaActualEnSidebar();
+ajustarSidebarPorPantalla();
+window.addEventListener("resize",ajustarSidebarPorPantalla);
 
 window.cambiarPestana=function(tipo){
 
@@ -3967,7 +4188,6 @@ function obtenerHistorialPlanillas(){
     return fechaA-fechaB;
   });
 }
-
 function clavePrueba(col){
   return normalizar(col.grupo)+"|"+normalizar(col.label);
 }
@@ -4461,8 +4681,6 @@ window.addEventListener("DOMContentLoaded",()=>{
 
 });
 </script>
-
-
 
 </body>
 </html>
