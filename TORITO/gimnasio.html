@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gimnasio y Rutinas | TORITO</title>
+<title>Gimnasio y Rutinas | torito FEMENINO</title>
 
 <style>
 :root {
@@ -2383,10 +2383,10 @@ a:focus-visible,
 <header class="barra-superior">
   <button class="boton-menu" id="botonMenu" type="button" aria-label="Abrir menú" aria-expanded="true">☰</button>
 
-  <img class="logo-superior" src="Logo TORITO.png" alt="Logo TORITO" onerror="this.onerror=null;this.src='Logo TORITO.png';">
+  <img class="logo-superior" src="Logo TORITO.png" alt="Logo torito" onerror="this.onerror=null;this.src='Logo TORITO.png';">
 
   <div class="titulo-superior">
-    <h1>TORITO</h1>
+    <h1>torito FEMENINO</h1>
     <p>Gimnasio y planificación de cargas</p>
   </div>
 
@@ -2591,7 +2591,7 @@ a:focus-visible,
 
       <div class="pie-tabla">
         <span id="textoPermisos"></span>
-        <span>TORITO · Gimnasio</span>
+        <span>torito FEMENINO · Gimnasio</span>
       </div>
     </section>
 
@@ -2652,7 +2652,7 @@ a:focus-visible,
 "use strict";
 
 /* =====================================================
-   CONEXIÓN FIREBASE - GIMNASIO TORITO
+   CONEXIÓN FIREBASE - GIMNASIO torito
 ===================================================== */
 
 window.firebaseGimnasioReady = (async () => {
@@ -2682,7 +2682,7 @@ const firebaseConfig = {
 
   const app = initializeApp(firebaseConfig);
   const dbCloud = getFirestore(app);
-  const referenciaCloud = doc(dbCloud,"torito_gimnasioTORITO", "principal");
+  const referenciaCloud = doc(dbCloud,"torito_gimnasiotorito", "principal");
 
   window.cargarGimnasioNube = async () => {
     const resultado = await getDoc(referenciaCloud);
@@ -2735,9 +2735,9 @@ const $ = id => document.getElementById(id);
    CONFIGURACIÓN
 ===================================================== */
 
-const KEY = "gimnasioTORITORutinasV1";
-const PLAYERS_KEY = "jugadorasTORITO";
-const SESSION_KEY = "usuarioTORITO";
+const KEY = "gimnasiotoritoRutinasV1";
+const PLAYERS_KEY = "jugadorastorito";
+const SESSION_KEY = "usuariotorito";
 
 const DIVISIONES = [
   "Sub 10",
@@ -3118,41 +3118,41 @@ function buscarJugadoraSesion() {
 ===================================================== */
 
 function claveGeneral(division) {
-  return "torito_GENERAL::" + division;
+  return "GENERAL::" + division;
 }
 
 function claveIndividual(division, id) {
-  return "torito_INDIVIDUAL::" + division + "torito_::" + id;
+  return "INDIVIDUAL::" + division + "::" + id;
 }
 
 function crearDiaVacio() {
-  return { repeticiones: ""torito_, peso: ""torito_, tiempo: ""torito_ };
+  return { repeticiones: "", peso: "", tiempo: "" };
 }
 
-function crearEjercicio(nombre = ""torito_) {
+function crearEjercicio(nombre = "") {
   return {
     nombre,
     repeticionesBase: 10,
-    tiempoBase: ""torito_,
+    tiempoBase: "",
     dias: Array.from({ length: 6 * DIAS_POR_SEMANA }, crearDiaVacio)
   };
 }
 
 function crearRutina() {
   return {
-    nombre: ""torito_,
+    nombre: "",
     guardada: false,
     semanas: 4,
 
     // Se conservan estas propiedades para compatibilidad con datos históricos.
-    rmPotencia1: ""torito_,
-    rmPotencia2: ""torito_,
+    rmPotencia1: "",
+    rmPotencia2: "",
 
-    potencia: [crearEjercicio(""torito_), crearEjercicio(""torito_)],
+    potencia: [crearEjercicio(""), crearEjercicio("")],
 
     // Cada bloque comienza con un solo ejercicio.
-    principales: [crearEjercicio(""torito_)],
-    complementarios: [crearEjercicio(""torito_)],
+    principales: [crearEjercicio("")],
+    complementarios: [crearEjercicio("")],
 
     actualizada: new Date().toISOString(),
     seccionesDinamicasInicializadas: true
@@ -3160,17 +3160,17 @@ function crearRutina() {
 }
 
 function rutinaTieneDatos(rutina) {
-  if (!rutina || typeof rutina !== "object"torito_) return false;
+  if (!rutina || typeof rutina !== "object") return false;
 
   if (
-    String(rutina.nombre || ""torito_).trim() &&
+    String(rutina.nombre || "").trim() &&
     !/^(rutina|espacio)\s+\d+$/i.test(String(rutina.nombre).trim())
   ) {
     return true;
   }
 
   if (
-    String(rutina.rmPotencia1 || ""torito_).trim() ||
+    String(rutina.rmPotencia1 || "").trim() ||
     String(rutina.rmPotencia2 || "").trim()
   ) {
     return true;
@@ -3394,7 +3394,7 @@ function guardarDB() {
     // No sobrescribir Firebase si la carga inicial falló.
     if (!nubeListaParaGuardar) {
       console.warn(
-        "TORITO: guardado local. Firebase todavía no está habilitado."
+        "torito: guardado local. Firebase todavía no está habilitado."
       );
 
       return true;
@@ -3411,7 +3411,7 @@ function guardarDB() {
       .then(() => {
         mostrarEstado("Rutina guardada correctamente en la nube.");
 
-        console.log("TORITO: Rutinas sincronizadas con Firestore.");
+        console.log("torito: Rutinas sincronizadas con Firestore.");
       })
       .catch(error => {
         nubeListaParaGuardar = false;
@@ -4378,12 +4378,12 @@ function construirPlanillaHTML(rutina, division, cantidadPersonas = 1) {
       <div class="planilla-cabecera">
         <img
           src="Logo TORITO.png"
-          alt="Logo TORITO"
+          alt="Logo torito"
           onerror="this.onerror=null;this.src='Logo TORITO.png';this.onerror=function(){this.style.display='none'}"
         >
 
         <div class="planilla-cabecera-texto">
-          <strong>TORITO</strong>
+          <strong>torito FEMENINO</strong>
           <span>${escaparHTML(normalizada.nombre || "Rutina sin título")}</span>
           <small>${escaparHTML(division.toUpperCase())} · Bloque ${totalSemanas} Semanas</small>
         </div>
@@ -4512,7 +4512,7 @@ function renderizarBiblioteca() {
       </div>
 
       <div class="miniatura-cabecera">
-        <div class="miniatura-club">TORITO</div>
+        <div class="miniatura-club">torito FEMENINO</div>
         <h4>${escaparHTML(rutina.nombre || "Rutina sin título")}</h4>
 
         <div class="miniatura-detalle">
@@ -4720,7 +4720,7 @@ function descargarRutinaPDF(indice, cantidadPersonas = 1) {
   );
 
   document.title =
-    "TORITO - " + rutina.nombre + " - " + division;
+    "torito FEMENINO - " + rutina.nombre + " - " + division;
 
   document.body.classList.add("imprimir-solo-rutina");
 
@@ -4951,7 +4951,7 @@ async function sincronizarGimnasioConNube() {
     renderizarBiblioteca();
 
     mostrarEstado("Datos del gimnasio sincronizados.");
-    console.log("TORITO: sincronización inicial completada.");
+    console.log("torito: sincronización inicial completada.");
 
   } catch (error) {
     nubeListaParaGuardar = false;
