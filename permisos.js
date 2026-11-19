@@ -137,8 +137,7 @@
     const t = textoControl(el);
     if (el.matches("a, [role=tab]")) return true;
     if (el.matches("button")) {
-      if (PALABRAS_NAVEGACION.test(t) && !PALABRAS_CAMBIO.test(t) && !PALABRAS_BORRADO.test(t)) return true;
-      return false;
+      return !PALABRAS_CAMBIO.test(t) && !PALABRAS_BORRADO.test(t);
     }
     if (el.matches("select")) {
       return !esSelectorJugadora(el) && !Array.from(el.options || []).some(o => categoriaDeTexto(o.value) || categoriaDeTexto(o.textContent));
