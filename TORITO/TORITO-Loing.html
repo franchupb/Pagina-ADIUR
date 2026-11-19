@@ -1,24 +1,22 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="theme-color"
-        content="#171717"
-    >
+    <meta name="theme-color" content="#171717">
 
     <meta
         name="description"
-        content="Inicio de sesión de TORITO. Accedé al sistema de gestión del club."
+        content="Inicio de sesión de TORITO FEMENINO. Accedé al sistema de gestión del club."
     >
 
-    <title>Iniciar sesión | TORITO</title>
+    <title>Iniciar sesión | TORITO FEMENINO</title>
 
     <style>
         /* =====================================================
-           IDENTIDAD VISUAL TORITO
+           IDENTIDAD VISUAL TORITO FEMENINO
         ===================================================== */
 
         :root {
@@ -80,7 +78,7 @@
                     rgba(25, 25, 25, 0.58),
                     rgba(18, 18, 18, 0.78)
                 ),
-                url("TORITO-Familia.jpg");
+                url("Fondo Login.jpg");
 
             background-size: cover;
             background-position: center;
@@ -158,7 +156,7 @@
         }
 
         /* =====================================================
-           LOGO DEL CLUB
+           LOGO OFICIAL DEL TORITO
         ===================================================== */
 
         .logo-contenedor {
@@ -173,15 +171,15 @@
             display: block;
 
             width: 112px;
-            height: 112px;
+            height: 125px;
 
             object-fit: contain;
 
-            padding: 4px;
+            padding: 0;
 
-            background: var(--blanco);
+            background: transparent;
 
-            border-radius: 100%;
+            border-radius: 0;
         }
 
         /* =====================================================
@@ -566,7 +564,7 @@
 
             .logo {
                 width: 96px;
-                height: 96px;
+                height: 108px;
             }
 
             .logo-contenedor {
@@ -607,7 +605,7 @@
 
             .logo {
                 width: 84px;
-                height: 84px;
+                height: 95px;
             }
 
             h1 {
@@ -641,7 +639,7 @@
 
             .logo {
                 width: 78px;
-                height: 78px;
+                height: 88px;
             }
 
             .logo-contenedor {
@@ -695,23 +693,24 @@
 
         <div class="login-contenido">
 
-            <!-- LOGO OFICIAL DE TORITO -->
+            <!-- LOGO OFICIAL DE C.A. EL TORITO -->
+
             <div class="logo-contenedor">
                 <img
-                    src="TORITO-Logo TORITO.png"
-                    alt="Escudo de TORITO"
+                    src="Logo Torito.png"
+                    alt="Escudo oficial de C.A. El Torito"
                     class="logo"
-                    onerror="if(!this.dataset.intento){this.dataset.intento='1';this.src='TORITO-Logo TORITO.png'}else{this.style.display='none'}"
                 >
             </div>
 
             <!-- IDENTIDAD DEL CLUB -->
+
             <div class="etiqueta-club">
                 <span class="etiqueta-punto" aria-hidden="true"></span>
                 CLUB DEPORTIVO
             </div>
 
-            <h1>TORITO</h1>
+            <h1>TORITO FEMENINO</h1>
 
             <p class="subtitulo">
                 Pasión, compromiso y trabajo en equipo
@@ -720,14 +719,17 @@
             <div class="separador" aria-hidden="true"></div>
 
             <!-- CABECERA DEL FORMULARIO -->
+
             <div class="formulario-cabecera">
                 <p></p>
             </div>
 
             <!-- FORMULARIO -->
+
             <form id="loginForm" novalidate>
 
                 <!-- USUARIO -->
+
                 <div class="campo">
                     <label for="usuario">Usuario</label>
 
@@ -745,6 +747,7 @@
                 </div>
 
                 <!-- CONTRASEÑA -->
+
                 <div class="campo">
                     <label for="contrasena">Contraseña</label>
 
@@ -772,6 +775,7 @@
                 </div>
 
                 <!-- BOTÓN -->
+
                 <button
                     type="submit"
                     class="boton-login"
@@ -785,6 +789,7 @@
                 </button>
 
                 <!-- MENSAJE DE ERROR -->
+
                 <div
                     class="error"
                     id="mensajeError"
@@ -798,8 +803,15 @@
             </form>
 
             <!-- PIE INSTITUCIONAL -->
+
             <footer class="pie-login">
                 <strong></strong>
+            </footer>
+
+        </div>
+
+    </main>
+
     <script>
         "use strict";
 
@@ -936,16 +948,17 @@
                 cuenta &&
                 cuenta.contrasena === contrasena
             ) {
+
                 /*
                  * GUARDAR LA SESIÓN
-                 *
-                 * Se conserva la clave "usuarioTORITO" y el formato
+
+                 * Se conserva la clave "usuarioADIUR" y el formato
                  * de texto que utilizan las demás páginas del club.
                  */
 
                 try {
                     localStorage.setItem(
-                        "usuarioTORITO",
+                        "usuarioADIUR",
                         cuenta.nombre
                     );
                 } catch (error) {
@@ -963,13 +976,14 @@
 
                 /*
                  * REDIRECCIÓN ORIGINAL
-                 *
+
                  * Se mantiene la página principal existente.
                  */
 
-                window.location.href = "TORITO-Pagina Principal.html";
+                window.location.href = "Pagina Principal.html";
 
             } else {
+
                 /* CREDENCIALES INCORRECTAS */
 
                 campoContrasena.value = "";
@@ -988,6 +1002,7 @@
         document.addEventListener("DOMContentLoaded", function() {
             campoUsuario.focus({ preventScroll: true });
         });
+
     </script>
 
 </body>
