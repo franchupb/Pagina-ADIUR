@@ -124,13 +124,14 @@
   }
 
   const PALABRAS_BORRADO = /eliminar|borrar|suprimir|quitar|dar de baja/i;
-  const PALABRAS_CAMBIO = /guardar|agregar|añadir|nuevo|crear|editar|modificar|actualizar|importar|cargar|registrar|duplicar|publicar|save|submit|enviar|confirmar/i;
+  const PALABRAS_CAMBIO = /guardar|agregar|añadir|nuevo|crear|editar|modificar|actualizar|importar|cargar|registrar|duplicar|publicar|aplicar|restaurar|reset|save|submit|enviar|confirmar/i;
   const PALABRAS_NAVEGACION = /cerrar|cancelar|volver|abrir|ver|filtrar|buscar|siguiente|anterior|mes|semana|dia|día|imprimir|descargar|mostrar|ocultar|menu|menú|perfil|sesion|sesión|inicio|pizarra|calendario/i;
 
   function textoControl(el) {
     return [
       el.textContent, el.value, el.getAttribute("aria-label"),
-      el.title, el.id, el.name, el.getAttribute("onclick")
+      el.title, el.id, el.name, el.className, el.getAttribute("data-accion"),
+      el.getAttribute("data-action"), el.getAttribute("data-operacion"), el.getAttribute("onclick")
     ].filter(Boolean).join(" ").toLowerCase();
   }
   function esControlSoloLecturaPermitido(el) {
