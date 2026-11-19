@@ -1303,7 +1303,112 @@ a{text-decoration:none;color:inherit}
 
 .estado-mejora{color:#21834a!important;font-weight:900}
 .estado-empeora{color:#c43e3e!important;font-weight:900}
+
 .estado-igual{color:#888!important;font-weight:800}
+
+.acciones-test-stats{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin:10px 0 12px;
+  padding:9px 10px;
+  border:1px solid #f0e5dc;
+  border-radius:7px;
+  background:#fffaf6;
+}
+
+.acciones-test-stats small{
+  color:#888;
+  font-size:8px;
+  line-height:1.4;
+}
+
+.btn-grafico{
+  min-height:32px;
+  flex:0 0 auto;
+  padding:7px 11px;
+  border:1px solid #efc9b1;
+  border-radius:7px;
+  background:#fff1e7;
+  color:#b65313;
+  font-size:8px;
+  font-weight:900;
+}
+
+.btn-grafico:hover{background:#ffe7d7}
+
+.graficos-evolucion{
+  display:none;
+  margin:0 0 13px;
+  padding:12px;
+  border:1px solid #e8eaed;
+  border-radius:8px;
+  background:#fbfcfd;
+}
+
+.graficos-evolucion.visible{display:block}
+
+.grafico-intento{
+  margin-top:10px;
+  padding:10px;
+  border:1px solid #eceef0;
+  border-radius:8px;
+  background:#fff;
+}
+
+.grafico-intento:first-child{margin-top:0}
+
+.grafico-intento h5{
+  margin:0 0 8px;
+  color:#555;
+  font-size:9px;
+  font-weight:900;
+}
+
+.grafico-svg-wrap{
+  width:100%;
+  overflow-x:auto;
+}
+
+.grafico-svg-wrap svg{
+  display:block;
+  width:100%;
+  min-width:520px;
+  height:auto;
+}
+
+.grafico-leyenda{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:7px;
+  color:#777;
+  font-size:8px;
+}
+
+.grafico-leyenda span{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+}
+
+.grafico-leyenda i{
+  width:8px;
+  height:8px;
+  display:inline-block;
+  border-radius:50%;
+}
+
+.grafico-sin-datos{
+  padding:17px 10px;
+  border:1px dashed #ddd;
+  border-radius:7px;
+  color:#888;
+  font-size:8px;
+  line-height:1.5;
+  text-align:center;
+}
 
 .stats-vacio{
   padding:25px 12px;
@@ -1963,7 +2068,7 @@ a{text-decoration:none;color:inherit}
           <div>
             <span class="kicker">ANÁLISIS DEL RENDIMIENTO</span>
             <h3>Estadísticas de testeos</h3>
-            <p>Seleccioná una jugadora para revisar todos los intentos y períodos. Los promedios grupales y por puesto se calculan por separado para cada intento.</p>
+            <p>Consultá los resultados de cada jugadora a partir de las planillas guardadas y observá la evolución de cada prueba entre períodos.</p>
           </div>
         </div>
 
@@ -1976,7 +2081,7 @@ a{text-decoration:none;color:inherit}
           </div>
 
           <div class="filtro-stats">
-            <label for="selectPruebaStats">Filtrar estadísticas grupales por prueba (opcional)</label>
+            <label for="selectPruebaStats">Filtrar estadísticas por prueba (opcional)</label>
             <select id="selectPruebaStats" onchange="renderizarEstadisticas()">
               <option value="">Todas las pruebas</option>
             </select>
@@ -1985,17 +2090,7 @@ a{text-decoration:none;color:inherit}
 
         <div class="stats-resumen" id="resumenStats"></div>
 
-        <div class="tabs-stats">
-          <button class="tab-stats activa" onclick="cambiarVistaStats('individual',this)">Individual</button>
-          <button class="tab-stats" onclick="cambiarVistaStats('puestos',this)">Promedios por puesto</button>
-          <button class="tab-stats" onclick="cambiarVistaStats('grupal',this)">Números del grupo</button>
-          <button class="tab-stats" onclick="cambiarVistaStats('historica',this)">Evolución grupal</button>
-        </div>
-
-        <div class="contenido-stats activa" id="statsIndividual"></div>
-        <div class="contenido-stats" id="statsPuestos"></div>
-        <div class="contenido-stats" id="statsGrupal"></div>
-        <div class="contenido-stats" id="statsHistorica"></div>
+        <div class="contenido-stats activo" id="statsIndividual"></div>
 
       </section>
 
@@ -3799,54 +3894,24 @@ function tieneResultadosPlanilla(item,nombres=jugadorasDivision){
 
 function obtenerHistorialPlanillas(){
   const division=document.getElementById("selectDivision").value;
-  const mapa=new Map();
 
-  planillasBiblioteca
-    .filter(item=>item.division===division&&item.clave)
-    .forEach(item=>mapa.set(item.clave,{...item}));
-
-  const operativas=[...planillasOperativas];
-  Object.keys(localStorage).forEach(key=>{
-    if(!key.startsWith("testeos_adiur_")||key.startsWith("testeos_adiur___biblioteca__"))return;
-    try{
-      const item=JSON.parse(localStorage.getItem(key)||"null");
-      if(item&&item.tipo!=="biblioteca_testeos"&&item.division===division&&item.mes){
-        operativas.push({...item,clave:item.clave||obtenerClavePlanilla(item.division,item.mes)});
-      }
-    }catch(error){}
-  });
-
-  operativas.forEach(item=>{
-    if(item.division!==division||!item.clave)return;
-    const anterior=mapa.get(item.clave);
-    const fechaNueva=new Date(item.ultimaActualizacion||item.fechaGuardado||0).getTime();
-    const fechaAnterior=anterior
-      ?new Date(anterior.ultimaActualizacion||anterior.fechaGuardado||0).getTime()
-      :0;
-    if(!anterior||fechaNueva>=fechaAnterior)mapa.set(item.clave,{...item});
-  });
-
-  const periodo=document.getElementById("selectMes").value.trim();
-  const claveActual=periodo?obtenerClavePlanilla(division,periodo):"";
-  const actual={
-    tipo:"biblioteca_testeos",
-    clave:claveActual,
-    division,
-    mes:periodo||"Período actual",
-    columnas:columnasActuales,
-    valores:valoresActuales,
-    jugadoras:[...jugadorasDivision],
-    posiciones:{...posicionesPorJugadora},
-    fechaGuardado:new Date().toISOString(),
-    esActual:true
-  };
-
-  if(claveActual&&tieneResultadosPlanilla(actual))mapa.set(claveActual,actual);
-
-  return [...mapa.values()].sort((a,b)=>
-    new Date(a.fechaGuardado||a.ultimaActualizacion||0).getTime()-
-    new Date(b.fechaGuardado||b.ultimaActualizacion||0).getTime()
-  );
+  // Las estadísticas individuales se construyen exclusivamente con
+  // snapshots guardados en Biblioteca Test. No se incorporan borradores,
+  // guardados automáticos operativos ni la planilla que sigue abierta.
+  return planillasBiblioteca
+    .filter(item=>
+      item&&
+      item.tipo==="biblioteca_testeos"&&
+      item.division===division&&
+      item.clave&&
+      Array.isArray(item.columnas)&&
+      item.valores&&
+      typeof item.valores==="object"
+    )
+    .map(item=>({...item}))
+    .sort((a,b)=>
+      new Date(a.fechaGuardado||0).getTime()-new Date(b.fechaGuardado||0).getTime()
+    );
 }
 
 function clavePrueba(col){
@@ -3861,12 +3926,6 @@ function obtenerPruebasHistoricas(){
       const clave=clavePrueba(col);
       if(!mapa.has(clave))mapa.set(clave,col);
     });
-  });
-
-  // Incluye también pruebas recién creadas, aunque todavía no tengan datos.
-  columnasActuales.filter(col=>!col.esComp).forEach(col=>{
-    const clave=clavePrueba(col);
-    if(!mapa.has(clave))mapa.set(clave,col);
   });
 
   return [...mapa.values()].sort((a,b)=>
@@ -3993,34 +4052,27 @@ function describirCambio(prueba,actual,anterior){
 function renderizarStatsResumen(){
   const contenedor=document.getElementById("resumenStats");
   const nombre=document.getElementById("selectJugadoraStats")?.value||"";
-  const historial=nombre?recolectarHistorialJugadora(nombre):[];
 
-  const cantidadRegistros=nombre
-    ?historial.reduce((total,item)=>total+item.registros.reduce((suma,r)=>suma+r.intentos.filter(valorCargado).length,0),0)
-    :obtenerHistorialPlanillas().reduce((total,item)=>{
-        const columnas=(item.columnas||[]).filter(c=>!c.esComp);
-        let cantidad=0;
-        columnas.forEach(col=>jugadorasDivision.forEach(j=>{
-          cantidad+=obtenerIntentos(item.valores||{},j,col).completos;
-        }));
-        return total+cantidad;
-      },0);
+  if(!nombre){
+    contenedor.innerHTML=`<div class="stats-vacio" style="grid-column:1/-1">Seleccioná una jugadora para consultar únicamente sus resultados guardados en Biblioteca Test.</div>`;
+    return;
+  }
 
-  const periodos=nombre
-    ?new Set(historial.flatMap(item=>item.registros.map(r=>r.clave))).size
-    :obtenerHistorialPlanillas().length;
-
-  const pruebas=nombre?historial.length:obtenerPruebasHistoricas().length;
+  const historial=recolectarHistorialJugadora(nombre);
+  const periodos=new Set(historial.flatMap(item=>item.registros.map(r=>r.clave))).size;
+  const intentos=historial.reduce((total,item)=>
+    total+item.registros.reduce((suma,r)=>suma+r.intentos.filter(valorCargado).length,0),0
+  );
 
   contenedor.innerHTML=`
     <div class="stats-card">
-      <span>${nombre?"JUGADORA SELECCIONADA":"JUGADORAS ACTIVAS"}</span>
-      <strong style="font-size:${nombre?"13px":"20px"}">${nombre?escapeHTML(nombre):jugadorasDivision.length}</strong>
-      <small>${nombre?"Historial individual":"En esta categoría"}</small>
+      <span>JUGADORA</span>
+      <strong style="font-size:13px">${escapeHTML(nombre)}</strong>
+      <small>Historial individual</small>
     </div>
-    <div class="stats-card"><span>PERÍODOS CON DATOS</span><strong>${periodos}</strong><small>Planillas incluidas</small></div>
-    <div class="stats-card"><span>PRUEBAS REGISTRADAS</span><strong>${pruebas}</strong><small>Tipos de evaluación</small></div>
-    <div class="stats-card"><span>INTENTOS CARGADOS</span><strong>${cantidadRegistros}</strong><small>${nombre?"Resultados de la jugadora":"Seleccioná una jugadora para ver su historial"}</small></div>
+    <div class="stats-card"><span>PLANILLAS GUARDADAS</span><strong>${periodos}</strong><small>Períodos con resultados</small></div>
+    <div class="stats-card"><span>PRUEBAS EVALUADAS</span><strong>${historial.length}</strong><small>Pruebas con datos</small></div>
+    <div class="stats-card"><span>INTENTOS REGISTRADOS</span><strong>${intentos}</strong><small>Resultados guardados</small></div>
   `;
 }
 
@@ -4028,23 +4080,130 @@ function renderizarStatsResumen(){
    ESTADÍSTICA INDIVIDUAL: HISTORIAL POR INTENTO
 ===================================================== */
 
+function crearGraficoEvolucionIntento(item,intento){
+  const puntos=item.registros.map(registro=>({
+    periodo:registro.periodo,
+    valor:numero(registro.intentos[intento-1]),
+    fecha:registro.fecha||""
+  })).filter(p=>p.valor!==null);
+
+  if(!puntos.length){
+    return `<div class="grafico-sin-datos">No hay resultados numéricos guardados para este intento. Las mediciones de texto no se representan en un gráfico.</div>`;
+  }
+
+  const ancho=900;
+  const alto=270;
+  const margen={izq:70,der:25,arriba:25,abajo:72};
+  const anchoGrafico=ancho-margen.izq-margen.der;
+  const altoGrafico=alto-margen.arriba-margen.abajo;
+  const valores=puntos.map(p=>p.valor);
+  let minimo=Math.min(...valores);
+  let maximo=Math.max(...valores);
+  let rango=maximo-minimo;
+  const relleno=rango===0?Math.max(Math.abs(maximo)*0.12,1):rango*0.16;
+  minimo-=relleno;
+  maximo+=relleno;
+  rango=maximo-minimo||1;
+
+  const coordenadas=puntos.map((p,i)=>({
+    ...p,
+    x:puntos.length===1?margen.izq+anchoGrafico/2:margen.izq+(i/(puntos.length-1))*anchoGrafico,
+    y:margen.arriba+((maximo-p.valor)/rango)*altoGrafico
+  }));
+
+  const colorCambio=(anterior,actual)=>{
+    if(item.prueba.criterio==="mayor")return actual>anterior?"#219653":actual<anterior?"#d34b4b":"#9a9a9a";
+    if(item.prueba.criterio==="menor")return actual<anterior?"#219653":actual>anterior?"#d34b4b":"#9a9a9a";
+    return actual>anterior?"#d17a28":actual<anterior?"#5277ad":"#9a9a9a";
+  };
+
+  const guias=Array.from({length:5},(_,i)=>{
+    const y=margen.arriba+(i/4)*altoGrafico;
+    const valor=maximo-(i/4)*rango;
+    return `
+      <line x1="${margen.izq}" y1="${y}" x2="${ancho-margen.der}" y2="${y}" stroke="#e9ecef" stroke-width="1" />
+      <text x="${margen.izq-10}" y="${y+3}" text-anchor="end" fill="#87909a" font-size="10">${escapeHTML(formatear(valor))}</text>
+    `;
+  }).join("");
+
+  const segmentos=coordenadas.slice(1).map((p,i)=>{
+    const anterior=coordenadas[i];
+    return `<line x1="${anterior.x}" y1="${anterior.y}" x2="${p.x}" y2="${p.y}" stroke="${colorCambio(anterior.valor,p.valor)}" stroke-width="3" stroke-linecap="round" />`;
+  }).join("");
+
+  const circulos=coordenadas.map((p,i)=>{
+    const color=i===0?"#f47721":colorCambio(coordenadas[i-1].valor,p.valor);
+    const etiqueta=p.periodo.length>13?p.periodo.slice(0,12)+"…":p.periodo;
+    const cambio=i===0?"Primera medición":`${p.valor-coordenadas[i-1].valor>0?"+":""}${formatear(p.valor-coordenadas[i-1].valor)} vs. período anterior`;
+    return `
+      <g>
+        <title>${escapeHTML(p.periodo)}: ${escapeHTML(formatear(p.valor))} · ${escapeHTML(cambio)}</title>
+        <circle cx="${p.x}" cy="${p.y}" r="5" fill="${color}" stroke="#fff" stroke-width="2" />
+        <text x="${p.x}" y="${Math.max(13,p.y-12)}" text-anchor="middle" fill="#41464d" font-size="11" font-weight="700">${escapeHTML(formatear(p.valor))}</text>
+        <text x="${p.x}" y="${alto-margen.abajo+20}" text-anchor="end" transform="rotate(-27 ${p.x} ${alto-margen.abajo+20})" fill="#737b84" font-size="10">${escapeHTML(etiqueta)}</text>
+      </g>
+    `;
+  }).join("");
+
+  let leyenda;
+  if(item.prueba.criterio==="mayor"){
+    leyenda=`<span><i style="background:#219653"></i>Mejora</span><span><i style="background:#d34b4b"></i>Descenso</span>`;
+  }else if(item.prueba.criterio==="menor"){
+    leyenda=`<span><i style="background:#219653"></i>Mejora</span><span><i style="background:#d34b4b"></i>Empeora</span>`;
+  }else{
+    leyenda=`<span><i style="background:#d17a28"></i>Subida</span><span><i style="background:#5277ad"></i>Bajada</span>`;
+  }
+
+  const mensaje=puntos.length<2
+    ?"Solo hay una medición numérica guardada; se muestra el punto disponible, pero todavía no se puede observar una tendencia."
+    :`${puntos.length} resultados numéricos en orden cronológico. Los segmentos muestran la variación entre períodos.`;
+
+  return `
+    <div class="grafico-svg-wrap">
+      <svg viewBox="0 0 ${ancho} ${alto}" role="img" aria-label="Evolución de resultados de ${escapeHTML(item.prueba.label)}">
+        ${guias}
+        <line x1="${margen.izq}" y1="${margen.arriba}" x2="${margen.izq}" y2="${alto-margen.abajo}" stroke="#cfd4da" stroke-width="1" />
+        <line x1="${margen.izq}" y1="${alto-margen.abajo}" x2="${ancho-margen.der}" y2="${alto-margen.abajo}" stroke="#cfd4da" stroke-width="1" />
+        ${segmentos}
+        ${circulos}
+      </svg>
+    </div>
+    <div class="grafico-leyenda">${leyenda}</div>
+    <div style="margin-top:7px;color:#888;font-size:8px;line-height:1.45">${mensaje}</div>
+  `;
+}
+
+window.alternarGraficoTest=function(id,boton){
+  const grafico=document.getElementById(id);
+  if(!grafico)return;
+  const visible=grafico.classList.toggle("visible");
+  boton.textContent=visible?"Ocultar gráfico":"Ver gráfico de evolución";
+};
+
 function renderizarStatsIndividual(){
   const contenedor=document.getElementById("statsIndividual");
   const nombre=document.getElementById("selectJugadoraStats")?.value||"";
+  const filtroPrueba=obtenerPruebaStats();
 
   if(!nombre){
-    contenedor.innerHTML=`<div class="stats-vacio">Seleccioná una jugadora ACTIVA para consultar todas sus pruebas, la cantidad de intentos configurada en cada una y su evolución entre períodos.</div>`;
+    contenedor.innerHTML=`<div class="stats-vacio">Seleccioná una jugadora activa para ver sus resultados de las planillas guardadas.</div>`;
     return;
   }
 
-  const historial=recolectarHistorialJugadora(nombre);
+  let historial=recolectarHistorialJugadora(nombre);
+  if(filtroPrueba){
+    historial=historial.filter(item=>clavePrueba(item.prueba)===clavePrueba(filtroPrueba));
+  }
+
   if(!historial.length){
-    contenedor.innerHTML=`<div class="stats-vacio">Todavía no hay resultados guardados de ${escapeHTML(nombre)} en esta categoría.</div>`;
+    contenedor.innerHTML=`<div class="stats-vacio">No hay resultados guardados de ${escapeHTML(nombre)}${filtroPrueba?` para ${escapeHTML(filtroPrueba.label)}`:""} en Biblioteca Test.</div>`;
     return;
   }
 
-  contenedor.innerHTML=historial.map(item=>{
+  contenedor.innerHTML=historial.map((item,indicePrueba)=>{
     const maxIntentos=Math.max(1,...item.registros.map(r=>r.cantidadIntentos));
+    const idGrafico=`graficoEvolucionTest${indicePrueba}`;
+
     const bloquesIntentos=Array.from({length:maxIntentos},(_,indice)=>{
       const intento=indice+1;
       let ultimoValor=null;
@@ -4079,7 +4238,7 @@ function renderizarStatsIndividual(){
           <strong style="font-size:9px;color:#777">${maxIntentos>1?`INTENTO ${intento}`:"RESULTADO"}</strong>
           <div class="tabla-stats-wrap" style="margin-top:5px">
             <table class="tabla-stats">
-              <thead><tr><th>Período</th><th>Resultado</th><th>Fecha</th><th>Diferencia</th><th>Evolución</th></tr></thead>
+              <thead><tr><th>Período guardado</th><th>Resultado</th><th>Fecha guardado</th><th>Diferencia</th><th>Evolución</th></tr></thead>
               <tbody>${filas}</tbody>
             </table>
           </div>
@@ -4087,10 +4246,30 @@ function renderizarStatsIndividual(){
       `;
     }).join("");
 
+    const graficosIntentos=Array.from({length:maxIntentos},(_,indice)=>{
+      const intento=indice+1;
+      return `
+        <section class="grafico-intento">
+          <h5>${maxIntentos>1?`INTENTO ${intento}`:"RESULTADO"}</h5>
+          ${crearGraficoEvolucionIntento(item,intento)}
+        </section>
+      `;
+    }).join("");
+
     return`
       <div class="stats-bloque" style="margin-bottom:10px">
         <h4>${escapeHTML(item.prueba.grupo)} · ${escapeHTML(item.prueba.label)}</h4>
-        <p>${item.registros.length} períodos con resultados. Cada intento se compara únicamente con el mismo número de intento de períodos anteriores.</p>
+        <p>${item.registros.length} planillas guardadas con datos. La evolución se calcula exclusivamente con resultados guardados en Biblioteca Test, sin incluir la carga abierta.</p>
+
+        <div class="acciones-test-stats">
+          <small>Consultá la ondulación de los resultados entre todos los períodos guardados.</small>
+          <button type="button" class="btn-grafico" onclick="alternarGraficoTest('${idGrafico}',this)">Ver gráfico de evolución</button>
+        </div>
+
+        <div class="graficos-evolucion" id="${idGrafico}">
+          ${graficosIntentos}
+        </div>
+
         ${bloquesIntentos}
       </div>
     `;
@@ -4317,13 +4496,12 @@ function renderizarStatsHistorica(pruebaFiltro){
 ===================================================== */
 
 function renderizarEstadisticas(){
-  const prueba=obtenerPruebaStats();
   renderizarStatsResumen();
   renderizarStatsIndividual();
-  renderizarStatsPuestos(prueba);
-  renderizarStatsGrupal(prueba);
-  renderizarStatsHistorica(prueba);
 }
+
+// Los selectores de estadísticas usan onchange en el HTML.
+window.renderizarEstadisticas=renderizarEstadisticas;
 
 /* =====================================================
    CAMBIO DE CATEGORÍA Y PERÍODO
