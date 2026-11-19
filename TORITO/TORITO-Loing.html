@@ -821,15 +821,17 @@
         ===================================================== */
 
         const usuarios = {
-            "Fran": {
-                contrasena: "ADIUR",
+            "fran": {
+                contrasena: "TORITO",
                 nombre: "Fran"
             },
 
-            "Liana": {
+            "liana": {
                 contrasena: "TORITO",
                 nombre: "Liana"
-        
+            }
+        };
+
         /* =====================================================
            ELEMENTOS DEL FORMULARIO
         ===================================================== */
@@ -953,15 +955,14 @@
                 /*
                  * GUARDAR LA SESIÓN
 
-                 * Se conserva la clave "usuarioADIUR"
-                 * para mantener la compatibilidad con
-                 * las demás páginas del sistema.
+                 * Se utiliza la clave propia de TORITO
+                 * para mantener la sesión separada de ADIUR.
                  */
 
                 try {
 
                     localStorage.setItem(
-                        "usuarioADIUR",
+                        "usuarioTORITO",
                         cuenta.nombre
                     );
 
@@ -983,7 +984,7 @@
                  * REDIRECCIÓN ORIGINAL
                  */
 
-                window.location.href = "Pagina Principal.html";
+                window.location.href = "TORITO-Pagina Principal.html";
 
             } else {
 
