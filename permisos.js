@@ -129,8 +129,9 @@
         select.dataset.adiurDivisionBloqueada = "1";
         return;
       }
-      const cambioNecesario = select.value !== opcionFinal.value;
-      select.value = opcionFinal.value;
+      const indicePermitido = Array.from(select.options || []).indexOf(opcionFinal);
+      const cambioNecesario = select.selectedIndex !== indicePermitido;
+      select.selectedIndex = indicePermitido;
       select.disabled = true;
       select.dataset.adiurDivisionProcesada = "1";
       select.dataset.adiurDivisionBloqueada = "0";
@@ -192,7 +193,7 @@
     }
     event.preventDefault();
     event.stopImmediatePropagation();
-    select.value = permitida.value;
+    select.selectedIndex = Array.from(select.options || []).indexOf(permitida);
     select.disabled = true;
     select.dispatchEvent(new Event("change", { bubbles: true }));
   }
