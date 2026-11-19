@@ -2967,6 +2967,16 @@ window.firebasePizarraReady.catch(error=>{
 
 let contadorCargaPizarra = 0;
 let guardadoEnCurso = false;
+let revisionPizarra = 0;
+
+// Si el usuario empieza a trabajar mientras se consulta Firebase, la respuesta
+// tardía no debe pisar los cambios que ya hizo en la cancha.
+const zonaPizarra = document.getElementById("main");
+["pointerdown","click","change","input"].forEach(tipoEvento=>{
+  zonaPizarra.addEventListener(tipoEvento,()=>{
+    revisionPizarra++;
+  },true);
+});
 
 async function guardarPizarra(){
   const boton = document.getElementById("guardarPizarraBtn");
@@ -3145,6 +3155,7 @@ function restablecerPizarraVacia(){
 async function cargarGuardada(){
   const division = document.getElementById("division").value;
   const miCarga = ++contadorCargaPizarra;
+  const revisionInicial = revisionPizarra;
   let datosLocales = null;
 
   try{
@@ -3176,7 +3187,7 @@ async function cargarGuardada(){
     if(miCarga !== contadorCargaPizarra) return;
 
     const datosNube = await window.cargarPizarraDesdeNube(division);
-    if(miCarga !== contadorCargaPizarra) return;
+    if(miCarga !== contadorCargaPizarra || revisionPizarra !== revisionInicial) return;
 
     if(datosNube){
       aplicarDatosPizarra(datosNube);
@@ -3190,6 +3201,7 @@ async function cargarGuardada(){
     }
 
     // Migra a Firestore una pizarra antigua que solo existía en este navegador.
+    if(revisionPizarra !== revisionInicial) return;
     if(datosLocales){
       await window.guardarPizarraEnNube(division,datosLocales);
       if(miCarga === contadorCargaPizarra){
