@@ -2850,7 +2850,7 @@ async function cargarDatosPlanilla(division,mes){
 
   if(nubeActiva&&db){
     try{
-      const ref=doc(db,"torito_testeos_adiur",clave);
+      const ref=doc(db,"torito_testeos_torito",clave);
       const snap=await getDoc(ref);
 
       if(version!==versionCarga)return;
@@ -2873,7 +2873,7 @@ async function cargarDatosPlanilla(division,mes){
 
   if(!cargadoDeNube){
 
-    const raw=localStorage.getItem("torito_testeos_adiur_"+clave);
+    const raw=localStorage.getItem("torito_testeos_torito_"+clave);
 
     if(raw){
       try{
@@ -2933,7 +2933,7 @@ function programarGuardadoNube(){
   };
 
   localStorage.setItem(
-    "torito_testeos_adiur_"+clave,
+    "torito_testeos_torito_"+clave,
     JSON.stringify(payload)
   );
 
@@ -2949,7 +2949,7 @@ function programarGuardadoNube(){
   timeoutGuardado=setTimeout(async()=>{
     if(nubeActiva&&db){
       try{
-        await setDoc(doc(db,"torito_testeos_adiur",clave),payload);
+        await setDoc(doc(db,"torito_testeos_torito",clave),payload);
         actualizarEstadoNube("","☁️ Guardado en la nube");
       }catch(error){
         console.error("Error guardando en Firestore:",error);
@@ -3679,7 +3679,7 @@ async function cargarBiblioteca(){
   // Recupera también las planillas operativas de períodos anteriores.
   // Estas se guardan automáticamente, aunque no se hayan agregado a Biblioteca Test.
   Object.keys(localStorage).forEach(key=>{
-    if(!key.startsWith("testeos_adiur_")||key.startsWith("testeos_adiur___biblioteca__"))return;
+    if(!key.startsWith("testeos_torito_")||key.startsWith("testeos_torito___biblioteca__"))return;
 
     try{
       const item=JSON.parse(localStorage.getItem(key)||"null");
@@ -3691,7 +3691,7 @@ async function cargarBiblioteca(){
 
   if(nubeActiva&&db){
     try{
-      const snap=await getDocs(collection(db,"torito_testeos_adiur"));
+      const snap=await getDocs(collection(db,"torito_testeos_torito"));
 
       snap.forEach(d=>{
         const data=d.data();
@@ -3836,15 +3836,15 @@ window.eliminarPlanillaBiblioteca=async function(indice){
     // El borrado en nube se realiza antes de quitar las copias locales.
     if(nubeActiva&&db){
       const batch=writeBatch(db);
-      batch.delete(doc(db,"torito_testeos_adiur",clave));
-      batch.delete(doc(db,"torito_testeos_adiur","__biblioteca__"+clave));
+      batch.delete(doc(db,"torito_testeos_torito",clave));
+      batch.delete(doc(db,"torito_testeos_torito","__biblioteca__"+clave));
       await batch.commit();
     }
 
     const biblioteca=leerBibliotecaLocal().filter(x=>x.clave!==clave);
     escribirBibliotecaLocal(biblioteca);
-    localStorage.removeItem("torito_testeos_adiur_"+clave);
-    localStorage.removeItem("torito_testeos_adiur___biblioteca__"+clave);
+    localStorage.removeItem("torito_testeos_torito_"+clave);
+    localStorage.removeItem("torito_testeos_torito___biblioteca__"+clave);
 
     planillasBiblioteca=planillasBiblioteca.filter(x=>x.clave!==clave);
     planillasOperativas=planillasOperativas.filter(x=>x.clave!==clave);
@@ -3852,7 +3852,7 @@ window.eliminarPlanillaBiblioteca=async function(indice){
     if(clave===claveActual){
       if(timeoutGuardado){clearTimeout(timeoutGuardado);timeoutGuardado=null;}
       valoresActuales={};
-      localStorage.removeItem("torito_testeos_adiur_"+clave);
+      localStorage.removeItem("torito_testeos_torito_"+clave);
       renderizarCarga();
     }
 
@@ -3936,7 +3936,7 @@ window.guardarPlanillaEnBiblioteca=async function(){
   escribirBibliotecaLocal(local);
 
   localStorage.setItem(
-    "torito_testeos_adiur_"+clave,
+    "torito_testeos_torito_"+clave,
     JSON.stringify(payload)
   );
 
@@ -3949,12 +3949,12 @@ window.guardarPlanillaEnBiblioteca=async function(){
     if(nubeActiva&&db){
 
       await setDoc(
-        doc(db,"torito_testeos_adiur",clave),
+        doc(db,"torito_testeos_torito",clave),
         payload
       );
 
       await setDoc(
-        doc(db,"torito_testeos_adiur","__biblioteca__"+clave),
+        doc(db,"torito_testeos_torito","__biblioteca__"+clave),
         snapshot
       );
 

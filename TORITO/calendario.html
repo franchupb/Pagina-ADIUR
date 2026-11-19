@@ -2705,11 +2705,11 @@ function rutaImagen(nombre) {
     const normalizado = archivo.toLowerCase();
 
     if (
-        normalizado === "adiur" ||
-        normalizado === "logo adiur" ||
+        normalizado === "torito" ||
+        normalizado === "logo torito" ||
         normalizado === "Logo TORITO.png" ||
-        normalizado === "logo adiur.png" ||
-        normalizado === "logo adiur.jpeg"
+        normalizado === "logo torito.png" ||
+        normalizado === "logo torito.jpeg"
     ) {
         return encodeURI("Logo TORITO.png");
     }
@@ -2745,7 +2745,7 @@ function nombreClubDesdeRuta(ruta) {
         .split("/")
         .pop();
 
-    if (archivo.toLowerCase().startsWith("logo adiur")) {
+    if (archivo.toLowerCase().startsWith("logo torito")) {
         return "TORITO";
     }
 

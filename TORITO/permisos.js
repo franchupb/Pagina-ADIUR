@@ -115,7 +115,7 @@
       const opcionPermitida = opcionDeDivision(select, divisionPermitida);
       if (!opcionPermitida) {
         select.disabled = true;
-        select.dataset.adiurDivisionBloqueada = "1";
+        select.dataset.toritoDivisionBloqueada = "1";
         select.setAttribute("aria-label", "No hay una opción autorizada para " + divisionPermitida);
         return;
       }
@@ -127,15 +127,15 @@
       const opcionFinal = opcionDeDivision(select, divisionPermitida);
       if (!opcionFinal) {
         select.disabled = true;
-        select.dataset.adiurDivisionBloqueada = "1";
+        select.dataset.toritoDivisionBloqueada = "1";
         return;
       }
       const indicePermitido = Array.from(select.options || []).indexOf(opcionFinal);
       const cambioNecesario = select.selectedIndex !== indicePermitido;
       select.selectedIndex = indicePermitido;
       select.disabled = true;
-      select.dataset.adiurDivisionProcesada = "1";
-      select.dataset.adiurDivisionBloqueada = "0";
+      select.dataset.toritoDivisionProcesada = "1";
+      select.dataset.toritoDivisionBloqueada = "0";
       select.setAttribute("aria-label", "División fijada por permisos: " + divisionPermitida);
       if (cambioNecesario) select.dispatchEvent(new Event("change", { bubbles: true }));
     });
@@ -172,11 +172,11 @@
       if (division && division !== divisionPermitida) {
         elemento.hidden = true;
         elemento.setAttribute("aria-hidden", "true");
-        elemento.dataset.adiurDivisionOculta = "1";
-      } else if (elemento.dataset.adiurDivisionOculta === "1") {
+        elemento.dataset.toritoDivisionOculta = "1";
+      } else if (elemento.dataset.toritoDivisionOculta === "1") {
         elemento.hidden = false;
         elemento.removeAttribute("aria-hidden");
-        delete elemento.dataset.adiurDivisionOculta;
+        delete elemento.dataset.toritoDivisionOculta;
       }
     });
   }
@@ -258,7 +258,7 @@
         el.disabled = true;
         el.setAttribute("aria-disabled", "true");
       }
-      el.classList.add("adiur-solo-lectura");
+      el.classList.add("torito-solo-lectura");
     });
     root.querySelectorAll("form").forEach(form => {
       form.addEventListener("submit", bloquearAccion, true);

@@ -1656,7 +1656,7 @@ function listaDesdeDatosFixture(datos, divisionPadre = "") {
       "division",
       "competicion",
       "jornada",
-      "golesAdiur",
+      "golestorito",
       "resultado"
     ].some(campo =>
       Object.prototype.hasOwnProperty.call(valor, campo)
@@ -1746,9 +1746,9 @@ function fechaFixture(partido) {
 
 function partidoTieneMarcador(partido) {
   const tieneGolesSeparados =
-    partido.golesAdiur !== undefined &&
-    partido.golesAdiur !== null &&
-    String(partido.golesAdiur).trim() !== "" &&
+    partido.golestorito !== undefined &&
+    partido.golestorito !== null &&
+    String(partido.golestorito).trim() !== "" &&
     partido.golesRival !== undefined &&
     partido.golesRival !== null &&
     String(partido.golesRival).trim() !== "";
@@ -1823,7 +1823,7 @@ function crearPartidoJugadoCard(partido) {
 
   local.append(
     construirEscudo(
-      partido.escudoAdiur || "Logo TORITO.png",
+      partido.escudotorito || "Logo TORITO.png",
       nombreLocal
     )
   );
@@ -1840,15 +1840,15 @@ function crearPartidoJugadoCard(partido) {
   marcador.className = "marcador";
 
   const tieneGoles =
-    partido.golesAdiur !== undefined &&
-    partido.golesAdiur !== null &&
-    String(partido.golesAdiur).trim() !== "" &&
+    partido.golestorito !== undefined &&
+    partido.golestorito !== null &&
+    String(partido.golestorito).trim() !== "" &&
     partido.golesRival !== undefined &&
     partido.golesRival !== null &&
     String(partido.golesRival).trim() !== "";
 
   if (tieneGoles) {
-    marcador.textContent = `${partido.golesAdiur} - ${partido.golesRival}`;
+    marcador.textContent = `${partido.golestorito} - ${partido.golesRival}`;
   } else if (partido.resultado) {
     marcador.textContent = String(partido.resultado).trim();
   } else {

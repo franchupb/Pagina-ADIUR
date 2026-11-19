@@ -1864,7 +1864,7 @@ async function obtenerInfoPartidosExternosJugadora(jugadora) {
   return `<div class="ficha-lista-items">` + deJugadora.slice(0, 6).map(p => {
     const rival = p.rival || p.equipoRival || p.contrincante || "Rival";
     const fecha = p.fecha || "";
-    const resultado = p.resultado || (p.golesAdiur !== undefined && p.golesRival !== undefined ? `${p.golesAdiur} - ${p.golesRival}` : "");
+    const resultado = p.resultado || (p.golestorito !== undefined && p.golesRival !== undefined ? `${p.golestorito} - ${p.golesRival}` : "");
     const comp = p.competencia || p.torneo || "";
     return `
       <div class="ficha-item-box">
@@ -1889,12 +1889,12 @@ async function obtenerInfoTesteosJugadora(jugadora) {
 
     if (nubeActiva && db) {
       try {
-        const snap = await getDoc(doc(db,"torito_testeos_adiur", clave));
+        const snap = await getDoc(doc(db,"torito_testeos_torito", clave));
         if (snap.exists()) data = snap.data();
       } catch (e) {}
     }
     if (!data) {
-      const raw = localStorage.getItem("torito_testeos_adiur_" + clave);
+      const raw = localStorage.getItem("torito_testeos_torito_" + clave);
       if (raw) { try { data = JSON.parse(raw); } catch (e) {} }
     }
 
@@ -2234,7 +2234,7 @@ async function renderizarPanelPartidosEInformesExternos() {
       const rival = p.rival || p.equipoRival || p.contrincante || "Rival";
       const fecha = p.fecha || "";
       const comp = p.competencia || p.torneo || "";
-      const res = p.resultado || (p.golesAdiur !== undefined && p.golesRival !== undefined ? `${p.golesAdiur} - ${p.golesRival}` : "");
+      const res = p.resultado || (p.golestorito !== undefined && p.golesRival !== undefined ? `${p.golestorito} - ${p.golesRival}` : "");
       return `
         <div class="item-partido-info">
           <div class="meta">${fecha} ${comp ? `· ${comp}` : ""}</div>

@@ -915,7 +915,7 @@ a:focus-visible {
 }
 
 .area-rival,
-.area-adiur {
+.area-torito {
   position: absolute;
   left: 32%;
   width: 36%;
@@ -928,7 +928,7 @@ a:focus-visible {
   border-top: 0;
 }
 
-.area-adiur {
+.area-torito {
   bottom: 3%;
   border-bottom: 0;
 }
@@ -3063,7 +3063,7 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 
           <div class="escudos-form">
             <div class="escudo-bloque">
-              <img class="escudo-preview" id="previewAdiur" src="Logo TORITO.png" alt="TORITO"
+              <img class="escudo-preview" id="previewtorito" src="Logo TORITO.png" alt="TORITO"
                 onerror="this.onerror=null;this.src='Logo TORITO.png';">
               <div class="escudo-info">
                 <strong>TORITO</strong>
@@ -3090,7 +3090,7 @@ button:disabled { opacity: .5; cursor: not-allowed; }
             </div>
 
             <div class="numeros-goles">
-              <input type="number" id="golesAdiur" min="0" max="99" placeholder="–"
+              <input type="number" id="golestorito" min="0" max="99" placeholder="–"
                 aria-label="Goles de TORITO" required>
               <span>–</span>
               <input type="number" id="golesRival" min="0" max="99" placeholder="–"
@@ -3132,7 +3132,7 @@ button:disabled { opacity: .5; cursor: not-allowed; }
                   onerror="this.onerror=null;this.src='Logo TORITO.png';">
                 <span>TORITO</span>
               </div>
-              <span class="numero-marcador" id="marcadorMiniAdiur">–</span>
+              <span class="numero-marcador" id="marcadorMinitorito">–</span>
               <span class="vs-marcador">VS</span>
               <span class="numero-marcador" id="marcadorMiniRival">–</span>
               <div class="equipo-compacto">
@@ -3438,7 +3438,7 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 ===================================================== */
 
 const CLAVE_PARTIDOS = "informesTORITOPartidosV2";
-const CLAVE_PLANTEL = "adiurJugadorasInformesV1";
+const CLAVE_PLANTEL = "toritoJugadorasInformesV1";
 const CLAVE_SESION = "usuarioTORITO";
 const CLAVE_FIXTURE = "fixtureTORITO";
 const CLAVE_INFORMES_ANTERIORES = "informesTORITOJornadasV1";
@@ -3560,7 +3560,7 @@ function mostrarPasoCarga(paso, desplazar = false) {
 
 function validarPasoCarga(paso) {
   if (paso === 1) {
-    const ids = ["division", "competicion", "fechaReal", "rival", "golesAdiur", "golesRival", "duracionPartido"];
+    const ids = ["division", "competicion", "fechaReal", "rival", "golestorito", "golesRival", "duracionPartido"];
     for (const id of ids) {
       const campo = $(id);
       if (!campo || !campo.checkValidity()) {
@@ -3648,7 +3648,7 @@ function actualizarResumenRevision() {
   const rival = nombreRivalActual() || "Rival pendiente";
   const fecha = $("fechaReal").value ? formatearFecha($("fechaReal").value) : "Sin fecha";
   const jornada = $("jornada").value ? `Fecha ${escaparHTML($("jornada").value)}` : "Jornada sin indicar";
-  const golesAdiur = $("golesAdiur").value === "" ? "–" : escaparHTML($("golesAdiur").value);
+  const golestorito = $("golestorito").value === "" ? "–" : escaparHTML($("golestorito").value);
   const golesRival = $("golesRival").value === "" ? "–" : escaparHTML($("golesRival").value);
   const participaciones = leerParticipacionesFormulario();
   const jugadorasCitadas = participaciones.filter(j => j.citada);
@@ -3674,7 +3674,7 @@ function actualizarResumenRevision() {
     </div>
     <div class="resumen-revision-card principal">
       <small>Resultado final</small>
-      <strong>TORITO ${golesAdiur} – ${golesRival} ${escaparHTML(rival)}</strong>
+      <strong>TORITO ${golestorito} – ${golesRival} ${escaparHTML(rival)}</strong>
       <p>Duración: ${numeroSeguro($("duracionPartido").value) || 90} minutos</p>
     </div>
     <div class="resumen-revision-card">
@@ -3727,7 +3727,7 @@ function guardarJSON(clave, valor) {
 
 function idUnico() {
   if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
-  return "adiur-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,9);
+  return "torito-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,9);
 }
 
 function normalizarTexto(valor) {
@@ -3986,7 +3986,7 @@ function actualizarMarcadorVisual() {
   $("tituloPlanilla").textContent = `${$("division").value || "CATEGORÍA"} · ${$("competicion").value || "INFORME"}`;
   $("rivalMiniTexto").textContent = rival;
 
-  $("marcadorMiniAdiur").textContent = $("golesAdiur").value==="" ? "–" : $("golesAdiur").value;
+  $("marcadorMinitorito").textContent = $("golestorito").value==="" ? "–" : $("golestorito").value;
   $("marcadorMiniRival").textContent = $("golesRival").value==="" ? "–" : $("golesRival").value;
 }
 
@@ -4045,7 +4045,7 @@ function cargarFixture() {
 
   return datos.filter(p => p && typeof p === "object" && !Array.isArray(p)).map((p, indice) => {
     // Esquema real de Partidos.html: id, division, competicion, jornada,
-    // fechaPartido, lugarPartido, rival, escudoRival, golesAdiur y golesRival.
+    // fechaPartido, lugarPartido, rival, escudoRival, golestorito y golesRival.
     const division = normalizarDivision(p.division || p.categoria || p.category);
     const rival = String(p.rival || p.equipoRival || p.clubRival || "").trim();
     const club = obtenerClubPorNombre(rival);
@@ -4064,7 +4064,7 @@ function cargarFixture() {
       ? String(idOriginal)
       : crearIdLegadoFixture(p, indice, division, competicion, rival, fechaReal, lugar);
 
-    const golesAdiur = p.golesAdiur ?? p.marcadorAdiur ?? "";
+    const golestorito = p.golestorito ?? p.marcadortorito ?? "";
     const golesRival = p.golesRival ?? p.marcadorRival ?? "";
 
     return {
@@ -4074,9 +4074,9 @@ function cargarFixture() {
       competicion,
       jornada,
       rival,
-      escudoAdiur: p.escudoAdiur || "Logo TORITO.png",
+      escudotorito: p.escudotorito || "Logo TORITO.png",
       escudoRival: escudo,
-      golesAdiur: golesAdiur === null ? "" : String(golesAdiur),
+      golestorito: golestorito === null ? "" : String(golestorito),
       golesRival: golesRival === null ? "" : String(golesRival),
       fechaReal,
       hora: p.hora || p.horario || "",
@@ -4119,8 +4119,8 @@ function actualizarSelectorFixture() {
     const opcion = document.createElement("option");
     opcion.value = String(partido.id);
 
-    const resultado = partido.golesAdiur !== "" && partido.golesRival !== ""
-      ? `TORITO ${partido.golesAdiur}-${partido.golesRival}`
+    const resultado = partido.golestorito !== "" && partido.golesRival !== ""
+      ? `TORITO ${partido.golestorito}-${partido.golesRival}`
       : "Resultado pendiente";
 
     opcion.textContent = [
@@ -4244,13 +4244,13 @@ function cargarDesdeFixture() {
 
   mostrarEscudoRival(p.escudoRival || rutaEscudoClub(p.rival),p.rival);
 
-  $("golesAdiur").value = p.golesAdiur==="" ? "" : p.golesAdiur;
+  $("golestorito").value = p.golestorito==="" ? "" : p.golestorito;
   $("golesRival").value = p.golesRival==="" ? "" : p.golesRival;
 
   const faltan = [];
   if (!p.fechaReal) faltan.push("fecha real");
   if (!p.lugar) faltan.push("lugar");
-  if (p.golesAdiur==="" || p.golesRival==="") faltan.push("marcador");
+  if (p.golestorito==="" || p.golesRival==="") faltan.push("marcador");
 
   if (faltan.length) {
     $("avisoDatosFixture").className = "aviso";
@@ -5191,12 +5191,12 @@ function actualizarAvisoGoles() {
   const aviso=$("avisoGolesIndividuales");
   const texto=$("textoAvisoGoles");
 
-  if ($("golesAdiur").value==="") {
+  if ($("golestorito").value==="") {
     aviso.classList.add("oculto");
     return;
   }
 
-  const marcador=numeroSeguro($("golesAdiur").value);
+  const marcador=numeroSeguro($("golestorito").value);
   const individuales=leerEventosGoles().filter(g=>g.jugadora).length;
 
   if (marcador!==individuales) {
@@ -5269,7 +5269,7 @@ function normalizarPartidoGuardado(p) {
     lugar:p.lugar||p.cancha||"",
     hora:p.hora||"",
     localia:p.localia||"Local",
-    golesFavor:p.golesFavor===undefined ? numeroOpcional(p.golesAdiur) : numeroOpcional(p.golesFavor),
+    golesFavor:p.golesFavor===undefined ? numeroOpcional(p.golestorito) : numeroOpcional(p.golesFavor),
     golesContra:p.golesContra===undefined ? numeroOpcional(p.golesRival) : numeroOpcional(p.golesContra),
     duracionPartido:duracion,
     formacion:p.formacion||"433",
@@ -5325,7 +5325,7 @@ function nuevoPartido() {
   $("jornada").value="";
   $("duracionPartido").value="";
   aplicarDuracionCategoria();
-  $("golesAdiur").value="";
+  $("golestorito").value="";
   $("golesRival").value="";
   $("observaciones").value="";
   $("localia").value="Local";
@@ -5370,7 +5370,7 @@ function editarPartido(id) {
   $("fechaReal").value=normalizarFechaInput(p.fecha);
   $("localia").value=p.localia||"Local";
   $("lugar").value=p.lugar||"";
-  $("golesAdiur").value=p.golesFavor===null?"":p.golesFavor;
+  $("golestorito").value=p.golesFavor===null?"":p.golesFavor;
   $("golesRival").value=p.golesContra===null?"":p.golesContra;
   $("observaciones").value=p.observaciones||"";
 
@@ -5431,7 +5431,7 @@ function guardarPartido(evento) {
   const rival=nombreRivalActual();
   const jornadaTexto=$("jornada").value.trim();
   const duracion=duracionPorDivision(division) || numeroSeguro($("duracionPartido").value);
-  const gfTexto=$("golesAdiur").value;
+  const gfTexto=$("golestorito").value;
   const gcTexto=$("golesRival").value;
 
   if (!DIVISIONES.includes(division)) {
@@ -6182,7 +6182,7 @@ function inicializar() {
     actualizarMarcadorVisual();
   });
 
-  $("golesAdiur").addEventListener("input",()=>{
+  $("golestorito").addEventListener("input",()=>{
     actualizarMarcadorVisual();
     actualizarAvisoGoles();
   });
@@ -6256,7 +6256,7 @@ function inicializar() {
     actualizarMarcadorVisual();
   });
 
-  $("golesAdiur").addEventListener("input",()=>{
+  $("golestorito").addEventListener("input",()=>{
     actualizarMarcadorVisual();
     actualizarAvisoGoles();
   });

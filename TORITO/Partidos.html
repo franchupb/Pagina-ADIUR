@@ -2157,10 +2157,10 @@ body.eliminando .btn-puntos {
                     </div>
 
                     <div class="field">
-                        <label for="golesAdiur">Goles TORITO</label>
+                        <label for="golestorito">Goles TORITO</label>
                         <input
                             type="number"
-                            id="golesAdiur"
+                            id="golestorito"
                             min="0"
                             max="99"
                             step="1"
@@ -2189,7 +2189,7 @@ body.eliminando .btn-puntos {
                         <label>Escudo de TORITO</label>
 
                         <img
-                            id="previewAdiur"
+                            id="previewtorito"
                             class="escudo-preview"
                             src="Logo TORITO.png"
                             alt="Escudo de TORITO"
@@ -2660,10 +2660,10 @@ function rutaImagen(nombre) {
     const minusculas = archivo.toLowerCase();
 
     if (
-        minusculas === "adiur" ||
+        minusculas === "torito" ||
         minusculas === "Logo TORITO.png" ||
-        minusculas === "logo adiur.png" ||
-        minusculas === "logo adiur.jpeg"
+        minusculas === "logo torito.png" ||
+        minusculas === "logo torito.jpeg"
     ) {
         return LOGO_TORITO_FIJO;
     }
@@ -2820,7 +2820,7 @@ function normalizarObjetoPartido(p, indice = 0) {
         escudoRival = rutaImagen(escudoRival);
     }
 
-    const golesAdiur = p.golesAdiur ?? p.marcadorAdiur ?? "";
+    const golestorito = p.golestorito ?? p.marcadortorito ?? "";
     const golesRival = p.golesRival ?? p.marcadorRival ?? "";
 
     return {
@@ -2833,11 +2833,11 @@ function normalizarObjetoPartido(p, indice = 0) {
         fecha: p.fechaPartido || p.fecha || "",
         lugarPartido: p.lugarPartido || p.lugar || p.cancha || "",
         rival,
-        escudoAdiur: LOGO_TORITO_FIJO,
+        escudotorito: LOGO_TORITO_FIJO,
         escudoRival,
-        golesAdiur: golesAdiur === "" || golesAdiur === null
+        golestorito: golestorito === "" || golestorito === null
             ? ""
-            : String(golesAdiur),
+            : String(golestorito),
         golesRival: golesRival === "" || golesRival === null
             ? ""
             : String(golesRival)
@@ -3108,16 +3108,16 @@ function abrirModal(id = null) {
     document.getElementById("jornada").value = 1;
     actualizarRequisitoFecha();
 
-    const previewAdiur = document.getElementById("previewAdiur");
+    const previewtorito = document.getElementById("previewtorito");
 
-    previewAdiur.style.display = "block";
+    previewtorito.style.display = "block";
 
-    previewAdiur.onerror = function() {
+    previewtorito.onerror = function() {
         this.onerror = null;
         this.src = "Logo TORITO.png";
     };
 
-    previewAdiur.src = LOGO_TORITO_FIJO;
+    previewtorito.src = LOGO_TORITO_FIJO;
 
     mostrarEscudoRival("");
 
@@ -3160,8 +3160,8 @@ function abrirModal(id = null) {
         document.getElementById("lugarPartido").value =
             partido.lugarPartido || "";
 
-        document.getElementById("golesAdiur").value =
-            partido.golesAdiur ?? "";
+        document.getElementById("golestorito").value =
+            partido.golestorito ?? "";
 
         document.getElementById("golesRival").value =
             partido.golesRival ?? "";
@@ -3245,15 +3245,15 @@ async function guardarPartido(event) {
     const rival = selectorRival.value.trim();
     const fechaPartido = document.getElementById("fechaPartido").value;
     const lugarPartido = document.getElementById("lugarPartido").value.trim();
-    const golesAdiurIngresados = document.getElementById("golesAdiur").value;
+    const golestoritoIngresados = document.getElementById("golestorito").value;
     const golesRivalIngresados = document.getElementById("golesRival").value;
 
     if (
-        golesAdiurIngresados !== "" &&
+        golestoritoIngresados !== "" &&
         (
-            !Number.isInteger(Number(golesAdiurIngresados)) ||
-            Number(golesAdiurIngresados) < 0 ||
-            Number(golesAdiurIngresados) > 99
+            !Number.isInteger(Number(golestoritoIngresados)) ||
+            Number(golestoritoIngresados) < 0 ||
+            Number(golestoritoIngresados) > 99
         )
     ) {
         alert("Ingresá una cantidad válida de goles para TORITO (0 a 99).");
@@ -3322,9 +3322,9 @@ async function guardarPartido(event) {
         fecha: fechaPartido,
         lugarPartido,
         rival,
-        escudoAdiur: LOGO_TORITO_FIJO,
+        escudotorito: LOGO_TORITO_FIJO,
         escudoRival: escudoRival || (anterior?.escudoRival || ""),
-        golesAdiur: golesAdiurIngresados,
+        golestorito: golestoritoIngresados,
         golesRival: golesRivalIngresados
     };
 
@@ -3405,8 +3405,8 @@ function escaparHTML(valor) {
     })[caracter]);
 }
 
-function construirEscudo(src, nombre, esAdiur = false) {
-    const ruta = esAdiur
+function construirEscudo(src, nombre, estorito = false) {
+    const ruta = estorito
         ? LOGO_TORITO_FIJO
         : rutaImagen(src || "");
 
@@ -3417,7 +3417,7 @@ function construirEscudo(src, nombre, esAdiur = false) {
     const rutaSegura = escaparHTML(encodeURI(ruta));
     const altSeguro = escaparHTML(nombre || "Escudo del equipo");
 
-    if (esAdiur) {
+    if (estorito) {
         return `
             <img
                 class="escudo-mini"
@@ -3476,7 +3476,7 @@ function renderizarFixture() {
             p.jornada,
             p.fechaPartido,
             p.lugarPartido,
-            p.golesAdiur,
+            p.golestorito,
             p.golesRival
         ].join(" ").toLowerCase();
 
@@ -3585,7 +3585,7 @@ function renderizarFixture() {
                             false
                         );
 
-                        const escudoAdiur = construirEscudo(
+                        const escudotorito = construirEscudo(
                             LOGO_TORITO_FIJO,
                             "TORITO",
                             true
@@ -3593,9 +3593,9 @@ function renderizarFixture() {
 
                         html += `
                             <article class="partido ${modoEliminar ? "modo-eliminar" : ""}">
-                                ${escudoAdiur}
+                                ${escudotorito}
                                 <span class="equipo-nombre">TORITO</span>
-                                <span class="marcador-gol">${mostrarGol(p.golesAdiur)}</span>
+                                <span class="marcador-gol">${mostrarGol(p.golestorito)}</span>
                                 <span class="vs">VS</span>
                                 <span class="marcador-gol">${mostrarGol(p.golesRival)}</span>
                                 <span class="equipo-nombre">${nombreRival}</span>

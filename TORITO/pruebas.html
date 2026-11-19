@@ -1089,7 +1089,7 @@ async function cargarDatosPlanilla(division, mes) {
   let cargadoDeNube = false;
   if (nubeActiva && db) {
     try {
-      const refDoc = doc(db,"torito_testeos_adiur", clave);
+      const refDoc = doc(db,"torito_testeos_torito", clave);
       const snap = await getDoc(refDoc);
       if (snap.exists()) {
         const data = snap.data();
@@ -1103,7 +1103,7 @@ async function cargarDatosPlanilla(division, mes) {
   }
 
   if (!cargadoDeNube) {
-    const localRaw = localStorage.getItem("torito_testeos_adiur_" + clave);
+    const localRaw = localStorage.getItem("torito_testeos_torito_" + clave);
     if (localRaw) {
       try {
         const parsed = JSON.parse(localRaw);
@@ -1137,7 +1137,7 @@ function programarGuardadoNube() {
     actualizadoPor: usuarioGuardado,
     ultimaActualizacion: new Date().toISOString()
   };
-  localStorage.setItem("torito_testeos_adiur_" + clave, JSON.stringify(payload));
+  localStorage.setItem("torito_testeos_torito_" + clave, JSON.stringify(payload));
 
   actualizarEstadoNube("guardando", "☁️ Guardando...");
 
@@ -1145,7 +1145,7 @@ function programarGuardadoNube() {
   timeoutGuardado = setTimeout(async () => {
     if (nubeActiva && db) {
       try {
-        await setDoc(doc(db,"torito_testeos_adiur", clave), payload);
+        await setDoc(doc(db,"torito_testeos_torito", clave), payload);
         actualizarEstadoNube("", "☁️ Guardado en la nube");
       } catch (err) {
         console.error("Error guardando en Firestore:", err);
