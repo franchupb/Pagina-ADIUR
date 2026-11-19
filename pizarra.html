@@ -2139,6 +2139,7 @@ function moverElemento(
 function iniciarArrastre(e){
 
   if(e.button !== undefined && e.button !== 0) return;
+  if(e.isPrimary === false) return;
   e.preventDefault();
 
   const rect =
@@ -2206,16 +2207,13 @@ document.addEventListener(
 
 
 
-document.addEventListener(
-  "pointerup",
-  function(){
+function finalizarArrastre(){
+  arrastrando = null;
+}
 
-    arrastrando = null;
-
-  }
-);
-
-document.addEventListener("pointercancel",function(){ arrastrando = null; });
+document.addEventListener("pointerup",finalizarArrastre);
+document.addEventListener("pointercancel",finalizarArrastre);
+window.addEventListener("blur",finalizarArrastre);
 
 
 
@@ -3258,6 +3256,14 @@ function limpiarPizarra(
   svgDibujos.querySelectorAll("path,polyline,ellipse,rect,polygon,line,g").forEach(el=>el.remove());
   puntosLinea=[];
   terminarDibujo();
+  arrastrando = null;
+  herramientaDibujo = "select";
+  pitch.classList.remove("drawing-active");
+  document.querySelectorAll("[data-tool]").forEach(b=>
+    b.classList.toggle("active",b.dataset.tool==="select")
+  );
+  const ayuda = document.getElementById("ayudaDibujo");
+  if(ayuda) ayuda.textContent = "Elegí una herramienta para marcar la jugada.";
 
 }
 
