@@ -2150,7 +2150,7 @@ main {
 
             <select id="imagenActividad">
                 <option value="">Sin escudo</option>
-                <option value="TORITO%20-%20Logo.png">TORITO</option>
+                <option value="TORITO - Logo.png">TORITO</option>
                 <option value="CLUBES/14 JUNIO.jpg">14 de Junio</option>
                 <option value="CLUBES/ALIANZA.png">Alianza</option>
                 <option value="CLUBES/ARGENTINO.png">Argentino</option>
@@ -2176,7 +2176,7 @@ main {
                 <option value="CLUBES/SPARTA.jpg">Sparta</option>
                 <option value="CLUBES/TIRO FEDERAL.jpg">Tiro Federal</option>
                 <option value="CLUBES/TIRO SUIZO.jpg">Tiro Suizo</option>
-                <option value="TORITO%20-%20Logo.png">Torito</option>
+                <option value="TORITO - Logo.png">Torito</option>
                 <option value="CLUBES/UNION AMERICANA.png">Unión Americana</option>
                 <option value="CLUBES/VG GALVEZ.png">Villa Gobernador Gálvez</option>
             </select>
@@ -2662,7 +2662,7 @@ const ESCUDOS_CLUBES = {
     "Sparta": "CLUBES/SPARTA.jpg",
     "Tiro Federal": "CLUBES/TIRO FEDERAL.jpg",
     "Tiro Suizo": "CLUBES/TIRO SUIZO.jpg",
-    "Torito": "TORITO%20-%20Logo.png",
+    "Torito": "TORITO - Logo.png",
     "Unión Americana": "CLUBES/UNION AMERICANA.png",
     "Villa Gobernador Gálvez": "CLUBES/VG GALVEZ.png"
 };
@@ -2701,7 +2701,8 @@ const NOMBRES_POR_ARCHIVO = {
 function rutaImagen(nombre) {
     if (!nombre) return "";
 
-    const archivo = String(nombre).trim();
+    let archivo = String(nombre).trim();
+    try { archivo = decodeURIComponent(archivo); } catch (error) { /* conservar la ruta original */ }
     const normalizado = archivo.toLowerCase();
 
     if (
@@ -2713,7 +2714,7 @@ function rutaImagen(nombre) {
         normalizado === "logo torito.png" ||
         normalizado === "logo torito.jpeg"
     ) {
-        return encodeURI("TORITO%20-%20Logo.png");
+        return encodeURI("TORITO - Logo.png");
     }
 
     if (archivo.includes("/") || archivo.includes("\\")) {
