@@ -1772,9 +1772,9 @@ body.eliminando .btn-puntos {
 
         <img
             class="logo-club"
-            src="CLUBES/TORITO.png"
+            src="TORITO%20-%20Logo.png"
             alt="Logo TORITO"
-            onerror="if(!this.dataset.intento){this.dataset.intento='1';this.src='CLUBES/TORITO.png'}else{this.style.display='none'}"
+            onerror="if(!this.dataset.intento){this.dataset.intento='1';this.src='TORITO%20-%20Logo.png'}else{this.style.display='none'}"
         >
 
         <div class="textos-club">
@@ -2191,9 +2191,9 @@ body.eliminando .btn-puntos {
                         <img
                             id="previewtorito"
                             class="escudo-preview"
-                            src="CLUBES/TORITO.png"
+                            src="TORITO%20-%20Logo.png"
                             alt="Escudo de TORITO"
-                            onerror="this.onerror=null;this.src='CLUBES/TORITO.png';"
+                            onerror="this.onerror=null;this.src='TORITO%20-%20Logo.png';"
                         >
 
                         <p class="escudo-fijo-aviso">
@@ -2606,7 +2606,7 @@ const ORDEN_COMPETICIONES = [
 ];
 
 const CLAVE_FIXTURE = "fixtureTORITO";
-const LOGO_TORITO_FIJO = "CLUBES/TORITO.png";
+const LOGO_TORITO_FIJO = "TORITO%20-%20Logo.png";
 
 /* =====================================================
    CLUBES Y ESCUDOS
@@ -2638,7 +2638,7 @@ const ESCUDOS_CLUBES = [
     { nombre: "Sparta", ruta: "CLUBES/SPARTA.jpg" },
     { nombre: "Tiro Federal", ruta: "CLUBES/TIRO FEDERAL.jpg" },
     { nombre: "Tiro Suizo", ruta: "CLUBES/TIRO SUIZO.jpg" },
-    { nombre: "Torito", ruta: "CLUBES/TORITO.png" },
+    { nombre: "Torito", ruta: "TORITO%20-%20Logo.png" },
     { nombre: "Unión Americana", ruta: "CLUBES/UNION AMERICANA.png" },
     { nombre: "Villa Gobernador Gálvez", ruta: "CLUBES/VG GALVEZ.png" }
 ];
@@ -3119,7 +3119,7 @@ function abrirModal(id = null) {
 
     previewtorito.onerror = function() {
         this.onerror = null;
-        this.src = "CLUBES/TORITO.png";
+        this.src = "TORITO%20-%20Logo.png";
     };
 
     previewtorito.src = LOGO_TORITO_FIJO;
@@ -3428,7 +3428,7 @@ function construirEscudo(src, nombre, estorito = false) {
                 class="escudo-mini"
                 src="${rutaSegura}"
                 alt="${altSeguro}"
-                onerror="this.onerror=null;this.src='CLUBES/TORITO.png';"
+                onerror="this.onerror=null;this.src='TORITO%20-%20Logo.png';"
             >
         `;
     }
