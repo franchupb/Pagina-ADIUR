@@ -2606,7 +2606,7 @@ const ORDEN_COMPETICIONES = [
 ];
 
 const CLAVE_FIXTURE = "fixtureTORITO";
-const LOGO_TORITO_FIJO = "TORITO%20-%20Logo.png";
+const LOGO_TORITO_FIJO = "TORITO - Logo.png";
 
 /* =====================================================
    CLUBES Y ESCUDOS
@@ -2638,7 +2638,7 @@ const ESCUDOS_CLUBES = [
     { nombre: "Sparta", ruta: "CLUBES/SPARTA.jpg" },
     { nombre: "Tiro Federal", ruta: "CLUBES/TIRO FEDERAL.jpg" },
     { nombre: "Tiro Suizo", ruta: "CLUBES/TIRO SUIZO.jpg" },
-    { nombre: "Torito", ruta: "TORITO%20-%20Logo.png" },
+    { nombre: "Torito", ruta: "TORITO - Logo.png" },
     { nombre: "Unión Americana", ruta: "CLUBES/UNION AMERICANA.png" },
     { nombre: "Villa Gobernador Gálvez", ruta: "CLUBES/VG GALVEZ.png" }
 ];
@@ -2654,11 +2654,13 @@ function obtenerClubPorNombre(nombre) {
 function rutaImagen(nombre) {
     if (!nombre) return "";
 
-    const archivo = String(nombre).trim();
+    let archivo = String(nombre).trim();
 
     if (/^data:image\//i.test(archivo)) {
         return archivo;
     }
+
+    try { archivo = decodeURIComponent(archivo); } catch (error) { /* conservar la ruta original */ }
 
     const minusculas = archivo.toLowerCase();
 
