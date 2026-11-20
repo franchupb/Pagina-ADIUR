@@ -4680,7 +4680,7 @@ function crearHTMLPreviewRival(nombre) {
   return `
     <img
       class="imagen-rival"
-      src="${escaparHTML(club.ruta)}"
+      src="${escaparHTML(encodeURI(club.ruta))}"
       alt="Escudo de ${escaparHTML(club.nombre)}"
       onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
     >
