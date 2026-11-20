@@ -1488,6 +1488,13 @@ details.agregar-jugadora summary {
   min-width: 0;
 }
 
+.escudos-partido {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
 .escudo-partido {
   width: 47px;
   height: 47px;
@@ -5813,7 +5820,12 @@ function renderizarPartidos() {
       <article class="partido-card">
         <div class="partido-superior">
           <div class="partido-identidad">
-            <div class="escudo-partido">${escudo}</div>
+            <div class="escudos-partido" aria-label="Escudos de los equipos">
+              <div class="escudo-partido">
+                <img src="CLUBES/TORITO.png" alt="Escudo de TORITO" onerror="this.onerror=null;this.parentElement.textContent='⚽'">
+              </div>
+              <div class="escudo-partido">${escudo}</div>
+            </div>
             <div>
               <h4>TORITO vs. ${escaparHTML(p.rival)}</h4>
               <p>${escaparHTML(formatearFecha(p.fecha))} · ${escaparHTML(p.division)} · ${escaparHTML(p.torneo)}${p.jornada?" · Jornada "+p.jornada:""}</p>
