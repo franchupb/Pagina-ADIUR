@@ -957,9 +957,9 @@ a {
 
   <img
     class="logo-superior"
-    src="TORITO - Logo.png"
-    alt="Logo TORITO"
-    onerror="if(!this.dataset.intento){this.dataset.intento='1';this.src='EL TORITO - Logo.png'}else{this.style.display='none'}"
+    src="CLUBES/TORITO.png"
+    alt="Escudo oficial de TORITO"
+    onerror="this.onerror=null;this.style.display='none'"
   >
 
   <div class="titulo-superior">
@@ -1814,14 +1814,10 @@ function crearPartidoJugadoCard(partido) {
   const local = document.createElement("div");
   local.className = "equipo";
 
-  const nombreLocal =
-    normalizarTexto(partido.equipoLocal || partido.local) || "TORITO";
+  const nombreLocal = "TORITO";
 
   local.append(
-    construirEscudo(
-      partido.escudotorito || "TORITO - Logo.png",
-      nombreLocal
-    )
+    construirEscudo("CLUBES/TORITO.png", nombreLocal)
   );
 
   const textoLocal = document.createElement("div");
